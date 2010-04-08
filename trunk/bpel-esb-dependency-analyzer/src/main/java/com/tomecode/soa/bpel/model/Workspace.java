@@ -1,7 +1,9 @@
 package com.tomecode.soa.bpel.model;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.tree.TreeNode;
@@ -74,4 +76,20 @@ public final class Workspace implements TreeNode {
 		return bpelProcesses.isEmpty();
 	}
 
+	public final List<BpelProcess> findUsages(BpelProcess usage) {
+		List<BpelProcess> list = new ArrayList<BpelProcess>();
+		for (BpelProcess bpelProcess : bpelProcesses) {
+			if (!bpelProcess.equals(usage)) {
+				for (PartnerLinkBinding partnerLinkBinding : bpelProcess.getPartnerLinkBindings()) {
+					if (partnerLinkBinding.getBpelProcess() != null) {
+						if (partnerLinkBinding.getBpelProcess().equals(usage)) {
+							list.add(partnerLinkBinding.getParent());
+						}
+					}
+				}
+			}
+
+		}
+		return list;
+	}
 }

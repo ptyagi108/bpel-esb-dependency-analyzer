@@ -40,4 +40,13 @@ public class BasicTree extends JTree {
 		}
 		expandPath(parent);
 	}
+
+	/**
+	 * reset content the tree
+	 * 
+	 */
+	public final void clear() {
+		treeModel.setRoot(null);
+
+	}
 }

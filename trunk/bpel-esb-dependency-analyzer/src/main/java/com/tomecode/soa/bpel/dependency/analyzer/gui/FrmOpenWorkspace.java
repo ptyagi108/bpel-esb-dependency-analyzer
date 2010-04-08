@@ -13,13 +13,17 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.tomecode.soa.bpel.dependency.analyzer.gui.components.TabbedManager;
+import com.tomecode.soa.bpel.model.BpelProcess;
+import com.tomecode.soa.bpel.model.Workspace;
 import com.tomecode.util.gui.Dialog;
 import com.tomecode.util.gui.Frame;
 import com.tomecode.util.gui.HideNotifiListener;
 import com.tomecode.util.gui.PanelFactory;
 
 /**
- * Form for Open
+ * Form for add new {@link Workspace} or {@link BpelProcess} to
+ * {@link TabbedManager}
  * 
  * @author Frastia Tomas
  * 
@@ -28,14 +32,24 @@ public final class FrmOpenWorkspace extends Dialog {
 
 	private static final long serialVersionUID = 3580997825429547608L;
 
+	/**
+	 * last selected path in {@link JFileChooser}
+	 */
 	private File lastSelectedPath;
 
+	/**
+	 * workspace name
+	 */
 	private String workspaceName;
-
+	/**
+	 * button for close this form and start parse
+	 */
 	private final JButton buttonOpen;
-
+	/**
+	 * button for display {@link JFileChooser}
+	 */
 	private final JButton bFindPath;
-
+	
 	private final JTextField textFieldPath;
 
 	private final JTextField textFieldName;

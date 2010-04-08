@@ -6,6 +6,7 @@ import com.tomecode.soa.bpel.model.BpelOperations;
 
 /**
  * 
+ * Display operation from selected proces in {@link WorkspaceTree}
  * 
  * @author Tomas Frastia
  * 
@@ -19,16 +20,12 @@ public final class ProjectOperationTree extends BasicTree {
 	}
 
 	/**
-	 * add bpel process to
+	 * display selected bpel proces in {@link WorkspaceTree}
 	 * 
 	 * @param bpelProcess
 	 */
 	public final void addBpelProcessOperations(BpelOperations bpelOperations) {
 		treeModel.setRoot(bpelOperations);
 		expandPath(new TreePath(bpelOperations));
-	}
-
-	public final void clear() {
-		treeModel.setRoot(null);
 	}
 }

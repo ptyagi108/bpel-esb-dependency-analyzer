@@ -2,7 +2,10 @@ package com.tomecode.soa.bpel.dependency.analyzer.gui.components;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.util.List;
 
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -21,7 +24,8 @@ import com.tomecode.soa.bpel.model.Workspace;
 import com.tomecode.util.gui.PanelFactory;
 
 /**
- * Panel contains list of components whiche display bpel process result
+ * The panel contains list of components wich display dependency for bpel
+ * processes
  * 
  * @author Tomas Frastia
  * 
@@ -49,19 +53,27 @@ public final class WorkspacePanel extends JPanel {
 	/**
 	 * path of selected bpel process
 	 */
-	private final JTextField txtProcessFolder;
+	// private final JTextArea txtProcessFolder;
 
 	private final JTextField txtError;
 
 	private final JTextField txtErrorWsdl;
 
+	private final DefaultListModel listDependency;
+
+	private Workspace workspace;
+
 	/**
 	 * Constructor
+	 * 
+	 * @param workspace
 	 */
 	public WorkspacePanel(Workspace workspace) {
 		super(new BorderLayout());
-		this.txtProcessFolder = new JTextField();
-		txtProcessFolder.setEditable(false);
+		this.workspace = workspace;
+		// this.txtProcessFolder = new JTextArea();
+		// txtProcessFolder.setEditable(false);
+		// txtProcessFolder.setWrapStyleWord(true);
 		this.workspaceTree = new WorkspaceTree(workspace);
 		this.projectOperationTree = new ProjectOperationTree();
 		this.processStructureTree = new ProcessStructureTree();
@@ -72,14 +84,23 @@ public final class WorkspacePanel extends JPanel {
 		spProjectTrees.add(PanelFactory.createBorderLayout("Project-Operations Dependecies", new JScrollPane(projectOperationTree)));
 		spProjectTrees.add(PanelFactory.createBorderLayout("Project Structure", new JScrollPane(processStructureTree)));
 		spProjectTrees.setDividerLocation(350);
-		JPanel pProject = PanelFactory.createBorderLayout();
-		pProject.add(spProjectTrees, BorderLayout.CENTER);
 
-		JPanel pProjectDetails = PanelFactory.createBorderLayout("Project Details");
-		JPanel pFileds = PanelFactory.createGridLayout(2, 1);
-		pFileds.add(PanelFactory.wrapWithLabelNorm("Process folder", txtProcessFolder, 10));
-		pProjectDetails.add(pFileds, BorderLayout.CENTER);
-		pProject.add(pProjectDetails, BorderLayout.SOUTH);
+		JSplitPane spProjectBase = PanelFactory.createSplitPanel();
+		spProjectBase.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		spProjectBase.setDividerLocation(350);
+		spProjectBase.add(spProjectTrees);
+
+		JPanel pProject = PanelFactory.createBorderLayout();
+		pProject.add(spProjectBase, BorderLayout.CENTER);
+
+		listDependency = new DefaultListModel();
+		JList list = new JList(listDependency);
+
+		JPanel pProjectDetail = PanelFactory.createBorderLayout();
+
+		pProjectDetail.add(PanelFactory.wrapWithTile("Usage", new JScrollPane(list)), BorderLayout.CENTER);
+
+		spProjectBase.add(pProjectDetail);
 
 		final JPanel pCardPanel = new JPanel(new CardLayout());
 		pCardPanel.add(pProject, P_TREE);
@@ -101,6 +122,7 @@ public final class WorkspacePanel extends JPanel {
 
 		add(spWorkspace, BorderLayout.CENTER);
 
+		// select bpel proces
 		this.workspaceTree.addTreeSelectionListener(new TreeSelectionListener() {
 			@Override
 			public final void valueChanged(TreeSelectionEvent e) {
@@ -108,9 +130,8 @@ public final class WorkspacePanel extends JPanel {
 				if (e.getPath().getLastPathComponent() instanceof BpelProcess) {
 					BpelProcess bpelProcess = (BpelProcess) e.getPath().getLastPathComponent();
 					if (bpelProcess != null) {
-						projectOperationTree.addBpelProcessOperations(bpelProcess.getBpelOperations());
-						processStructureTree.addBpelProcessStrukture(bpelProcess.getBpelProcessStrukture());
-						txtProcessFolder.setText(bpelProcess.getBpelXmlFile().getParent());
+						selectBpelProcess(bpelProcess);
+						// txtProcessFolder.setText(bpelProcess.getBpelXmlFile().getParent());
 					}
 					CardLayout cardLayout = (CardLayout) pCardPanel.getLayout();
 					cardLayout.show(pCardPanel, P_TREE);
@@ -118,7 +139,7 @@ public final class WorkspacePanel extends JPanel {
 				} else {
 					processStructureTree.clear();
 					projectOperationTree.clear();
-					txtProcessFolder.setText("");
+					// txtProcessFolder.setText("");
 
 					ErrorNode errorNode = (ErrorNode) e.getPath().getLastPathComponent();
 					txtError.setText(errorNode.getErrorText());
@@ -128,8 +149,10 @@ public final class WorkspacePanel extends JPanel {
 				}
 
 			}
+
 		});
 
+		// select operation in selected bpel proces in workspaceTree
 		this.projectOperationTree.addTreeSelectionListener(new TreeSelectionListener() {
 			@Override
 			public final void valueChanged(TreeSelectionEvent e) {
@@ -153,10 +176,23 @@ public final class WorkspacePanel extends JPanel {
 	private final void displayBpelProcessStructure(BpelProcess bpelProcess) {
 		if (bpelProcess == null) {
 			processStructureTree.clear();
-			txtProcessFolder.setText("");
+			// txtProcessFolder.setText("");
 		} else {
 			processStructureTree.addBpelProcessStrukture(bpelProcess.getBpelProcessStrukture());
-			txtProcessFolder.setText(bpelProcess.getBpelXmlFile().getParent());
+			// txtProcessFolder.setText(bpelProcess.getBpelXmlFile().getParent());
+		}
+
+	}
+
+	private final void selectBpelProcess(BpelProcess bpelProcess) {
+		projectOperationTree.addBpelProcessOperations(bpelProcess.getBpelOperations());
+		processStructureTree.addBpelProcessStrukture(bpelProcess.getBpelProcessStrukture());
+
+		listDependency.clear();
+
+		List<BpelProcess> listUsage = this.workspace.findUsages(bpelProcess);
+		for (BpelProcess usageBpelProcess : listUsage) {
+			listDependency.addElement(usageBpelProcess);
 		}
 
 	}

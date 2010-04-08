@@ -6,6 +6,8 @@ import com.tomecode.soa.bpel.model.BpelProcessStrukture;
 
 /**
  * 
+ * Display structure of selected process in {@link WorkspaceTree}
+ * 
  * @author Tomas Frastia
  * 
  */
@@ -17,13 +19,14 @@ public final class ProcessStructureTree extends BasicTree {
 		super();
 	}
 
+	/**
+	 * display select process in {@link WorkspaceTree}
+	 * 
+	 * @param bpelProcessStrukture
+	 */
 	public final void addBpelProcessStrukture(BpelProcessStrukture bpelProcessStrukture) {
 		treeModel.setRoot(bpelProcessStrukture);
 		expandAllNodes(new TreePath(bpelProcessStrukture));
 	}
 
-	public final void clear() {
-		treeModel.setRoot(null);
-		
-	}
 }

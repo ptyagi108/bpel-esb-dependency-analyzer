@@ -4,6 +4,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  * 
+ * Error node contais basic info about error
+ * 
  * @author Tomas Frastia
  * 
  */
@@ -13,10 +15,22 @@ public final class ErrorNode extends DefaultMutableTreeNode {
 
 	private Exception exception;
 
+	/**
+	 * user error text
+	 */
 	private String errorText;
-
+	/**
+	 * WSDL, which is made up of parser error
+	 */
 	private String wsdl;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param errorText
+	 * @param wsdl
+	 * @param exception
+	 */
 	public ErrorNode(String errorText, String wsdl, Exception exception) {
 		super(errorText);
 		this.errorText = errorText;
