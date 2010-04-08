@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tomecode.soa.bpel.model.BpelProcess;
+import com.tomecode.soa.bpel.model.PartnerLinkBinding;
 import com.tomecode.soa.bpel.model.Workspace;
 
 /**
@@ -15,12 +17,6 @@ import com.tomecode.soa.bpel.model.Workspace;
 public final class WorkSpaceParser {
 
 	private final BpelParser bpelParser;
-	
-
-	public static final void main(String[] arg) throws BpelParserException {
-		WorkSpaceParser parser = new WorkSpaceParser();
-		parser.parse(new File("C:/ORACLE/projects/BPEL/samples/"));
-	}
 
 	public WorkSpaceParser() {
 		bpelParser = new BpelParser();
@@ -42,6 +38,14 @@ public final class WorkSpaceParser {
 		Workspace workspace = new Workspace(workspaceFolder);
 		for (File bpelXml : bpelXmlFiles) {
 			workspace.addBpelProcess(bpelParser.parseBpelXml(bpelXml));
+		}
+
+		for (BpelProcess bpelProcess : workspace.getBpelProcesses()) {
+			for (PartnerLinkBinding partnerLinkBinding : bpelProcess.getPartnerLinkBindings()) {
+				if (partnerLinkBinding.getBpelProcess() == null) {
+					bpelParser.parseBpelByWsdl(partnerLinkBinding);
+				}
+			}
 		}
 		return workspace;
 	}

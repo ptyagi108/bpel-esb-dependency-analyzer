@@ -5,8 +5,9 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
+
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
 
 /**
  * 
@@ -88,9 +89,10 @@ public final class BpelProcess implements TreeNode, Cloneable {
 
 	@Override
 	public TreeNode getChildAt(int childIndex) {
-		BpelProcess bpelProcess = partnerLinkBindings.get(childIndex).getBpelProcess();
+		PartnerLinkBinding partnerLinkBinding = partnerLinkBindings.get(childIndex);
+		BpelProcess bpelProcess = partnerLinkBinding.getBpelProcess();
 		if (bpelProcess == null) {
-			return new DefaultMutableTreeNode("error");
+			return new ErrorNode("not found process[" + partnerLinkBinding.getName() + "]", partnerLinkBinding.getParseErrror());
 		}
 		return bpelProcess;
 	}

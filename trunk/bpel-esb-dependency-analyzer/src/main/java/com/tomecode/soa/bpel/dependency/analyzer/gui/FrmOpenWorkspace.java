@@ -64,7 +64,7 @@ public final class FrmOpenWorkspace extends Dialog {
 			}
 		});
 
-		textFieldPath = new JTextField();
+		textFieldPath = new JTextField("C:/ORACLE/projects/BPEL/samples/");
 		textFieldPath.addKeyListener(new KeyAdapter() {
 			public final void keyTyped(KeyEvent e) {
 				enableButton(e);
@@ -74,7 +74,7 @@ public final class FrmOpenWorkspace extends Dialog {
 				enableButton(e);
 			}
 		});
-		textFieldName = new JTextField();
+		textFieldName = new JTextField("33");
 		textFieldName.addKeyListener(new KeyAdapter() {
 			public final void keyReleased(KeyEvent e) {
 				workspaceName = textFieldName.getText().trim();
@@ -154,7 +154,7 @@ public final class FrmOpenWorkspace extends Dialog {
 		if (textFieldPath.getText().trim().length() == 0) {
 			return null;
 		}
-		return new File(textFieldPath.getText());
+		return new File(textFieldPath.getText().trim());
 	}
 
 }

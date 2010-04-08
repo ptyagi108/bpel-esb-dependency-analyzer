@@ -1,9 +1,10 @@
 package com.tomecode.soa.bpel.model;
 
 import java.util.Enumeration;
-import java.util.Vector;
 
 import javax.swing.tree.TreeNode;
+
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
 
 /**
  * Partner link operation
@@ -21,8 +22,6 @@ public final class Operation implements TreeNode {
 
 	private PartnerLinkBinding partnerLinkBinding;
 
-	private final Vector<BpelProcess> bpelProcesses;
-
 	/**
 	 * Constructor
 	 * 
@@ -32,14 +31,10 @@ public final class Operation implements TreeNode {
 	 * @param partnerLinkBinding
 	 */
 	public Operation(String activity, String name, String operation, PartnerLinkBinding partnerLinkBinding) {
-		this.bpelProcesses = new Vector<BpelProcess>();
 		this.activity = activity;
 		this.name = name;
 		this.operation = operation;
 		this.partnerLinkBinding = partnerLinkBinding;
-		if (partnerLinkBinding != null) {
-			bpelProcesses.add(partnerLinkBinding.getBpelProcess());
-		}
 	}
 
 	public final String getOperation() {
@@ -60,45 +55,48 @@ public final class Operation implements TreeNode {
 
 	@Override
 	public Enumeration<?> children() {
-		return bpelProcesses.elements();
+		return null;
 	}
 
 	@Override
 	public boolean getAllowsChildren() {
-		return !bpelProcesses.isEmpty();
+		if (partnerLinkBinding != null) {
+			return (partnerLinkBinding.getBpelProcess() != null);
+		}
+		return false;
 	}
 
 	@Override
 	public TreeNode getChildAt(int childIndex) {
-		BpelProcess bpelProcess = bpelProcesses.get(childIndex);
+		BpelProcess bpelProcess = partnerLinkBinding.getBpelProcess();
+		if (bpelProcess == null || bpelProcess.getBpelOperations() == null) {
+			return new ErrorNode("ERROR:not found " + partnerLinkBinding.getWsdlLocation(), null);
+		}
 		return bpelProcess.getBpelOperations();
 	}
 
 	@Override
 	public int getChildCount() {
-		return bpelProcesses.size();
+		return getAllowsChildren() ? 1 : 0;
 	}
 
 	@Override
 	public int getIndex(TreeNode node) {
-		return bpelProcesses.indexOf(node);
+		return 0;
 	}
 
 	@Override
 	public TreeNode getParent() {
-		if (partnerLinkBinding != null) {
-			return partnerLinkBinding.getBpelProcess();
-		}
-		return null;
+		return partnerLinkBinding.getBpelProcess();
 	}
 
 	@Override
 	public boolean isLeaf() {
-		return bpelProcesses.isEmpty();
+		return !getAllowsChildren();
 	}
-	
-	public final BpelProcess getBpelProcess(){
-		return bpelProcesses.get(0);
+
+	public final BpelProcess getBpelProcess() {
+		return partnerLinkBinding.getBpelProcess();
 	}
 
 	public final String toString() {

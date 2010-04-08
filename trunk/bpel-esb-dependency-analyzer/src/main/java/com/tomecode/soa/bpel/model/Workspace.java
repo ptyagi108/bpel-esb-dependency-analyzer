@@ -27,6 +27,10 @@ public final class Workspace implements TreeNode {
 		this.file = file;
 	}
 
+	public final Vector<BpelProcess> getBpelProcesses() {
+		return bpelProcesses;
+	}
+
 	public final void addBpelProcess(BpelProcess bpelProcess) {
 		this.bpelProcesses.add(bpelProcess);
 	}

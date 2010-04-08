@@ -21,4 +21,9 @@ public final class ProcessStructureTree extends BasicTree {
 		treeModel.setRoot(bpelProcessStrukture);
 		expandAllNodes(new TreePath(bpelProcessStrukture));
 	}
+
+	public final void clear() {
+		treeModel.setRoot(null);
+		
+	}
 }

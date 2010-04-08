@@ -1,5 +1,6 @@
 package com.tomecode.soa.bpel.model;
 
+
 /**
  * Contains data for partnerlink
  * 
@@ -14,8 +15,10 @@ public final class PartnerLinkBinding {
 	private BpelProcess bpelProcess;
 
 	private BpelProcess parent;
-	
-	//zoznam operacii
+
+	private Exception parseError;
+
+	// zoznam operacii
 
 	public PartnerLinkBinding(String name, String wsdlLocation) {
 		this.name = name;
@@ -36,6 +39,7 @@ public final class PartnerLinkBinding {
 
 	public final void setBpelProcess(BpelProcess bpelProcess) {
 		this.bpelProcess = bpelProcess;
+		this.parseError  = null;
 	}
 
 	public void setParent(BpelProcess parent) {
@@ -44,6 +48,14 @@ public final class PartnerLinkBinding {
 
 	public final BpelProcess getParent() {
 		return parent;
+	}
+
+	public final Exception getParseErrror() {
+		return parseError;
+	}
+
+	public final void setParseErrror(Exception parseErrror) {
+		this.parseError = parseErrror;
 	}
 
 }

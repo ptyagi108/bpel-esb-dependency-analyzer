@@ -1,7 +1,5 @@
 package com.tomecode.soa.bpel.dependency.analyzer.gui.tree;
 
-import java.util.Enumeration;
-
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -28,19 +26,16 @@ public class BasicTree extends JTree {
 	}
 
 	/**
-	 * expand all nodes in tree
+	 * expand all nodes
 	 * 
 	 * @param parent
 	 */
 	protected final void expandAllNodes(TreePath parent) {
 		TreeNode node = (TreeNode) parent.getLastPathComponent();
 		if (node.getChildCount() >= 0) {
-			for (Enumeration<?> e = node.children(); e.hasMoreElements();) {
-				Object o = e.nextElement();
-				if (o instanceof TreeNode) {
-					TreePath path = parent.pathByAddingChild((TreeNode) o);
-					expandAllNodes(path);
-				}
+			for (int i = 0; i <= node.getChildCount() - 1; i++) {
+				TreePath path = parent.pathByAddingChild(node.getChildAt(i));
+				expandAllNodes(path);
 			}
 		}
 		expandPath(parent);

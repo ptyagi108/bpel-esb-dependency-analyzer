@@ -25,7 +25,10 @@ public final class ProjectOperationTree extends BasicTree {
 	 */
 	public final void addBpelProcessOperations(BpelOperations bpelOperations) {
 		treeModel.setRoot(bpelOperations);
-		expandAllNodes(new TreePath(bpelOperations));
+		expandPath(new TreePath(bpelOperations));
 	}
 
+	public final void clear() {
+		treeModel.setRoot(null);
+	}
 }

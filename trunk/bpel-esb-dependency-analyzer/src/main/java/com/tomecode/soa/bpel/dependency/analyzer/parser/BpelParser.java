@@ -3,7 +3,7 @@ package com.tomecode.soa.bpel.dependency.analyzer.parser;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Hashtable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.dom4j.Document;
@@ -26,17 +26,29 @@ import com.tomecode.soa.bpel.model.PartnerLinkBinding;
  */
 public final class BpelParser {
 
-	/**
-	 * contains parsed list of bpel.xml
-	 */
-	private final Hashtable<File, BpelProcess> parsedProcess = new Hashtable<File, BpelProcess>();
+	private final List<BpelProcess> parsedProcess = new ArrayList<BpelProcess>();
 
 	public static final void main(String[] arg) throws BpelParserException {
 		BpelParser bpelParser = new BpelParser();
-		BpelProcess bpelProcess = bpelParser.parseBpelXml(new File("C:/ORACLE/projects/BPEL/samples/Client/bpel"));
-
+		BpelProcess bpelProcess = bpelParser.parseBpelXml(new File("C:/ORACLE/projects/BPEL/samples/BPELProcess1"));
 		bpelProcess.toString();
+	}
 
+	/**
+	 * parse bpel process from url
+	 * 
+	 * @param data
+	 * @return
+	 */
+	public final String getProcessNameFromUrl(String data) {
+		String code = "/orabpel/";
+		int i = data.indexOf(code);
+		if (i == -1)
+			return null;
+		String partial = data.substring(i + code.length());
+		i = partial.indexOf("/");
+		partial = partial.substring(i + 1);
+		return partial.substring(0, partial.indexOf("/"));
 	}
 
 	/**
@@ -47,7 +59,16 @@ public final class BpelParser {
 	 * @throws BpelParserException
 	 */
 	public final BpelProcess parseBpelXml(File file) throws BpelParserException {
-		File bpelXmlFile = file.getName().equals("bpel.xml") ? file : new File(file + File.separator + "bpel.xml");
+		File bpelXmlFile = file;
+
+		if (file.isDirectory() && file.getName().endsWith(File.separator + "bpel")) {
+			bpelXmlFile = new File(file + File.separator + "bpel.xml");
+		} else if (file.isDirectory()) {
+			bpelXmlFile = new File(file + File.separator + "bpel" + File.separator + "bpel.xml");
+		}
+
+		// file.getName().equals("bpel.xml") ? file : new File(file +
+		// File.separator + "bpel" + File.separator + "bpel.xml");
 		Element bpelXml = parseXml(bpelXmlFile);
 		return parseBpelXml(bpelXml, bpelXmlFile);
 	}
@@ -66,30 +87,38 @@ public final class BpelParser {
 		Element eBPELProcess = eBpelXml.element("BPELProcess");
 		BpelProcess bpelProcess = new BpelProcess(eBPELProcess.attributeValue("id"), eBPELProcess.attributeValue("src"), bpelXmlFile);
 
-		if (parsedProcess.containsKey(bpelXmlFile)) {
-			return parsedProcess.get(bpelXmlFile);
-		} else {
-			parsedProcess.put(bpelXmlFile, bpelProcess);
+		if (!isParsedProcess(bpelProcess)) {
+			parsedProcess.add(bpelProcess);
 		}
-		int index = 0;
+
 		List<?> eListOfPartnerLinkBindinds = eBPELProcess.element("partnerLinkBindings").elements("partnerLinkBinding");
 		for (Object e : eListOfPartnerLinkBindinds) {
 			Element ePartnerLink = (Element) e;
 			PartnerLinkBinding partnerLinkBinding = new PartnerLinkBinding(ePartnerLink.attributeValue("name"), parseWsdlLocation(ePartnerLink));
 
-			// // TODO : doriesit - parsovanie clienta
-			if (index != 0) {
-				bpelProcess.addPartnerLinkBinding(partnerLinkBinding);
-				partnerLinkBinding.setBpelProcess(parseBpelByWsdl(partnerLinkBinding.getWsdlLocation()));
-
-			}
-			index++;
+			bpelProcess.addPartnerLinkBinding(partnerLinkBinding);
+			parseBpelByWsdl(partnerLinkBinding);
 		}
 
 		Element bpelRootElement = parseXml(new File(bpelXmlFile.getParentFile() + File.separator + bpelProcess.getSrc()));
 		parseBpelOperations(bpelRootElement, bpelProcess.getBpelOperations());
 		parseBpelProcessStrukture(bpelRootElement, bpelProcess.getBpelProcessStrukture());
 		return bpelProcess;
+	}
+
+	/**
+	 * chekc if process is parsed
+	 * 
+	 * @param newBpelProcess
+	 * @return
+	 */
+	private final boolean isParsedProcess(BpelProcess newBpelProcess) {
+		for (BpelProcess pBpelProcess : parsedProcess) {
+			if (pBpelProcess.getBpelXmlFile().toString().equals(newBpelProcess.getBpelXmlFile().toString())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -178,25 +207,67 @@ public final class BpelParser {
 	 * @throws MalformedURLException
 	 * @throws DocumentException
 	 */
-	private final BpelProcess parseBpelByWsdl(String wsdlLocation) throws BpelParserException {
-		URL url;
-		try {
-			url = new URL(wsdlLocation);
-		} catch (MalformedURLException e) {
-			e.getMessage().equals("no protocol");
-			e.printStackTrace();
-			return null;
-		}
+	public final void parseBpelByWsdl(PartnerLinkBinding partnerLinkBinding) throws BpelParserException {
 
-		if (!url.getProtocol().equals("file")) {
-			return null;
+		try {
+			URL url = new URL(partnerLinkBinding.getWsdlLocation());
+
+			if (url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
+				String processName = getProcessNameFromUrl(url.toString());
+				partnerLinkBinding.setBpelProcess(findParsedProcess(processName));
+			} else {
+				// parse file dependencie
+				File file = new File(url.getFile());
+				BpelProcess parseBpelProcess = findParsedProcess(file);
+				if (parseBpelProcess != null) {
+					partnerLinkBinding.setBpelProcess(parseBpelProcess);
+				} else {
+					parseBpelXml(file.getParentFile());
+				}
+			}
+
+		} catch (Exception e) {
+			int index = partnerLinkBinding.getWsdlLocation().lastIndexOf(".");
+			if (index != -1) {
+				String processName = partnerLinkBinding.getWsdlLocation().substring(0, index);
+				partnerLinkBinding.setBpelProcess(findParsedProcess(processName));
+			} else {
+				partnerLinkBinding.setParseErrror(e);
+			}
 		}
-		File file = new File(url.getFile());
-		BpelProcess parseBpelProcess = parsedProcess.get(file);
-		if (parseBpelProcess != null) {
-			return parseBpelProcess;
+	}
+
+	/**
+	 * find {@link BpelProcess} in list of {@link #parsedProcess} by bpel.xml
+	 * 
+	 * @param file
+	 * @return
+	 */
+	private final BpelProcess findParsedProcess(File file) {
+		if (file.getName().endsWith(".wsdl") || file.getName().endsWith("?wsdl")) {
+			file = new File(file.getParent() + File.separator + "bpel.xml");
 		}
-		return parseBpelXml(file.getParentFile());
+		for (BpelProcess bpelProcess : parsedProcess) {
+			if (bpelProcess.getBpelXmlFile().toString().equals(file.toString())) {
+				return bpelProcess;
+			}
+		}
+		return null;
+	}
+
+	private final BpelProcess findParsedProcess(String processName) {
+		for (BpelProcess bpelProcess : parsedProcess) {
+			if (bpelProcess.getId() != null) {
+				if (bpelProcess.getId().equals(processName)) {
+					return bpelProcess;
+				}
+			} else if (bpelProcess.getSrc() != null) {
+				if (bpelProcess.getSrc().equals(processName)) {
+					return bpelProcess;
+				}
+			}
+		}
+		return null;
 	}
 
 	/**

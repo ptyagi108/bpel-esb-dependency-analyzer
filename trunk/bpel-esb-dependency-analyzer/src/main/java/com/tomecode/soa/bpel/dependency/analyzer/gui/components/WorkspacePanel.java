@@ -79,12 +79,20 @@ public final class WorkspacePanel extends JPanel {
 		this.workspaceTree.addTreeSelectionListener(new TreeSelectionListener() {
 			@Override
 			public final void valueChanged(TreeSelectionEvent e) {
-				BpelProcess bpelProcess = (BpelProcess) e.getPath().getLastPathComponent();
-				if (bpelProcess != null) {
-					projectOperationTree.addBpelProcessOperations(bpelProcess.getBpelOperations());
-					processStructureTree.addBpelProcessStrukture(bpelProcess.getBpelProcessStrukture());
-					txtProcessFolder.setText(bpelProcess.getBpelXmlFile().getParent());
+
+				if (e.getPath().getLastPathComponent() instanceof BpelProcess) {
+					BpelProcess bpelProcess = (BpelProcess) e.getPath().getLastPathComponent();
+					if (bpelProcess != null) {
+						projectOperationTree.addBpelProcessOperations(bpelProcess.getBpelOperations());
+						processStructureTree.addBpelProcessStrukture(bpelProcess.getBpelProcessStrukture());
+						txtProcessFolder.setText(bpelProcess.getBpelXmlFile().getParent());
+					}
+				} else {
+					processStructureTree.clear();
+					projectOperationTree.clear();
+					txtProcessFolder.setText("");
 				}
+
 			}
 		});
 
@@ -109,7 +117,13 @@ public final class WorkspacePanel extends JPanel {
 	 * @param bpelProcess
 	 */
 	private final void displayBpelProcessStructure(BpelProcess bpelProcess) {
-		processStructureTree.addBpelProcessStrukture(bpelProcess.getBpelProcessStrukture());
-		txtProcessFolder.setText(bpelProcess.getBpelXmlFile().getParent());
+		if (bpelProcess == null) {
+			processStructureTree.clear();
+			txtProcessFolder.setText("");
+		} else {
+			processStructureTree.addBpelProcessStrukture(bpelProcess.getBpelProcessStrukture());
+			txtProcessFolder.setText(bpelProcess.getBpelXmlFile().getParent());
+		}
+
 	}
 }
