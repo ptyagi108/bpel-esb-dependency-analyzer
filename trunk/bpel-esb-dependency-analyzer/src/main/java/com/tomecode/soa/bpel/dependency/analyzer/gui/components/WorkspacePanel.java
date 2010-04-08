@@ -1,6 +1,7 @@
 package com.tomecode.soa.bpel.dependency.analyzer.gui.components;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -12,6 +13,7 @@ import javax.swing.event.TreeSelectionListener;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.ProcessStructureTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.ProjectOperationTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.WorkspaceTree;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
 import com.tomecode.soa.bpel.model.BpelOperations;
 import com.tomecode.soa.bpel.model.BpelProcess;
 import com.tomecode.soa.bpel.model.Operation;
@@ -28,6 +30,9 @@ public final class WorkspacePanel extends JPanel {
 
 	private static final long serialVersionUID = 1530206367436072362L;
 
+	private static final String P_TREE = "p.tree";
+
+	private static final String P_ERROR = "p.error";
 	/**
 	 * {@link WorkspaceTree}
 	 */
@@ -45,6 +50,10 @@ public final class WorkspacePanel extends JPanel {
 	 * path of selected bpel process
 	 */
 	private final JTextField txtProcessFolder;
+
+	private final JTextField txtError;
+
+	private final JTextField txtErrorWsdl;
 
 	/**
 	 * Constructor
@@ -72,7 +81,23 @@ public final class WorkspacePanel extends JPanel {
 		pProjectDetails.add(pFileds, BorderLayout.CENTER);
 		pProject.add(pProjectDetails, BorderLayout.SOUTH);
 
-		spWorkspace.add(pProject);
+		final JPanel pCardPanel = new JPanel(new CardLayout());
+		pCardPanel.add(pProject, P_TREE);
+
+		JPanel pError = PanelFactory.createBorderLayout("Parse Error");
+		txtError = new JTextField();
+		txtError.setEditable(false);
+
+		txtErrorWsdl = new JTextField();
+		txtErrorWsdl.setEditable(false);
+
+		JPanel pErrorRow = PanelFactory.createGridLayout(2, 1);
+		pErrorRow.add(PanelFactory.wrapWithLabelNorm("Error:", txtError, 16), BorderLayout.NORTH);
+		pErrorRow.add(PanelFactory.wrapWithLabelNorm("WSDL:", txtErrorWsdl, 10), BorderLayout.NORTH);
+		pError.add(pErrorRow, BorderLayout.NORTH);
+		pCardPanel.add(pError, P_ERROR);
+
+		spWorkspace.add(pCardPanel);
 
 		add(spWorkspace, BorderLayout.CENTER);
 
@@ -87,10 +112,19 @@ public final class WorkspacePanel extends JPanel {
 						processStructureTree.addBpelProcessStrukture(bpelProcess.getBpelProcessStrukture());
 						txtProcessFolder.setText(bpelProcess.getBpelXmlFile().getParent());
 					}
+					CardLayout cardLayout = (CardLayout) pCardPanel.getLayout();
+					cardLayout.show(pCardPanel, P_TREE);
+
 				} else {
 					processStructureTree.clear();
 					projectOperationTree.clear();
 					txtProcessFolder.setText("");
+
+					ErrorNode errorNode = (ErrorNode) e.getPath().getLastPathComponent();
+					txtError.setText(errorNode.getErrorText());
+					txtErrorWsdl.setText(errorNode.getWsdl());
+					CardLayout cardLayout = (CardLayout) pCardPanel.getLayout();
+					cardLayout.show(pCardPanel, P_ERROR);
 				}
 
 			}
@@ -101,7 +135,7 @@ public final class WorkspacePanel extends JPanel {
 			public final void valueChanged(TreeSelectionEvent e) {
 				if (e.getPath().getLastPathComponent() instanceof Operation) {
 					Operation operation = (Operation) e.getPath().getLastPathComponent();
-					displayBpelProcessStructure(operation.getBpelProcess());
+					displayBpelProcessStructure(operation.getPartnerLinkBinding().getParent());// .getBpelProcess());
 				} else if (e.getPath().getLastPathComponent() instanceof BpelOperations) {
 					BpelOperations bpelOperations = (BpelOperations) e.getPath().getLastPathComponent();
 					displayBpelProcessStructure(bpelOperations.getBpelProcess());

@@ -15,10 +15,17 @@ public final class ErrorNode extends DefaultMutableTreeNode {
 
 	private String errorText;
 
-	public ErrorNode(String errorText, Exception exception) {
+	private String wsdl;
+
+	public ErrorNode(String errorText, String wsdl, Exception exception) {
 		super(errorText);
 		this.errorText = errorText;
 		this.exception = exception;
+		this.wsdl = wsdl;
+	}
+
+	public final String getWsdl() {
+		return wsdl;
 	}
 
 	public final Exception getException() {

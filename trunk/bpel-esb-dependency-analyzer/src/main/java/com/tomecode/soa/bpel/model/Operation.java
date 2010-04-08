@@ -70,7 +70,7 @@ public final class Operation implements TreeNode {
 	public TreeNode getChildAt(int childIndex) {
 		BpelProcess bpelProcess = partnerLinkBinding.getBpelProcess();
 		if (bpelProcess == null || bpelProcess.getBpelOperations() == null) {
-			return new ErrorNode("ERROR:not found " + partnerLinkBinding.getWsdlLocation(), null);
+			return new ErrorNode("ERROR:not found " + partnerLinkBinding.getName(), partnerLinkBinding.getWsdlLocation(), null);
 		}
 		return bpelProcess.getBpelOperations();
 	}

@@ -92,7 +92,7 @@ public final class BpelProcess implements TreeNode, Cloneable {
 		PartnerLinkBinding partnerLinkBinding = partnerLinkBindings.get(childIndex);
 		BpelProcess bpelProcess = partnerLinkBinding.getBpelProcess();
 		if (bpelProcess == null) {
-			return new ErrorNode("not found process[" + partnerLinkBinding.getName() + "]", partnerLinkBinding.getParseErrror());
+			return new ErrorNode("not found process[" + partnerLinkBinding.getName() + "]", partnerLinkBinding.getWsdlLocation(), partnerLinkBinding.getParseErrror());
 		}
 		return bpelProcess;
 	}
