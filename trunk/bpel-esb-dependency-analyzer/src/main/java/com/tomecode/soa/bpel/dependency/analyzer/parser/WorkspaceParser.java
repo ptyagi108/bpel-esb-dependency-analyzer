@@ -9,16 +9,17 @@ import com.tomecode.soa.bpel.model.PartnerLinkBinding;
 import com.tomecode.soa.bpel.model.Workspace;
 
 /**
- * Parser for {@link Workspace}
+ * 
+ * Parser for bpel workspace
  * 
  * @author Tomas Frastia
  * 
  */
-public final class WorkSpaceParser {
+public final class WorkspaceParser {
 
 	private final BpelParser bpelParser;
 
-	public WorkSpaceParser() {
+	public WorkspaceParser() {
 		bpelParser = new BpelParser();
 	}
 
