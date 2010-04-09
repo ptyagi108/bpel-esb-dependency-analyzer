@@ -11,7 +11,7 @@ import org.dom4j.Element;
 
 import com.tomecode.soa.oracle10g.bpel.Activity;
 import com.tomecode.soa.oracle10g.bpel.BpelOperations;
-import com.tomecode.soa.oracle10g.bpel.BpelProcess;
+import com.tomecode.soa.oracle10g.bpel.Bpel;
 import com.tomecode.soa.oracle10g.bpel.BpelProcessStrukture;
 import com.tomecode.soa.oracle10g.bpel.Operation;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
@@ -24,11 +24,11 @@ import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
  */
 public final class BpelParser extends AbstractParser {
 
-	private final List<BpelProcess> parsedProcess = new ArrayList<BpelProcess>();
+	private final List<Bpel> parsedProcess = new ArrayList<Bpel>();
 
 	public static final void main(String[] arg) throws ServiceParserException {
 		BpelParser bpelParser = new BpelParser();
-		BpelProcess bpelProcess = bpelParser.parseBpelXml(new File("C:/ORACLE/projects/BPEL/samples/BPELProcess1"));
+		Bpel bpelProcess = bpelParser.parseBpelXml(new File("C:/ORACLE/projects/BPEL/samples/BPELProcess1"));
 		bpelProcess.toString();
 	}
 
@@ -56,7 +56,7 @@ public final class BpelParser extends AbstractParser {
 	 * @return
 	 * @throws ServiceParserException
 	 */
-	public final BpelProcess parseBpelXml(File file) throws ServiceParserException {
+	public final Bpel parseBpelXml(File file) throws ServiceParserException {
 		File bpelXmlFile = file;
 
 		if (file.isDirectory() && file.getName().endsWith(File.separator + "bpel")) {
@@ -81,9 +81,9 @@ public final class BpelParser extends AbstractParser {
 	 * @return
 	 * @throws ServiceParserException
 	 */
-	private final BpelProcess parseBpelXml(Element eBpelXml, File bpelXmlFile) throws ServiceParserException {
+	private final Bpel parseBpelXml(Element eBpelXml, File bpelXmlFile) throws ServiceParserException {
 		Element eBPELProcess = eBpelXml.element("BPELProcess");
-		BpelProcess bpelProcess = new BpelProcess(eBPELProcess.attributeValue("id"), eBPELProcess.attributeValue("src"), bpelXmlFile);
+		Bpel bpelProcess = new Bpel(eBPELProcess.attributeValue("id"), eBPELProcess.attributeValue("src"), bpelXmlFile);
 
 		if (!isParsedProcess(bpelProcess)) {
 			parsedProcess.add(bpelProcess);
@@ -110,8 +110,8 @@ public final class BpelParser extends AbstractParser {
 	 * @param newBpelProcess
 	 * @return
 	 */
-	private final boolean isParsedProcess(BpelProcess newBpelProcess) {
-		for (BpelProcess pBpelProcess : parsedProcess) {
+	private final boolean isParsedProcess(Bpel newBpelProcess) {
+		for (Bpel pBpelProcess : parsedProcess) {
 			if (pBpelProcess.getBpelXmlFile().toString().equals(newBpelProcess.getBpelXmlFile().toString())) {
 				return true;
 			}
@@ -216,7 +216,7 @@ public final class BpelParser extends AbstractParser {
 			} else {
 				// parse file dependencie
 				File file = new File(url.getFile());
-				BpelProcess parseBpelProcess = findParsedProcess(file);
+				Bpel parseBpelProcess = findParsedProcess(file);
 				if (parseBpelProcess != null) {
 					partnerLinkBinding.setBpelProcess(parseBpelProcess);
 				} else {
@@ -236,16 +236,16 @@ public final class BpelParser extends AbstractParser {
 	}
 
 	/**
-	 * find {@link BpelProcess} in list of {@link #parsedProcess} by bpel.xml
+	 * find {@link Bpel} in list of {@link #parsedProcess} by bpel.xml
 	 * 
 	 * @param file
 	 * @return
 	 */
-	private final BpelProcess findParsedProcess(File file) {
+	private final Bpel findParsedProcess(File file) {
 		if (file.getName().endsWith(".wsdl") || file.getName().endsWith("?wsdl")) {
 			file = new File(file.getParent() + File.separator + "bpel.xml");
 		}
-		for (BpelProcess bpelProcess : parsedProcess) {
+		for (Bpel bpelProcess : parsedProcess) {
 			if (bpelProcess.getBpelXmlFile().toString().equals(file.toString())) {
 				return bpelProcess;
 			}
@@ -253,8 +253,8 @@ public final class BpelParser extends AbstractParser {
 		return null;
 	}
 
-	private final BpelProcess findParsedProcess(String processName) {
-		for (BpelProcess bpelProcess : parsedProcess) {
+	private final Bpel findParsedProcess(String processName) {
+		for (Bpel bpelProcess : parsedProcess) {
 			if (bpelProcess.getId() != null) {
 				if (bpelProcess.getId().equals(processName)) {
 					return bpelProcess;

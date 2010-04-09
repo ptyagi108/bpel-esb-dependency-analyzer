@@ -35,14 +35,13 @@ public final class EsbParser extends AbstractParser {
 		Element eServiceDefinition = eService.element("serviceDefinition");
 		if (eServiceDefinition != null) {
 			esb.setWsdlURL(eServiceDefinition.elementTextTrim("wsdlURL"));
-		}
 
-		Element eEndpointDefinition = eServiceDefinition.element("endpointDefinition");
-		if (eEndpointDefinition != null) {
-			esb.setConcreteWSDLURL(eEndpointDefinition.elementTextTrim("concreteWSDLURL"));
-			esb.setSoapEndpointURI(eEndpointDefinition.elementTextTrim("soapEndpointURI"));
+			Element eEndpointDefinition = eServiceDefinition.element("endpointDefinition");
+			if (eEndpointDefinition != null) {
+				esb.setConcreteWSDLURL(eEndpointDefinition.elementTextTrim("concreteWSDLURL"));
+				esb.setSoapEndpointURI(eEndpointDefinition.elementTextTrim("soapEndpointURI"));
+			}
 		}
-
 		parseOperations(eService, esb);
 
 		return esb;

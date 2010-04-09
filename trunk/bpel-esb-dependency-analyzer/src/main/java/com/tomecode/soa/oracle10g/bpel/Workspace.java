@@ -8,8 +8,10 @@ import java.util.Vector;
 
 import javax.swing.tree.TreeNode;
 
+import com.tomecode.soa.process.Service;
+
 /**
- * This object contains all {@link BpelProcess}
+ * This object contains all {@link Service}
  * 
  * @author Tomas Frastia
  * 
@@ -18,23 +20,31 @@ public final class Workspace implements TreeNode {
 
 	private File file;
 
-	private final Vector<BpelProcess> bpelProcesses;
+	private final Vector<Service> services;
 
+	/**
+	 * Constructor
+	 */
 	public Workspace() {
-		this.bpelProcesses = new Vector<BpelProcess>();
+		this.services = new Vector<Service>();
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param file
+	 */
 	public Workspace(File file) {
 		this();
 		this.file = file;
 	}
 
-	public final Vector<BpelProcess> getBpelProcesses() {
-		return bpelProcesses;
+	public final Vector<Service> getServices() {
+		return services;
 	}
 
-	public final void addBpelProcess(BpelProcess bpelProcess) {
-		this.bpelProcesses.add(bpelProcess);
+	public final void addService(Service service) {
+		this.services.add(service);
 	}
 
 	public final File getFile() {
@@ -43,27 +53,27 @@ public final class Workspace implements TreeNode {
 
 	@Override
 	public Enumeration<?> children() {
-		return bpelProcesses.elements();
+		return services.elements();
 	}
 
 	@Override
 	public boolean getAllowsChildren() {
-		return !bpelProcesses.isEmpty();
+		return !services.isEmpty();
 	}
 
 	@Override
 	public TreeNode getChildAt(int childIndex) {
-		return bpelProcesses.get(childIndex);
+		return services.get(childIndex);
 	}
 
 	@Override
 	public int getChildCount() {
-		return bpelProcesses.size();
+		return services.size();
 	}
 
 	@Override
 	public int getIndex(TreeNode node) {
-		return bpelProcesses.indexOf(node);
+		return services.indexOf(node);
 	}
 
 	@Override
@@ -73,23 +83,30 @@ public final class Workspace implements TreeNode {
 
 	@Override
 	public boolean isLeaf() {
-		return bpelProcesses.isEmpty();
+		return services.isEmpty();
 	}
 
-	public final List<BpelProcess> findUsages(BpelProcess usage) {
-		List<BpelProcess> list = new ArrayList<BpelProcess>();
-		for (BpelProcess bpelProcess : bpelProcesses) {
-			if (!bpelProcess.equals(usage)) {
-				for (PartnerLinkBinding partnerLinkBinding : bpelProcess.getPartnerLinkBindings()) {
-					if (partnerLinkBinding.getBpelProcess() != null) {
-						if (partnerLinkBinding.getBpelProcess().equals(usage)) {
-							list.add(partnerLinkBinding.getParent());
-						}
-					}
-				}
-			}
-
-		}
-		return list;
+	/**
+	 * find usage for bpel process
+	 * 
+	 * @param usage
+	 * @return
+	 */
+	public final List<Bpel> findUsages(Bpel usage) {
+		// List<Bpel> list = new ArrayList<Bpel>();
+		// for (Bpel bpelProcess : services) {
+		// if (!bpelProcess.equals(usage)) {
+		// for (PartnerLinkBinding partnerLinkBinding :
+		// bpelProcess.getPartnerLinkBindings()) {
+		// if (partnerLinkBinding.getBpelProcess() != null) {
+		// if (partnerLinkBinding.getBpelProcess().equals(usage)) {
+		// list.add(partnerLinkBinding.getParent());
+		// }
+		// }
+		// }
+		// }
+		// }
+		// return list;
+		return new ArrayList<Bpel>();
 	}
 }

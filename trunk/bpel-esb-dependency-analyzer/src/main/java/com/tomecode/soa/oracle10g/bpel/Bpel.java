@@ -8,6 +8,8 @@ import java.util.Vector;
 import javax.swing.tree.TreeNode;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
+import com.tomecode.soa.process.Service;
+import com.tomecode.soa.process.ServiceType;
 
 /**
  * 
@@ -16,7 +18,7 @@ import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
  * @author Tomas Frastia
  * 
  */
-public final class BpelProcess implements TreeNode, Cloneable {
+public final class Bpel extends Service {
 
 	private String id;
 
@@ -36,7 +38,8 @@ public final class BpelProcess implements TreeNode, Cloneable {
 	/**
 	 * Constructor
 	 */
-	public BpelProcess() {
+	public Bpel() {
+		super(ServiceType.ORACLE10G_BPEL);
 		this.partnerLinkBindings = new Vector<PartnerLinkBinding>();
 		this.bpelOperations = new BpelOperations(this);
 		this.bpelProcessStrukture = new BpelProcessStrukture(this);
@@ -49,7 +52,7 @@ public final class BpelProcess implements TreeNode, Cloneable {
 	 * @param src
 	 * @param bpelXmlFile
 	 */
-	public BpelProcess(String id, String src, File bpelXmlFile) {
+	public Bpel(String id, String src, File bpelXmlFile) {
 		this();
 		this.id = id;
 		this.src = src;
@@ -90,7 +93,7 @@ public final class BpelProcess implements TreeNode, Cloneable {
 	@Override
 	public TreeNode getChildAt(int childIndex) {
 		PartnerLinkBinding partnerLinkBinding = partnerLinkBindings.get(childIndex);
-		BpelProcess bpelProcess = partnerLinkBinding.getBpelProcess();
+		Bpel bpelProcess = partnerLinkBinding.getBpelProcess();
 		if (bpelProcess == null) {
 			return new ErrorNode("not found process[" + partnerLinkBinding.getName() + "]", partnerLinkBinding.getWsdlLocation(), partnerLinkBinding.getParseErrror());
 		}

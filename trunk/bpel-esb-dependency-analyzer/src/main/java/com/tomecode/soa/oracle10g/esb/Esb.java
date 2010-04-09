@@ -1,7 +1,13 @@
 package com.tomecode.soa.oracle10g.esb;
 
 import java.io.File;
+import java.util.Enumeration;
 import java.util.Vector;
+
+import javax.swing.tree.TreeNode;
+
+import com.tomecode.soa.process.Service;
+import com.tomecode.soa.process.ServiceType;
 
 /**
  * Esb service
@@ -9,7 +15,7 @@ import java.util.Vector;
  * @author Frastia Tomas
  * 
  */
-public final class Esb {
+public final class Esb extends Service {
 
 	private File file;
 	private String name;
@@ -24,6 +30,7 @@ public final class Esb {
 	private Vector<EsbOperation> esbOperations;
 
 	public Esb() {
+		super(ServiceType.ORACLE10G_ESB);
 		esbOperations = new Vector<EsbOperation>();
 	}
 
@@ -81,4 +88,47 @@ public final class Esb {
 		esbOperations.add(esbOperation);
 	}
 
+	@Override
+	public Enumeration<?> children() {
+		return null;
+	}
+
+	@Override
+	public boolean getAllowsChildren() {
+		return !esbOperations.isEmpty();
+	}
+
+	@Override
+	public TreeNode getChildAt(int childIndex) {
+		return esbOperations.get(childIndex);
+	}
+
+	@Override
+	public int getChildCount() {
+		return esbOperations.size();
+	}
+
+	@Override
+	public int getIndex(TreeNode node) {
+		return esbOperations.indexOf(node);
+	}
+
+	@Override
+	public TreeNode getParent() {
+		return null;
+	}
+
+	@Override
+	public boolean isLeaf() {
+		return esbOperations.isEmpty();
+	}
+
+	public String toString() {
+		if (name == null) {
+			if (qName != null) {
+				return qName;
+			}
+		}
+		return file.getName();
+	}
 }

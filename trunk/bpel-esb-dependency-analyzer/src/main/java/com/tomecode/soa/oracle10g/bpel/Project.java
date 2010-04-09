@@ -5,13 +5,13 @@ import java.util.List;
 
 public class Project {
 
-	private final List<BpelProcess> bpelProcesses;
+	private final List<Bpel> bpelProcesses;
 
 	public Project() {
-		this.bpelProcesses = new ArrayList<BpelProcess>();
+		this.bpelProcesses = new ArrayList<Bpel>();
 	}
 
-	public final void addBpelProcess(BpelProcess bpelProcess) {
+	public final void addBpelProcess(Bpel bpelProcess) {
 		this.bpelProcesses.add(bpelProcess);
 	}
 }
