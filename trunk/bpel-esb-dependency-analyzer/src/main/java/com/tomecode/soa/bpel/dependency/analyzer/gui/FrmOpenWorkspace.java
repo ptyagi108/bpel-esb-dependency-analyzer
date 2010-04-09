@@ -14,8 +14,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.components.TabbedManager;
-import com.tomecode.soa.bpel.model.BpelProcess;
-import com.tomecode.soa.bpel.model.Workspace;
+import com.tomecode.soa.oracle10g.model.BpelProcess;
+import com.tomecode.soa.oracle10g.model.Workspace;
 import com.tomecode.util.gui.Dialog;
 import com.tomecode.util.gui.Frame;
 import com.tomecode.util.gui.HideNotifiListener;

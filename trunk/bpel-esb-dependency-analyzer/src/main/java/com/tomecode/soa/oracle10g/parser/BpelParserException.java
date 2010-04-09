@@ -1,4 +1,4 @@
-package com.tomecode.soa.bpel.dependency.analyzer.parser;
+package com.tomecode.soa.oracle10g.parser;
 
 /**
  * 

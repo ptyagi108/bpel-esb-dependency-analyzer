@@ -1,4 +1,4 @@
-package com.tomecode.soa.bpel.model;
+package com.tomecode.soa.oracle10g.model;
 
 import java.util.Enumeration;
 import java.util.Vector;

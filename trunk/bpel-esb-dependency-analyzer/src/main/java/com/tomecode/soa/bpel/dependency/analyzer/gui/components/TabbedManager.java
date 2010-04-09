@@ -12,7 +12,7 @@ import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 
-import com.tomecode.soa.bpel.model.Workspace;
+import com.tomecode.soa.oracle10g.model.Workspace;
 
 /**
  * 

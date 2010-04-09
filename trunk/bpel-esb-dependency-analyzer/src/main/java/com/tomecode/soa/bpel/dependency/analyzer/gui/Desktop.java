@@ -10,8 +10,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.components.TabbedManager;
-import com.tomecode.soa.bpel.dependency.analyzer.parser.BpelParserException;
-import com.tomecode.soa.bpel.dependency.analyzer.parser.WorkspaceParser;
+import com.tomecode.soa.oracle10g.parser.BpelParserException;
+import com.tomecode.soa.oracle10g.parser.WorkspaceParser;
 import com.tomecode.util.gui.Frame;
 import com.tomecode.util.gui.HideNotifiListener;
 

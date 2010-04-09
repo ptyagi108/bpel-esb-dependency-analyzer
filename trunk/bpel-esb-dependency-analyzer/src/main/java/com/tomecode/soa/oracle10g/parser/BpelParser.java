@@ -1,4 +1,4 @@
-package com.tomecode.soa.bpel.dependency.analyzer.parser;
+package com.tomecode.soa.oracle10g.parser;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -11,12 +11,12 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import com.tomecode.soa.bpel.model.Activity;
-import com.tomecode.soa.bpel.model.BpelOperations;
-import com.tomecode.soa.bpel.model.BpelProcess;
-import com.tomecode.soa.bpel.model.BpelProcessStrukture;
-import com.tomecode.soa.bpel.model.Operation;
-import com.tomecode.soa.bpel.model.PartnerLinkBinding;
+import com.tomecode.soa.oracle10g.model.Activity;
+import com.tomecode.soa.oracle10g.model.BpelOperations;
+import com.tomecode.soa.oracle10g.model.BpelProcess;
+import com.tomecode.soa.oracle10g.model.BpelProcessStrukture;
+import com.tomecode.soa.oracle10g.model.Operation;
+import com.tomecode.soa.oracle10g.model.PartnerLinkBinding;
 
 /**
  * Parser for BPEL
