@@ -2,7 +2,7 @@ package com.tomecode.soa.bpel.dependency.analyzer.gui.tree;
 
 import javax.swing.tree.TreePath;
 
-import com.tomecode.soa.oracle10g.model.BpelOperations;
+import com.tomecode.soa.oracle10g.bpel.BpelOperations;
 
 /**
  * 

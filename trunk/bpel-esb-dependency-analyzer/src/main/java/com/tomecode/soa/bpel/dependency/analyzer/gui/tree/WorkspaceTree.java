@@ -1,6 +1,6 @@
 package com.tomecode.soa.bpel.dependency.analyzer.gui.tree;
 
-import com.tomecode.soa.oracle10g.model.Workspace;
+import com.tomecode.soa.oracle10g.bpel.Workspace;
 
 /**
  * Display all BPEL/ESB projects in workspace

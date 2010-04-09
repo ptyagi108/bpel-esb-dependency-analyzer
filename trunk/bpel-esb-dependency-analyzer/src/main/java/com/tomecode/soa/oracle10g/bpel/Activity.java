@@ -1,4 +1,4 @@
-package com.tomecode.soa.oracle10g.model;
+package com.tomecode.soa.oracle10g.bpel;
 
 import java.util.Enumeration;
 import java.util.Vector;
@@ -10,23 +10,41 @@ import javax.swing.tree.TreeNode;
  * @author Tomas Frastia
  * 
  */
-public final class BpelProcessStrukture implements TreeNode {
+public final class Activity implements TreeNode {
 
 	private final Vector<Activity> activities;
 
-	private BpelProcess bpelProcess;
+	private Activity parent;
 
-	public BpelProcessStrukture() {
+	private String type;
+
+	private String name;
+
+	public Activity() {
 		this.activities = new Vector<Activity>();
 	}
 
-	public BpelProcessStrukture(BpelProcess bpelProcess) {
+	public Activity(String type) {
 		this();
-		this.bpelProcess = bpelProcess;
+		this.type = type;
+	}
+
+	public Activity(String type, String name) {
+		this(type);
+		this.name = name;
 	}
 
 	public final void addActivity(Activity activity) {
+		activity.setParent(this);
 		this.activities.add(activity);
+	}
+
+	private void setParent(Activity parent) {
+		this.parent = parent;
+	}
+
+	public final String getName() {
+		return name;
 	}
 
 	@Override
@@ -56,7 +74,7 @@ public final class BpelProcessStrukture implements TreeNode {
 
 	@Override
 	public TreeNode getParent() {
-		return bpelProcess;
+		return this.parent;
 	}
 
 	@Override
@@ -65,6 +83,6 @@ public final class BpelProcessStrukture implements TreeNode {
 	}
 
 	public final String toString() {
-		return bpelProcess.toString();
+		return type + (name == null ? "" : (":" + name));
 	}
 }

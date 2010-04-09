@@ -1,4 +1,4 @@
-package com.tomecode.soa.oracle10g.model;
+package com.tomecode.soa.oracle10g.bpel;
 
 import java.util.ArrayList;
 import java.util.List;

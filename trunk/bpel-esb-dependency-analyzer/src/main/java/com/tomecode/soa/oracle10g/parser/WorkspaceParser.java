@@ -4,9 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tomecode.soa.oracle10g.model.BpelProcess;
-import com.tomecode.soa.oracle10g.model.PartnerLinkBinding;
-import com.tomecode.soa.oracle10g.model.Workspace;
+import com.tomecode.soa.oracle10g.bpel.BpelProcess;
+import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
+import com.tomecode.soa.oracle10g.bpel.Workspace;
 
 /**
  * 

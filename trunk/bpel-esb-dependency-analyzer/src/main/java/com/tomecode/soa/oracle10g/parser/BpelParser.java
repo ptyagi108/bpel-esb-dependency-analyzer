@@ -9,12 +9,12 @@ import java.util.List;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
-import com.tomecode.soa.oracle10g.model.Activity;
-import com.tomecode.soa.oracle10g.model.BpelOperations;
-import com.tomecode.soa.oracle10g.model.BpelProcess;
-import com.tomecode.soa.oracle10g.model.BpelProcessStrukture;
-import com.tomecode.soa.oracle10g.model.Operation;
-import com.tomecode.soa.oracle10g.model.PartnerLinkBinding;
+import com.tomecode.soa.oracle10g.bpel.Activity;
+import com.tomecode.soa.oracle10g.bpel.BpelOperations;
+import com.tomecode.soa.oracle10g.bpel.BpelProcess;
+import com.tomecode.soa.oracle10g.bpel.BpelProcessStrukture;
+import com.tomecode.soa.oracle10g.bpel.Operation;
+import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
 
 /**
  * Parser for BPEL

@@ -2,7 +2,7 @@ package com.tomecode.soa.bpel.dependency.analyzer.gui.tree;
 
 import java.util.List;
 
-import com.tomecode.soa.oracle10g.model.BpelProcess;
+import com.tomecode.soa.oracle10g.bpel.BpelProcess;
 
 /**
  * The tree, which contains an selected process in (@ link WorkspaceTree) and
