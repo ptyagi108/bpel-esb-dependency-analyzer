@@ -5,15 +5,15 @@ package com.tomecode.soa.oracle10g.parser;
  * @author Tomas Frastia
  * 
  */
-public class BpelParserException extends Exception {
+public class ServiceParserException extends Exception {
 
 	private boolean userException;
 
-	public BpelParserException(Exception e) {
+	public ServiceParserException(Exception e) {
 		super(e.getMessage(), e);
 	}
 
-	public BpelParserException(String message, boolean userException) {
+	public ServiceParserException(String message, boolean userException) {
 		super(message);
 		this.userException = userException;
 	}

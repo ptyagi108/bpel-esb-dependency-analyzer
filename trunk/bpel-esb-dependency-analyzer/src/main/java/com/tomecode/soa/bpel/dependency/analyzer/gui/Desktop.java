@@ -10,7 +10,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.components.TabbedManager;
-import com.tomecode.soa.oracle10g.parser.BpelParserException;
+import com.tomecode.soa.oracle10g.parser.ServiceParserException;
 import com.tomecode.soa.oracle10g.parser.WorkspaceParser;
 import com.tomecode.util.gui.Frame;
 import com.tomecode.util.gui.HideNotifiListener;
@@ -91,7 +91,7 @@ public final class Desktop extends Frame implements ActionListener {
 				if (returnObj != null && returnObj.length != 0) {
 					try {
 						workspaceTabb.addTable(returnObj[0].toString(), new WorkspaceParser().parse((File) returnObj[1]));
-					} catch (BpelParserException e) {
+					} catch (ServiceParserException e) {
 						e.printStackTrace();
 					}
 				}

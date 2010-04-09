@@ -28,11 +28,11 @@ public final class WorkspaceParser {
 	 * 
 	 * @param workspaceFolder
 	 * @return
-	 * @throws BpelParserException
+	 * @throws ServiceParserException
 	 */
-	public final Workspace parse(File workspaceFolder) throws BpelParserException {
+	public final Workspace parse(File workspaceFolder) throws ServiceParserException {
 		if (workspaceFolder.isFile()) {
-			throw new BpelParserException(workspaceFolder + " is file!", true);
+			throw new ServiceParserException(workspaceFolder + " is file!", true);
 		}
 		List<File> bpelXmlFiles = new ArrayList<File>();
 		loadBpelXmlFiles(workspaceFolder, bpelXmlFiles);

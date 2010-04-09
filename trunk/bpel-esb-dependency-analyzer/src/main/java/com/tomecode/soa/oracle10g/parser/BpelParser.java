@@ -6,10 +6,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 
 import com.tomecode.soa.oracle10g.model.Activity;
 import com.tomecode.soa.oracle10g.model.BpelOperations;
@@ -24,11 +22,11 @@ import com.tomecode.soa.oracle10g.model.PartnerLinkBinding;
  * @author Tomas Frastia
  * 
  */
-public final class BpelParser {
+public final class BpelParser extends AbstractParser {
 
 	private final List<BpelProcess> parsedProcess = new ArrayList<BpelProcess>();
 
-	public static final void main(String[] arg) throws BpelParserException {
+	public static final void main(String[] arg) throws ServiceParserException {
 		BpelParser bpelParser = new BpelParser();
 		BpelProcess bpelProcess = bpelParser.parseBpelXml(new File("C:/ORACLE/projects/BPEL/samples/BPELProcess1"));
 		bpelProcess.toString();
@@ -56,9 +54,9 @@ public final class BpelParser {
 	 * 
 	 * @param file
 	 * @return
-	 * @throws BpelParserException
+	 * @throws ServiceParserException
 	 */
-	public final BpelProcess parseBpelXml(File file) throws BpelParserException {
+	public final BpelProcess parseBpelXml(File file) throws ServiceParserException {
 		File bpelXmlFile = file;
 
 		if (file.isDirectory() && file.getName().endsWith(File.separator + "bpel")) {
@@ -81,9 +79,9 @@ public final class BpelParser {
 	 *            parsed bpel.xml
 	 * @param bpelXmlFile
 	 * @return
-	 * @throws BpelParserException
+	 * @throws ServiceParserException
 	 */
-	private final BpelProcess parseBpelXml(Element eBpelXml, File bpelXmlFile) throws BpelParserException {
+	private final BpelProcess parseBpelXml(Element eBpelXml, File bpelXmlFile) throws ServiceParserException {
 		Element eBPELProcess = eBpelXml.element("BPELProcess");
 		BpelProcess bpelProcess = new BpelProcess(eBPELProcess.attributeValue("id"), eBPELProcess.attributeValue("src"), bpelXmlFile);
 
@@ -159,9 +157,9 @@ public final class BpelParser {
 	 * 
 	 * @param element
 	 * @param bpelOperations
-	 * @throws BpelParserException
+	 * @throws ServiceParserException
 	 */
-	private void parseBpelOperations(Element element, BpelOperations bpelOperations) throws BpelParserException {
+	private void parseBpelOperations(Element element, BpelOperations bpelOperations) throws ServiceParserException {
 		List<?> eList = element.element("partnerLinks").elements("partnerLink");
 		for (Object e : eList) {
 			Element ePartnerLink = (Element) e;
@@ -207,7 +205,7 @@ public final class BpelParser {
 	 * @throws MalformedURLException
 	 * @throws DocumentException
 	 */
-	public final void parseBpelByWsdl(PartnerLinkBinding partnerLinkBinding) throws BpelParserException {
+	public final void parseBpelByWsdl(PartnerLinkBinding partnerLinkBinding) throws ServiceParserException {
 
 		try {
 			URL url = new URL(partnerLinkBinding.getWsdlLocation());
@@ -285,24 +283,6 @@ public final class BpelParser {
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * parse file to Xml
-	 * 
-	 * @param file
-	 * @return
-	 * @throws BpelParserException
-	 */
-	private final Element parseXml(File file) throws BpelParserException {
-		SAXReader saxReader = new SAXReader();
-		Document document;
-		try {
-			document = saxReader.read(file);
-		} catch (DocumentException e) {
-			throw new BpelParserException(e);
-		}
-		return document.getRootElement();
 	}
 
 }
