@@ -2,11 +2,22 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.tomecode</groupId>
-	<artifactId>bpel-dependency-analyzer</artifactId>
+	<artifactId>bpel-esb-dependency-analyzer</artifactId>
 	<name>bpel-esb-dependency-analyzer</name>
 	<version>0.1</version>
 	<packaging>jar</packaging>
+	<description>SEO analyzer for BPEL and ESB dependencies</description>
 
+	<url>http://www.tomecode.com</url>
+	
+	<developers>
+		<developer>
+			<organizationUrl>http://www.tomecode.com</organizationUrl>
+			<organization>Frastia Tomas</organization>
+			<url>http://www.tomecode.com</url>
+			<name>Frastia Tomas</name>
+		</developer>
+	</developers>
 	<build>
 		<plugins>
 			<plugin>
