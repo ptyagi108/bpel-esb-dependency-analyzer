@@ -47,39 +47,36 @@ public final class WorkspaceParser {
 		if (workspaceFolder.isFile()) {
 			throw new ServiceParserException(workspaceFolder + " is file!", true);
 		}
-		List<File> listOfFiles = new ArrayList<File>();
-		findBpelXmlFiles(workspaceFolder, listOfFiles);
-		Workspace workspace = new Workspace(workspaceFolder);
-		for (File bpelXml : listOfFiles) {
-			workspace.addService(bpelParser.parseBpelXml(bpelXml));
-		}
+		try {
+			List<File> listOfFiles = new ArrayList<File>();
+			findBpelXmlFiles(workspaceFolder, listOfFiles);
+			Workspace workspace = new Workspace(workspaceFolder);
+			for (File bpelXml : listOfFiles) {
+				workspace.addService(bpelParser.parseBpelXml(bpelXml));
+			}
 
-		for (Service service : workspace.getServices()) {
-			if (service.getType() == ServiceType.ORACLE10G_BPEL) {
-				Bpel bpel = (Bpel) service;
-				for (PartnerLinkBinding partnerLinkBinding : bpel.getPartnerLinkBindings()) {
-					if (partnerLinkBinding.getBpelProcess() == null) {
-						bpelParser.parseBpelByWsdl(partnerLinkBinding);
+			for (Service service : workspace.getServices()) {
+				if (service.getType() == ServiceType.ORACLE10G_BPEL) {
+					Bpel bpel = (Bpel) service;
+					for (PartnerLinkBinding partnerLinkBinding : bpel.getPartnerLinkBindings()) {
+						if (partnerLinkBinding.getBpelProcess() == null) {
+							bpelParser.parseBpelByWsdl(partnerLinkBinding);
+						}
 					}
 				}
 			}
+
+			List<File> esbFiles = new ArrayList<File>();
+			findEsbXmlFiles(workspaceFolder, esbFiles);
+			for (File esbFile : esbFiles) {
+				workspace.addService(esbParser.parse(esbFile));
+			}
+
+			return workspace;
+		} catch (Exception e) {
+			throw new ServiceParserException(e);
 		}
 
-		List<File> esbFiles = new ArrayList<File>();
-		findEsbXmlFiles(workspaceFolder, esbFiles);
-		for (File esbFile : esbFiles) {
-			workspace.addService(esbParser.parse(esbFile));
-		}
-
-		// for (Bpel bpelProcess : workspace.getServices()) {
-		// for (PartnerLinkBinding partnerLinkBinding :
-		// bpelProcess.getPartnerLinkBindings()) {
-		// if (partnerLinkBinding.getBpelProcess() == null) {
-		// bpelParser.parseBpelByWsdl(partnerLinkBinding);
-		// }
-		// }
-		// }
-		return workspace;
 	}
 
 	/**

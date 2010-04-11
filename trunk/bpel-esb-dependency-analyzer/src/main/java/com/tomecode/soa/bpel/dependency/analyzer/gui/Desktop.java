@@ -3,6 +3,7 @@ package com.tomecode.soa.bpel.dependency.analyzer.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 
 import javax.swing.JMenu;
@@ -48,6 +49,7 @@ public final class Desktop extends Frame implements ActionListener {
 		JMenu menu = new JMenu("File");
 		menu.add(createMenuItem("Open"));
 		menu.add(createMenuItem("Exit"));
+		menu.setMnemonic(KeyEvent.VK_ALT);
 		return menu;
 	}
 
@@ -92,7 +94,7 @@ public final class Desktop extends Frame implements ActionListener {
 					try {
 						workspaceTabb.addTable(returnObj[0].toString(), new WorkspaceParser().parse((File) returnObj[1]));
 					} catch (ServiceParserException e) {
-						e.printStackTrace();
+						FrmError.showMe(e.getMessage(), e);
 					}
 				}
 			}
