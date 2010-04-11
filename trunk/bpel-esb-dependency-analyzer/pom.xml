@@ -6,7 +6,7 @@
 	<name>bpel-esb-dependency-analyzer</name>
 	<version>0.1</version>
 	<packaging>jar</packaging>
-	<description>SEO analyzer for BPEL and ESB dependencies</description>
+	<description>SOA analyzer for BPEL and ESB dependencies</description>
 
 	<url>http://www.tomecode.com</url>
 	
