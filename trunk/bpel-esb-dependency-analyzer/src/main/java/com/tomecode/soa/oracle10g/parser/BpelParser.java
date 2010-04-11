@@ -182,14 +182,6 @@ public final class BpelParser extends AbstractParser {
 					Operation operation = new Operation(element.getName(), element.attributeValue("name"), element.attributeValue("operation"), bpelOperations.getBpelProcess().findPartnerLinkBinding(element.attributeValue("partnerLink")), getOperationPath(element));
 					bpelOperations.addOperation(operation);
 				}
-				// if (element.getName().equals("pick")) {
-				// Operation operation = new Operation(element.getName(),
-				// element.attributeValue("name"),
-				// element.attributeValue("operation"),
-				// bpelOperations.getBpelProcess().findPartnerLinkBinding(element.attributeValue("partnerLink")),
-				// getOperationPath(element));
-				// bpelOperations.addOperation(operation);
-				// }
 			}
 			findUsageForPartnerLink(partnerLinkName, bpelOperations, element);
 		}

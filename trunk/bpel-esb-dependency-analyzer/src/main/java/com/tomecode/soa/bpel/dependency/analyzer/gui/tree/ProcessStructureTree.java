@@ -2,6 +2,7 @@ package com.tomecode.soa.bpel.dependency.analyzer.gui.tree;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
+import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.oracle10g.bpel.Activity;
 import com.tomecode.soa.oracle10g.bpel.BpelProcessStrukture;
 
@@ -71,36 +73,24 @@ public final class ProcessStructureTree extends BasicTree {
 
 			DefaultTreeCellRenderer rnd = (DefaultTreeCellRenderer) new DefaultTreeCellRenderer().getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 
-			if (value instanceof Activity) {
+			if (value instanceof BpelProcessStrukture) {
+				rnd.setIcon(IconFactory.PROCESS);
+			} else if (value instanceof Activity) {
 				Activity activity = (Activity) value;
-
-				for (Activity selectActivity : activities) {
-					if (selectActivity.toString().equals(activity.toString())) {
+				if (!activities.isEmpty()) {
+					if (activities.get(0).toString().equals(activity.toString())) {
 						rnd.setForeground(Color.red);
+						rnd.setFont(rnd.getFont().deriveFont(Font.BOLD));
 					}
-				}
 
+				}
 				if (activity.getActivtyType() != null) {
 					rnd.setIcon(activity.getActivtyType().getImageIcon());
 				}
-
 			}
-
-			// if (value instanceof Operation) {
-			//
-			// BpelProcess bpelProcess = (BpelProcess) value;
-			// if (bpelProcess.getParent() != null) {
-			//
-			// // if (rootBpelProcess.equals(bpelProcess)) {
-			// rnd.setForeground(Color.red);
-			// } else {
-			// rnd.setForeground(Color.black);
-			// }
-			// rnd.setText(value.toString());
-			//
-			// }
-
+			rnd.setFocusable(true);
 			return rnd;
+
 		}
 	}
 
