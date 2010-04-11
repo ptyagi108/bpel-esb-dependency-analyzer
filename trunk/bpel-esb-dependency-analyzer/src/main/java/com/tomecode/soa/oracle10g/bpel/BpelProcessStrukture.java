@@ -7,6 +7,7 @@ import javax.swing.tree.TreeNode;
 
 /**
  * 
+ * View the BPEL process tree
  * 
  * 
  * @author Tomas Frastia

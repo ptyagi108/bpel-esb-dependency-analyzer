@@ -4,12 +4,13 @@ import javax.swing.ImageIcon;
 
 /**
  * 
+ * Contains all incons in project
+ * 
  * @author Tomas Frastia
  */
 public final class IconFactory {
 
 	public static final ImageIcon ASSIGN = new ImageIcon(IconFactory.class.getResource("assign.gif"));
-
 	public static final ImageIcon SEQUENCE = new ImageIcon(IconFactory.class.getResource("sequence.gif"));
 	public static final ImageIcon SCOPE = new ImageIcon(IconFactory.class.getResource("scope.gif"));
 	public static final ImageIcon CATCH = new ImageIcon(IconFactory.class.getResource("catch.gif"));
@@ -30,8 +31,7 @@ public final class IconFactory {
 	public static final ImageIcon COMPENSTATE = new ImageIcon(IconFactory.class.getResource("compensate.gif"));
 	public static final ImageIcon TERMINATE = new ImageIcon(IconFactory.class.getResource("terminate.gif"));
 	public static final ImageIcon THROW = new ImageIcon(IconFactory.class.getResource("throw.gif"));
-	
-	
+
 	private IconFactory() {
 	}
 
