@@ -7,11 +7,21 @@ import javax.swing.tree.TreeNode;
 
 /**
  * 
+ * BPEL Activity
+ * 
  * @author Tomas Frastia
  * 
  */
 public final class Activity implements TreeNode {
 
+	/**
+	 * actvity type
+	 */
+	private ActivtyType activtyType;
+
+	/**
+	 * child activities
+	 */
 	private final Vector<Activity> activities;
 
 	private Activity parent;
@@ -20,13 +30,22 @@ public final class Activity implements TreeNode {
 
 	private String name;
 
+	/**
+	 * Constructor
+	 */
 	public Activity() {
 		this.activities = new Vector<Activity>();
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param type
+	 */
 	public Activity(String type) {
 		this();
 		this.type = type;
+		this.activtyType = ActivtyType.parseActivtyType(type);
 	}
 
 	public Activity(String type, String name) {
@@ -37,6 +56,10 @@ public final class Activity implements TreeNode {
 	public final void addActivity(Activity activity) {
 		activity.setParent(this);
 		this.activities.add(activity);
+	}
+
+	public final ActivtyType getActivtyType() {
+		return activtyType;
 	}
 
 	private void setParent(Activity parent) {

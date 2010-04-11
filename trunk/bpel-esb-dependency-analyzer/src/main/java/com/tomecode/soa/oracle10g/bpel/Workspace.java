@@ -9,6 +9,7 @@ import java.util.Vector;
 import javax.swing.tree.TreeNode;
 
 import com.tomecode.soa.process.Service;
+import com.tomecode.soa.process.ServiceType;
 
 /**
  * This object contains all {@link Service}
@@ -87,26 +88,30 @@ public final class Workspace implements TreeNode {
 	}
 
 	/**
-	 * find usage for bpel process
+	 * find usage for bpel process (only bpel )
 	 * 
 	 * @param usage
 	 * @return
 	 */
-	public final List<Bpel> findUsages(Bpel usage) {
-		// List<Bpel> list = new ArrayList<Bpel>();
-		// for (Bpel bpelProcess : services) {
-		// if (!bpelProcess.equals(usage)) {
-		// for (PartnerLinkBinding partnerLinkBinding :
-		// bpelProcess.getPartnerLinkBindings()) {
-		// if (partnerLinkBinding.getBpelProcess() != null) {
-		// if (partnerLinkBinding.getBpelProcess().equals(usage)) {
-		// list.add(partnerLinkBinding.getParent());
-		// }
-		// }
-		// }
-		// }
-		// }
-		// return list;
-		return new ArrayList<Bpel>();
+	public final List<Bpel> findBpelUsages(Bpel usage) {
+		List<Bpel> list = new ArrayList<Bpel>();
+
+		for (Service service : services) {
+			if (service.getType() == ServiceType.ORACLE10G_BPEL) {
+				Bpel bpel = (Bpel) service;
+				if (!bpel.equals(usage)) {
+					for (PartnerLinkBinding partnerLinkBinding : bpel.getPartnerLinkBindings()) {
+						if (partnerLinkBinding.getBpelProcess() != null) {
+							if (partnerLinkBinding.getBpelProcess().equals(usage)) {
+								list.add(partnerLinkBinding.getParent());
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return list;
+		// return new ArrayList<Bpel>();
 	}
 }

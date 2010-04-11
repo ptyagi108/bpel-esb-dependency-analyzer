@@ -10,8 +10,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
 import com.tomecode.soa.oracle10g.bpel.Activity;
-import com.tomecode.soa.oracle10g.bpel.BpelOperations;
 import com.tomecode.soa.oracle10g.bpel.Bpel;
+import com.tomecode.soa.oracle10g.bpel.BpelOperations;
 import com.tomecode.soa.oracle10g.bpel.BpelProcessStrukture;
 import com.tomecode.soa.oracle10g.bpel.Operation;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
@@ -25,12 +25,6 @@ import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
 public final class BpelParser extends AbstractParser {
 
 	private final List<Bpel> parsedProcess = new ArrayList<Bpel>();
-
-	public static final void main(String[] arg) throws ServiceParserException {
-		BpelParser bpelParser = new BpelParser();
-		Bpel bpelProcess = bpelParser.parseBpelXml(new File("C:/ORACLE/projects/BPEL/samples/BPELProcess1"));
-		bpelProcess.toString();
-	}
 
 	/**
 	 * parse bpel process from url
@@ -65,8 +59,6 @@ public final class BpelParser extends AbstractParser {
 			bpelXmlFile = new File(file + File.separator + "bpel" + File.separator + "bpel.xml");
 		}
 
-		// file.getName().equals("bpel.xml") ? file : new File(file +
-		// File.separator + "bpel" + File.separator + "bpel.xml");
 		Element bpelXml = parseXml(bpelXmlFile);
 		return parseBpelXml(bpelXml, bpelXmlFile);
 	}
@@ -141,7 +133,9 @@ public final class BpelParser extends AbstractParser {
 	private final void parseBpelProcessActivities(List<?> elements, Activity root) {
 		for (Object e : elements) {
 			Element element = (Element) e;
-			if (element.getName().equals("sequence") || element.getName().equals("scope") || element.getName().equals("switch") || element.getName().equals("flow") | element.getName().endsWith(":flowN")) {
+			if (element.getName().equals("sequence") || element.getName().equals("scope") || element.getName().equals("switch") || element.getName().equals("flow") || element.getName().equals("flowN") || element.getName().equals("case") || element.getName().equals("otherwise")
+					|| element.getName().equals("faultHandlers") || element.getName().equals("eventHandlers") || element.getName().equals("catch") || element.getName().equals("catchAll") || element.getName().equals("onAlarm") || element.getName().equals("onMessage")
+					|| element.getName().equals("compensationHandler") || element.getName().equals("pick")) {
 				Activity activity = new Activity(element.getName(), element.attributeValue("name"));
 				root.addActivity(activity);
 				parseBpelProcessActivities(element.elements(), activity);
@@ -164,12 +158,9 @@ public final class BpelParser extends AbstractParser {
 		for (Object e : eList) {
 			Element ePartnerLink = (Element) e;
 			String partnerLinkName = ePartnerLink.attributeValue("name");
-
-			// TODO: parse all partnerLinks in scopes
-			System.out.println("find:" + partnerLinkName);
+			ePartnerLink.getPath();
 			findUsageForPartnerLink(partnerLinkName, bpelOperations, element);
 		}
-
 	}
 
 	/**
@@ -186,15 +177,40 @@ public final class BpelParser extends AbstractParser {
 		}
 		for (Object e : listOfElements) {
 			Element element = (Element) e;
-			if (element.getName().equals("receive") || element.getName().equals("invoke") || element.getName().equals("reply") || element.getName().equals("pick")) {
+			if (element.getName().equals("receive") || element.getName().equals("invoke") || element.getName().equals("reply")) {
 				if (element.attributeValue("partnerLink").equals(partnerLinkName)) {
-					System.out.println(element.getName() + " " + element.attributeValue("name") + " " + element.attributeValue("partnerLink"));
-					Operation operation = new Operation(element.getName(), element.attributeValue("name"), element.attributeValue("operation"), bpelOperations.getBpelProcess().findPartnerLinkBinding(element.attributeValue("partnerLink")));
+					Operation operation = new Operation(element.getName(), element.attributeValue("name"), element.attributeValue("operation"), bpelOperations.getBpelProcess().findPartnerLinkBinding(element.attributeValue("partnerLink")), getOperationPath(element));
 					bpelOperations.addOperation(operation);
 				}
+				// if (element.getName().equals("pick")) {
+				// Operation operation = new Operation(element.getName(),
+				// element.attributeValue("name"),
+				// element.attributeValue("operation"),
+				// bpelOperations.getBpelProcess().findPartnerLinkBinding(element.attributeValue("partnerLink")),
+				// getOperationPath(element));
+				// bpelOperations.addOperation(operation);
+				// }
 			}
 			findUsageForPartnerLink(partnerLinkName, bpelOperations, element);
 		}
+	}
+
+	/**
+	 * 
+	 * find operation path
+	 * 
+	 * 
+	 * @param element
+	 * @return
+	 */
+	private final List<Activity> getOperationPath(Element element) {
+		List<Activity> activities = new ArrayList<Activity>();
+		while (element.getParent() != null) {
+			activities.add(new Activity(element.getName(), element.attributeValue("name")));
+			element = element.getParent();
+
+		}
+		return activities;
 	}
 
 	/**

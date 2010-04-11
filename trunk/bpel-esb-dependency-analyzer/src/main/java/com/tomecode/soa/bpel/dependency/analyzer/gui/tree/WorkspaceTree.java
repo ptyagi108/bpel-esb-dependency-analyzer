@@ -1,5 +1,13 @@
 package com.tomecode.soa.bpel.dependency.analyzer.gui.tree;
 
+import java.awt.Component;
+
+import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeCellRenderer;
+
+import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
+import com.tomecode.soa.oracle10g.bpel.Bpel;
 import com.tomecode.soa.oracle10g.bpel.Workspace;
 
 /**
@@ -15,6 +23,7 @@ public final class WorkspaceTree extends BasicTree {
 	public WorkspaceTree() {
 		super();
 		setRootVisible(false);
+		setCellRenderer(new WorkspaceTreeRenderer());
 	}
 
 	public WorkspaceTree(Workspace workspace) {
@@ -22,4 +31,22 @@ public final class WorkspaceTree extends BasicTree {
 		treeModel.setRoot(workspace);
 	}
 
+	/**
+	 * 
+	 * @author Tomas Frastia
+	 * 
+	 */
+	private final class WorkspaceTreeRenderer implements TreeCellRenderer {
+
+		public final Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+
+			DefaultTreeCellRenderer rnd = (DefaultTreeCellRenderer) new DefaultTreeCellRenderer().getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
+
+			if (value instanceof Bpel) {
+				rnd.setIcon(IconFactory.PROCESS);
+			}
+
+			return rnd;
+		}
+	}
 }

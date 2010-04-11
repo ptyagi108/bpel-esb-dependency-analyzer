@@ -17,6 +17,7 @@ import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.ProcessStructureTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.ProjectOperationTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.WorkspaceTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
+import com.tomecode.soa.oracle10g.bpel.Activity;
 import com.tomecode.soa.oracle10g.bpel.BpelOperations;
 import com.tomecode.soa.oracle10g.bpel.Bpel;
 import com.tomecode.soa.oracle10g.bpel.Operation;
@@ -71,9 +72,6 @@ public final class WorkspacePanel extends JPanel {
 	public WorkspacePanel(Workspace workspace) {
 		super(new BorderLayout());
 		this.workspace = workspace;
-		// this.txtProcessFolder = new JTextArea();
-		// txtProcessFolder.setEditable(false);
-		// txtProcessFolder.setWrapStyleWord(true);
 		this.workspaceTree = new WorkspaceTree(workspace);
 		this.projectOperationTree = new ProjectOperationTree();
 		this.processStructureTree = new ProcessStructureTree();
@@ -162,10 +160,11 @@ public final class WorkspacePanel extends JPanel {
 			public final void valueChanged(TreeSelectionEvent e) {
 				if (e.getPath().getLastPathComponent() instanceof Operation) {
 					Operation operation = (Operation) e.getPath().getLastPathComponent();
-					displayBpelProcessStructure(operation.getPartnerLinkBinding().getParent());// .getBpelProcess());
+
+					displayBpelProcessStructure(operation.getActivities(), operation.getPartnerLinkBinding().getParent());// .getBpelProcess());
 				} else if (e.getPath().getLastPathComponent() instanceof BpelOperations) {
 					BpelOperations bpelOperations = (BpelOperations) e.getPath().getLastPathComponent();
-					displayBpelProcessStructure(bpelOperations.getBpelProcess());
+					displayBpelProcessStructure(null, bpelOperations.getBpelProcess());
 				}
 			}
 		});
@@ -177,13 +176,18 @@ public final class WorkspacePanel extends JPanel {
 	 * 
 	 * @param bpelProcess
 	 */
-	private final void displayBpelProcessStructure(Bpel bpelProcess) {
+	private final void displayBpelProcessStructure(List<Activity> activities, Bpel bpelProcess) {
 		if (bpelProcess == null) {
 			processStructureTree.clear();
 			// txtProcessFolder.setText("");
 		} else {
 			processStructureTree.addBpelProcessStrukture(bpelProcess.getBpelProcessStrukture());
 			// txtProcessFolder.setText(bpelProcess.getBpelXmlFile().getParent());
+		}
+		if (activities == null) {
+			processStructureTree.clearSelectedOpertiaons();
+		} else {
+			processStructureTree.addSelectedActivities(activities);
 		}
 
 	}
@@ -194,7 +198,7 @@ public final class WorkspacePanel extends JPanel {
 
 		listDependency.clear();
 
-		List<Bpel> listUsage = this.workspace.findUsages(bpelProcess);
+		List<Bpel> listUsage = this.workspace.findBpelUsages(bpelProcess);
 		for (Bpel usageBpelProcess : listUsage) {
 			listDependency.addElement(usageBpelProcess);
 		}
