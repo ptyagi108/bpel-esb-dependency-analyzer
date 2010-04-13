@@ -7,8 +7,8 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
-import com.tomecode.soa.oracle10g.bpel.Bpel;
-import com.tomecode.soa.oracle10g.bpel.Workspace;
+import com.tomecode.soa.oracle10g.Workspace;
+import com.tomecode.soa.oracle10g.bpel.BpelProject;
 
 /**
  * Display all BPEL/ESB projects in workspace
@@ -42,7 +42,7 @@ public final class WorkspaceTree extends BasicTree {
 
 			DefaultTreeCellRenderer rnd = (DefaultTreeCellRenderer) new DefaultTreeCellRenderer().getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 
-			if (value instanceof Bpel) {
+			if (value instanceof BpelProject) {
 				rnd.setIcon(IconFactory.PROCESS);
 			}
 

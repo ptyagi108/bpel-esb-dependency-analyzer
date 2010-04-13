@@ -17,13 +17,13 @@ public final class BpelProcessStrukture implements TreeNode {
 
 	private final Vector<Activity> activities;
 
-	private Bpel bpelProcess;
+	private BpelProject bpelProcess;
 
 	public BpelProcessStrukture() {
 		this.activities = new Vector<Activity>();
 	}
 
-	public BpelProcessStrukture(Bpel bpelProcess) {
+	public BpelProcessStrukture(BpelProject bpelProcess) {
 		this();
 		this.bpelProcess = bpelProcess;
 	}

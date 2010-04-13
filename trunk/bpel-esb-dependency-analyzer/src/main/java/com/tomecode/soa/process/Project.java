@@ -9,15 +9,15 @@ import javax.swing.tree.TreeNode;
  * @author Frastia Tomas
  * 
  */
-public abstract class Service implements TreeNode {
+public abstract class Project implements TreeNode {
 
-	protected final ServiceType type;
+	protected final ProjectType type;
 
-	public Service(ServiceType type) {
+	public Project(ProjectType type) {
 		this.type = type;
 	}
 
-	public final ServiceType getType() {
+	public final ProjectType getType() {
 		return type;
 	}
 

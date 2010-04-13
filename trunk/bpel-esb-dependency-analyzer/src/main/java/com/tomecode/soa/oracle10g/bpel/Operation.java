@@ -78,7 +78,7 @@ public final class Operation implements TreeNode {
 
 	@Override
 	public TreeNode getChildAt(int childIndex) {
-		Bpel bpelProcess = partnerLinkBinding.getBpelProcess();
+		BpelProject bpelProcess = partnerLinkBinding.getBpelProcess();
 		if (bpelProcess == null || bpelProcess.getBpelOperations() == null) {
 			return new ErrorNode("ERROR:not found " + partnerLinkBinding.getName(), partnerLinkBinding.getWsdlLocation(), null);
 		}
@@ -105,7 +105,7 @@ public final class Operation implements TreeNode {
 		return !getAllowsChildren();
 	}
 
-	public final Bpel getBpelProcess() {
+	public final BpelProject getBpelProcess() {
 		return partnerLinkBinding.getBpelProcess();
 	}
 

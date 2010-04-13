@@ -7,7 +7,7 @@ package com.tomecode.soa.process;
  * @author Frastia Tomas
  * 
  */
-public enum ServiceType {
+public enum ProjectType {
 
 	ORACLE10G_BPEL, ORACLE10G_ESB;
 }

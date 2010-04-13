@@ -14,15 +14,15 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.components.TabbedManager;
-import com.tomecode.soa.oracle10g.bpel.Bpel;
-import com.tomecode.soa.oracle10g.bpel.Workspace;
+import com.tomecode.soa.oracle10g.Workspace;
+import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.util.gui.Dialog;
 import com.tomecode.util.gui.Frame;
 import com.tomecode.util.gui.HideNotifiListener;
 import com.tomecode.util.gui.PanelFactory;
 
 /**
- * Form for add new {@link Workspace} or {@link Bpel} to
+ * Form for add new {@link Workspace} or {@link BpelProject} to
  * {@link TabbedManager}
  * 
  * @author Frastia Tomas

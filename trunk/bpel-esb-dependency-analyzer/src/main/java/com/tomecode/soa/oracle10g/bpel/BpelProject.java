@@ -8,8 +8,8 @@ import java.util.Vector;
 import javax.swing.tree.TreeNode;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
-import com.tomecode.soa.process.Service;
-import com.tomecode.soa.process.ServiceType;
+import com.tomecode.soa.process.Project;
+import com.tomecode.soa.process.ProjectType;
 
 /**
  * 
@@ -18,7 +18,7 @@ import com.tomecode.soa.process.ServiceType;
  * @author Tomas Frastia
  * 
  */
-public final class Bpel extends Service {
+public final class BpelProject extends Project {
 
 	private String id;
 
@@ -38,8 +38,8 @@ public final class Bpel extends Service {
 	/**
 	 * Constructor
 	 */
-	public Bpel() {
-		super(ServiceType.ORACLE10G_BPEL);
+	public BpelProject() {
+		super(ProjectType.ORACLE10G_BPEL);
 		this.partnerLinkBindings = new Vector<PartnerLinkBinding>();
 		this.bpelOperations = new BpelOperations(this);
 		this.bpelProcessStrukture = new BpelProcessStrukture(this);
@@ -52,7 +52,7 @@ public final class Bpel extends Service {
 	 * @param src
 	 * @param bpelXmlFile
 	 */
-	public Bpel(String id, String src, File bpelXmlFile) {
+	public BpelProject(String id, String src, File bpelXmlFile) {
 		this();
 		this.id = id;
 		this.src = src;
@@ -93,7 +93,7 @@ public final class Bpel extends Service {
 	@Override
 	public TreeNode getChildAt(int childIndex) {
 		PartnerLinkBinding partnerLinkBinding = partnerLinkBindings.get(childIndex);
-		Bpel bpelProcess = partnerLinkBinding.getBpelProcess();
+		BpelProject bpelProcess = partnerLinkBinding.getBpelProcess();
 		if (bpelProcess == null) {
 			return new ErrorNode("not found process[" + partnerLinkBinding.getName() + "]", partnerLinkBinding.getWsdlLocation(), partnerLinkBinding.getParseErrror());
 		}

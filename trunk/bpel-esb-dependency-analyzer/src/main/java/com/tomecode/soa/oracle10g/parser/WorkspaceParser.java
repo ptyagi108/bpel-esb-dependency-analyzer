@@ -4,11 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tomecode.soa.oracle10g.bpel.Bpel;
+import com.tomecode.soa.oracle10g.Workspace;
+import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
-import com.tomecode.soa.oracle10g.bpel.Workspace;
-import com.tomecode.soa.process.Service;
-import com.tomecode.soa.process.ServiceType;
+import com.tomecode.soa.process.Project;
+import com.tomecode.soa.process.ProjectType;
 
 /**
  * 
@@ -52,12 +52,12 @@ public final class WorkspaceParser {
 			findBpelXmlFiles(workspaceFolder, listOfFiles);
 			Workspace workspace = new Workspace(workspaceFolder);
 			for (File bpelXml : listOfFiles) {
-				workspace.addService(bpelParser.parseBpelXml(bpelXml));
+				workspace.addProject(bpelParser.parseBpelXml(bpelXml));
 			}
 
-			for (Service service : workspace.getServices()) {
-				if (service.getType() == ServiceType.ORACLE10G_BPEL) {
-					Bpel bpel = (Bpel) service;
+			for (Project service : workspace.getServices()) {
+				if (service.getType() == ProjectType.ORACLE10G_BPEL) {
+					BpelProject bpel = (BpelProject) service;
 					for (PartnerLinkBinding partnerLinkBinding : bpel.getPartnerLinkBindings()) {
 						if (partnerLinkBinding.getBpelProcess() == null) {
 							bpelParser.parseBpelByWsdl(partnerLinkBinding);
@@ -66,10 +66,10 @@ public final class WorkspaceParser {
 				}
 			}
 
-			List<File> esbFiles = new ArrayList<File>();
-			findEsbXmlFiles(workspaceFolder, esbFiles);
-			for (File esbFile : esbFiles) {
-				workspace.addService(esbParser.parse(esbFile));
+			List<File> esbProjectFolders = new ArrayList<File>();
+			findAllEsbProjectFolders(workspaceFolder, esbProjectFolders);
+			for (File esbProjectFolder : esbProjectFolders) {
+				workspace.addProject(esbParser.parse(esbProjectFolder));
 			}
 
 			return workspace;
@@ -100,19 +100,31 @@ public final class WorkspaceParser {
 		}
 	}
 
-	private final void findEsbXmlFiles(File workspace, List<File> findedFiles) {
+	private final void findAllEsbProjectFolders(File workspace, List<File> findedFolders) {
 		File[] files = workspace.listFiles();
 		if (files == null) {
 			return;
 		}
 		for (File file : files) {
 			if (file.isDirectory()) {
-				findEsbXmlFiles(file, findedFiles);
+				findAllEsbProjectFolders(file, findedFolders);
 			}
-			if (file.isFile() && file.getName().endsWith(".esb")) {
-				findedFiles.add(file);
+			if (file.isFile() && (file.getName().endsWith(".esb"))) {
+
+				if (!containsFile(file.getParentFile(), findedFolders)) {
+					findedFolders.add(file.getParentFile());
+				}
 			}
 		}
+	}
+
+	private final boolean containsFile(File targetFile, List<File> files) {
+		for (File file : files) {
+			if (file.toString().equals(targetFile.toString())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

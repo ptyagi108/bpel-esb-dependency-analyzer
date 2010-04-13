@@ -11,7 +11,7 @@ import javax.swing.tree.TreeNode;
  * 
  */
 public final class BpelOperations implements TreeNode {
-	private Bpel bpelProcess;
+	private BpelProject bpelProcess;
 
 	/**
 	 * {@link Operation}
@@ -22,7 +22,7 @@ public final class BpelOperations implements TreeNode {
 		this.operations = new Vector<Operation>();
 	}
 
-	public BpelOperations(Bpel process) {
+	public BpelOperations(BpelProject process) {
 		this();
 		this.bpelProcess = process;
 
@@ -36,7 +36,7 @@ public final class BpelOperations implements TreeNode {
 		return operations;
 	}
 
-	public final Bpel getBpelProcess() {
+	public final BpelProject getBpelProcess() {
 		return bpelProcess;
 	}
 

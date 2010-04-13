@@ -12,9 +12,9 @@ public final class PartnerLinkBinding {
 	private String name;
 	private String wsdlLocation;
 
-	private Bpel bpelProcess;
+	private BpelProject bpelProcess;
 
-	private Bpel parent;
+	private BpelProject parent;
 
 	private Exception parseError;
 
@@ -33,20 +33,20 @@ public final class PartnerLinkBinding {
 		return wsdlLocation;
 	}
 
-	public final Bpel getBpelProcess() {
+	public final BpelProject getBpelProcess() {
 		return bpelProcess;
 	}
 
-	public final void setBpelProcess(Bpel bpelProcess) {
+	public final void setBpelProcess(BpelProject bpelProcess) {
 		this.bpelProcess = bpelProcess;
 		this.parseError  = null;
 	}
 
-	public void setParent(Bpel parent) {
+	public void setParent(BpelProject parent) {
 		this.parent = parent;
 	}
 
-	public final Bpel getParent() {
+	public final BpelProject getParent() {
 		return parent;
 	}
 

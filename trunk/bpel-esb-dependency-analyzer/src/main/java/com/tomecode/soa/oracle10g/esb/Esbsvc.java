@@ -6,16 +6,13 @@ import java.util.Vector;
 
 import javax.swing.tree.TreeNode;
 
-import com.tomecode.soa.process.Service;
-import com.tomecode.soa.process.ServiceType;
-
 /**
  * Esb service
  * 
  * @author Frastia Tomas
  * 
  */
-public final class Esb extends Service {
+public final class Esbsvc implements TreeNode {
 
 	private File file;
 	private String name;
@@ -29,8 +26,13 @@ public final class Esb extends Service {
 
 	private Vector<EsbOperation> esbOperations;
 
-	public Esb() {
-		super(ServiceType.ORACLE10G_ESB);
+	private EsbProject ownerEsbProject;
+
+	/**
+	 * Constructor
+	 */
+	public Esbsvc() {
+		// super(ProjectType.ORACLE10G_ESB);
 		esbOperations = new Vector<EsbOperation>();
 	}
 
@@ -41,11 +43,19 @@ public final class Esb extends Service {
 	 * @param name
 	 * @param qName
 	 */
-	public Esb(File file, String name, String qName) {
+	public Esbsvc(File file, String name, String qName) {
 		this();
 		this.file = file;
 		this.name = name;
 		this.qName = qName;
+	}
+
+	public final EsbProject getOwnerEsbProject() {
+		return ownerEsbProject;
+	}
+
+	public final void setOwnerEsbProject(EsbProject esbProject) {
+		this.ownerEsbProject = esbProject;
 	}
 
 	public final File getFile() {
@@ -124,11 +134,13 @@ public final class Esb extends Service {
 	}
 
 	public String toString() {
-		if (name == null) {
-			if (qName != null) {
+		if (name == null || name.trim().length() == 0) {
+			if (qName == null || qName.trim().length() == 0) {
+				return file.getName();
+			} else {
 				return qName;
 			}
 		}
-		return file.getName();
+		return name;
 	}
 }

@@ -2,7 +2,7 @@ package com.tomecode.soa.bpel.dependency.analyzer.gui.tree;
 
 import java.util.List;
 
-import com.tomecode.soa.oracle10g.bpel.Bpel;
+import com.tomecode.soa.oracle10g.bpel.BpelProject;
 
 /**
  * The tree, which contains an selected process in (@ link WorkspaceTree) and
@@ -18,7 +18,7 @@ public final class UsageTree extends BasicTree {
 	public UsageTree() {
 	}
 
-	public final void setBpelProces(Bpel bpelProcess, List<Bpel> list) {
+	public final void setBpelProces(BpelProject bpelProcess, List<BpelProject> list) {
 
 	}
 }

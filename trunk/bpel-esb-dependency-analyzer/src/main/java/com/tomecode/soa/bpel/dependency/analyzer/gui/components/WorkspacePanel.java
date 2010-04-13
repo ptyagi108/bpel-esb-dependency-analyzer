@@ -17,11 +17,11 @@ import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.ProcessStructureTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.ProjectOperationTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.WorkspaceTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
+import com.tomecode.soa.oracle10g.Workspace;
 import com.tomecode.soa.oracle10g.bpel.Activity;
 import com.tomecode.soa.oracle10g.bpel.BpelOperations;
-import com.tomecode.soa.oracle10g.bpel.Bpel;
+import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.Operation;
-import com.tomecode.soa.oracle10g.bpel.Workspace;
 import com.tomecode.util.gui.PanelFactory;
 
 /**
@@ -125,8 +125,8 @@ public final class WorkspacePanel extends JPanel {
 			@Override
 			public final void valueChanged(TreeSelectionEvent e) {
 
-				if (e.getPath().getLastPathComponent() instanceof Bpel) {
-					Bpel bpelProcess = (Bpel) e.getPath().getLastPathComponent();
+				if (e.getPath().getLastPathComponent() instanceof BpelProject) {
+					BpelProject bpelProcess = (BpelProject) e.getPath().getLastPathComponent();
 					if (bpelProcess != null) {
 						selectBpelProcess(bpelProcess);
 						// txtProcessFolder.setText(bpelProcess.getBpelXmlFile().getParent());
@@ -176,7 +176,7 @@ public final class WorkspacePanel extends JPanel {
 	 * 
 	 * @param bpelProcess
 	 */
-	private final void displayBpelProcessStructure(List<Activity> activities, Bpel bpelProcess) {
+	private final void displayBpelProcessStructure(List<Activity> activities, BpelProject bpelProcess) {
 		if (bpelProcess == null) {
 			processStructureTree.clear();
 			// txtProcessFolder.setText("");
@@ -192,14 +192,14 @@ public final class WorkspacePanel extends JPanel {
 
 	}
 
-	private final void selectBpelProcess(Bpel bpelProcess) {
+	private final void selectBpelProcess(BpelProject bpelProcess) {
 		projectOperationTree.addBpelProcessOperations(bpelProcess.getBpelOperations());
 		processStructureTree.addBpelProcessStrukture(bpelProcess.getBpelProcessStrukture());
 
 		listDependency.clear();
 
-		List<Bpel> listUsage = this.workspace.findBpelUsages(bpelProcess);
-		for (Bpel usageBpelProcess : listUsage) {
+		List<BpelProject> listUsage = this.workspace.findBpelUsages(bpelProcess);
+		for (BpelProject usageBpelProcess : listUsage) {
 			listDependency.addElement(usageBpelProcess);
 		}
 

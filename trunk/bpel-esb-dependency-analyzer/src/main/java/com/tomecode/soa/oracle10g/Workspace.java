@@ -1,4 +1,4 @@
-package com.tomecode.soa.oracle10g.bpel;
+package com.tomecode.soa.oracle10g;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -8,11 +8,13 @@ import java.util.Vector;
 
 import javax.swing.tree.TreeNode;
 
-import com.tomecode.soa.process.Service;
-import com.tomecode.soa.process.ServiceType;
+import com.tomecode.soa.oracle10g.bpel.BpelProject;
+import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
+import com.tomecode.soa.process.Project;
+import com.tomecode.soa.process.ProjectType;
 
 /**
- * This object contains all {@link Service}
+ * This object contains all {@link Project}
  * 
  * @author Tomas Frastia
  * 
@@ -21,13 +23,13 @@ public final class Workspace implements TreeNode {
 
 	private File file;
 
-	private final Vector<Service> services;
+	private final Vector<Project> projects;
 
 	/**
 	 * Constructor
 	 */
 	public Workspace() {
-		this.services = new Vector<Service>();
+		this.projects = new Vector<Project>();
 	}
 
 	/**
@@ -40,12 +42,12 @@ public final class Workspace implements TreeNode {
 		this.file = file;
 	}
 
-	public final Vector<Service> getServices() {
-		return services;
+	public final Vector<Project> getServices() {
+		return projects;
 	}
 
-	public final void addService(Service service) {
-		this.services.add(service);
+	public final void addProject(Project service) {
+		this.projects.add(service);
 	}
 
 	public final File getFile() {
@@ -54,27 +56,27 @@ public final class Workspace implements TreeNode {
 
 	@Override
 	public Enumeration<?> children() {
-		return services.elements();
+		return projects.elements();
 	}
 
 	@Override
 	public boolean getAllowsChildren() {
-		return !services.isEmpty();
+		return !projects.isEmpty();
 	}
 
 	@Override
 	public TreeNode getChildAt(int childIndex) {
-		return services.get(childIndex);
+		return projects.get(childIndex);
 	}
 
 	@Override
 	public int getChildCount() {
-		return services.size();
+		return projects.size();
 	}
 
 	@Override
 	public int getIndex(TreeNode node) {
-		return services.indexOf(node);
+		return projects.indexOf(node);
 	}
 
 	@Override
@@ -84,7 +86,7 @@ public final class Workspace implements TreeNode {
 
 	@Override
 	public boolean isLeaf() {
-		return services.isEmpty();
+		return projects.isEmpty();
 	}
 
 	/**
@@ -93,12 +95,12 @@ public final class Workspace implements TreeNode {
 	 * @param usage
 	 * @return
 	 */
-	public final List<Bpel> findBpelUsages(Bpel usage) {
-		List<Bpel> list = new ArrayList<Bpel>();
+	public final List<BpelProject> findBpelUsages(BpelProject usage) {
+		List<BpelProject> list = new ArrayList<BpelProject>();
 
-		for (Service service : services) {
-			if (service.getType() == ServiceType.ORACLE10G_BPEL) {
-				Bpel bpel = (Bpel) service;
+		for (Project project : projects) {
+			if (project.getType() == ProjectType.ORACLE10G_BPEL) {
+				BpelProject bpel = (BpelProject) project;
 				if (!bpel.equals(usage)) {
 					for (PartnerLinkBinding partnerLinkBinding : bpel.getPartnerLinkBindings()) {
 						if (partnerLinkBinding.getBpelProcess() != null) {
