@@ -76,10 +76,10 @@ public final class WorkspacePanel extends JPanel {
 		this.projectOperationTree = new ProjectOperationTree();
 		this.processStructureTree = new ProcessStructureTree();
 		JSplitPane spWorkspace = PanelFactory.createSplitPanel();
-		spWorkspace.add(PanelFactory.createBorderLayout("Workspace Dependecies", new JScrollPane(workspaceTree)));
+		spWorkspace.add(PanelFactory.createBorderLayout("Project Dependencies", new JScrollPane(workspaceTree)));
 		spWorkspace.setDividerLocation(200);
 		JSplitPane spProjectTrees = PanelFactory.createSplitPanel();
-		spProjectTrees.add(PanelFactory.createBorderLayout("Project-Operations Dependecies", new JScrollPane(projectOperationTree)));
+		spProjectTrees.add(PanelFactory.createBorderLayout("Project dependencies by Operations", new JScrollPane(projectOperationTree)));
 		spProjectTrees.add(PanelFactory.createBorderLayout("Project Structure", new JScrollPane(processStructureTree)));
 		spProjectTrees.setDividerLocation(350);
 
@@ -96,7 +96,7 @@ public final class WorkspacePanel extends JPanel {
 
 		JPanel pProjectDetail = PanelFactory.createBorderLayout();
 
-		pProjectDetail.add(PanelFactory.wrapWithTile("Usage", new JScrollPane(list)), BorderLayout.CENTER);
+		pProjectDetail.add(PanelFactory.wrapWithTile("Service being used in:", new JScrollPane(list)), BorderLayout.CENTER);
 
 		spProjectBase.add(pProjectDetail);
 
@@ -161,7 +161,14 @@ public final class WorkspacePanel extends JPanel {
 				if (e.getPath().getLastPathComponent() instanceof Operation) {
 					Operation operation = (Operation) e.getPath().getLastPathComponent();
 
-					displayBpelProcessStructure(operation.getActivities(), operation.getPartnerLinkBinding().getParent());// .getBpelProcess());
+					if (operation.getPartnerLinkBinding() == null) {
+						// TODO: if not found partnerlink project show error
+						// form
+						displayBpelProcessStructure(operation.getActivities(), null);
+					} else {
+						displayBpelProcessStructure(operation.getActivities(), operation.getPartnerLinkBinding().getParent());
+					}
+
 				} else if (e.getPath().getLastPathComponent() instanceof BpelOperations) {
 					BpelOperations bpelOperations = (BpelOperations) e.getPath().getLastPathComponent();
 					displayBpelProcessStructure(null, bpelOperations.getBpelProcess());
