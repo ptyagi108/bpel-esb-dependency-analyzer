@@ -9,6 +9,7 @@ import javax.swing.tree.TreeCellRenderer;
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.oracle10g.Workspace;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
+import com.tomecode.soa.oracle10g.esb.EsbProject;
 
 /**
  * Display all BPEL/ESB projects in workspace
@@ -44,6 +45,8 @@ public final class WorkspaceTree extends BasicTree {
 
 			if (value instanceof BpelProject) {
 				rnd.setIcon(IconFactory.PROCESS);
+			} else if (value instanceof EsbProject) {
+				rnd.setIcon(IconFactory.ESB);
 			}
 
 			return rnd;

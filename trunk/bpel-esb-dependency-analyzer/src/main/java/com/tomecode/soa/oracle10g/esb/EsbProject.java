@@ -84,7 +84,7 @@ public final class EsbProject extends Project {
 
 	@Override
 	public int getChildCount() {
-		return esbs.size();
+		return 0;//esbs.size();
 	}
 
 	@Override

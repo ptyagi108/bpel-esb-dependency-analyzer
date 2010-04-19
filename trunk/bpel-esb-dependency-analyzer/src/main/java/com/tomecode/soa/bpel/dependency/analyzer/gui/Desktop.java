@@ -11,6 +11,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.components.TabbedManager;
+import com.tomecode.soa.oracle10g.Workspace;
 import com.tomecode.soa.oracle10g.parser.ServiceParserException;
 import com.tomecode.soa.oracle10g.parser.WorkspaceParser;
 import com.tomecode.util.gui.Frame;
@@ -91,14 +92,25 @@ public final class Desktop extends Frame implements ActionListener {
 			@Override
 			public final void hideForm(Object... returnObj) {
 				if (returnObj != null && returnObj.length != 0) {
-					try {
-						workspaceTabb.addTable(returnObj[0].toString(), new WorkspaceParser().parse((File) returnObj[1]));
-					} catch (ServiceParserException e) {
-						FrmError.showMe(e.getMessage(), e);
-					}
+					openNewWorkspace(returnObj[0].toString(), (File) returnObj[1]);
 				}
 			}
 		});
+	}
+
+	/**
+	 * open new {@link Workspace}
+	 * 
+	 * @param name
+	 * @param workspace
+	 */
+	private final void openNewWorkspace(String name, File workspace) {
+		try {
+
+			workspaceTabb.addTable(name, new WorkspaceParser().parse(workspace));
+		} catch (ServiceParserException e) {
+			FrmError.showMe(e.getMessage(), e);
+		}
 
 	}
 }

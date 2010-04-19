@@ -11,6 +11,8 @@ import com.tomecode.util.gui.PanelFactory;
 
 /**
  * 
+ * 
+ * 
  * @author Tomas Frastia
  * 
  */
@@ -26,9 +28,7 @@ public final class FrmLoadingWorkspace extends Dialog {
 		progressBar = new JProgressBar(0, 50);
 		progressBar.setPreferredSize(new Dimension(100, 10));
 		progressBar.setIndeterminate(true);
-
 		panelRoot.add(PanelFactory.createBorderLayout(PanelFactory.wrapByBorderLayout(progressBar, BorderLayout.NORTH), 10, 15, 10, 15), BorderLayout.CENTER);
-
 	}
 
 }

@@ -31,6 +31,7 @@ public final class IconFactory {
 	public static final ImageIcon COMPENSTATE = new ImageIcon(IconFactory.class.getResource("compensate.gif"));
 	public static final ImageIcon TERMINATE = new ImageIcon(IconFactory.class.getResource("terminate.gif"));
 	public static final ImageIcon THROW = new ImageIcon(IconFactory.class.getResource("throw.gif"));
+	public static final ImageIcon ESB = new ImageIcon(IconFactory.class.getResource("esb.gif"));
 
 	private IconFactory() {
 	}
