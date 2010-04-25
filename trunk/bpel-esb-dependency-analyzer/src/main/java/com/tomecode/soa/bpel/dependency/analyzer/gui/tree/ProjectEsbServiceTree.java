@@ -11,8 +11,8 @@ import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.EsbServiceNode;
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.oracle10g.esb.EsbGrp;
 import com.tomecode.soa.oracle10g.esb.EsbProject;
+import com.tomecode.soa.oracle10g.esb.EsbSvc;
 import com.tomecode.soa.oracle10g.esb.EsbSys;
-import com.tomecode.soa.oracle10g.esb.Esbsvc;
 
 /**
  * 
@@ -49,7 +49,7 @@ public final class ProjectEsbServiceTree extends BasicTree {
 
 			if (value instanceof EsbServiceNode) {
 				rnd.setIcon(IconFactory.ESB);
-			} else if (value instanceof Esbsvc) {
+			} else if (value instanceof EsbSvc) {
 				rnd.setIcon(IconFactory.SERVICE);
 			} else if (value instanceof EsbSys) {
 				rnd.setIcon(IconFactory.SYSTEM);

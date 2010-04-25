@@ -10,8 +10,8 @@ import com.tomecode.soa.oracle10g.esb.EsbGrp;
 import com.tomecode.soa.oracle10g.esb.EsbOperation;
 import com.tomecode.soa.oracle10g.esb.EsbProject;
 import com.tomecode.soa.oracle10g.esb.EsbRoutingRule;
+import com.tomecode.soa.oracle10g.esb.EsbSvc;
 import com.tomecode.soa.oracle10g.esb.EsbSys;
-import com.tomecode.soa.oracle10g.esb.Esbsvc;
 
 /**
  * 
@@ -146,9 +146,9 @@ public final class EsbParser extends AbstractParser {
 	 * @param file
 	 * @throws ServiceParserException
 	 */
-	public final Esbsvc parseEsbsvc(File file, EsbProject esbProject) throws ServiceParserException {
+	public final void parseEsbsvc(File file, EsbProject esbProject) throws ServiceParserException {
 		Element eService = parseXml(file);
-		Esbsvc esb = new Esbsvc(file, eService.attributeValue("name"), eService.attributeValue("qname"));
+		EsbSvc esb = new EsbSvc(file, eService.attributeValue("name"), eService.attributeValue("qname"));
 
 		Element eServiceDefinition = eService.element("serviceDefinition");
 		if (eServiceDefinition != null) {
@@ -177,7 +177,7 @@ public final class EsbParser extends AbstractParser {
 				}
 			}
 		}
-		return esb;
+
 	}
 
 	/**
@@ -187,7 +187,7 @@ public final class EsbParser extends AbstractParser {
 	 * @param esb
 	 */
 	@SuppressWarnings("unchecked")
-	private final void parseOperations(Element eService, Esbsvc esb) {
+	private final void parseOperations(Element eService, EsbSvc esb) {
 		Element eOperations = eService.element("operations");
 		if (eOperations != null) {
 			List<Element> operations = eOperations.elements("operationInfo");
