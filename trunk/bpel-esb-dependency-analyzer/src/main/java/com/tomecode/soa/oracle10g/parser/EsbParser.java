@@ -174,6 +174,7 @@ public final class EsbParser extends AbstractParser {
 				} else {
 					EsbSys esbSysNew = new EsbSys(parent.attributeValue("qname"));
 					esbSysNew.addBasicEsbNode(esb);
+					esbProject.addBasicEsbNode(esbSysNew);
 				}
 			}
 		}
