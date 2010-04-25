@@ -23,7 +23,7 @@ public final class WorkspaceTree extends BasicTree {
 
 	public WorkspaceTree() {
 		super();
-		setRootVisible(false);
+		setRootVisible(true);
 		setCellRenderer(new WorkspaceTreeRenderer());
 	}
 

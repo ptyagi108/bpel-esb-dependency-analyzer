@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import javax.swing.tree.TreeNode;
 
+import com.tomecode.soa.oracle10g.esb.BasicEsbNode.EsbNodeType;
 import com.tomecode.soa.process.Project;
 import com.tomecode.soa.process.ProjectType;
 
@@ -23,17 +24,20 @@ public final class EsbProject extends Project {
 	private String name;
 
 	private File projectFolder;
+
+	private final Vector<BasicEsbNode> basicEsbNodes;
 	/**
 	 * list of esbsvc
 	 */
-	private final Vector<Esbsvc> esbs;
+	private final Vector<EsbProject> esbProjectsDependecies;
 
 	/**
 	 * Constructor
 	 */
 	public EsbProject() {
 		super(ProjectType.ORACLE10G_ESB);
-		esbs = new Vector<Esbsvc>();
+		basicEsbNodes = new Vector<BasicEsbNode>();
+		esbProjectsDependecies = new Vector<EsbProject>();
 	}
 
 	/**
@@ -48,13 +52,12 @@ public final class EsbProject extends Project {
 		this.name = name;
 	}
 
-	public final void addEsb(Esbsvc esb) {
-		esb.setOwnerEsbProject(this);
-		esbs.add(esb);
+	public final Vector<BasicEsbNode> getBasicEsbNodes() {
+		return basicEsbNodes;
 	}
 
-	public final Vector<Esbsvc> getEsbs() {
-		return esbs;
+	public final void addBasicEsbNode(BasicEsbNode basicEsbNode) {
+		basicEsbNodes.add(basicEsbNode);
 	}
 
 	public final String getName() {
@@ -66,30 +69,28 @@ public final class EsbProject extends Project {
 	}
 
 	@Override
-	public Enumeration<Esbsvc> children() {
-		return esbs.elements();
+	public Enumeration<?> children() {
+		return esbProjectsDependecies.elements();
 	}
 
 	@Override
 	public boolean getAllowsChildren() {
-		return !esbs.isEmpty();
+		return !esbProjectsDependecies.isEmpty();
 	}
 
 	@Override
 	public TreeNode getChildAt(int childIndex) {
-		esbs.get(childIndex).getOwnerEsbProject();
-		
-		return esbs.get(childIndex);
+		return esbProjectsDependecies.get(childIndex);
 	}
 
 	@Override
 	public int getChildCount() {
-		return 0;//esbs.size();
+		return esbProjectsDependecies.size() - 1;
 	}
 
 	@Override
 	public int getIndex(TreeNode node) {
-		return esbs.indexOf(node);
+		return esbProjectsDependecies.indexOf(node);
 	}
 
 	@Override
@@ -99,11 +100,48 @@ public final class EsbProject extends Project {
 
 	@Override
 	public boolean isLeaf() {
-		return esbs.isEmpty();
+		return esbProjectsDependecies.isEmpty();// esbs.isEmpty();
 	}
 
 	public final String toString() {
 		return name;
+	}
+
+	public final EsbSys findEsbSysByQname(String qname) {
+		for (BasicEsbNode basicEsbNode : basicEsbNodes) {
+			if (basicEsbNode.getType() == EsbNodeType.ESBSYS) {
+				EsbSys esbSys = (EsbSys) basicEsbNode.get();
+				if (esbSys.getQname().equals(qname)) {
+					return esbSys;
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public final EsbGrp findEsbGrpByQname(String qname) {
+		for (BasicEsbNode basicEsbNode : basicEsbNodes) {
+			if (basicEsbNode.getType() == EsbNodeType.ESBGRP) {
+				if (basicEsbNode.getQname().equals(qname)) {
+					return (EsbGrp) basicEsbNode.get();
+				} else {
+					EsbGrp esbGrp = (EsbGrp) basicEsbNode.get();
+					esbGrp = esbGrp.findEsbGrpByQname(qname);
+					if (esbGrp != null) {
+						return esbGrp;
+					}
+				}
+			} else if (basicEsbNode.getType() == EsbNodeType.ESBSYS) {
+				EsbSys esbSys = (EsbSys) basicEsbNode.get();
+				EsbGrp esbGrp = esbSys.findEsbGrpByQname(qname);
+				if (esbGrp != null) {
+					return esbGrp;
+				}
+			}
+		}
+
+		return null;
 	}
 
 }

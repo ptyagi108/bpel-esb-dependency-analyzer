@@ -74,6 +74,7 @@ public final class WorkspaceParser {
 
 			return workspace;
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ServiceParserException(e);
 		}
 

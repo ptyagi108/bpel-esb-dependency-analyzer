@@ -12,7 +12,7 @@ import javax.swing.tree.TreeNode;
  * @author Frastia Tomas
  * 
  */
-public final class Esbsvc implements TreeNode {
+public final class Esbsvc implements BasicEsbNode {
 
 	private File file;
 	private String name;
@@ -32,7 +32,6 @@ public final class Esbsvc implements TreeNode {
 	 * Constructor
 	 */
 	public Esbsvc() {
-		// super(ProjectType.ORACLE10G_ESB);
 		esbOperations = new Vector<EsbOperation>();
 	}
 
@@ -66,7 +65,7 @@ public final class Esbsvc implements TreeNode {
 		return name;
 	}
 
-	public final String getQName() {
+	public final String getQname() {
 		return qName;
 	}
 
@@ -94,7 +93,7 @@ public final class Esbsvc implements TreeNode {
 		this.soapEndpointURI = soapEndpointURI;
 	}
 
-	public final void addOperation(EsbOperation esbOperation) {
+	public final void addEsbOperation(EsbOperation esbOperation) {
 		esbOperations.add(esbOperation);
 	}
 
@@ -142,5 +141,15 @@ public final class Esbsvc implements TreeNode {
 			}
 		}
 		return name;
+	}
+
+	@Override
+	public Object get() {
+		return this;
+	}
+
+	@Override
+	public EsbNodeType getType() {
+		return EsbNodeType.ESBSVC;
 	}
 }

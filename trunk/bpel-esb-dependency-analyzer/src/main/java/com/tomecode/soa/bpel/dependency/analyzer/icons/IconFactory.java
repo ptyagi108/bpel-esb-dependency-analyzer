@@ -32,6 +32,9 @@ public final class IconFactory {
 	public static final ImageIcon TERMINATE = new ImageIcon(IconFactory.class.getResource("terminate.gif"));
 	public static final ImageIcon THROW = new ImageIcon(IconFactory.class.getResource("throw.gif"));
 	public static final ImageIcon ESB = new ImageIcon(IconFactory.class.getResource("esb.gif"));
+	public static final ImageIcon SYSTEM = new ImageIcon(IconFactory.class.getResource("system.gif"));
+	public static final ImageIcon SERVICE_GROUPE = new ImageIcon(IconFactory.class.getResource("serviceGroupe.gif"));
+	public static final ImageIcon SERVICE = new ImageIcon(IconFactory.class.getResource("service.gif"));
 
 	private IconFactory() {
 	}

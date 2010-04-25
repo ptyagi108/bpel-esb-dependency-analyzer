@@ -116,4 +116,8 @@ public final class Workspace implements TreeNode {
 		return list;
 		// return new ArrayList<Bpel>();
 	}
+
+	public final String toString() {
+		return "workspace";
+	}
 }

@@ -10,7 +10,7 @@ import javax.swing.tree.TreeNode;
  * @author Frastia Tomas
  * 
  */
-public final class EsbOperation implements TreeNode {
+public final class EsbOperation implements BasicEsbNode {
 
 	private String qname;
 
@@ -52,7 +52,7 @@ public final class EsbOperation implements TreeNode {
 
 	@Override
 	public TreeNode getChildAt(int childIndex) {
-		return null;// return esbRoutingRules.get(childIndex);
+		return esbRoutingRules.get(childIndex);
 	}
 
 	@Override
@@ -79,4 +79,17 @@ public final class EsbOperation implements TreeNode {
 		esbRoutingRules.add(esbRoutingRule);
 	}
 
+	public final String toString() {
+		return wsdlOperation;
+	}
+
+	@Override
+	public Object get() {
+		return this;
+	}
+
+	@Override
+	public EsbNodeType getType() {
+		return EsbNodeType.ESBOPERATION;
+	}
 }
