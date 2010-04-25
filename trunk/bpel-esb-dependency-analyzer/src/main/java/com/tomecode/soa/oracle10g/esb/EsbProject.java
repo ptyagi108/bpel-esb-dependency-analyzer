@@ -104,7 +104,7 @@ public final class EsbProject extends Project {
 	}
 
 	public final String toString() {
-		return name;
+		return (projectFolder != null) ? projectFolder.getName() : name;
 	}
 
 	public final EsbSys findEsbSysByQname(String qname) {
