@@ -1,18 +1,20 @@
 package com.tomecode.soa.oracle10g.parser;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.tomecode.soa.oracle10g.Workspace;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
+import com.tomecode.soa.oracle10g.esb.EsbProject;
 import com.tomecode.soa.process.Project;
 import com.tomecode.soa.process.ProjectType;
 
 /**
  * 
- * Parser for bpel workspace
+ * Parser for bpel and esb workspace
  * 
  * @author Tomas Frastia
  * 
@@ -48,6 +50,7 @@ public final class WorkspaceParser {
 			throw new ServiceParserException(workspaceFolder + " is file!", true);
 		}
 		try {
+			// parse bpel projects
 			List<File> listOfFiles = new ArrayList<File>();
 			findBpelXmlFiles(workspaceFolder, listOfFiles);
 			Workspace workspace = new Workspace(workspaceFolder);
@@ -55,29 +58,101 @@ public final class WorkspaceParser {
 				workspace.addProject(bpelParser.parseBpelXml(bpelXml));
 			}
 
-			for (Project service : workspace.getServices()) {
+			// analyze of bpel dependecy
+			for (Project service : workspace.getProjects()) {
 				if (service.getType() == ProjectType.ORACLE10G_BPEL) {
 					BpelProject bpel = (BpelProject) service;
 					for (PartnerLinkBinding partnerLinkBinding : bpel.getPartnerLinkBindings()) {
-						if (partnerLinkBinding.getBpelProcess() == null) {
+						if (partnerLinkBinding.getDependencyProject() == null) {
 							bpelParser.parseBpelByWsdl(partnerLinkBinding);
 						}
 					}
 				}
 			}
 
+			// parse esb projects
 			List<File> esbProjectFolders = new ArrayList<File>();
 			findAllEsbProjectFolders(workspaceFolder, esbProjectFolders);
 			for (File esbProjectFolder : esbProjectFolders) {
 				workspace.addProject(esbParser.parse(esbProjectFolder));
 			}
 
+			// analysis of esb dependency
+			for (Project project : workspace.getProjects()) {
+				if (project.getType() == ProjectType.ORACLE10G_ESB) {
+					EsbProject esbProject = (EsbProject) project;
+					// mal by nacitat vsetky projekty atd.
+				}
+			}
+			// analysis of unresolved dependency
+			anaylizeUnresolvedDependnecy(workspace);
+
 			return workspace;
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new ServiceParserException(e);
 		}
 
+	}
+
+	/**
+	 * anlyzer unresolved dependeciy for oracle 10g bpel process
+	 * 
+	 * @param workspace
+	 */
+	private final void anaylizeUnresolvedDependnecy(Workspace workspace) {
+		for (Project project : workspace.getProjects()) {
+			if (project.getType() == ProjectType.ORACLE10G_BPEL) {
+				BpelProject bpelProject = (BpelProject) project;
+				for (PartnerLinkBinding partnerLinkBinding : bpelProject.getPartnerLinkBindings()) {
+					if (partnerLinkBinding.getDependencyProject() == null) {
+
+						URL urlWsdl = parseWsdlToUrl(partnerLinkBinding.getWsdlLocation());
+						String qName = esbParser.convertWsdlToQname(urlWsdl);
+						if (urlWsdl != null && qName != null) {
+							Project qNameProject = findEsbProjectByQname(qName, urlWsdl, workspace);
+							if (qNameProject != null) {
+								partnerLinkBinding.setDependencyProject(qNameProject);
+							}
+						}
+
+					}
+				}
+			}
+		}
+	}
+
+	private final URL parseWsdlToUrl(String wsdl) {
+		if (wsdl != null) {
+			try {
+				return new URL(wsdl);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * find {@link EsbProject} by qName
+	 * 
+	 * @param qName
+	 *            //service/@name
+	 * @param serviceURL
+	 *            wsld from //service/serviceDefinition/wsdlURL
+	 * @param workspace
+	 * @return
+	 */
+	private final Project findEsbProjectByQname(String qName, URL serviceURL, Workspace workspace) {
+		for (Project project : workspace.getProjects()) {
+			if (project.getType() == ProjectType.ORACLE10G_ESB) {
+				EsbProject esbProject = (EsbProject) project;
+				EsbProject fProject = esbProject.findEsbProjectByQname(qName, serviceURL);
+				if (fProject != null) {
+					return fProject;
+				}
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -101,6 +176,12 @@ public final class WorkspaceParser {
 		}
 	}
 
+	/**
+	 * find list of files that end with '.esb'
+	 * 
+	 * @param workspace
+	 * @param findedFolders
+	 */
 	private final void findAllEsbProjectFolders(File workspace, List<File> findedFolders) {
 		File[] files = workspace.listFiles();
 		if (files == null) {

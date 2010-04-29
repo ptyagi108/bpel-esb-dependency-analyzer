@@ -1,6 +1,7 @@
 package com.tomecode.soa.oracle10g.esb;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -11,7 +12,7 @@ import com.tomecode.soa.process.Project;
 import com.tomecode.soa.process.ProjectType;
 
 /**
- * Contains esbsvc files in project
+ * Contains esbsvc,esbgrp, esb files in project
  * 
  * @author Tomas Frastia
  * 
@@ -105,6 +106,45 @@ public final class EsbProject extends Project {
 
 	public final String toString() {
 		return (projectFolder != null) ? projectFolder.getName() : name;
+	}
+
+	/**
+	 * find {@link EsbProject} by qName and service url
+	 * 
+	 * @param qName
+	 * @param serviceURL
+	 * @return if return null then not found
+	 */
+	public final EsbProject findEsbProjectByQname(String qName, URL serviceURL) {
+		for (BasicEsbNode basicEsbNode : basicEsbNodes) {
+			if (basicEsbNode.getQname().equals(qName)) {
+				return this;
+			} else if (basicEsbNode.getType() == EsbNodeType.ESBSYS) {
+				EsbSys esbSys = (EsbSys) basicEsbNode.get();
+				if (esbSys.getQname().equals(qName)) {
+					return this;
+				} else {
+					if (esbSys.findEsbProjectByQname(qName, serviceURL) != null) {
+						return this;
+					}
+				}
+			} else if (basicEsbNode.getType() == EsbNodeType.ESBGRP) {
+				EsbGrp esbGrp = (EsbGrp) basicEsbNode;
+				if (esbGrp.getQname().equals(qName)) {
+					return this;
+				} else {
+					if (esbGrp.findEsbProjectByQname(qName, serviceURL) != null) {
+						return this;
+					}
+				}
+			} else if (basicEsbNode.getType() == EsbNodeType.ESBSYS) {
+				if (((EsbSys) basicEsbNode).findEsbProjectByQname(qName, serviceURL) != null) {
+					return this;
+				}
+			}
+		}
+
+		return null;
 	}
 
 	public final EsbSys findEsbSysByQname(String qname) {

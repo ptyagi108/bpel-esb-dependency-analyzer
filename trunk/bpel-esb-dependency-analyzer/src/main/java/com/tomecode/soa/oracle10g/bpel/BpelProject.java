@@ -93,11 +93,11 @@ public final class BpelProject extends Project {
 	@Override
 	public TreeNode getChildAt(int childIndex) {
 		PartnerLinkBinding partnerLinkBinding = partnerLinkBindings.get(childIndex);
-		BpelProject bpelProcess = partnerLinkBinding.getBpelProcess();
-		if (bpelProcess == null) {
+		Project project = (Project) partnerLinkBinding.getDependencyProject();
+		if (project == null) {
 			return new ErrorNode("not found process[" + partnerLinkBinding.getName() + "]", partnerLinkBinding.getWsdlLocation(), partnerLinkBinding.getParseErrror());
 		}
-		return bpelProcess;
+		return project;
 	}
 
 	@Override

@@ -71,14 +71,14 @@ public final class Operation implements TreeNode {
 	@Override
 	public boolean getAllowsChildren() {
 		if (partnerLinkBinding != null) {
-			return (partnerLinkBinding.getBpelProcess() != null);
+			return (partnerLinkBinding.getDependencyProject() != null);
 		}
 		return false;
 	}
 
 	@Override
 	public TreeNode getChildAt(int childIndex) {
-		BpelProject bpelProcess = partnerLinkBinding.getBpelProcess();
+		BpelProject bpelProcess = (BpelProject) partnerLinkBinding.getDependencyProject();
 		if (bpelProcess == null || bpelProcess.getBpelOperations() == null) {
 			return new ErrorNode("ERROR:not found " + partnerLinkBinding.getName(), partnerLinkBinding.getWsdlLocation(), null);
 		}
@@ -97,7 +97,7 @@ public final class Operation implements TreeNode {
 
 	@Override
 	public TreeNode getParent() {
-		return partnerLinkBinding.getBpelProcess();
+		return partnerLinkBinding.getDependencyProject();
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public final class Operation implements TreeNode {
 	}
 
 	public final BpelProject getBpelProcess() {
-		return partnerLinkBinding.getBpelProcess();
+		return (BpelProject) partnerLinkBinding.getDependencyProject();
 	}
 
 	public final ActivtyType getActivtyType() {

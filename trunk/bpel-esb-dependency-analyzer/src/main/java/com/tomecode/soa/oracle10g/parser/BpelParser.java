@@ -17,13 +17,16 @@ import com.tomecode.soa.oracle10g.bpel.Operation;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
 
 /**
- * Parser for BPEL
+ * Parser for Oracle 10g BPEL process
  * 
  * @author Tomas Frastia
  * 
  */
 public final class BpelParser extends AbstractParser {
 
+	/**
+	 * list of parsed process
+	 */
 	private final List<BpelProject> parsedProcess = new ArrayList<BpelProject>();
 
 	/**
@@ -220,13 +223,13 @@ public final class BpelParser extends AbstractParser {
 
 			if (url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
 				String processName = getProcessNameFromUrl(url.toString());
-				partnerLinkBinding.setBpelProcess(findParsedProcess(processName));
+				partnerLinkBinding.setDependencyProject(findParsedProcess(processName));
 			} else {
 				// parse file dependencie
 				File file = new File(url.getFile());
 				BpelProject parseBpelProcess = findParsedProcess(file);
 				if (parseBpelProcess != null) {
-					partnerLinkBinding.setBpelProcess(parseBpelProcess);
+					partnerLinkBinding.setDependencyProject(parseBpelProcess);
 				} else {
 					parseBpelXml(file.getParentFile());
 				}
@@ -236,7 +239,7 @@ public final class BpelParser extends AbstractParser {
 			int index = partnerLinkBinding.getWsdlLocation().lastIndexOf(".");
 			if (index != -1) {
 				String processName = partnerLinkBinding.getWsdlLocation().substring(0, index);
-				partnerLinkBinding.setBpelProcess(findParsedProcess(processName));
+				partnerLinkBinding.setDependencyProject(findParsedProcess(processName));
 			} else {
 				partnerLinkBinding.setParseErrror(e);
 			}

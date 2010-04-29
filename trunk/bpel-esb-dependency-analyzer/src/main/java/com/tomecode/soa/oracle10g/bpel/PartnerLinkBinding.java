@@ -1,5 +1,6 @@
 package com.tomecode.soa.oracle10g.bpel;
 
+import com.tomecode.soa.process.Project;
 
 /**
  * Contains data for partnerlink
@@ -12,14 +13,20 @@ public final class PartnerLinkBinding {
 	private String name;
 	private String wsdlLocation;
 
-	private BpelProject bpelProcess;
+	private Project dependencyProject;
 
 	private BpelProject parent;
 
 	private Exception parseError;
 
-	// zoznam operacii
-
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 *            partner link name
+	 * @param wsdlLocation
+	 *            wsdl url
+	 */
 	public PartnerLinkBinding(String name, String wsdlLocation) {
 		this.name = name;
 		this.wsdlLocation = wsdlLocation;
@@ -33,13 +40,13 @@ public final class PartnerLinkBinding {
 		return wsdlLocation;
 	}
 
-	public final BpelProject getBpelProcess() {
-		return bpelProcess;
+	public final Project getDependencyProject() {
+		return dependencyProject;
 	}
 
-	public final void setBpelProcess(BpelProject bpelProcess) {
-		this.bpelProcess = bpelProcess;
-		this.parseError  = null;
+	public final void setDependencyProject(Project project) {
+		this.dependencyProject = project;
+		this.parseError = null;
 	}
 
 	public void setParent(BpelProject parent) {

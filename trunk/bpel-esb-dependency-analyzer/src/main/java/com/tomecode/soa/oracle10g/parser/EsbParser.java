@@ -1,11 +1,13 @@
 package com.tomecode.soa.oracle10g.parser;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.dom4j.Element;
 
+import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
 import com.tomecode.soa.oracle10g.esb.EsbGrp;
 import com.tomecode.soa.oracle10g.esb.EsbOperation;
 import com.tomecode.soa.oracle10g.esb.EsbProject;
@@ -15,13 +17,16 @@ import com.tomecode.soa.oracle10g.esb.EsbSys;
 
 /**
  * 
- * Esb parser
+ * Parser for Oracle 10g ESB services
  * 
  * @author Tomas Frastia
  * 
  */
 public final class EsbParser extends AbstractParser {
 
+	/**
+	 * Constructor
+	 */
 	public EsbParser() {
 
 	}
@@ -149,6 +154,7 @@ public final class EsbParser extends AbstractParser {
 	public final void parseEsbsvc(File file, EsbProject esbProject) throws ServiceParserException {
 		Element eService = parseXml(file);
 		EsbSvc esb = new EsbSvc(file, eService.attributeValue("name"), eService.attributeValue("qname"));
+		esb.setOwnerEsbProject(esbProject);
 
 		Element eServiceDefinition = eService.element("serviceDefinition");
 		if (eServiceDefinition != null) {
@@ -223,5 +229,40 @@ public final class EsbParser extends AbstractParser {
 			}
 
 		}
+	}
+
+	/**
+	 * parse wsdl and find bpel
+	 * 
+	 * @param partnerLinkBinding
+	 */
+	public final String createEsbSystemUrl(PartnerLinkBinding partnerLinkBinding) {
+		try {
+			URL url = new URL(partnerLinkBinding.getWsdlLocation());
+
+			if (url.getFile().startsWith("/esb/wsil/")) {
+				return url.getFile().replace("/esb/wsil/", "");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * convert wsdl to qName
+	 * 
+	 * @param wsdlLocation
+	 * @return
+	 */
+	public final String convertWsdlToQname(URL url) {
+		if (url.getFile().startsWith("/esb/wsil/")) {
+			String urlQname = url.getFile().replace("/esb/wsil/", "");
+			if (urlQname.endsWith("?wsdl")) {
+				return urlQname.substring(0, urlQname.lastIndexOf("?wsdl")).replace("/", ".");
+			}
+		}
+		return null;
 	}
 }

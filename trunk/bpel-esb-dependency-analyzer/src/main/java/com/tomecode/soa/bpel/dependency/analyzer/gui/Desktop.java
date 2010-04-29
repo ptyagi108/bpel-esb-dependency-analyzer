@@ -3,6 +3,8 @@ package com.tomecode.soa.bpel.dependency.analyzer.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 
@@ -39,6 +41,17 @@ public final class Desktop extends Frame implements ActionListener {
 		workspaceTabb = new TabbedManager();
 		addToContainer(rootMenuBar, BorderLayout.NORTH);
 		addToContainer(workspaceTabb, BorderLayout.CENTER);
+
+		addComponentListener(new ComponentAdapter() {
+
+			@Override
+			public void componentResized(ComponentEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("resise");
+			}
+
+		});
+
 	}
 
 	/**

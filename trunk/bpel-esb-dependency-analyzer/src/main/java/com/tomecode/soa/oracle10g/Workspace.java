@@ -42,7 +42,7 @@ public final class Workspace implements TreeNode {
 		this.file = file;
 	}
 
-	public final Vector<Project> getServices() {
+	public final Vector<Project> getProjects() {
 		return projects;
 	}
 
@@ -103,8 +103,8 @@ public final class Workspace implements TreeNode {
 				BpelProject bpel = (BpelProject) project;
 				if (!bpel.equals(usage)) {
 					for (PartnerLinkBinding partnerLinkBinding : bpel.getPartnerLinkBindings()) {
-						if (partnerLinkBinding.getBpelProcess() != null) {
-							if (partnerLinkBinding.getBpelProcess().equals(usage)) {
+						if (partnerLinkBinding.getDependencyProject() != null) {
+							if (partnerLinkBinding.getDependencyProject().equals(usage)) {
 								list.add(partnerLinkBinding.getParent());
 							}
 						}

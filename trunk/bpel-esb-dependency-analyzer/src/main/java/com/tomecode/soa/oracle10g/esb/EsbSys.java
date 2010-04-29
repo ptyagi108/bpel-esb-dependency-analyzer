@@ -1,12 +1,14 @@
 package com.tomecode.soa.oracle10g.esb;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.Vector;
 
 import javax.swing.tree.TreeNode;
 
 /**
+ * service system for Oracle 10g
  * 
  * @author Tomas Frastia
  * 
@@ -130,6 +132,43 @@ public final class EsbSys implements BasicEsbNode {
 			}
 		}
 
+		return null;
+	}
+
+	/**
+	 * find {@link EsbProject} by qName and serviceURL
+	 * 
+	 * @param qName
+	 * @param sericeURL
+	 * @return
+	 */
+	public final EsbProject findEsbProjectByQname(String qName, URL sericeURL) {
+		for (BasicEsbNode basicEsbNode : basicEsbNodes) {
+			if (basicEsbNode.getType() == EsbNodeType.ESBSYS) {
+				if (basicEsbNode.getQname().equals(qName)) {
+					return ((EsbSys) basicEsbNode.get()).getOwnerEsbProject();
+				} else {
+					EsbProject esbProject = ((EsbSys) basicEsbNode.get()).findEsbProjectByQname(qName, sericeURL);
+					if (esbProject != null) {
+						return esbProject;
+					}
+				}
+			} else if (basicEsbNode.getType() == EsbNodeType.ESBGRP) {
+				if (basicEsbNode.getQname().equals(qName)) {
+					return ((EsbGrp) basicEsbNode.get()).getOwnerEsbProject();
+				} else {
+					EsbProject esbProject = ((EsbGrp) basicEsbNode.get()).findEsbProjectByQname(qName, sericeURL);
+					if (esbProject != null) {
+						return esbProject;
+					}
+				}
+			} else if (basicEsbNode.getType() == EsbNodeType.ESBSVC) {
+				EsbProject esbProject = ((EsbSvc) basicEsbNode.get()).findEsbProjectByQname(qName, sericeURL);
+				if (esbProject != null) {
+					return esbProject;
+				}
+			}
+		}
 		return null;
 	}
 }

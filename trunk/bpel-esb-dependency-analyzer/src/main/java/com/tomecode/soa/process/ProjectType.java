@@ -1,7 +1,7 @@
 package com.tomecode.soa.process;
 
 /**
- * Service Type
+ * Project type is type of BPEL or ESB
  * 
  * 
  * @author Frastia Tomas
@@ -9,5 +9,12 @@ package com.tomecode.soa.process;
  */
 public enum ProjectType {
 
-	ORACLE10G_BPEL, ORACLE10G_ESB;
+	/**
+	 * ORACLE 10g BPEL process project
+	 */
+	ORACLE10G_BPEL,
+	/**
+	 * ORACLE 10g ESB service project
+	 */
+	ORACLE10G_ESB;
 }

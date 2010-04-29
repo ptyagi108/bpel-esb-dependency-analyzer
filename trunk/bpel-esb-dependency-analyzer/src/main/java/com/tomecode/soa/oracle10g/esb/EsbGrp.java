@@ -1,28 +1,50 @@
 package com.tomecode.soa.oracle10g.esb;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.Vector;
 
 import javax.swing.tree.TreeNode;
 
 /**
+ * Oracle 10g - service group
  * 
  * @author Tomas Frastia
  * 
  */
 public final class EsbGrp implements BasicEsbNode {
 
+	private EsbProject ownerEsbProject;
+	/**
+	 * service group file
+	 */
 	private File esbGrpFile;
+	/**
+	 * service group name
+	 */
 	private String name;
+	/**
+	 * service group qName
+	 */
 	private String qname;
 
 	private final Vector<BasicEsbNode> basicEsbNodes;
 
+	/**
+	 * Constructor
+	 */
 	public EsbGrp() {
 		basicEsbNodes = new Vector<BasicEsbNode>();
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param esbGrpFile
+	 * @param name
+	 * @param qname
+	 */
 	public EsbGrp(File esbGrpFile, String name, String qname) {
 		this();
 		this.esbGrpFile = esbGrpFile;
@@ -112,4 +134,42 @@ public final class EsbGrp implements BasicEsbNode {
 
 		return null;
 	}
+
+	public final EsbProject getOwnerEsbProject() {
+		return ownerEsbProject;
+	}
+
+	public final void setOwnerEsbProject(EsbProject ownerEsbProject) {
+		this.ownerEsbProject = ownerEsbProject;
+	}
+
+	public final EsbProject findEsbProjectByQname(String qName, URL serviceURL) {
+		for (BasicEsbNode basicEsbNode : basicEsbNodes) {
+			if (basicEsbNode.getType() == EsbNodeType.ESBSYS) {
+				if (basicEsbNode.getQname().equals(qName)) {
+					return ((EsbSys) basicEsbNode.get()).getOwnerEsbProject();
+				} else {
+					EsbProject esbProject = ((EsbSys) basicEsbNode.get()).findEsbProjectByQname(qName, serviceURL);
+					if (esbProject != null) {
+						return esbProject;
+					}
+				}
+			} else if (basicEsbNode.getType() == EsbNodeType.ESBGRP) {
+				if (basicEsbNode.getQname().equals(qName)) {
+					return ((EsbGrp) basicEsbNode.get()).getOwnerEsbProject();
+				} else {
+					EsbProject esbProject = ((EsbGrp) basicEsbNode.get()).findEsbProjectByQname(qName, serviceURL);
+					if (esbProject != null) {
+						return esbProject;
+					}
+				}
+			} else if (basicEsbNode.getType() == EsbNodeType.ESBSVC) {
+				if (basicEsbNode.getQname().equals(qName)) {
+					return ((EsbSvc) basicEsbNode.get()).getOwnerEsbProject();
+				}
+			}
+		}
+		return null;
+	}
+
 }

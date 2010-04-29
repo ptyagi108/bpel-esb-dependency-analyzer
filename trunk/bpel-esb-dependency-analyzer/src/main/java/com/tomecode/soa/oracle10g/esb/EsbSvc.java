@@ -1,6 +1,7 @@
 package com.tomecode.soa.oracle10g.esb;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -151,5 +152,17 @@ public final class EsbSvc implements BasicEsbNode {
 	@Override
 	public EsbNodeType getType() {
 		return EsbNodeType.ESBSVC;
+	}
+
+	public final EsbProject findEsbProjectByQname(String qName, URL sericeURL) {
+		if (this.qName.equalsIgnoreCase(qName)) {
+			if (this.concreteWSDLURL != null) {
+				if (this.concreteWSDLURL.equalsIgnoreCase(sericeURL.getFile())) {
+					return ownerEsbProject;
+				}
+			}
+		}
+
+		return null;
 	}
 }
