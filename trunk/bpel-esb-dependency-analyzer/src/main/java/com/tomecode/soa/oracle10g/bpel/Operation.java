@@ -6,6 +6,8 @@ import java.util.List;
 import javax.swing.tree.TreeNode;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
+import com.tomecode.soa.process.Project;
+import com.tomecode.soa.process.ProjectType;
 
 /**
  * Partner link operation
@@ -78,11 +80,17 @@ public final class Operation implements TreeNode {
 
 	@Override
 	public TreeNode getChildAt(int childIndex) {
-		BpelProject bpelProcess = (BpelProject) partnerLinkBinding.getDependencyProject();
-		if (bpelProcess == null || bpelProcess.getBpelOperations() == null) {
-			return new ErrorNode("ERROR:not found " + partnerLinkBinding.getName(), partnerLinkBinding.getWsdlLocation(), null);
+
+		Project project = (Project) partnerLinkBinding.getDependencyProject();
+		if (project.getType() == ProjectType.ORACLE10G_BPEL) {
+			BpelProject bpelProcess = (BpelProject) partnerLinkBinding.getDependencyProject();
+			if (bpelProcess == null || bpelProcess.getBpelOperations() == null) {
+				return new ErrorNode("ERROR:not found " + partnerLinkBinding.getName(), partnerLinkBinding.getWsdlLocation(), null);
+			}
+			return bpelProcess.getBpelOperations();
 		}
-		return bpelProcess.getBpelOperations();
+		return project;
+
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import javax.swing.tree.TreePath;
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.oracle10g.bpel.BpelOperations;
 import com.tomecode.soa.oracle10g.bpel.Operation;
+import com.tomecode.soa.oracle10g.esb.EsbProject;
 
 /**
  * 
@@ -55,6 +56,8 @@ public final class ProjectOperationTree extends BasicTree {
 				rnd.setIcon(IconFactory.PROCESS);
 			} else if (value instanceof Operation) {
 				rnd.setIcon(((Operation) value).getActivtyType().getImageIcon());
+			} else if (value instanceof EsbProject) {
+				rnd.setIcon(IconFactory.ESB);
 			}
 
 			return rnd;

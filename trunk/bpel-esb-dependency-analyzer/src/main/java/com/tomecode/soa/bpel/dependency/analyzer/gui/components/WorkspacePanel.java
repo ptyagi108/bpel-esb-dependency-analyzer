@@ -162,7 +162,6 @@ public final class WorkspacePanel extends JPanel {
 
 					CardLayout cardLayout = (CardLayout) pCardPanel.getLayout();
 					cardLayout.show(pCardPanel, P_ESB_TREE);
-
 				} else {
 					processStructureTree.clear();
 					projectOperationTree.clear();
@@ -183,7 +182,6 @@ public final class WorkspacePanel extends JPanel {
 
 					if (operation.getPartnerLinkBinding() == null) {
 						// TODO: if not found partnerlink project show error
-						// form
 						displayBpelProcessStructure(operation.getActivities(), null);
 					} else {
 						displayBpelProcessStructure(operation.getActivities(), operation.getPartnerLinkBinding().getParent());
@@ -192,6 +190,8 @@ public final class WorkspacePanel extends JPanel {
 				} else if (e.getPath().getLastPathComponent() instanceof BpelOperations) {
 					BpelOperations bpelOperations = (BpelOperations) e.getPath().getLastPathComponent();
 					displayBpelProcessStructure(null, bpelOperations.getBpelProcess());
+				} else if (e.getPath().getLastPathComponent() instanceof EsbProject) {
+					processStructureTree.clear();
 				}
 			}
 		});
