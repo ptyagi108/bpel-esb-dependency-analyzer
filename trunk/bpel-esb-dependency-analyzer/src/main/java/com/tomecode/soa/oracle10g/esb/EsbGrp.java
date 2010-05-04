@@ -172,4 +172,8 @@ public final class EsbGrp implements BasicEsbNode {
 		return null;
 	}
 
+	public final Vector<BasicEsbNode> getBasicEsbNodes() {
+		return basicEsbNodes;
+	}
+
 }

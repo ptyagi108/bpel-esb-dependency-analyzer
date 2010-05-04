@@ -165,4 +165,9 @@ public final class EsbSvc implements BasicEsbNode {
 
 		return null;
 	}
+
+	public final Vector<EsbOperation> getEsbOperations() {
+		return esbOperations;
+	}
+
 }

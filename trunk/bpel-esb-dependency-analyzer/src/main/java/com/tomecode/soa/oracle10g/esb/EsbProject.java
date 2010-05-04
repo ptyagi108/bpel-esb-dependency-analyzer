@@ -30,7 +30,7 @@ public final class EsbProject extends Project {
 	/**
 	 * list of esbsvc
 	 */
-	private final Vector<EsbProject> esbProjectsDependecies;
+	private final Vector<Project> esbProjectsDependecies;
 
 	/**
 	 * Constructor
@@ -38,7 +38,7 @@ public final class EsbProject extends Project {
 	public EsbProject() {
 		super(ProjectType.ORACLE10G_ESB);
 		basicEsbNodes = new Vector<BasicEsbNode>();
-		esbProjectsDependecies = new Vector<EsbProject>();
+		esbProjectsDependecies = new Vector<Project>();
 	}
 
 	/**
@@ -86,7 +86,7 @@ public final class EsbProject extends Project {
 
 	@Override
 	public int getChildCount() {
-		return esbProjectsDependecies.size() - 1;
+		return esbProjectsDependecies.size();
 	}
 
 	@Override
@@ -182,6 +182,12 @@ public final class EsbProject extends Project {
 		}
 
 		return null;
+	}
+
+	public final void addDependency(Project esbProject) {
+		if (!esbProjectsDependecies.contains(esbProject)) {
+			esbProjectsDependecies.add(esbProject);
+		}
 	}
 
 }

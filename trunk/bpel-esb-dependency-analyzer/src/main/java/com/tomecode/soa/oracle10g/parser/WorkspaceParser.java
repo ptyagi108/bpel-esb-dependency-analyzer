@@ -8,7 +8,11 @@ import java.util.List;
 import com.tomecode.soa.oracle10g.Workspace;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
+import com.tomecode.soa.oracle10g.esb.BasicEsbNode;
+import com.tomecode.soa.oracle10g.esb.EsbGrp;
 import com.tomecode.soa.oracle10g.esb.EsbProject;
+import com.tomecode.soa.oracle10g.esb.EsbSvc;
+import com.tomecode.soa.oracle10g.esb.EsbSys;
 import com.tomecode.soa.process.Project;
 import com.tomecode.soa.process.ProjectType;
 
@@ -82,6 +86,8 @@ public final class WorkspaceParser {
 				if (project.getType() == ProjectType.ORACLE10G_ESB) {
 					EsbProject esbProject = (EsbProject) project;
 					// mal by nacitat vsetky projekty atd.
+
+					analyzeEsbDependencies(esbProject.getBasicEsbNodes(), workspace);
 				}
 			}
 			// analysis of unresolved dependency
@@ -92,6 +98,29 @@ public final class WorkspaceParser {
 			throw new ServiceParserException(e);
 		}
 
+	}
+
+	private final void analyzeEsbDependencies(List<BasicEsbNode> basicEsbNodes, Workspace workspace) {
+		for (BasicEsbNode basicEsbNode : basicEsbNodes) {
+			if (basicEsbNode.get() instanceof EsbSvc) {
+				EsbSvc esbSvc = (EsbSvc) basicEsbNode.get();
+				URL url = parseWsdlToUrl(esbSvc.getWsdlURL());
+				if (url != null) {
+					String qName = esbParser.convertWsdlToQname(url);
+					Project esbProject = findEsbProjectByQname(qName, url, workspace);
+					if (esbProject != null) {
+						esbSvc.getOwnerEsbProject().addDependency(esbProject);
+					}
+				}
+
+			} else if (basicEsbNode.get() instanceof EsbSys) {
+				EsbSys esbSys = (EsbSys) basicEsbNode.get();
+				analyzeEsbDependencies(esbSys.getBasicEsbNodes(), workspace);
+			} else if (basicEsbNode.get() instanceof EsbGrp) {
+				EsbGrp esbGrp = (EsbGrp) basicEsbNode.get();
+				analyzeEsbDependencies(esbGrp.getBasicEsbNodes(), workspace);
+			}
+		}
 	}
 
 	/**
@@ -126,7 +155,7 @@ public final class WorkspaceParser {
 			try {
 				return new URL(wsdl);
 			} catch (Exception e) {
-				e.printStackTrace();
+				// e.printStackTrace();
 			}
 		}
 		return null;

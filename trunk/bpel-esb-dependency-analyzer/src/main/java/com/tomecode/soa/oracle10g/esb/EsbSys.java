@@ -171,4 +171,9 @@ public final class EsbSys implements BasicEsbNode {
 		}
 		return null;
 	}
+
+	public final Vector<BasicEsbNode> getBasicEsbNodes() {
+		return basicEsbNodes;
+	}
+
 }
