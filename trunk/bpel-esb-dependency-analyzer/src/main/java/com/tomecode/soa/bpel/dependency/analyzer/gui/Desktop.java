@@ -7,12 +7,15 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.List;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.components.TabbedManager;
+import com.tomecode.soa.bpel.dependency.analyzer.settings.RecentFile;
+import com.tomecode.soa.bpel.dependency.analyzer.settings.SettingsManager;
 import com.tomecode.soa.oracle10g.Workspace;
 import com.tomecode.soa.oracle10g.parser.ServiceParserException;
 import com.tomecode.soa.oracle10g.parser.WorkspaceParser;
@@ -30,6 +33,8 @@ public final class Desktop extends Frame implements ActionListener {
 
 	private static final long serialVersionUID = -9130398154838815230L;
 
+	private JMenu menuRecentFiles;
+
 	private final JMenuBar rootMenuBar;
 
 	private final TabbedManager workspaceTabb;
@@ -37,6 +42,7 @@ public final class Desktop extends Frame implements ActionListener {
 	private Desktop() {
 		super("BPEL and ESB Dependency analyzer", 944, 544, true, true);
 		rootMenuBar = new JMenuBar();
+		menuRecentFiles = new JMenu("Recent Files");
 		rootMenuBar.add(createMenuFile());
 		workspaceTabb = new TabbedManager();
 		addToContainer(rootMenuBar, BorderLayout.NORTH);
@@ -46,7 +52,6 @@ public final class Desktop extends Frame implements ActionListener {
 
 			@Override
 			public void componentResized(ComponentEvent e) {
-				// TODO Auto-generated method stub
 				System.out.println("resise");
 			}
 
@@ -62,9 +67,29 @@ public final class Desktop extends Frame implements ActionListener {
 	private final JMenu createMenuFile() {
 		JMenu menu = new JMenu("File");
 		menu.add(createMenuItem("Open"));
+		menu.addSeparator();
+		menu.add(menuRecentFiles);
+		menu.addSeparator();
 		menu.add(createMenuItem("Exit"));
 		menu.setMnemonic(KeyEvent.VK_ALT);
+
+		reloadMenuRecentFiles();
 		return menu;
+	}
+
+	/**
+	 * 
+	 * create menu for recent files
+	 * 
+	 * @return
+	 */
+	private final void reloadMenuRecentFiles() {
+		List<RecentFile> files = SettingsManager.getRecentFiles();
+		menuRecentFiles.removeAll();
+		for (RecentFile recentFile : files) {
+			menuRecentFiles.add(createMenuItemOpenRecentFiles(recentFile.getName() + " - " + recentFile.getFile().getPath(), recentFile.getFile().getPath()));
+		}
+		menuRecentFiles.updateUI();
 	}
 
 	/**
@@ -77,6 +102,26 @@ public final class Desktop extends Frame implements ActionListener {
 		JMenuItem menuItem = new JMenuItem(name);
 		menuItem.setActionCommand(name);
 		menuItem.addActionListener(this);
+		return menuItem;
+	}
+
+	/**
+	 * create special {@link JMenuItem} for recent files
+	 * 
+	 * @param text
+	 * @param filePath
+	 * @return
+	 */
+	private final JMenuItem createMenuItemOpenRecentFiles(String text, String filePath) {
+		JMenuItem menuItem = new JMenuItem(text);
+		menuItem.setActionCommand(filePath);
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public final void actionPerformed(ActionEvent e) {
+				File workspaceFolder = new File(e.getActionCommand());
+				openNewWorkspace(workspaceFolder);
+			}
+		});
 		return menuItem;
 	}
 
@@ -117,13 +162,14 @@ public final class Desktop extends Frame implements ActionListener {
 	 * @param name
 	 * @param workspace
 	 */
-	private final void openNewWorkspace(File workspace) {
+	private final void openNewWorkspace(File workspaceFolder) {
 		try {
-
-			workspaceTabb.addTable(new WorkspaceParser().parse(workspace));
+			Workspace workspace = new WorkspaceParser().parse(workspaceFolder);
+			SettingsManager.addRecentFile(workspace.getName(), workspace.getFile());
+			workspaceTabb.addTable(workspace);
 		} catch (ServiceParserException e) {
 			FrmError.showMe(e.getMessage(), e);
 		}
-
+		reloadMenuRecentFiles();
 	}
 }
