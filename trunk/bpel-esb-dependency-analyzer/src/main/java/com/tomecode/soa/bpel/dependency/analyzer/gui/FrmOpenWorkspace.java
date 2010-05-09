@@ -78,7 +78,7 @@ public final class FrmOpenWorkspace extends Dialog {
 			}
 		});
 
-		textFieldPath = new JTextField("C:/ORACLE/projects/BPEL/samples/");
+		textFieldPath = new JTextField("");
 		textFieldPath.addKeyListener(new KeyAdapter() {
 			public final void keyTyped(KeyEvent e) {
 				enableButton(e);
