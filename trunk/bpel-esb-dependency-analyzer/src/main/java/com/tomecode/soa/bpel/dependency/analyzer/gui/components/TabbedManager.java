@@ -57,8 +57,8 @@ public final class TabbedManager extends JTabbedPane {
 	 * @param name
 	 * @param workspace
 	 */
-	public final void addTable(String name, Workspace workspace) {
-		addTab(name, new WorkspacePanel(workspace));
+	public final void addTable(Workspace workspace) {
+		addTab(workspace.getName(), new WorkspacePanel(workspace));
 		setSelectedIndex(getTabCount() - 1);
 	}
 }

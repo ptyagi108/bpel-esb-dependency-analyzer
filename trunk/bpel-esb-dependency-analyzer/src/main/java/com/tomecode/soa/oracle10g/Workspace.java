@@ -21,6 +21,8 @@ import com.tomecode.soa.process.ProjectType;
  */
 public final class Workspace implements TreeNode {
 
+	private String name;
+
 	private File file;
 
 	private final Vector<Project> projects;
@@ -118,6 +120,14 @@ public final class Workspace implements TreeNode {
 	}
 
 	public final String toString() {
-		return "workspace";
+		return name;
+	}
+
+	public final String getName() {
+		return name;
+	}
+
+	public final void setName(String name) {
+		this.name = name;
 	}
 }

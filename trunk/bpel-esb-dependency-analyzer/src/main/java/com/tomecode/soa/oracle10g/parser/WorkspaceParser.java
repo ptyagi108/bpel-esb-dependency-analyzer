@@ -53,11 +53,15 @@ public final class WorkspaceParser {
 		if (workspaceFolder.isFile()) {
 			throw new ServiceParserException(workspaceFolder + " is file!", true);
 		}
+		Workspace workspace = new Workspace(workspaceFolder);
+
+		workspace.setName(parseWorkspaceName(workspaceFolder));
+
 		try {
 			// parse bpel projects
 			List<File> listOfFiles = new ArrayList<File>();
 			findBpelXmlFiles(workspaceFolder, listOfFiles);
-			Workspace workspace = new Workspace(workspaceFolder);
+
 			for (File bpelXml : listOfFiles) {
 				workspace.addProject(bpelParser.parseBpelXml(bpelXml));
 			}
@@ -98,6 +102,25 @@ public final class WorkspaceParser {
 			throw new ServiceParserException(e);
 		}
 
+	}
+
+	/**
+	 * parse {@link Workspace} name
+	 * 
+	 * @param workspaceFolder
+	 * @return
+	 */
+	private final String parseWorkspaceName(File workspaceFolder) {
+		File[] files = workspaceFolder.listFiles();
+
+		if (files != null) {
+			for (File file : files) {
+				if (file.getName().endsWith(".jws")) {
+					return file.getName().substring(0, file.getName().length() - 4);
+				}
+			}
+		}
+		return workspaceFolder.getName();
 	}
 
 	/**

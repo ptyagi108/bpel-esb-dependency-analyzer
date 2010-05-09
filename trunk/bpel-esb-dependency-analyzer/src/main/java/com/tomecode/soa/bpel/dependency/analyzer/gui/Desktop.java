@@ -105,7 +105,7 @@ public final class Desktop extends Frame implements ActionListener {
 			@Override
 			public final void hideForm(Object... returnObj) {
 				if (returnObj != null && returnObj.length != 0) {
-					openNewWorkspace(returnObj[0].toString(), (File) returnObj[1]);
+					openNewWorkspace((File) returnObj[0]);
 				}
 			}
 		});
@@ -117,10 +117,10 @@ public final class Desktop extends Frame implements ActionListener {
 	 * @param name
 	 * @param workspace
 	 */
-	private final void openNewWorkspace(String name, File workspace) {
+	private final void openNewWorkspace(File workspace) {
 		try {
 
-			workspaceTabb.addTable(name, new WorkspaceParser().parse(workspace));
+			workspaceTabb.addTable(new WorkspaceParser().parse(workspace));
 		} catch (ServiceParserException e) {
 			FrmError.showMe(e.getMessage(), e);
 		}

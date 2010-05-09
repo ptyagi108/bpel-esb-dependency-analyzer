@@ -49,10 +49,10 @@ public final class FrmOpenWorkspace extends Dialog {
 	 * button for display {@link JFileChooser}
 	 */
 	private final JButton bFindPath;
-	
+
 	private final JTextField textFieldPath;
 
-	private final JTextField textFieldName;
+	// private final JTextField textFieldName;
 
 	/**
 	 * Constructor
@@ -67,7 +67,7 @@ public final class FrmOpenWorkspace extends Dialog {
 		buttonOpen.addActionListener(new ActionListener() {
 			@Override
 			public final void actionPerformed(ActionEvent e) {
-				hideMe(textFieldName.getText().trim(), getSelectedPath());
+				hideMe(getSelectedPath());
 			}
 		});
 
@@ -88,12 +88,12 @@ public final class FrmOpenWorkspace extends Dialog {
 				enableButton(e);
 			}
 		});
-		textFieldName = new JTextField("33");
-		textFieldName.addKeyListener(new KeyAdapter() {
-			public final void keyReleased(KeyEvent e) {
-				workspaceName = textFieldName.getText().trim();
-			}
-		});
+		// textFieldName = new JTextField("33");
+		// textFieldName.addKeyListener(new KeyAdapter() {
+		// public final void keyReleased(KeyEvent e) {
+		// workspaceName = textFieldName.getText().trim();
+		// }
+		// });
 		addToButtonLayout(buttonOpen);
 		bFindPath = new JButton("...");
 		bFindPath.addActionListener(new ActionListener() {
@@ -107,12 +107,14 @@ public final class FrmOpenWorkspace extends Dialog {
 		pPath.add(PanelFactory.wrapByBorderLayout(bFindPath, BorderLayout.NORTH), BorderLayout.EAST);
 		bFindPath.setPreferredSize(new Dimension(30, 20));
 
-		JPanel pName = PanelFactory.createBorderLayout(0, 0, 0, 0);
-		pName.add(PanelFactory.wrapWithLabelNorm("Name", textFieldName, 13), BorderLayout.CENTER);
+		// JPanel pName = PanelFactory.createBorderLayout(0, 0, 0, 0);
+		// pName.add(PanelFactory.wrapWithLabelNorm("Name", textFieldName, 13),
+		// BorderLayout.CENTER);
 
-		JPanel panelTxts = PanelFactory.createGridLayout(2, 1);
+		JPanel panelTxts = PanelFactory.createBorderLayout();// .createGridLayout(2,
+		// 1);
 
-		panelTxts.add(pName);
+		// panelTxts.add(pName);
 		panelTxts.add(pPath);
 
 		panelRoot.add(PanelFactory.wrapWithTile("", panelTxts, 10, 15, 10, 15), BorderLayout.NORTH);
@@ -127,7 +129,7 @@ public final class FrmOpenWorkspace extends Dialog {
 		if (workspace.isDirectory() && workspace.exists()) {
 			buttonOpen.setEnabled(true);
 			if ((e != null) && e.getKeyCode() == KeyEvent.VK_ENTER) {
-				hideMe(textFieldName.getText().trim(), getSelectedPath());
+				hideMe(getSelectedPath());
 			}
 		} else {
 			buttonOpen.setEnabled(false);
