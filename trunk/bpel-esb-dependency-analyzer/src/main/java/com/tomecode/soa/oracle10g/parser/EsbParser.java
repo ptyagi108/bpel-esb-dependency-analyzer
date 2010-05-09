@@ -223,8 +223,10 @@ public final class EsbParser extends AbstractParser {
 				for (Element routingRule : routingRules) {
 
 					Element targetOperation = routingRule.element("targetOperation");
-					EsbRoutingRule esbRoutingRule = new EsbRoutingRule(targetOperation.attributeValue("qname"), targetOperation.attributeValue("serviceQName"));
-					esbOperation.addRoutingRule(esbRoutingRule);
+					if (targetOperation != null) {
+						EsbRoutingRule esbRoutingRule = new EsbRoutingRule(targetOperation.attributeValue("qname"), targetOperation.attributeValue("serviceQName"));
+						esbOperation.addRoutingRule(esbRoutingRule);
+					}
 				}
 			}
 

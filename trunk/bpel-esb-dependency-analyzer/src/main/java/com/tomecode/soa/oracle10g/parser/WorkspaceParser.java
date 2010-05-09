@@ -86,7 +86,6 @@ public final class WorkspaceParser {
 				if (project.getType() == ProjectType.ORACLE10G_ESB) {
 					EsbProject esbProject = (EsbProject) project;
 					// mal by nacitat vsetky projekty atd.
-
 					analyzeEsbDependencies(esbProject.getBasicEsbNodes(), workspace);
 				}
 			}
@@ -95,11 +94,18 @@ public final class WorkspaceParser {
 
 			return workspace;
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ServiceParserException(e);
 		}
 
 	}
 
+	/**
+	 * analyse {@link EsbProject} dependencies
+	 * 
+	 * @param basicEsbNodes
+	 * @param workspace
+	 */
 	private final void analyzeEsbDependencies(List<BasicEsbNode> basicEsbNodes, Workspace workspace) {
 		for (BasicEsbNode basicEsbNode : basicEsbNodes) {
 			if (basicEsbNode.get() instanceof EsbSvc) {
@@ -124,7 +130,7 @@ public final class WorkspaceParser {
 	}
 
 	/**
-	 * anlyzer unresolved dependeciy for oracle 10g bpel process
+	 * analyse unresolved dependecy for oracle 10g bpel process
 	 * 
 	 * @param workspace
 	 */
@@ -146,8 +152,60 @@ public final class WorkspaceParser {
 
 					}
 				}
+			} else if (project.getType() == ProjectType.ORACLE10G_ESB) {
+				EsbProject esbProject = (EsbProject) project;
+
+				List<EsbSvc> esbSvcs = esbProject.getAllEsbSvc();
+				for (EsbSvc esbSvc : esbSvcs) {
+					URL url = parseWsdlToUrl(esbSvc.getWsdlURL());
+					if (url != null) {
+						if (url.getFile().startsWith("/orabpel")) {
+							BpelProject bpelProject = findBpelProjectForEsb(workspace, url.getFile());
+							if (bpelProject != null) {
+								esbSvc.getOwnerEsbProject().addDependency(bpelProject);
+							}
+
+						}
+					}
+				}
+
+				// najst vsetky esbserice ktore su unresolved reps. nemaju
+				// zavisloti ako bpel a tie parsovat voci bpelu
+
+				// for(esbSvc: listEsbsvc) {
+				// findInBpel
+				// }
+				//
 			}
 		}
+	}
+
+	private final BpelProject findBpelProjectForEsb(Workspace workspace, String url) {
+		int index = url.indexOf("?wsdl");
+		if (index != -1) {
+			url = url.replace("?", ".");
+
+			index = url.lastIndexOf("/");
+			if (index != -1) {
+				url = url.substring(0, index);
+				String processName = url.substring(url.lastIndexOf("/") + 1, index);
+				return findBpelByName(workspace, processName);
+			}
+
+		}
+		return null;
+	}
+
+	private final BpelProject findBpelByName(Workspace workspace, String bpelProcessName) {
+		for (Project project : workspace.getProjects()) {
+			if (project.getType() == ProjectType.ORACLE10G_BPEL) {
+				BpelProject bpelProject = (BpelProject) project;
+				if (bpelProject.toString().equals(bpelProcessName)) {
+					return bpelProject;
+				}
+			}
+		}
+		return null;
 	}
 
 	private final URL parseWsdlToUrl(String wsdl) {

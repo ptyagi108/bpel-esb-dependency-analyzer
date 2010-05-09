@@ -2,7 +2,9 @@ package com.tomecode.soa.oracle10g.esb;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.tree.TreeNode;
@@ -190,4 +192,24 @@ public final class EsbProject extends Project {
 		}
 	}
 
+	public final List<EsbSvc> getAllEsbSvc() {
+		List<EsbSvc> esbSvcs = new ArrayList<EsbSvc>();
+		findAllEsbSvc(esbSvcs);
+		return esbSvcs;
+	}
+
+	private final void findAllEsbSvc(List<EsbSvc> esbSvcs) {
+		for (BasicEsbNode basicEsbNode : basicEsbNodes) {
+			if (basicEsbNode.getType() == EsbNodeType.ESBGRP) {
+				EsbGrp esbGrp = (EsbGrp) basicEsbNode.get();
+				esbGrp.findAllEsbSvc(esbSvcs);
+			} else if (basicEsbNode.getType() == EsbNodeType.ESBSYS) {
+				EsbSys esbSys = (EsbSys) basicEsbNode.get();
+				esbSys.findAllEsbSvc(esbSvcs);
+			} else if (basicEsbNode.getType() == EsbNodeType.ESBSVC) {
+				esbSvcs.add((EsbSvc) basicEsbNode.get());
+			}
+		}
+
+	}
 }
