@@ -11,7 +11,7 @@ Version 0.3
   * analysis dependence between BPEL projects for Oracle SOA 10g
 
 Version 0.5-b01
-  * fix some bux in BPEL parser for Oracle SOA 10g
+  * fix bug in BPEL parser for Oracle SOA 10g
   * ESB(Enterprise Service Bus) parser for Oracle SOA 10g
   * analysis dependence between ESB projects
   * analysis dependence between BPEL and ESB projects
