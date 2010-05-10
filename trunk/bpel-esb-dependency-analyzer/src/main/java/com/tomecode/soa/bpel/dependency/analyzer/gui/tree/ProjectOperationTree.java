@@ -7,6 +7,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.EmptyNode;
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.oracle10g.bpel.BpelOperations;
 import com.tomecode.soa.oracle10g.bpel.Operation;
@@ -57,6 +58,8 @@ public final class ProjectOperationTree extends BasicTree {
 			} else if (value instanceof Operation) {
 				rnd.setIcon(((Operation) value).getActivtyType().getImageIcon());
 			} else if (value instanceof EsbProject) {
+				rnd.setIcon(IconFactory.ESB);
+			} else if (value instanceof EmptyNode) {
 				rnd.setIcon(IconFactory.ESB);
 			}
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.EmptyNode;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
 import com.tomecode.soa.process.Project;
 import com.tomecode.soa.process.ProjectType;
@@ -89,7 +90,7 @@ public final class Operation implements TreeNode {
 			}
 			return bpelProcess.getBpelOperations();
 		}
-		return project;
+		return new EmptyNode(project);
 
 	}
 
@@ -122,7 +123,7 @@ public final class Operation implements TreeNode {
 	}
 
 	public final String toString() {
-		return activity + ":" + name + ":" + operation;
+		return activity + ":" + name + (operation == null ? "" : ":" + operation);
 	}
 
 }
