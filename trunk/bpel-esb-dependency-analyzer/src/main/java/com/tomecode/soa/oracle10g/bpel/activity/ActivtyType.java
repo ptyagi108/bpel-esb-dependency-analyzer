@@ -1,4 +1,4 @@
-package com.tomecode.soa.oracle10g.bpel;
+package com.tomecode.soa.oracle10g.bpel.activity;
 
 import javax.swing.ImageIcon;
 
@@ -16,7 +16,7 @@ public enum ActivtyType {
 	SCOPE("scope", IconFactory.SCOPE), SEQUENCE("sequence", IconFactory.SEQUENCE), ASSIGN("assign", IconFactory.ASSIGN), EMPTY("empty", IconFactory.EMPTY), RECEIVE("receive", IconFactory.RECEIVE), INVOKE("invoke", IconFactory.INVOKE), REPLY("reply", IconFactory.REPLY), SWITCH(
 			"switch", IconFactory.SWITCH), CATCH("catch", IconFactory.CATCH), CATCHALL("catchAll", IconFactory.CATCHALL), ONALARM("onAlarm", IconFactory.ONALARM), ONMESSAGE("onMessage", IconFactory.ONMESSAGE), COMPENSATIONHANDLER("compensationHandler",
 			IconFactory.COMPENSATIONHANDLER), JAVA_EMBEDDING("exec", IconFactory.BPELX_EXEC), PICK("pick", IconFactory.PICK), FLOW("flow", IconFactory.FLOW), FLOWN("flowN", IconFactory.FLOWN), COMPENSATE("compensate", IconFactory.COMPENSTATE), TERMINATE("terminate",
-			IconFactory.TERMINATE),	THROW("throw", IconFactory.THROW);
+			IconFactory.TERMINATE), THROW("throw", IconFactory.THROW), PARTNERLINK("partnerLink", null);
 
 	private final String name;
 	private final ImageIcon imageIcon;

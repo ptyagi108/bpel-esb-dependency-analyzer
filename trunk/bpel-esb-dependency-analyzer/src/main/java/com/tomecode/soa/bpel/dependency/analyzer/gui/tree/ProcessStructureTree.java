@@ -12,8 +12,8 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
-import com.tomecode.soa.oracle10g.bpel.Activity;
 import com.tomecode.soa.oracle10g.bpel.BpelProcessStrukture;
+import com.tomecode.soa.oracle10g.bpel.activity.Activity;
 
 /**
  * 

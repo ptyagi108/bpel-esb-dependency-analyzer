@@ -5,6 +5,8 @@ import java.util.Vector;
 
 import javax.swing.tree.TreeNode;
 
+import com.tomecode.soa.oracle10g.bpel.activity.Activity;
+
 /**
  * 
  * View the BPEL process tree

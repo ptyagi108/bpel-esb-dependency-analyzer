@@ -20,10 +20,10 @@ import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.WorkspaceTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
 import com.tomecode.soa.oracle10g.MultiWorkspace;
 import com.tomecode.soa.oracle10g.Workspace;
-import com.tomecode.soa.oracle10g.bpel.Activity;
 import com.tomecode.soa.oracle10g.bpel.BpelOperations;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.Operation;
+import com.tomecode.soa.oracle10g.bpel.activity.Activity;
 import com.tomecode.soa.oracle10g.esb.EsbProject;
 import com.tomecode.util.gui.PanelFactory;
 

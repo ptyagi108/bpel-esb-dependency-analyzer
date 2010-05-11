@@ -9,12 +9,12 @@ import java.util.List;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
-import com.tomecode.soa.oracle10g.bpel.Activity;
 import com.tomecode.soa.oracle10g.bpel.BpelOperations;
 import com.tomecode.soa.oracle10g.bpel.BpelProcessStrukture;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.Operation;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
+import com.tomecode.soa.oracle10g.bpel.activity.Activity;
 
 /**
  * Parser for Oracle 10g BPEL process
@@ -144,10 +144,17 @@ public final class BpelParser extends AbstractParser {
 			Element element = (Element) e;
 			if (element.getName().equals("sequence") || element.getName().equals("scope") || element.getName().equals("switch") || element.getName().equals("flow") || element.getName().equals("flowN") || element.getName().equals("case") || element.getName().equals("otherwise")
 					|| element.getName().equals("faultHandlers") || element.getName().equals("eventHandlers") || element.getName().equals("catch") || element.getName().equals("catchAll") || element.getName().equals("onAlarm") || element.getName().equals("onMessage")
-					|| element.getName().equals("compensationHandler") || element.getName().equals("pick")) {
+					|| element.getName().equals("compensationHandler") || element.getName().equals("pick") || element.getName().equals("variables") || element.getName().equals("partnerLinks")) {
 				Activity activity = new Activity(element.getName(), element.attributeValue("name"));
 				root.addActivity(activity);
 				parseBpelProcessActivities(element.elements(), activity);
+			} else if (element.getName().equals("variable")) {
+				Activity variable = new Activity(element.getName(), element.attributeValue("name"));
+				root.addActivity(variable);
+			} else if (element.getName().equals("partnerLink")) {
+				Activity variable = new Activity(element.getName(), element.attributeValue("name"));
+				root.addActivity(variable);
+
 			} else {
 				Activity activity = new Activity(element.getName(), element.attributeValue("name"));
 				root.addActivity(activity);
