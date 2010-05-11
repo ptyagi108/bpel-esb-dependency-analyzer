@@ -29,6 +29,8 @@ public abstract class AbstractParser {
 			document = saxReader.read(file);
 		} catch (DocumentException e) {
 			throw new ServiceParserException(e);
+		} catch (Exception e) {
+			throw new ServiceParserException(e);
 		}
 		return document.getRootElement();
 	}

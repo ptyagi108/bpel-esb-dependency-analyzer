@@ -16,9 +16,10 @@ import javax.swing.JMenuItem;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.components.TabbedManager;
 import com.tomecode.soa.bpel.dependency.analyzer.settings.RecentFile;
 import com.tomecode.soa.bpel.dependency.analyzer.settings.SettingsManager;
+import com.tomecode.soa.oracle10g.MultiWorkspace;
 import com.tomecode.soa.oracle10g.Workspace;
+import com.tomecode.soa.oracle10g.parser.MultiWorkspaceParser;
 import com.tomecode.soa.oracle10g.parser.ServiceParserException;
-import com.tomecode.soa.oracle10g.parser.WorkspaceParser;
 import com.tomecode.util.gui.Frame;
 import com.tomecode.util.gui.HideNotifiListener;
 
@@ -67,6 +68,7 @@ public final class Desktop extends Frame implements ActionListener {
 	private final JMenu createMenuFile() {
 		JMenu menu = new JMenu("File");
 		menu.add(createMenuItem("Open"));
+		menu.add(createMenuItem("Open Multi-Workspace"));
 		menu.addSeparator();
 		menu.add(menuRecentFiles);
 		menu.addSeparator();
@@ -137,6 +139,8 @@ public final class Desktop extends Frame implements ActionListener {
 	public final void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Open")) {
 			newWorkspace();
+		} else if (e.getActionCommand().equals("Open Multi-Workspace")) {
+			newMultiWorkspace();
 		} else if (e.getActionCommand().equals("Exit")) {
 			System.exit(0);
 		}
@@ -146,11 +150,22 @@ public final class Desktop extends Frame implements ActionListener {
 	 * display {@link FrmOpenWorkspace} and
 	 */
 	private final void newWorkspace() {
-		FrmOpenWorkspace.showMe(this, new HideNotifiListener() {
+		FrmOpenWorkspace.showMe(this, false, new HideNotifiListener() {
 			@Override
 			public final void hideForm(Object... returnObj) {
 				if (returnObj != null && returnObj.length != 0) {
 					openNewWorkspace((File) returnObj[0]);
+				}
+			}
+		});
+	}
+
+	private final void newMultiWorkspace() {
+		FrmOpenWorkspace.showMe(this, true, new HideNotifiListener() {
+			@Override
+			public final void hideForm(Object... returnObj) {
+				if (returnObj != null && returnObj.length != 0) {
+					openNewMultipleWorkspace((String) returnObj[0], (File) returnObj[1]);
 				}
 			}
 		});
@@ -164,9 +179,21 @@ public final class Desktop extends Frame implements ActionListener {
 	 */
 	private final void openNewWorkspace(File workspaceFolder) {
 		try {
-			Workspace workspace = new WorkspaceParser().parse(workspaceFolder);
-			SettingsManager.addRecentFile(workspace.getName(), workspace.getFile());
-			workspaceTabb.addTable(workspace);
+			MultiWorkspace multiWorkspace = new MultiWorkspaceParser().parse(workspaceFolder);
+			String name = multiWorkspace.getWorkspaces().isEmpty() ? "not found workspace" : multiWorkspace.getWorkspaces().get(0).getName();
+			SettingsManager.addRecentFile(name, multiWorkspace.getFile());
+			workspaceTabb.addTable(name, multiWorkspace);
+		} catch (ServiceParserException e) {
+			FrmError.showMe(e.getMessage(), e);
+		}
+		reloadMenuRecentFiles();
+	}
+
+	private final void openNewMultipleWorkspace(String name, File workspaceFolder) {
+		try {
+			MultiWorkspace multiWorkspace = new MultiWorkspaceParser().parse(workspaceFolder);
+			SettingsManager.addRecentFile(name, multiWorkspace.getFile());
+			workspaceTabb.addTable(name, multiWorkspace);
 		} catch (ServiceParserException e) {
 			FrmError.showMe(e.getMessage(), e);
 		}

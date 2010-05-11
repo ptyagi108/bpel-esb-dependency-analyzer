@@ -12,6 +12,10 @@ import javax.swing.tree.TreeNode;
 public abstract class Project implements TreeNode {
 
 	/**
+	 * if true then project is in *.jws
+	 */
+	private boolean isInJws;
+	/**
 	 * project type
 	 */
 	protected final ProjectType type;
@@ -32,6 +36,14 @@ public abstract class Project implements TreeNode {
 	 */
 	public final ProjectType getType() {
 		return type;
+	}
+
+	public final boolean isInJws() {
+		return isInJws;
+	}
+
+	public final void setInJws(boolean isInJws) {
+		this.isInJws = isInJws;
 	}
 
 }

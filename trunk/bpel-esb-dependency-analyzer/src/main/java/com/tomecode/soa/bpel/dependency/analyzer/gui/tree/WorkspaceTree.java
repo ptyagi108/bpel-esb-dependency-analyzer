@@ -1,15 +1,18 @@
 package com.tomecode.soa.bpel.dependency.analyzer.gui.tree;
 
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
-import com.tomecode.soa.oracle10g.Workspace;
+import com.tomecode.soa.oracle10g.MultiWorkspace;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.esb.EsbProject;
+import com.tomecode.soa.process.Project;
 
 /**
  * Display all BPEL/ESB projects in workspace
@@ -23,13 +26,13 @@ public final class WorkspaceTree extends BasicTree {
 
 	public WorkspaceTree() {
 		super();
-		setRootVisible(true);
+		setRootVisible(false);
 		setCellRenderer(new WorkspaceTreeRenderer());
 	}
 
-	public WorkspaceTree(Workspace workspace) {
+	public WorkspaceTree(MultiWorkspace multiWorkspace) {
 		this();
-		treeModel.setRoot(workspace);
+		treeModel.setRoot(multiWorkspace);
 	}
 
 	/**
@@ -47,6 +50,14 @@ public final class WorkspaceTree extends BasicTree {
 				rnd.setIcon(IconFactory.PROCESS);
 			} else if (value instanceof EsbProject) {
 				rnd.setIcon(IconFactory.ESB);
+			}
+			if (value instanceof Project) {
+				if (!((Project) value).isInJws()) {
+					rnd.setForeground(Color.BLACK);
+					rnd.setFont(rnd.getFont().deriveFont(Font.BOLD));
+
+				}
+
 			}
 
 			return rnd;

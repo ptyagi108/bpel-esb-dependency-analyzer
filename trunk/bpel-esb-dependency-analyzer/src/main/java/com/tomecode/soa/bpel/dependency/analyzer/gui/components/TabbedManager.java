@@ -12,7 +12,7 @@ import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 
-import com.tomecode.soa.oracle10g.Workspace;
+import com.tomecode.soa.oracle10g.MultiWorkspace;
 
 /**
  * 
@@ -51,14 +51,8 @@ public final class TabbedManager extends JTabbedPane {
 
 	}
 
-	/**
-	 * add new tab panel
-	 * 
-	 * @param name
-	 * @param workspace
-	 */
-	public final void addTable(Workspace workspace) {
-		addTab(workspace.getName(), new WorkspacePanel(workspace));
+	public final void addTable(String name, MultiWorkspace multiWorkspace) {
+		addTab(name, new WorkspacePanel(multiWorkspace));
 		setSelectedIndex(getTabCount() - 1);
 	}
 }

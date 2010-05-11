@@ -10,9 +10,9 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
 import com.tomecode.soa.oracle10g.bpel.Activity;
-import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.BpelOperations;
 import com.tomecode.soa.oracle10g.bpel.BpelProcessStrukture;
+import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.Operation;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
 
@@ -44,6 +44,12 @@ public final class BpelParser extends AbstractParser {
 		i = partial.indexOf("/");
 		partial = partial.substring(i + 1);
 		return partial.substring(0, partial.indexOf("/"));
+	}
+
+	public static final void main(String[] arg) throws ServiceParserException {
+		BpelParser bpelParser = new BpelParser();
+		BpelProject bpelProject = bpelParser.parseBpelXml(new File("C:/ORACLE/projects/BPEL/samples/Server/bpel/bpel.xml"));
+		bpelProject.toString();
 	}
 
 	/**
@@ -94,7 +100,7 @@ public final class BpelParser extends AbstractParser {
 		}
 
 		Element bpelRootElement = parseXml(new File(bpelXmlFile.getParentFile() + File.separator + bpelProcess.getSrc()));
-		parseBpelOperations(bpelRootElement, bpelProcess.getBpelOperations());
+		parseBpelOperations(bpelRootElement, bpelProcess);
 		parseBpelProcessStrukture(bpelRootElement, bpelProcess.getBpelProcessStrukture());
 		return bpelProcess;
 	}
@@ -156,13 +162,12 @@ public final class BpelParser extends AbstractParser {
 	 * @param bpelOperations
 	 * @throws ServiceParserException
 	 */
-	private void parseBpelOperations(Element element, BpelOperations bpelOperations) throws ServiceParserException {
+	private void parseBpelOperations(Element element, BpelProject bpelProject) throws ServiceParserException {
 		List<?> eList = element.element("partnerLinks").elements("partnerLink");
 		for (Object e : eList) {
 			Element ePartnerLink = (Element) e;
 			String partnerLinkName = ePartnerLink.attributeValue("name");
-			ePartnerLink.getPath();
-			findUsageForPartnerLink(partnerLinkName, bpelOperations, element);
+			findUsageForPartnerLink(partnerLinkName, bpelProject, element);
 		}
 	}
 
@@ -173,7 +178,7 @@ public final class BpelParser extends AbstractParser {
 	 * @param bpelOperations
 	 * @param root
 	 */
-	private final void findUsageForPartnerLink(String partnerLinkName, BpelOperations bpelOperations, Element root) {
+	private final void findUsageForPartnerLink(String partnerLinkName, BpelProject bpelProject, Element root) {
 		List<?> listOfElements = root.elements();
 		if (listOfElements == null) {
 			return;
@@ -182,11 +187,12 @@ public final class BpelParser extends AbstractParser {
 			Element element = (Element) e;
 			if (element.getName().equals("receive") || element.getName().equals("invoke") || element.getName().equals("reply")) {
 				if (element.attributeValue("partnerLink").equals(partnerLinkName)) {
-					Operation operation = new Operation(element.getName(), element.attributeValue("name"), element.attributeValue("operation"), bpelOperations.getBpelProcess().findPartnerLinkBinding(element.attributeValue("partnerLink")), getOperationPath(element));
+					BpelOperations bpelOperations = bpelProject.getBpelOperations();
+					Operation operation = new Operation(element.getName(), element.attributeValue("name"), element.attributeValue("operation"), bpelProject, bpelOperations.getBpelProcess().findPartnerLinkBinding(element.attributeValue("partnerLink")), getOperationPath(element));
 					bpelOperations.addOperation(operation);
 				}
 			}
-			findUsageForPartnerLink(partnerLinkName, bpelOperations, element);
+			findUsageForPartnerLink(partnerLinkName, bpelProject, element);
 		}
 	}
 
@@ -257,7 +263,7 @@ public final class BpelParser extends AbstractParser {
 			file = new File(file.getParent() + File.separator + "bpel.xml");
 		}
 		for (BpelProject bpelProcess : parsedProcess) {
-			if (bpelProcess.getBpelXmlFile().toString().equals(file.toString())) {
+			if (bpelProcess.getBpelXmlFile().equals(file)) {
 				return bpelProcess;
 			}
 		}

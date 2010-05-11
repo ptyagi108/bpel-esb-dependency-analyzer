@@ -52,14 +52,14 @@ public final class FrmOpenWorkspace extends Dialog {
 
 	private final JTextField textFieldPath;
 
-	// private final JTextField textFieldName;
+	private final JTextField textFieldName;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param owner
 	 */
-	public FrmOpenWorkspace(Frame owner, HideNotifiListener notifiListener) {
+	public FrmOpenWorkspace(Frame owner, final boolean isMultipleWorkspace, HideNotifiListener notifiListener) {
 		super(owner, "Open BPEL workspace", 600, 140, false, true, true, true);
 		buttonOpen = new JButton("Open");
 		this.addHideListeners(notifiListener);
@@ -67,7 +67,12 @@ public final class FrmOpenWorkspace extends Dialog {
 		buttonOpen.addActionListener(new ActionListener() {
 			@Override
 			public final void actionPerformed(ActionEvent e) {
-				hideMe(getSelectedPath());
+				if (isMultipleWorkspace) {
+					hideMe(textFieldName.getText().trim(), getSelectedPath());
+				} else {
+					hideMe(getSelectedPath());
+				}
+
 			}
 		});
 
@@ -81,24 +86,24 @@ public final class FrmOpenWorkspace extends Dialog {
 		textFieldPath = new JTextField("");
 		textFieldPath.addKeyListener(new KeyAdapter() {
 			public final void keyTyped(KeyEvent e) {
-				enableButton(e);
+				enableButton(e, isMultipleWorkspace);
 			}
 
 			public final void keyReleased(KeyEvent e) {
-				enableButton(e);
+				enableButton(e, isMultipleWorkspace);
 			}
 		});
-		// textFieldName = new JTextField("33");
-		// textFieldName.addKeyListener(new KeyAdapter() {
-		// public final void keyReleased(KeyEvent e) {
-		// workspaceName = textFieldName.getText().trim();
-		// }
-		// });
+		textFieldName = new JTextField();
+		textFieldName.addKeyListener(new KeyAdapter() {
+			public final void keyReleased(KeyEvent e) {
+				workspaceName = textFieldName.getText().trim();
+			}
+		});
 		addToButtonLayout(buttonOpen);
 		bFindPath = new JButton("...");
 		bFindPath.addActionListener(new ActionListener() {
 			public final void actionPerformed(ActionEvent e) {
-				chooseWorkspace();
+				chooseWorkspace(isMultipleWorkspace);
 			}
 		});
 
@@ -107,29 +112,33 @@ public final class FrmOpenWorkspace extends Dialog {
 		pPath.add(PanelFactory.wrapByBorderLayout(bFindPath, BorderLayout.NORTH), BorderLayout.EAST);
 		bFindPath.setPreferredSize(new Dimension(30, 20));
 
-		// JPanel pName = PanelFactory.createBorderLayout(0, 0, 0, 0);
-		// pName.add(PanelFactory.wrapWithLabelNorm("Name", textFieldName, 13),
-		// BorderLayout.CENTER);
+		JPanel panelTxts = null;
+		if (isMultipleWorkspace) {
+			JPanel pName = PanelFactory.createBorderLayout(0, 0, 0, 0);
+			pName.add(PanelFactory.wrapWithLabelNorm("Name", textFieldName, 13), BorderLayout.CENTER);
+			panelTxts = PanelFactory.createGridLayout(2, 1);
+			panelTxts.add(pName);
+		} else {
+			panelTxts = PanelFactory.createBorderLayout();// .createGridLayout(2,
+		}
 
-		JPanel panelTxts = PanelFactory.createBorderLayout();// .createGridLayout(2,
-		// 1);
-
-		// panelTxts.add(pName);
 		panelTxts.add(pPath);
-
 		panelRoot.add(PanelFactory.wrapWithTile("", panelTxts, 10, 15, 10, 15), BorderLayout.NORTH);
-
 	}
 
 	/**
 	 * enable button
 	 */
-	private final void enableButton(KeyEvent e) {
+	private final void enableButton(KeyEvent e, boolean isMultipleWorkspace) {
 		File workspace = new File(textFieldPath.getText());
 		if (workspace.isDirectory() && workspace.exists()) {
 			buttonOpen.setEnabled(true);
 			if ((e != null) && e.getKeyCode() == KeyEvent.VK_ENTER) {
-				hideMe(getSelectedPath());
+				if (isMultipleWorkspace) {
+					hideMe(textFieldName.getText().trim(), getSelectedPath());
+				} else {
+					hideMe(getSelectedPath());
+				}
 			}
 		} else {
 			buttonOpen.setEnabled(false);
@@ -140,7 +149,7 @@ public final class FrmOpenWorkspace extends Dialog {
 		return workspaceName;
 	}
 
-	private final void chooseWorkspace() {
+	private final void chooseWorkspace(boolean isMultipleWorkspace) {
 		final JFileChooser fc = (lastSelectedPath == null) ? new JFileChooser() : new JFileChooser(lastSelectedPath.getPath());
 		fc.setMultiSelectionEnabled(false);
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -148,7 +157,7 @@ public final class FrmOpenWorkspace extends Dialog {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			lastSelectedPath = fc.getSelectedFile().getParentFile();
 			textFieldPath.setText(fc.getSelectedFile().getPath());
-			enableButton(null);
+			enableButton(null, isMultipleWorkspace);
 		}
 	}
 
@@ -158,10 +167,10 @@ public final class FrmOpenWorkspace extends Dialog {
 	 * 
 	 * @param owner
 	 */
-	public static final void showMe(final Frame owner, final HideNotifiListener notifiListener) {
+	public static final void showMe(final Frame owner, final boolean isMultipleWorkspace, final HideNotifiListener notifiListener) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				new FrmOpenWorkspace(owner, notifiListener).setVisible(true);
+				new FrmOpenWorkspace(owner, isMultipleWorkspace, notifiListener).setVisible(true);
 			}
 		});
 	}

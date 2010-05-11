@@ -39,9 +39,10 @@ public final class Workspace implements TreeNode {
 	 * 
 	 * @param file
 	 */
-	public Workspace(File file) {
+	public Workspace(File jwsFile) {
 		this();
-		this.file = file;
+		this.file = jwsFile;
+		this.name = jwsFile.getName().replace(".jws", "");
 	}
 
 	public final Vector<Project> getProjects() {

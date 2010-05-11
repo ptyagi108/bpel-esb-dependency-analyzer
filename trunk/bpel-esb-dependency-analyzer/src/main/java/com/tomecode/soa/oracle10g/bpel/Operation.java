@@ -29,6 +29,8 @@ public final class Operation implements TreeNode {
 
 	private List<Activity> activities;
 
+	private BpelProject ownerBpelProject;
+
 	/**
 	 * Constructor
 	 * 
@@ -37,13 +39,14 @@ public final class Operation implements TreeNode {
 	 * @param operation
 	 * @param partnerLinkBinding
 	 */
-	public Operation(String activity, String name, String operation, PartnerLinkBinding partnerLinkBinding, List<Activity> activities) {
+	public Operation(String activity, String name, String operation, BpelProject ownerBpelProject, PartnerLinkBinding partnerLinkBinding, List<Activity> activities) {
 		this.activity = activity;
 		this.activtyType = ActivtyType.parseActivtyType(activity);
 		this.name = name;
 		this.operation = operation;
 		this.partnerLinkBinding = partnerLinkBinding;
 		this.activities = activities;
+		this.ownerBpelProject = ownerBpelProject;
 	}
 
 	public final List<Activity> getActivities() {
@@ -114,7 +117,11 @@ public final class Operation implements TreeNode {
 		return !getAllowsChildren();
 	}
 
-	public final BpelProject getBpelProcess() {
+	public final BpelProject getOwnerBpelProject() {
+		return ownerBpelProject;
+	}
+
+	public final BpelProject getPartnerLinkBpelProcess() {
 		return (BpelProject) partnerLinkBinding.getDependencyProject();
 	}
 

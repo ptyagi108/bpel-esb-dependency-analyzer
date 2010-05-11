@@ -18,7 +18,7 @@ import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.ProjectEsbServiceTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.ProjectOperationTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.WorkspaceTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
-import com.tomecode.soa.oracle10g.Workspace;
+import com.tomecode.soa.oracle10g.MultiWorkspace;
 import com.tomecode.soa.oracle10g.bpel.Activity;
 import com.tomecode.soa.oracle10g.bpel.BpelOperations;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
@@ -70,17 +70,17 @@ public final class WorkspacePanel extends JPanel {
 
 	private final DefaultListModel listDependency;
 
-	private Workspace workspace;
+	private MultiWorkspace multiWorkspace;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param workspace
 	 */
-	public WorkspacePanel(Workspace workspace) {
+	public WorkspacePanel(MultiWorkspace multiWorkspace) {
 		super(new BorderLayout());
-		this.workspace = workspace;
-		this.workspaceTree = new WorkspaceTree(workspace);
+		this.multiWorkspace = multiWorkspace;
+		this.workspaceTree = new WorkspaceTree(multiWorkspace);
 		this.projectOperationTree = new ProjectOperationTree();
 		this.projectEsbServiceTree = new ProjectEsbServiceTree();
 		this.processStructureTree = new ProcessStructureTree();
@@ -179,14 +179,7 @@ public final class WorkspacePanel extends JPanel {
 			public final void valueChanged(TreeSelectionEvent e) {
 				if (e.getPath().getLastPathComponent() instanceof Operation) {
 					Operation operation = (Operation) e.getPath().getLastPathComponent();
-
-					if (operation.getPartnerLinkBinding() == null) {
-						// TODO: if not found partnerlink project show error
-						displayBpelProcessStructure(operation.getActivities(), null);
-					} else {
-						displayBpelProcessStructure(operation.getActivities(), operation.getPartnerLinkBinding().getParent());
-					}
-
+					displayBpelProcessStructure(operation.getActivities(), operation.getOwnerBpelProject());
 				} else if (e.getPath().getLastPathComponent() instanceof BpelOperations) {
 					BpelOperations bpelOperations = (BpelOperations) e.getPath().getLastPathComponent();
 					displayBpelProcessStructure(null, bpelOperations.getBpelProcess());
@@ -225,7 +218,7 @@ public final class WorkspacePanel extends JPanel {
 
 		listDependency.clear();
 
-		List<BpelProject> listUsage = this.workspace.findBpelUsages(bpelProcess);
+		List<BpelProject> listUsage = this.multiWorkspace.findBpelUsages(bpelProcess);
 		for (BpelProject usageBpelProcess : listUsage) {
 			listDependency.addElement(usageBpelProcess);
 		}
