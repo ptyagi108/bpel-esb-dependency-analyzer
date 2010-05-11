@@ -130,7 +130,7 @@ public final class Operation implements TreeNode {
 	}
 
 	public final String toString() {
-		return activity + ":" + name + (operation == null ? "" : ":" + operation);
+		return name + (operation == null ? "" : ":" + operation);
 	}
 
 }
