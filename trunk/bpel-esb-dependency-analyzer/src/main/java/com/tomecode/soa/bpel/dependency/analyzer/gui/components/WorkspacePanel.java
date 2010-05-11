@@ -19,6 +19,7 @@ import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.ProjectOperationTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.WorkspaceTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
 import com.tomecode.soa.oracle10g.MultiWorkspace;
+import com.tomecode.soa.oracle10g.Workspace;
 import com.tomecode.soa.oracle10g.bpel.Activity;
 import com.tomecode.soa.oracle10g.bpel.BpelOperations;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
@@ -36,6 +37,8 @@ import com.tomecode.util.gui.PanelFactory;
 public final class WorkspacePanel extends JPanel {
 
 	private static final long serialVersionUID = 1530206367436072362L;
+
+	private static final String P_WORKSPACE = "p.workspace";
 
 	private static final String P_BPEL_TREE = "p.bpel.tree";
 
@@ -70,6 +73,8 @@ public final class WorkspacePanel extends JPanel {
 
 	private final DefaultListModel listDependency;
 
+	private final JTextField txtProjectPath;
+
 	private MultiWorkspace multiWorkspace;
 
 	/**
@@ -97,8 +102,8 @@ public final class WorkspacePanel extends JPanel {
 		spProjectBase.setDividerLocation(350);
 		spProjectBase.add(spProjectTrees);
 
-		JPanel pProject = PanelFactory.createBorderLayout();
-		pProject.add(spProjectBase, BorderLayout.CENTER);
+		JPanel pBpelProject = PanelFactory.createBorderLayout();
+		pBpelProject.add(spProjectBase, BorderLayout.CENTER);
 
 		listDependency = new DefaultListModel();
 		JList list = new JList(listDependency);
@@ -110,7 +115,7 @@ public final class WorkspacePanel extends JPanel {
 		spProjectBase.add(pProjectDetail);
 
 		final JPanel pCardPanel = new JPanel(new CardLayout());
-		pCardPanel.add(pProject, P_BPEL_TREE);
+		pCardPanel.add(pBpelProject, P_BPEL_TREE);
 
 		JPanel pError = PanelFactory.createBorderLayout("Parse Error");
 		txtError = new JTextField();
@@ -129,6 +134,13 @@ public final class WorkspacePanel extends JPanel {
 		pEsbProject.add(PanelFactory.wrapWithTile("Esb Services:", new JScrollPane(projectEsbServiceTree)), BorderLayout.CENTER);
 		pCardPanel.add(pEsbProject, P_ESB_TREE);
 
+		JPanel pWorkspace = PanelFactory.createBorderLayout();
+
+		txtProjectPath = new JTextField();
+		txtProjectPath.setEditable(false);
+		pWorkspace.add(PanelFactory.wrapWithTile("Project path", txtProjectPath), BorderLayout.NORTH);
+		pCardPanel.add(pWorkspace, P_WORKSPACE);
+
 		spWorkspace.add(pCardPanel);
 
 		add(spWorkspace, BorderLayout.CENTER);
@@ -137,14 +149,18 @@ public final class WorkspacePanel extends JPanel {
 		this.workspaceTree.addTreeSelectionListener(new TreeSelectionListener() {
 			@Override
 			public final void valueChanged(TreeSelectionEvent e) {
+				CardLayout cardLayout = (CardLayout) pCardPanel.getLayout();
 
-				if (e.getPath().getLastPathComponent() instanceof BpelProject) {
+				if (e.getPath().getLastPathComponent() instanceof Workspace) {
+					Workspace workspace = (Workspace) e.getPath().getLastPathComponent();
+					txtProjectPath.setText(workspace.getFile().toString());
+					cardLayout.show(pCardPanel, P_WORKSPACE);
+				} else if (e.getPath().getLastPathComponent() instanceof BpelProject) {
 					BpelProject bpelProject = (BpelProject) e.getPath().getLastPathComponent();
 					if (bpelProject != null) {
 						selectBpelProcess(bpelProject);
 						// txtProcessFolder.setText(bpelProcess.getBpelXmlFile().getParent());
 					}
-					CardLayout cardLayout = (CardLayout) pCardPanel.getLayout();
 					cardLayout.show(pCardPanel, P_BPEL_TREE);
 				} else if (e.getPath().getLastPathComponent() instanceof ErrorNode) {
 					processStructureTree.clear();
@@ -153,19 +169,15 @@ public final class WorkspacePanel extends JPanel {
 					ErrorNode errorNode = (ErrorNode) e.getPath().getLastPathComponent();
 					txtError.setText(errorNode.getErrorText());
 					txtErrorWsdl.setText(errorNode.getWsdl());
-					CardLayout cardLayout = (CardLayout) pCardPanel.getLayout();
 					cardLayout.show(pCardPanel, P_ERROR);
 				} else if (e.getPath().getLastPathComponent() instanceof EsbProject) {
 					EsbProject esbProject = (EsbProject) e.getPath().getLastPathComponent();
 
 					projectEsbServiceTree.addEsbProject(esbProject);
-
-					CardLayout cardLayout = (CardLayout) pCardPanel.getLayout();
 					cardLayout.show(pCardPanel, P_ESB_TREE);
 				} else {
 					processStructureTree.clear();
 					projectOperationTree.clear();
-					CardLayout cardLayout = (CardLayout) pCardPanel.getLayout();
 					cardLayout.show(pCardPanel, P_BPEL_TREE);
 				}
 
