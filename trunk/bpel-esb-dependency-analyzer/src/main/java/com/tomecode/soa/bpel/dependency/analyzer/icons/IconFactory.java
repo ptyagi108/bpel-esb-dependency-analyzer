@@ -24,7 +24,7 @@ public final class IconFactory {
 	public static final ImageIcon ONMESSAGE = new ImageIcon(IconFactory.class.getResource("onMessage.gif"));
 	public static final ImageIcon COMPENSATIONHANDLER = new ImageIcon(IconFactory.class.getResource("compensationHandler.gif"));
 	public static final ImageIcon PROCESS = new ImageIcon(IconFactory.class.getResource("process.gif"));
-	public static final ImageIcon BPELX_EXEC = new ImageIcon(IconFactory.class.getResource("process.gif"));
+	public static final ImageIcon BPELX_EXEC = new ImageIcon(IconFactory.class.getResource("exec.gif"));
 	public static final ImageIcon PICK = new ImageIcon(IconFactory.class.getResource("pick.gif"));
 	public static final ImageIcon FLOW = new ImageIcon(IconFactory.class.getResource("flow.gif"));
 	public static final ImageIcon FLOWN = new ImageIcon(IconFactory.class.getResource("flowN.gif"));
