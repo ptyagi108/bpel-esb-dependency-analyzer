@@ -2,6 +2,8 @@ package com.tomecode.soa.bpel.dependency.analyzer.gui.components;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -94,7 +96,7 @@ public final class WorkspacePanel extends JPanel {
 		this.projectOperationTree = new ProjectOperationTree();
 		this.projectEsbServiceTree = new ProjectEsbServiceTree();
 		this.processStructureTree = new ProcessStructureTree(workspaceUtilsPanel);
-		JSplitPane spWorkspace = PanelFactory.createSplitPanel();
+		final JSplitPane spWorkspace = PanelFactory.createSplitPanel();
 		spWorkspace.add(PanelFactory.createBorderLayout("Project Dependencies", new JScrollPane(workspaceTree)));
 		spWorkspace.setDividerLocation(200);
 		JSplitPane spProjectTrees = PanelFactory.createSplitPanel();
@@ -102,7 +104,7 @@ public final class WorkspacePanel extends JPanel {
 		spProjectTrees.add(PanelFactory.createBorderLayout("Project Structure", new JScrollPane(processStructureTree)));
 		spProjectTrees.setDividerLocation(350);
 
-		JSplitPane spProjectBase = PanelFactory.createSplitPanel();
+		final JSplitPane spProjectBase = PanelFactory.createSplitPanel();
 		spProjectBase.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		spProjectBase.setDividerLocation(350);
 		spProjectBase.add(spProjectTrees);
@@ -152,6 +154,15 @@ public final class WorkspacePanel extends JPanel {
 		txtProjectPath.setEditable(false);
 		pWorkspace.add(PanelFactory.wrapWithTile("Project path", txtProjectPath), BorderLayout.NORTH);
 		pCardPanel.add(pWorkspace, P_WORKSPACE_DETAIL);
+
+		addComponentListener(new ComponentAdapter() {
+
+			@Override
+			public void componentResized(ComponentEvent e) {
+				spProjectBase.setDividerLocation((e.getComponent().getSize().height - 140));
+				spProjectBase.updateUI();
+			}
+		});
 
 		spWorkspace.add(pCardPanel);
 

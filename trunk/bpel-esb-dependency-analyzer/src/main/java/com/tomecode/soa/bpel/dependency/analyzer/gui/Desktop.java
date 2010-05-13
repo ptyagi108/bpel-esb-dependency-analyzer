@@ -41,7 +41,7 @@ public final class Desktop extends Frame implements ActionListener {
 	private final TabbedManager workspaceTabb;
 
 	private Desktop() {
-		super("BPEL and ESB Dependency analyzer", 944, 544, true, true);
+		super("BPEL and ESB Dependency analyzer", 1044, 644, true, true);
 		rootMenuBar = new JMenuBar();
 		menuRecentFiles = new JMenu("Recent Files");
 		rootMenuBar.add(createMenuFile());
