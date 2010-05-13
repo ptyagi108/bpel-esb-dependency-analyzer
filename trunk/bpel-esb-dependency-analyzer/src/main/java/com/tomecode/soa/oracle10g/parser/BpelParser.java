@@ -16,14 +16,18 @@ import com.tomecode.soa.oracle10g.bpel.Operation;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
 import com.tomecode.soa.oracle10g.bpel.activity.Activity;
 import com.tomecode.soa.oracle10g.bpel.activity.Catch;
+import com.tomecode.soa.oracle10g.bpel.activity.Email;
+import com.tomecode.soa.oracle10g.bpel.activity.Fax;
 import com.tomecode.soa.oracle10g.bpel.activity.Invoke;
 import com.tomecode.soa.oracle10g.bpel.activity.OnMessage;
 import com.tomecode.soa.oracle10g.bpel.activity.PartnerLink;
 import com.tomecode.soa.oracle10g.bpel.activity.Receive;
 import com.tomecode.soa.oracle10g.bpel.activity.Reply;
+import com.tomecode.soa.oracle10g.bpel.activity.Sms;
 import com.tomecode.soa.oracle10g.bpel.activity.Throw;
 import com.tomecode.soa.oracle10g.bpel.activity.Transform;
 import com.tomecode.soa.oracle10g.bpel.activity.Variable;
+import com.tomecode.soa.oracle10g.bpel.activity.Voice;
 
 /**
  * Parser for Oracle 10g BPEL process
@@ -145,7 +149,7 @@ public final class BpelParser extends AbstractParser {
 	private final void parseBpelProcessActivities(List<?> elements, Activity root, BpelProcessStrukture strukture) {
 		for (Object e : elements) {
 			Element element = (Element) e;
-			if (element.getName().equals("sequence") || element.getName().equals("scope") || element.getName().equals("switch") || element.getName().equals("flow") || element.getName().equals("flowN") || element.getName().equals("case") || element.getName().equals("otherwise")
+			if (element.getName().equals("sequence") || element.getName().equals("switch") || element.getName().equals("flow") || element.getName().equals("flowN") || element.getName().equals("case") || element.getName().equals("otherwise")
 					|| element.getName().equals("faultHandlers") || element.getName().equals("eventHandlers") || element.getName().equals("catchAll") || element.getName().equals("onAlarm") || element.getName().equals("compensationHandler") || element.getName().equals("pick")
 					|| element.getName().equals("variables") || element.getName().equals("partnerLinks")) {
 				Activity activity = new Activity(element.getName(), element.attributeValue("name"));
@@ -180,12 +184,47 @@ public final class BpelParser extends AbstractParser {
 					if (ePattern != null && "transformation".equals(ePattern.getText())) {
 						Transform transform = new Transform(element.attributeValue("name"), null, null);
 						root.addActivity(transform);
-						return;
+					} else {
+						Activity activity = new Activity(element.getName(), element.attributeValue("name"));
+						root.addActivity(activity);
 					}
-				}
 
-				Activity activity = new Activity(element.getName(), element.attributeValue("name"));
-				root.addActivity(activity);
+				} else {
+					Activity activity = new Activity(element.getName(), element.attributeValue("name"));
+					root.addActivity(activity);
+				}
+			} else if (element.getName().equals("scope")) {
+				Element eAnnotation = element.element("annotation");
+				if (eAnnotation != null) {
+					Element ePattern = eAnnotation.element("pattern");
+					if (ePattern != null) {
+						String patternName = ePattern.attributeValue("patternName");
+						if (patternName != null) {
+							if (patternName.endsWith(":email")) {
+								Email email = new Email(element.attributeValue("name"));
+								root.addActivity(email);
+								parseBpelProcessActivities(element.elements(), email, strukture);
+							} else if (patternName.endsWith(":fax")) {
+								Fax fax = new Fax(element.attributeValue("name"));
+								root.addActivity(fax);
+								parseBpelProcessActivities(element.elements(), fax, strukture);
+							} else if (patternName.endsWith(":sms")) {
+								Sms sms = new Sms(element.attributeValue("name"));
+								root.addActivity(sms);
+								parseBpelProcessActivities(element.elements(), sms, strukture);
+							} else if (patternName.endsWith(":voice")) {
+								Voice voice = new Voice(element.attributeValue("name"));
+								root.addActivity(voice);
+								parseBpelProcessActivities(element.elements(), voice, strukture);
+							}
+						}
+					}
+
+				} else {
+					Activity activity = new Activity(element.getName(), element.attributeValue("name"));
+					root.addActivity(activity);
+					parseBpelProcessActivities(element.elements(), activity, strukture);
+				}
 
 			} else {
 				Activity activity = new Activity(element.getName(), element.attributeValue("name"));
