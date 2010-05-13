@@ -38,8 +38,9 @@ import com.tomecode.util.gui.PanelFactory;
 public final class WorkspacePanel extends JPanel {
 
 	private static final long serialVersionUID = 1530206367436072362L;
+	private static final String P_WORKSPACE_EMPTY = "p.workspace.empty";
 
-	private static final String P_WORKSPACE = "p.workspace";
+	private static final String P_WORKSPACE_DETAIL = "p.workspace.detail";
 
 	private static final String P_BPEL_TREE = "p.bpel.tree";
 
@@ -116,13 +117,16 @@ public final class WorkspacePanel extends JPanel {
 
 		pProjectDetail.add(workspaceUtilsPanel, BorderLayout.CENTER);
 		workspaceUtilsPanel.addServiceUsedIn();
-		//tabbedPane.add("Service being used in", new JScrollPane(list));
+		// tabbedPane.add("Service being used in", new JScrollPane(list));
 		// pProjectDetail.add(PanelFactory.wrapWithTile("Service being used in:",
 		// new JScrollPane(list)), BorderLayout.CENTER);
 
 		spProjectBase.add(pProjectDetail);
 
 		final JPanel pCardPanel = new JPanel(new CardLayout());
+		// frist panel is empty panel
+		pCardPanel.add(PanelFactory.createBorderLayout(), P_WORKSPACE_EMPTY);
+
 		pCardPanel.add(pBpelProject, P_BPEL_TREE);
 
 		JPanel pError = PanelFactory.createBorderLayout("Parse Error");
@@ -147,7 +151,7 @@ public final class WorkspacePanel extends JPanel {
 		txtProjectPath = new JTextField();
 		txtProjectPath.setEditable(false);
 		pWorkspace.add(PanelFactory.wrapWithTile("Project path", txtProjectPath), BorderLayout.NORTH);
-		pCardPanel.add(pWorkspace, P_WORKSPACE);
+		pCardPanel.add(pWorkspace, P_WORKSPACE_DETAIL);
 
 		spWorkspace.add(pCardPanel);
 
@@ -162,7 +166,7 @@ public final class WorkspacePanel extends JPanel {
 				if (e.getPath().getLastPathComponent() instanceof Workspace) {
 					Workspace workspace = (Workspace) e.getPath().getLastPathComponent();
 					txtProjectPath.setText(workspace.getFile().toString());
-					cardLayout.show(pCardPanel, P_WORKSPACE);
+					cardLayout.show(pCardPanel, P_WORKSPACE_DETAIL);
 				} else if (e.getPath().getLastPathComponent() instanceof BpelProject) {
 					BpelProject bpelProject = (BpelProject) e.getPath().getLastPathComponent();
 					if (bpelProject != null) {
