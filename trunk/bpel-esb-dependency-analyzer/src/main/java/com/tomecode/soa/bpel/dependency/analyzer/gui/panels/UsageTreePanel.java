@@ -61,7 +61,13 @@ public final class UsageTreePanel extends JPanel {
 		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
 			DefaultTreeCellRenderer rnd = (DefaultTreeCellRenderer) new DefaultTreeCellRenderer().getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 
-			if (value instanceof Usage) {
+			if (value instanceof FindUsage) {
+				FindUsage findUsage = (FindUsage) value;
+				ImageIcon icon = findUsage.getIcon();
+				if (icon != null) {
+					rnd.setIcon(icon);
+				}
+			} else if (value instanceof Usage) {
 				Usage usage = (Usage) value;
 				ImageIcon icon = usage.getActivity().getActivtyType().getImageIcon();
 				if (icon != null) {

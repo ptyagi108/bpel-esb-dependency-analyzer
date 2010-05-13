@@ -39,6 +39,7 @@ public final class IconFactory {
 	public static final ImageIcon FAX = new ImageIcon(IconFactory.class.getResource("fax.gif"));
 	public static final ImageIcon SMS = new ImageIcon(IconFactory.class.getResource("sms.gif"));
 	public static final ImageIcon VOICE = new ImageIcon(IconFactory.class.getResource("voice.gif"));
+	public static final ImageIcon PARTNERLINK = new ImageIcon(IconFactory.class.getResource("partnerLink.gif"));
 
 	private IconFactory() {
 	}

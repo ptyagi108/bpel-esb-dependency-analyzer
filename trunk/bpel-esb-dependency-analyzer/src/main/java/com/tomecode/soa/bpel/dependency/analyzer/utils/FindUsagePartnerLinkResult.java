@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 
 import com.tomecode.soa.oracle10g.bpel.activity.Activity;
@@ -75,5 +76,10 @@ public final class FindUsagePartnerLinkResult implements FindUsage {
 
 	public final String toString() {
 		return partnerLink.toString();
+	}
+
+	@Override
+	public final ImageIcon getIcon() {
+		return partnerLink.getActivtyType().getImageIcon();
 	}
 }
