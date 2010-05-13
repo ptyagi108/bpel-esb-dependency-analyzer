@@ -26,7 +26,7 @@ public final class Invoke extends Activity {
 	 * @param operation
 	 */
 	public Invoke(String name, String inputVariable, String outputVariable, String partnerLink, String operation) {
-		super(ActivtyType.INVOKE, name);
+		super(ActivityType.INVOKE, name);
 		this.inputVariable = inputVariable;
 		this.outputVariable = outputVariable;
 		this.partnerLink = partnerLink;

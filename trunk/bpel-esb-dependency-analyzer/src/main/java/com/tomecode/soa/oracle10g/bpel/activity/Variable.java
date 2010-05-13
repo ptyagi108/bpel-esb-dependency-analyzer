@@ -22,7 +22,7 @@ public final class Variable extends Activity {
 	 * @param strukture
 	 */
 	public Variable(String name, String messageType, BpelProcessStrukture strukture) {
-		super(ActivtyType.VARIABLE, name);
+		super(ActivityType.VARIABLE, name);
 		this.strukture = strukture;
 	}
 

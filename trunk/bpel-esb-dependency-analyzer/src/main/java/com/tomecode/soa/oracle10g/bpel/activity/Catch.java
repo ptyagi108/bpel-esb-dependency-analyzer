@@ -17,7 +17,7 @@ public final class Catch extends Activity {
 	 * @param faultVariable
 	 */
 	public Catch(String name, String faultVariable) {
-		super(ActivtyType.CATCH, name);
+		super(ActivityType.CATCH, name);
 		this.faultVariable = faultVariable;
 	}
 

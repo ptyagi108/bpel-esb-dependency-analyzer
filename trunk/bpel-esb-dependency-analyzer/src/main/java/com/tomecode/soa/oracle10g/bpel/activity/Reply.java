@@ -23,7 +23,7 @@ public final class Reply extends Activity {
 	 * @param operation
 	 */
 	public Reply(String name, String variable, String partnerLink, String operation) {
-		super(ActivtyType.REPLY, name);
+		super(ActivityType.REPLY, name);
 		this.variable = variable;
 		this.partnerLink = partnerLink;
 		this.operation = operation;

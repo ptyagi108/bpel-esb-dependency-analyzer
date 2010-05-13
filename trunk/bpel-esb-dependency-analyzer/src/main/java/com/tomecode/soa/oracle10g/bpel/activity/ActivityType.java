@@ -11,7 +11,7 @@ import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
  * @author Tomas Frastia
  * 
  */
-public enum ActivtyType {
+public enum ActivityType {
 
 	SCOPE("scope", IconFactory.SCOPE), SEQUENCE("sequence", IconFactory.SEQUENCE), ASSIGN("assign", IconFactory.ASSIGN), EMPTY("empty", IconFactory.EMPTY), RECEIVE("receive", IconFactory.RECEIVE, true), INVOKE("invoke", IconFactory.INVOKE, true), REPLY("reply",
 			IconFactory.REPLY, true), SWITCH("switch", IconFactory.SWITCH), CATCH("catch", IconFactory.CATCH, true), CATCHALL("catchAll", IconFactory.CATCHALL), ONALARM("onAlarm", IconFactory.ONALARM), ONMESSAGE("onMessage", IconFactory.ONMESSAGE, true), COMPENSATIONHANDLER(
@@ -23,7 +23,7 @@ public enum ActivtyType {
 
 	private final boolean containsVariable;
 
-	private ActivtyType(String name, ImageIcon imageIcon) {
+	private ActivityType(String name, ImageIcon imageIcon) {
 		this(name, imageIcon, false);
 	}
 
@@ -35,7 +35,7 @@ public enum ActivtyType {
 	 * @param imageIcon
 	 *            icon
 	 */
-	private ActivtyType(String name, ImageIcon imageIcon, boolean containsVariable) {
+	private ActivityType(String name, ImageIcon imageIcon, boolean containsVariable) {
 		this.name = name;
 		this.imageIcon = imageIcon;
 		this.containsVariable = containsVariable;
@@ -54,13 +54,13 @@ public enum ActivtyType {
 	}
 
 	/**
-	 * parse string to {@link ActivtyType}
+	 * parse string to {@link ActivityType}
 	 * 
 	 * @param name
 	 * @return
 	 */
-	public static final ActivtyType parseActivtyType(String name) {
-		for (ActivtyType activtyType : values()) {
+	public static final ActivityType parseActivtyType(String name) {
+		for (ActivityType activtyType : values()) {
 			if (activtyType.getName().equals(name)) {
 				return activtyType;
 			}

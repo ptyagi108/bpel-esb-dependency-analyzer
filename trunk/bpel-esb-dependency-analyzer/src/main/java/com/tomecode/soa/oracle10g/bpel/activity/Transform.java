@@ -19,7 +19,7 @@ public final class Transform extends Activity {
 	 * @param toVariable
 	 */
 	public Transform(String name, String fromVariable, String toVariable) {
-		super(ActivtyType.TRANSFORMATE, name);
+		super(ActivityType.TRANSFORMATE, name);
 		this.fromVariable = fromVariable;
 		this.toVariable = toVariable;
 	}

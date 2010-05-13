@@ -18,7 +18,7 @@ public final class Throw extends Activity {
 	 * @param faultVariable
 	 */
 	public Throw(String name, String faultVariable) {
-		super(ActivtyType.THROW, name);
+		super(ActivityType.THROW, name);
 		this.faultVariable = faultVariable;
 	}
 

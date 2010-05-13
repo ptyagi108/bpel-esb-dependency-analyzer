@@ -20,7 +20,7 @@ public class Activity implements TreeNode {
 	/**
 	 * actvity type
 	 */
-	private ActivtyType activtyType;
+	private ActivityType activtyType;
 
 	/**
 	 * child activities
@@ -48,7 +48,7 @@ public class Activity implements TreeNode {
 	public Activity(String type) {
 		this();
 		this.type = type;
-		this.activtyType = ActivtyType.parseActivtyType(type);
+		this.activtyType = ActivityType.parseActivtyType(type);
 	}
 
 	public Activity(String type, String name) {
@@ -56,7 +56,7 @@ public class Activity implements TreeNode {
 		this.name = name;
 	}
 
-	public Activity(ActivtyType type, String name) {
+	public Activity(ActivityType type, String name) {
 		this();
 		this.activtyType = type;
 		this.type = activtyType.toString();
@@ -68,7 +68,7 @@ public class Activity implements TreeNode {
 		this.activities.add(activity);
 	}
 
-	public final ActivtyType getActivtyType() {
+	public final ActivityType getActivtyType() {
 		return activtyType;
 	}
 
@@ -164,16 +164,16 @@ public class Activity implements TreeNode {
 	 * @param activity
 	 */
 	private final void findPartnerLinkInActivty(FindUsagePartnerLinkResult findUsagePartnerLinkResult, Activity activity) {
-		if (activity.getActivtyType() == ActivtyType.RECEIVE) {
+		if (activity.getActivtyType() == ActivityType.RECEIVE) {
 			if (findUsagePartnerLinkResult.getPartnerLink().getName().equals(((Receive) activity).getPartnerLink())) {
 				findUsagePartnerLinkResult.addUsage(activity);
 			}
-		} else if (activity.getActivtyType() == ActivtyType.INVOKE) {
+		} else if (activity.getActivtyType() == ActivityType.INVOKE) {
 			Invoke invoke = (Invoke) activity;
 			if (findUsagePartnerLinkResult.getPartnerLink().getName().equals(invoke.getPartnerLink())) {
 				findUsagePartnerLinkResult.addUsage(activity);
 			}
-		} else if (activity.getActivtyType() == ActivtyType.REPLY) {
+		} else if (activity.getActivtyType() == ActivityType.REPLY) {
 			if (findUsagePartnerLinkResult.getPartnerLink().getName().equals(((Reply) activity).getPartnerLink())) {
 				findUsagePartnerLinkResult.addUsage(activity);
 			}
@@ -187,16 +187,16 @@ public class Activity implements TreeNode {
 	 * @param activity
 	 */
 	private final void findVariableInActivty(FindUsageVariableResult findUsageVariableResult, Activity activity) {
-		if (activity.getActivtyType() == ActivtyType.RECEIVE) {
+		if (activity.getActivtyType() == ActivityType.RECEIVE) {
 			if (findUsageVariableResult.getVariable().getName().equals(((Receive) activity).getVariable())) {
 				findUsageVariableResult.addUsage(activity);
 			}
-		} else if (activity.getActivtyType() == ActivtyType.INVOKE) {
+		} else if (activity.getActivtyType() == ActivityType.INVOKE) {
 			Invoke invoke = (Invoke) activity;
 			if (findUsageVariableResult.getVariable().getName().equals(invoke.getInputVariable()) || findUsageVariableResult.getVariable().getName().equals(invoke.getOutputVariable())) {
 				findUsageVariableResult.addUsage(activity);
 			}
-		} else if (activity.getActivtyType() == ActivtyType.REPLY) {
+		} else if (activity.getActivtyType() == ActivityType.REPLY) {
 			if (findUsageVariableResult.getVariable().getName().equals(((Reply) activity).getVariable())) {
 				findUsageVariableResult.addUsage(activity);
 			}

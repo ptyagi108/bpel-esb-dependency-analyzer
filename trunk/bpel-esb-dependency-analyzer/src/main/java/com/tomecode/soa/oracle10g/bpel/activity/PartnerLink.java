@@ -28,7 +28,7 @@ public final class PartnerLink extends Activity {
 	 * @param strukture
 	 */
 	public PartnerLink(String name, String partnerLinkType, String myRole, String partnerRole, BpelProcessStrukture strukture) {
-		super(ActivtyType.PARTNERLINK, name);
+		super(ActivityType.PARTNERLINK, name);
 		this.partnerLinkType = partnerLinkType;
 		this.myRole = myRole;
 		this.partnerRole = partnerRole;

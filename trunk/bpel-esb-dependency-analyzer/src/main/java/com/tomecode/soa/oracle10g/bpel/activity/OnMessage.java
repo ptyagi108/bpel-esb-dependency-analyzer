@@ -23,7 +23,7 @@ public final class OnMessage extends Activity {
 	 * @param headerVariable
 	 */
 	public OnMessage(String variable, String partnerLink, String operation, String headerVariable) {
-		super(ActivtyType.ONMESSAGE, null);
+		super(ActivityType.ONMESSAGE, null);
 		this.variable = variable;
 		this.partnerLink = partnerLink;
 		this.operation = operation;

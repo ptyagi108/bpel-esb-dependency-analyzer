@@ -25,7 +25,7 @@ public final class Receive extends Activity {
 	 * @param operation
 	 */
 	public Receive(String name, String variable, String partnerLink, String operation) {
-		super(ActivtyType.RECEIVE, name);
+		super(ActivityType.RECEIVE, name);
 		this.variable = variable;
 		this.partnerLink = partnerLink;
 		this.operation = operation;

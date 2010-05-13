@@ -8,7 +8,7 @@ import javax.swing.tree.TreeNode;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.EmptyNode;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
 import com.tomecode.soa.oracle10g.bpel.activity.Activity;
-import com.tomecode.soa.oracle10g.bpel.activity.ActivtyType;
+import com.tomecode.soa.oracle10g.bpel.activity.ActivityType;
 import com.tomecode.soa.process.Project;
 import com.tomecode.soa.process.ProjectType;
 
@@ -20,7 +20,7 @@ import com.tomecode.soa.process.ProjectType;
  */
 public final class Operation implements TreeNode {
 
-	private final ActivtyType activtyType;
+	private final ActivityType activtyType;
 	private String activity;
 
 	private String name;
@@ -43,7 +43,7 @@ public final class Operation implements TreeNode {
 	 */
 	public Operation(String activity, String name, String operation, BpelProject ownerBpelProject, PartnerLinkBinding partnerLinkBinding, List<Activity> activities) {
 		this.activity = activity;
-		this.activtyType = ActivtyType.parseActivtyType(activity);
+		this.activtyType = ActivityType.parseActivtyType(activity);
 		this.name = name;
 		this.operation = operation;
 		this.partnerLinkBinding = partnerLinkBinding;
@@ -127,7 +127,7 @@ public final class Operation implements TreeNode {
 		return (BpelProject) partnerLinkBinding.getDependencyProject();
 	}
 
-	public final ActivtyType getActivtyType() {
+	public final ActivityType getActivtyType() {
 		return activtyType;
 	}
 
