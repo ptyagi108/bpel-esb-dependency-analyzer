@@ -19,6 +19,8 @@ import javax.swing.tree.TreePath;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.panels.WorkspaceUtilsPanel;
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
+import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsagePartnerLinkResult;
+import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageVariableResult;
 import com.tomecode.soa.oracle10g.bpel.BpelProcessStrukture;
 import com.tomecode.soa.oracle10g.bpel.activity.Activity;
 import com.tomecode.soa.oracle10g.bpel.activity.PartnerLink;
@@ -176,16 +178,22 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 	public final void actionPerformed(ActionEvent e) {
 		if ("findUsageVariable".equals(e.getActionCommand())) {
 			Variable variable = (Variable) getSelectionPath().getLastPathComponent();
-			BpelProcessStrukture strukture = variable.getStrukture();
-			workspaceUtilsPanel.showFindUsageVariable(strukture.findUsage(variable));
-			// analizuje data
-			// lzonam . a ten putem do panelu
+			FindUsageVariableResult result = new FindUsageVariableResult(variable);
+
+			if (variable.getParentActivity() != null && variable.getParentActivity().getParentActivity() != null) {
+				variable.getParentActivity().getParentActivity().findUsage(result);
+			}
+			workspaceUtilsPanel.showFindUsageVariable(result);
 		} else if ("findUsagePartnerLink".equals(e.getActionCommand())) {
 			PartnerLink partnerLink = (PartnerLink) getSelectionPath().getLastPathComponent();
-			BpelProcessStrukture strukture = partnerLink.getStrukture();
-			
-			workspaceUtilsPanel.showFindUsagePartnerLink(strukture.findUsage(partnerLink));
 
+			FindUsagePartnerLinkResult result = new FindUsagePartnerLinkResult(partnerLink);
+
+			if (partnerLink.getParentActivity() != null && partnerLink.getParentActivity().getParentActivity() != null) {
+				partnerLink.getParentActivity().getParentActivity().findUsage(result);
+			}
+
+			workspaceUtilsPanel.showFindUsagePartnerLink(result);
 		}
 	}
 }

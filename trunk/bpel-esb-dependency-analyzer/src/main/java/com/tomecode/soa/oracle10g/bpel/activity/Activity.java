@@ -110,6 +110,10 @@ public class Activity implements TreeNode {
 		return this.parent;
 	}
 
+	public Activity getParentActivity() {
+		return this.parent;
+	}
+
 	@Override
 	public boolean isLeaf() {
 		return activities.isEmpty();
@@ -158,7 +162,7 @@ public class Activity implements TreeNode {
 	}
 
 	/**
-	 * find usage for partnerLink in activities 
+	 * find usage for partnerLink in activities
 	 * 
 	 * @param findUsagePartnerLinkResult
 	 * @param activity
