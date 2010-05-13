@@ -49,4 +49,9 @@ public class BasicTree extends JTree {
 		treeModel.setRoot(null);
 
 	}
+
+	public final void addData(TreeNode node) {
+		treeModel.setRoot(node);
+		expandAllNodes(new TreePath(node));
+	}
 }

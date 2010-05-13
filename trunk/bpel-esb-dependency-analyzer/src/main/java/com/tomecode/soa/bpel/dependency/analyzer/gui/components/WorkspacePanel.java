@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
+import com.tomecode.soa.bpel.dependency.analyzer.gui.panels.WorkspaceUtilsPanel;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.ProcessStructureTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.ProjectEsbServiceTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.ProjectOperationTree;
@@ -77,6 +78,8 @@ public final class WorkspacePanel extends JPanel {
 
 	private MultiWorkspace multiWorkspace;
 
+	private WorkspaceUtilsPanel workspaceUtilsPanel;
+
 	/**
 	 * Constructor
 	 * 
@@ -85,10 +88,11 @@ public final class WorkspacePanel extends JPanel {
 	public WorkspacePanel(MultiWorkspace multiWorkspace) {
 		super(new BorderLayout());
 		this.multiWorkspace = multiWorkspace;
+		this.workspaceUtilsPanel = new WorkspaceUtilsPanel();
 		this.workspaceTree = new WorkspaceTree(multiWorkspace);
 		this.projectOperationTree = new ProjectOperationTree();
 		this.projectEsbServiceTree = new ProjectEsbServiceTree();
-		this.processStructureTree = new ProcessStructureTree();
+		this.processStructureTree = new ProcessStructureTree(workspaceUtilsPanel);
 		JSplitPane spWorkspace = PanelFactory.createSplitPanel();
 		spWorkspace.add(PanelFactory.createBorderLayout("Project Dependencies", new JScrollPane(workspaceTree)));
 		spWorkspace.setDividerLocation(200);
@@ -110,7 +114,11 @@ public final class WorkspacePanel extends JPanel {
 
 		JPanel pProjectDetail = PanelFactory.createBorderLayout();
 
-		pProjectDetail.add(PanelFactory.wrapWithTile("Service being used in:", new JScrollPane(list)), BorderLayout.CENTER);
+		pProjectDetail.add(workspaceUtilsPanel, BorderLayout.CENTER);
+		workspaceUtilsPanel.addServiceUsedIn();
+		//tabbedPane.add("Service being used in", new JScrollPane(list));
+		// pProjectDetail.add(PanelFactory.wrapWithTile("Service being used in:",
+		// new JScrollPane(list)), BorderLayout.CENTER);
 
 		spProjectBase.add(pProjectDetail);
 

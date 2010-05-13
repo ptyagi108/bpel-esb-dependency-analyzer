@@ -5,6 +5,9 @@ import java.util.Vector;
 
 import javax.swing.tree.TreeNode;
 
+import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsagePartnerLinkResult;
+import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageVariableResult;
+
 /**
  * 
  * BPEL Activity
@@ -12,7 +15,7 @@ import javax.swing.tree.TreeNode;
  * @author Tomas Frastia
  * 
  */
-public final class Activity implements TreeNode {
+public class Activity implements TreeNode {
 
 	/**
 	 * actvity type
@@ -28,7 +31,7 @@ public final class Activity implements TreeNode {
 
 	private String type;
 
-	private String name;
+	protected String name;
 
 	/**
 	 * Constructor
@@ -50,6 +53,13 @@ public final class Activity implements TreeNode {
 
 	public Activity(String type, String name) {
 		this(type);
+		this.name = name;
+	}
+
+	public Activity(ActivtyType type, String name) {
+		this();
+		this.activtyType = type;
+		this.type = activtyType.toString();
 		this.name = name;
 	}
 
@@ -105,7 +115,91 @@ public final class Activity implements TreeNode {
 		return activities.isEmpty();
 	}
 
-	public final String toString() {
+	public String toString() {
 		return type + (name == null ? "" : (":" + name));
+	}
+
+	/**
+	 * find usage for {@link Variable}
+	 * 
+	 * @param findUsageVariableResult
+	 */
+	public final void findUsage(FindUsageVariableResult findUsageVariableResult) {
+		for (Activity activity : activities) {
+			if (activity.getActivtyType() != null) {
+				if (activity.getActivtyType().isContainsVariable()) {
+					findVariableInActivty(findUsageVariableResult, activity);
+				} else {
+					activity.findUsage(findUsageVariableResult);
+				}
+			} else {
+				activity.findUsage(findUsageVariableResult);
+			}
+		}
+	}
+
+	/**
+	 * find usage for {@link PartnerLink}
+	 * 
+	 * @param findUsagePartnerLinkResult
+	 */
+	public final void findUsage(FindUsagePartnerLinkResult findUsagePartnerLinkResult) {
+		for (Activity activity : activities) {
+			if (activity.getActivtyType() != null) {
+				if (activity.getActivtyType().isContainsVariable()) {
+					findPartnerLinkInActivty(findUsagePartnerLinkResult, activity);
+				} else {
+					activity.findUsage(findUsagePartnerLinkResult);
+				}
+			} else {
+				activity.findUsage(findUsagePartnerLinkResult);
+			}
+		}
+	}
+
+	/**
+	 * find usage for partnerLink in activities 
+	 * 
+	 * @param findUsagePartnerLinkResult
+	 * @param activity
+	 */
+	private final void findPartnerLinkInActivty(FindUsagePartnerLinkResult findUsagePartnerLinkResult, Activity activity) {
+		if (activity.getActivtyType() == ActivtyType.RECEIVE) {
+			if (findUsagePartnerLinkResult.getPartnerLink().getName().equals(((Receive) activity).getPartnerLink())) {
+				findUsagePartnerLinkResult.addUsage(activity);
+			}
+		} else if (activity.getActivtyType() == ActivtyType.INVOKE) {
+			Invoke invoke = (Invoke) activity;
+			if (findUsagePartnerLinkResult.getPartnerLink().getName().equals(invoke.getPartnerLink())) {
+				findUsagePartnerLinkResult.addUsage(activity);
+			}
+		} else if (activity.getActivtyType() == ActivtyType.REPLY) {
+			if (findUsagePartnerLinkResult.getPartnerLink().getName().equals(((Reply) activity).getPartnerLink())) {
+				findUsagePartnerLinkResult.addUsage(activity);
+			}
+		}
+	}
+
+	/**
+	 * find usage for variable in bpel actvities
+	 * 
+	 * @param findUsageVariableResult
+	 * @param activity
+	 */
+	private final void findVariableInActivty(FindUsageVariableResult findUsageVariableResult, Activity activity) {
+		if (activity.getActivtyType() == ActivtyType.RECEIVE) {
+			if (findUsageVariableResult.getVariable().getName().equals(((Receive) activity).getVariable())) {
+				findUsageVariableResult.addUsage(activity);
+			}
+		} else if (activity.getActivtyType() == ActivtyType.INVOKE) {
+			Invoke invoke = (Invoke) activity;
+			if (findUsageVariableResult.getVariable().getName().equals(invoke.getInputVariable()) || findUsageVariableResult.getVariable().getName().equals(invoke.getOutputVariable())) {
+				findUsageVariableResult.addUsage(activity);
+			}
+		} else if (activity.getActivtyType() == ActivtyType.REPLY) {
+			if (findUsageVariableResult.getVariable().getName().equals(((Reply) activity).getVariable())) {
+				findUsageVariableResult.addUsage(activity);
+			}
+		}
 	}
 }

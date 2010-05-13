@@ -15,6 +15,15 @@ import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.Operation;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
 import com.tomecode.soa.oracle10g.bpel.activity.Activity;
+import com.tomecode.soa.oracle10g.bpel.activity.Catch;
+import com.tomecode.soa.oracle10g.bpel.activity.Invoke;
+import com.tomecode.soa.oracle10g.bpel.activity.OnMessage;
+import com.tomecode.soa.oracle10g.bpel.activity.PartnerLink;
+import com.tomecode.soa.oracle10g.bpel.activity.Receive;
+import com.tomecode.soa.oracle10g.bpel.activity.Reply;
+import com.tomecode.soa.oracle10g.bpel.activity.Throw;
+import com.tomecode.soa.oracle10g.bpel.activity.Transform;
+import com.tomecode.soa.oracle10g.bpel.activity.Variable;
 
 /**
  * Parser for Oracle 10g BPEL process
@@ -44,12 +53,6 @@ public final class BpelParser extends AbstractParser {
 		i = partial.indexOf("/");
 		partial = partial.substring(i + 1);
 		return partial.substring(0, partial.indexOf("/"));
-	}
-
-	public static final void main(String[] arg) throws ServiceParserException {
-		BpelParser bpelParser = new BpelParser();
-		BpelProject bpelProject = bpelParser.parseBpelXml(new File("C:/ORACLE/projects/BPEL/samples/Server/bpel/bpel.xml"));
-		bpelProject.toString();
 	}
 
 	/**
@@ -129,7 +132,7 @@ public final class BpelParser extends AbstractParser {
 	private final void parseBpelProcessStrukture(Element root, BpelProcessStrukture strukture) {
 		Activity activity = new Activity(root.getName());
 		strukture.addActivity(activity);
-		parseBpelProcessActivities(root.elements(), activity);
+		parseBpelProcessActivities(root.elements(), activity, strukture);
 	}
 
 	/**
@@ -139,26 +142,57 @@ public final class BpelParser extends AbstractParser {
 	 * @param elements
 	 * @param root
 	 */
-	private final void parseBpelProcessActivities(List<?> elements, Activity root) {
+	private final void parseBpelProcessActivities(List<?> elements, Activity root, BpelProcessStrukture strukture) {
 		for (Object e : elements) {
 			Element element = (Element) e;
 			if (element.getName().equals("sequence") || element.getName().equals("scope") || element.getName().equals("switch") || element.getName().equals("flow") || element.getName().equals("flowN") || element.getName().equals("case") || element.getName().equals("otherwise")
-					|| element.getName().equals("faultHandlers") || element.getName().equals("eventHandlers") || element.getName().equals("catch") || element.getName().equals("catchAll") || element.getName().equals("onAlarm") || element.getName().equals("onMessage")
-					|| element.getName().equals("compensationHandler") || element.getName().equals("pick") || element.getName().equals("variables") || element.getName().equals("partnerLinks")) {
+					|| element.getName().equals("faultHandlers") || element.getName().equals("eventHandlers") || element.getName().equals("catchAll") || element.getName().equals("onAlarm") || element.getName().equals("compensationHandler") || element.getName().equals("pick")
+					|| element.getName().equals("variables") || element.getName().equals("partnerLinks")) {
 				Activity activity = new Activity(element.getName(), element.attributeValue("name"));
 				root.addActivity(activity);
-				parseBpelProcessActivities(element.elements(), activity);
+				parseBpelProcessActivities(element.elements(), activity, strukture);
 			} else if (element.getName().equals("variable")) {
-				Activity variable = new Activity(element.getName(), element.attributeValue("name"));
+				Variable variable = new Variable(element.attributeValue("name"), element.attributeValue("messageType"), strukture);
 				root.addActivity(variable);
 			} else if (element.getName().equals("partnerLink")) {
-				Activity variable = new Activity(element.getName(), element.attributeValue("name"));
-				root.addActivity(variable);
+				PartnerLink partnerLink = new PartnerLink(element.attributeValue("name"), element.attributeValue("partnerLinkType"), element.attributeValue("myRole"), element.attributeValue("partnerRole"), strukture);
+				root.addActivity(partnerLink);
+			} else if (element.getName().equals("receive")) {
+				root.addActivity(new Receive(element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation")));
+			} else if (element.getName().equals("invoke")) {
+				root.addActivity(new Invoke(element.attributeValue("name"), element.attributeValue("inputVariable"), element.attributeValue("outputVariable"), element.attributeValue("partnerLink"), element.attributeValue("operation")));
+			} else if (element.getName().equals("reply")) {
+				root.addActivity(new Reply(element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation")));
+			} else if (element.getName().equals("throw")) {
+				root.addActivity(new Throw(element.attributeValue("name"), element.attributeValue("faultVariable")));
+			} else if (element.getName().equals("onMessage")) {
+				OnMessage onMessageActivity = new OnMessage(element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"), element.attributeValue("headerVariable"));
+				root.addActivity(onMessageActivity);
+				parseBpelProcessActivities(element.elements(), onMessageActivity, strukture);
+			} else if (element.getName().equals("catch")) {
+				Catch catchActivity = new Catch(element.attributeValue("faultName"), element.attributeValue("faultVariable"));
+				root.addActivity(catchActivity);
+				parseBpelProcessActivities(element.elements(), catchActivity, strukture);
+			} else if (element.getName().equals("assign")) {
+				Element eAnnotation = element.element("annotation");
+				if (eAnnotation != null) {
+					Element ePattern = eAnnotation.element("pattern");
+					if (ePattern != null && "transformation".equals(ePattern.getText())) {
+						Transform transform = new Transform(element.attributeValue("name"), null, null);
+						root.addActivity(transform);
+						return;
+					}
+				}
+
+				Activity activity = new Activity(element.getName(), element.attributeValue("name"));
+				root.addActivity(activity);
 
 			} else {
 				Activity activity = new Activity(element.getName(), element.attributeValue("name"));
 				root.addActivity(activity);
 			}
+
+			// TODO: DOROBIT transformation
 		}
 	}
 
@@ -187,19 +221,24 @@ public final class BpelParser extends AbstractParser {
 	 */
 	private final void findUsageForPartnerLink(String partnerLinkName, BpelProject bpelProject, Element root) {
 		List<?> listOfElements = root.elements();
-		if (listOfElements == null) {
-			return;
-		}
-		for (Object e : listOfElements) {
-			Element element = (Element) e;
-			if (element.getName().equals("receive") || element.getName().equals("invoke") || element.getName().equals("reply")) {
-				if (element.attributeValue("partnerLink").equals(partnerLinkName)) {
-					BpelOperations bpelOperations = bpelProject.getBpelOperations();
-					Operation operation = new Operation(element.getName(), element.attributeValue("name"), element.attributeValue("operation"), bpelProject, bpelOperations.getBpelProcess().findPartnerLinkBinding(element.attributeValue("partnerLink")), getOperationPath(element));
-					bpelOperations.addOperation(operation);
+		if (listOfElements != null) {
+			for (Object e : listOfElements) {
+				Element element = (Element) e;
+				if (element.getName().equals("receive") || element.getName().equals("invoke") || element.getName().equals("reply")) {
+
+					if (element.attributeValue("partnerLink") == null) {
+						new NullPointerException("").printStackTrace();
+					} else {
+						if (element.attributeValue("partnerLink").equals(partnerLinkName)) {
+							BpelOperations bpelOperations = bpelProject.getBpelOperations();
+							Operation operation = new Operation(element.getName(), element.attributeValue("name"), element.attributeValue("operation"), bpelProject, bpelOperations.getBpelProcess().findPartnerLinkBinding(element.attributeValue("partnerLink")),
+									getOperationPath(element));
+							bpelOperations.addOperation(operation);
+						}
+					}
 				}
+				findUsageForPartnerLink(partnerLinkName, bpelProject, element);
 			}
-			findUsageForPartnerLink(partnerLinkName, bpelProject, element);
 		}
 	}
 

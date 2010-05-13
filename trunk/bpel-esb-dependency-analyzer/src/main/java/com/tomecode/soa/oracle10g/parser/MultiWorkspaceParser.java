@@ -98,12 +98,15 @@ public final class MultiWorkspaceParser extends AbstractParser {
 					if (partnerLinkBinding.getDependencyProject() == null) {
 
 						URL urlWsdl = parseWsdlToUrl(partnerLinkBinding.getWsdlLocation());
-						String qName = esbParser.convertWsdlToQname(urlWsdl);
-						if (urlWsdl != null && qName != null) {
-							Project qNameProject = findEsbProjectByQname(qName, urlWsdl, workspace);
-							if (qNameProject != null) {
-								partnerLinkBinding.setDependencyProject(qNameProject);
+						if (urlWsdl != null) {
+							String qName = esbParser.convertWsdlToQname(urlWsdl);
+							if (qName != null) {
+								Project qNameProject = findEsbProjectByQname(qName, urlWsdl, workspace);
+								if (qNameProject != null) {
+									partnerLinkBinding.setDependencyProject(qNameProject);
+								}
 							}
+
 						}
 
 					}

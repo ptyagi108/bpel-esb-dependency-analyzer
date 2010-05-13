@@ -5,7 +5,11 @@ import java.util.Vector;
 
 import javax.swing.tree.TreeNode;
 
+import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsagePartnerLinkResult;
+import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageVariableResult;
 import com.tomecode.soa.oracle10g.bpel.activity.Activity;
+import com.tomecode.soa.oracle10g.bpel.activity.PartnerLink;
+import com.tomecode.soa.oracle10g.bpel.activity.Variable;
 
 /**
  * 
@@ -71,5 +75,21 @@ public final class BpelProcessStrukture implements TreeNode {
 
 	public final String toString() {
 		return bpelProcess.toString();
+	}
+
+	public final FindUsagePartnerLinkResult findUsage(PartnerLink partnerLink) {
+		FindUsagePartnerLinkResult findUsagePartnerLinkResult = new FindUsagePartnerLinkResult(partnerLink);
+		for (Activity activity : activities) {
+			activity.findUsage(findUsagePartnerLinkResult);
+		}
+		return findUsagePartnerLinkResult;
+	}
+
+	public final FindUsageVariableResult findUsage(Variable variable) {
+		FindUsageVariableResult findUsageVariableResult = new FindUsageVariableResult(variable);
+		for (Activity activity : activities) {
+			activity.findUsage(findUsageVariableResult);
+		}
+		return findUsageVariableResult;
 	}
 }

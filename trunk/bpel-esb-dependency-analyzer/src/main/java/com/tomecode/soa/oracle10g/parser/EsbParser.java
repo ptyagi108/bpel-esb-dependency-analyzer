@@ -259,11 +259,16 @@ public final class EsbParser extends AbstractParser {
 	 * @return
 	 */
 	public final String convertWsdlToQname(URL url) {
-		if (url.getFile().startsWith("/esb/wsil/")) {
-			String urlQname = url.getFile().replace("/esb/wsil/", "");
-			if (urlQname.endsWith("?wsdl")) {
-				return urlQname.substring(0, urlQname.lastIndexOf("?wsdl")).replace("/", ".");
+		try {
+			if (url.getFile().startsWith("/esb/wsil/")) {
+				String urlQname = url.getFile().replace("/esb/wsil/", "");
+				if (urlQname.endsWith("?wsdl")) {
+					return urlQname.substring(0, urlQname.lastIndexOf("?wsdl")).replace("/", ".");
+				}
 			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return null;
 	}

@@ -13,13 +13,19 @@ import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
  */
 public enum ActivtyType {
 
-	SCOPE("scope", IconFactory.SCOPE), SEQUENCE("sequence", IconFactory.SEQUENCE), ASSIGN("assign", IconFactory.ASSIGN), EMPTY("empty", IconFactory.EMPTY), RECEIVE("receive", IconFactory.RECEIVE), INVOKE("invoke", IconFactory.INVOKE), REPLY("reply", IconFactory.REPLY), SWITCH(
-			"switch", IconFactory.SWITCH), CATCH("catch", IconFactory.CATCH), CATCHALL("catchAll", IconFactory.CATCHALL), ONALARM("onAlarm", IconFactory.ONALARM), ONMESSAGE("onMessage", IconFactory.ONMESSAGE), COMPENSATIONHANDLER("compensationHandler",
-			IconFactory.COMPENSATIONHANDLER), JAVA_EMBEDDING("exec", IconFactory.BPELX_EXEC), PICK("pick", IconFactory.PICK), FLOW("flow", IconFactory.FLOW), FLOWN("flowN", IconFactory.FLOWN), COMPENSATE("compensate", IconFactory.COMPENSTATE), TERMINATE("terminate",
-			IconFactory.TERMINATE), THROW("throw", IconFactory.THROW), PARTNERLINK("partnerLink", null);
+	SCOPE("scope", IconFactory.SCOPE), SEQUENCE("sequence", IconFactory.SEQUENCE), ASSIGN("assign", IconFactory.ASSIGN), EMPTY("empty", IconFactory.EMPTY), RECEIVE("receive", IconFactory.RECEIVE, true), INVOKE("invoke", IconFactory.INVOKE, true), REPLY("reply",
+			IconFactory.REPLY, true), SWITCH("switch", IconFactory.SWITCH), CATCH("catch", IconFactory.CATCH, true), CATCHALL("catchAll", IconFactory.CATCHALL), ONALARM("onAlarm", IconFactory.ONALARM), ONMESSAGE("onMessage", IconFactory.ONMESSAGE, true), COMPENSATIONHANDLER(
+			"compensationHandler", IconFactory.COMPENSATIONHANDLER), JAVA_EMBEDDING("exec", IconFactory.BPELX_EXEC), PICK("pick", IconFactory.PICK), FLOW("flow", IconFactory.FLOW), FLOWN("flowN", IconFactory.FLOWN), COMPENSATE("compensate", IconFactory.COMPENSTATE), TERMINATE(
+			"terminate", IconFactory.TERMINATE), THROW("throw", IconFactory.THROW, true), PARTNERLINK("partnerLink", null), VARIABLE("variable", null), TRANSFORMATE("transformation", null, true);
 
 	private final String name;
 	private final ImageIcon imageIcon;
+
+	private final boolean containsVariable;
+
+	private ActivtyType(String name, ImageIcon imageIcon) {
+		this(name, imageIcon, false);
+	}
 
 	/**
 	 * Constructor
@@ -29,9 +35,10 @@ public enum ActivtyType {
 	 * @param imageIcon
 	 *            icon
 	 */
-	private ActivtyType(String name, ImageIcon imageIcon) {
+	private ActivtyType(String name, ImageIcon imageIcon, boolean containsVariable) {
 		this.name = name;
 		this.imageIcon = imageIcon;
+		this.containsVariable = containsVariable;
 	}
 
 	public final String getName() {
@@ -42,6 +49,16 @@ public enum ActivtyType {
 		return imageIcon;
 	}
 
+	public final boolean isContainsVariable() {
+		return containsVariable;
+	}
+
+	/**
+	 * parse string to {@link ActivtyType}
+	 * 
+	 * @param name
+	 * @return
+	 */
 	public static final ActivtyType parseActivtyType(String name) {
 		for (ActivtyType activtyType : values()) {
 			if (activtyType.getName().equals(name)) {
