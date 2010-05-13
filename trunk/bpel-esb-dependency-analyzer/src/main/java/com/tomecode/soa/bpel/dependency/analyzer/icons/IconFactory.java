@@ -35,6 +35,10 @@ public final class IconFactory {
 	public static final ImageIcon SYSTEM = new ImageIcon(IconFactory.class.getResource("system.gif"));
 	public static final ImageIcon SERVICE_GROUPE = new ImageIcon(IconFactory.class.getResource("serviceGroupe.gif"));
 	public static final ImageIcon SERVICE = new ImageIcon(IconFactory.class.getResource("service.gif"));
+	public static final ImageIcon EMAIL = new ImageIcon(IconFactory.class.getResource("email.gif"));
+	public static final ImageIcon FAX = new ImageIcon(IconFactory.class.getResource("fax.gif"));
+	public static final ImageIcon SMS = new ImageIcon(IconFactory.class.getResource("sms.gif"));
+	public static final ImageIcon VOICE = new ImageIcon(IconFactory.class.getResource("voice.gif"));
 
 	private IconFactory() {
 	}

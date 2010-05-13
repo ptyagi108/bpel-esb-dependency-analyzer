@@ -16,13 +16,22 @@ public enum ActivityType {
 	SCOPE("scope", IconFactory.SCOPE), SEQUENCE("sequence", IconFactory.SEQUENCE), ASSIGN("assign", IconFactory.ASSIGN), EMPTY("empty", IconFactory.EMPTY), RECEIVE("receive", IconFactory.RECEIVE, true), INVOKE("invoke", IconFactory.INVOKE, true), REPLY("reply",
 			IconFactory.REPLY, true), SWITCH("switch", IconFactory.SWITCH), CATCH("catch", IconFactory.CATCH, true), CATCHALL("catchAll", IconFactory.CATCHALL), ONALARM("onAlarm", IconFactory.ONALARM), ONMESSAGE("onMessage", IconFactory.ONMESSAGE, true), COMPENSATIONHANDLER(
 			"compensationHandler", IconFactory.COMPENSATIONHANDLER), JAVA_EMBEDDING("exec", IconFactory.BPELX_EXEC), PICK("pick", IconFactory.PICK), FLOW("flow", IconFactory.FLOW), FLOWN("flowN", IconFactory.FLOWN), COMPENSATE("compensate", IconFactory.COMPENSTATE), TERMINATE(
-			"terminate", IconFactory.TERMINATE), THROW("throw", IconFactory.THROW, true), PARTNERLINK("partnerLink", null), VARIABLE("variable", null), TRANSFORMATE("transformation", null, true);
+			"terminate", IconFactory.TERMINATE), THROW("throw", IconFactory.THROW, true), PARTNERLINK("partnerLink", null), VARIABLE("variable", null), TRANSFORMATE("transformation", null, true), EMAIL("email", IconFactory.EMAIL), FAX("fax", IconFactory.FAX), SMS("sms",
+			IconFactory.SMS), VOICE("voice", IconFactory.VOICE);
 
 	private final String name;
 	private final ImageIcon imageIcon;
 
 	private final boolean containsVariable;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 *            activity name in *.bpel file
+	 * @param imageIcon
+	 *            icon
+	 */
 	private ActivityType(String name, ImageIcon imageIcon) {
 		this(name, imageIcon, false);
 	}
