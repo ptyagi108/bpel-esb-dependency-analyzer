@@ -194,45 +194,55 @@ public final class BpelParser extends AbstractParser {
 					root.addActivity(activity);
 				}
 			} else if (element.getName().equals("scope")) {
-				Element eAnnotation = element.element("annotation");
-				if (eAnnotation != null) {
-					Element ePattern = eAnnotation.element("pattern");
-					if (ePattern != null) {
-						String patternName = ePattern.attributeValue("patternName");
-						if (patternName != null) {
-							if (patternName.endsWith(":email")) {
-								Email email = new Email(element.attributeValue("name"));
-								root.addActivity(email);
-								parseBpelProcessActivities(element.elements(), email, strukture);
-							} else if (patternName.endsWith(":fax")) {
-								Fax fax = new Fax(element.attributeValue("name"));
-								root.addActivity(fax);
-								parseBpelProcessActivities(element.elements(), fax, strukture);
-							} else if (patternName.endsWith(":sms")) {
-								Sms sms = new Sms(element.attributeValue("name"));
-								root.addActivity(sms);
-								parseBpelProcessActivities(element.elements(), sms, strukture);
-							} else if (patternName.endsWith(":voice")) {
-								Voice voice = new Voice(element.attributeValue("name"));
-								root.addActivity(voice);
-								parseBpelProcessActivities(element.elements(), voice, strukture);
-							}
-						}
-					}
-
-				} else {
-					Activity activity = new Activity(element.getName(), element.attributeValue("name"));
-					root.addActivity(activity);
-					parseBpelProcessActivities(element.elements(), activity, strukture);
-				}
-
+				parseSpecialScopes(element, root, strukture);
 			} else {
 				Activity activity = new Activity(element.getName(), element.attributeValue("name"));
 				root.addActivity(activity);
 			}
-
-			// TODO: DOROBIT transformation
 		}
+	}
+
+	/**
+	 * parse special scopes for example: email, sms, voice and fax
+	 * 
+	 * @param element
+	 * @param root
+	 * @param strukture
+	 */
+	private final void parseSpecialScopes(Element element, Activity root, BpelProcessStrukture strukture) {
+		Element eAnnotation = element.element("annotation");
+		if (eAnnotation != null) {
+			Element ePattern = eAnnotation.element("pattern");
+			if (ePattern != null) {
+				String patternName = ePattern.attributeValue("patternName");
+				if (patternName != null) {
+					if (patternName.endsWith(":email")) {
+						Email email = new Email(element.attributeValue("name"));
+						root.addActivity(email);
+						parseBpelProcessActivities(element.elements(), email, strukture);
+						return;
+					} else if (patternName.endsWith(":fax")) {
+						Fax fax = new Fax(element.attributeValue("name"));
+						root.addActivity(fax);
+						parseBpelProcessActivities(element.elements(), fax, strukture);
+						return;
+					} else if (patternName.endsWith(":sms")) {
+						Sms sms = new Sms(element.attributeValue("name"));
+						root.addActivity(sms);
+						parseBpelProcessActivities(element.elements(), sms, strukture);
+						return;
+					} else if (patternName.endsWith(":voice")) {
+						Voice voice = new Voice(element.attributeValue("name"));
+						root.addActivity(voice);
+						parseBpelProcessActivities(element.elements(), voice, strukture);
+						return;
+					}
+				}
+			}
+		}
+		Activity activity = new Activity(element.getName(), element.attributeValue("name"));
+		root.addActivity(activity);
+		parseBpelProcessActivities(element.elements(), activity, strukture);
 	}
 
 	/**
