@@ -120,7 +120,7 @@ public class Activity implements TreeNode {
 	}
 
 	public String toString() {
-		return type + (name == null ? "" : (":" + name));
+		return type.toLowerCase() + (name == null ? "" : (" - " + name));
 	}
 
 	/**

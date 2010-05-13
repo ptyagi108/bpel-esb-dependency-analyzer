@@ -15,6 +15,8 @@ import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.Operation;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
 import com.tomecode.soa.oracle10g.bpel.activity.Activity;
+import com.tomecode.soa.oracle10g.bpel.activity.Case;
+import com.tomecode.soa.oracle10g.bpel.activity.CaseOtherwise;
 import com.tomecode.soa.oracle10g.bpel.activity.Catch;
 import com.tomecode.soa.oracle10g.bpel.activity.Email;
 import com.tomecode.soa.oracle10g.bpel.activity.Fax;
@@ -149,9 +151,8 @@ public final class BpelParser extends AbstractParser {
 	private final void parseBpelProcessActivities(List<?> elements, Activity root, BpelProcessStrukture strukture) {
 		for (Object e : elements) {
 			Element element = (Element) e;
-			if (element.getName().equals("sequence") || element.getName().equals("switch") || element.getName().equals("flow") || element.getName().equals("flowN") || element.getName().equals("case") || element.getName().equals("otherwise")
-					|| element.getName().equals("faultHandlers") || element.getName().equals("eventHandlers") || element.getName().equals("catchAll") || element.getName().equals("onAlarm") || element.getName().equals("compensationHandler") || element.getName().equals("pick")
-					|| element.getName().equals("variables") || element.getName().equals("partnerLinks")) {
+			if (element.getName().equals("sequence") || element.getName().equals("switch") || element.getName().equals("flow") || element.getName().equals("flowN") || element.getName().equals("faultHandlers") || element.getName().equals("eventHandlers")
+					|| element.getName().equals("catchAll") || element.getName().equals("onAlarm") || element.getName().equals("compensationHandler") || element.getName().equals("pick") || element.getName().equals("variables") || element.getName().equals("partnerLinks")) {
 				Activity activity = new Activity(element.getName(), element.attributeValue("name"));
 				root.addActivity(activity);
 				parseBpelProcessActivities(element.elements(), activity, strukture);
@@ -193,8 +194,30 @@ public final class BpelParser extends AbstractParser {
 					Activity activity = new Activity(element.getName(), element.attributeValue("name"));
 					root.addActivity(activity);
 				}
+			} else if (element.getName().equals("case")) {
+				Element eAnnotation = element.element("annotation");
+				if (eAnnotation != null) {
+					Element ePattern = eAnnotation.element("pattern");
+					if (ePattern != null) {
+						if (ePattern.attributeValue("patternName") != null && "case".equals(ePattern.attributeValue("patternName"))) {
+							Case caseActivity = new Case(ePattern.getText());
+							root.addActivity(caseActivity);
+							parseBpelProcessActivities(element.elements(), caseActivity, strukture);
+						}
+					}
+				} else {
+					Activity activity = new Activity(element.getName(), element.attributeValue("name"));
+					root.addActivity(activity);
+				}
+			} else if (element.getName().equals("otherwise")) {
+				CaseOtherwise caseOtherwise = new CaseOtherwise("otherwise");
+				root.addActivity(caseOtherwise);
+				parseBpelProcessActivities(element.elements(), caseOtherwise, strukture);
+
 			} else if (element.getName().equals("scope")) {
 				parseSpecialScopes(element, root, strukture);
+			} else if (element.getName().equals("annotation")) {
+				//
 			} else {
 				Activity activity = new Activity(element.getName(), element.attributeValue("name"));
 				root.addActivity(activity);

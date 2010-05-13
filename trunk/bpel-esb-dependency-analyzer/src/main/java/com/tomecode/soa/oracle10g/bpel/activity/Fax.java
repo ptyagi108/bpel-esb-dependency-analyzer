@@ -17,7 +17,7 @@ public final class Fax extends Activity {
 		super(ActivityType.FAX, name);
 	}
 
-	public final String toString() {
-		return (name != null ? name : super.toString());
-	}
+	// public final String toString() {
+	// return (name != null ? name : super.toString());
+	// }
 }

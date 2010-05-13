@@ -41,7 +41,7 @@ public final class Reply extends Activity {
 		return variable;
 	}
 
-	public final String toString() {
-		return (name != null ? name : super.toString());
-	}
+	// public final String toString() {
+	// return (name != null ? name : super.toString());
+	// }
 }

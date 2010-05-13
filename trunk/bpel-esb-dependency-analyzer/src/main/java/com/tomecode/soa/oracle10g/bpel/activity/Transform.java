@@ -32,7 +32,7 @@ public final class Transform extends Activity {
 		return toVariable;
 	}
 
-	public final String toString() {
-		return (name != null ? name : super.toString());
-	}
+	// public final String toString() {
+	// return (name != null ? name : super.toString());
+	// }
 }

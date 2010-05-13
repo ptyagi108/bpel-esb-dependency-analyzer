@@ -49,9 +49,9 @@ public final class Invoke extends Activity {
 		return outputVariable;
 	}
 
-	public final String toString() {
-		return (name != null ? name : super.toString());
-	}
+//	public final String toString() {
+//		return (name != null ? name : super.toString());
+//	}
 
 	public boolean abstractHasVariable(Variable variable) {
 		return false;

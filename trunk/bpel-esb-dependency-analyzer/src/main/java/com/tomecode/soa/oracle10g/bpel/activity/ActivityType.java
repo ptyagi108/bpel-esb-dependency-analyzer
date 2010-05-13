@@ -17,7 +17,7 @@ public enum ActivityType {
 			IconFactory.REPLY, true), SWITCH("switch", IconFactory.SWITCH), CATCH("catch", IconFactory.CATCH, true), CATCHALL("catchAll", IconFactory.CATCHALL), ONALARM("onAlarm", IconFactory.ONALARM), ONMESSAGE("onMessage", IconFactory.ONMESSAGE, true), COMPENSATIONHANDLER(
 			"compensationHandler", IconFactory.COMPENSATIONHANDLER), JAVA_EMBEDDING("exec", IconFactory.BPELX_EXEC), PICK("pick", IconFactory.PICK), FLOW("flow", IconFactory.FLOW), FLOWN("flowN", IconFactory.FLOWN), COMPENSATE("compensate", IconFactory.COMPENSTATE), TERMINATE(
 			"terminate", IconFactory.TERMINATE), THROW("throw", IconFactory.THROW, true), PARTNERLINK("partnerLink", null), VARIABLE("variable", null), TRANSFORMATE("transformation", null, true), EMAIL("email", IconFactory.EMAIL), FAX("fax", IconFactory.FAX), SMS("sms",
-			IconFactory.SMS), VOICE("voice", IconFactory.VOICE);
+			IconFactory.SMS), VOICE("voice", IconFactory.VOICE), CASE("case", IconFactory.SWITCH);
 
 	private final String name;
 	private final ImageIcon imageIcon;
