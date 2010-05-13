@@ -226,6 +226,72 @@ public final class BpelParser extends AbstractParser {
 	}
 
 	/**
+	 * parse bpel activities by type
+	 * 
+	 * @param element
+	 * @return
+	 */
+	private final Activity parseBpelActivity(Element element) {
+
+		if (element.getName().equals("receive")) {
+			return new Receive(element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"));
+		} else if (element.getName().equals("invoke")) {
+			return new Invoke(element.attributeValue("name"), element.attributeValue("inputVariable"), element.attributeValue("outputVariable"), element.attributeValue("partnerLink"), element.attributeValue("operation"));
+		} else if (element.getName().equals("reply")) {
+			return new Reply(element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"));
+		} else if (element.getName().equals("throw")) {
+			return new Throw(element.attributeValue("name"), element.attributeValue("faultVariable"));
+		} else if (element.getName().equals("onMessage")) {
+			return new OnMessage(element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"), element.attributeValue("headerVariable"));
+		} else if (element.getName().equals("catch")) {
+			return new Catch(element.attributeValue("faultName"), element.attributeValue("faultVariable"));
+		} else if (element.getName().equals("assign")) {
+			Element eAnnotation = element.element("annotation");
+			if (eAnnotation != null) {
+				Element ePattern = eAnnotation.element("pattern");
+				if (ePattern != null && "transformation".equals(ePattern.getText())) {
+					return new Transform(element.attributeValue("name"), null, null);
+				}
+			}
+		} else if (element.getName().equals("case")) {
+			Element eAnnotation = element.element("annotation");
+			if (eAnnotation != null) {
+				Element ePattern = eAnnotation.element("pattern");
+				if (ePattern != null) {
+					if (ePattern.attributeValue("patternName") != null && "case".equals(ePattern.attributeValue("patternName"))) {
+						return new Case(ePattern.getText());
+					}
+				}
+			}
+		} else if (element.getName().equals("otherwise")) {
+			return new CaseOtherwise("otherwise");
+		} else if (element.getName().equals("scope")) {
+			Element eAnnotation = element.element("annotation");
+			if (eAnnotation != null) {
+				Element ePattern = eAnnotation.element("pattern");
+				if (ePattern != null) {
+					String patternName = ePattern.attributeValue("patternName");
+					if (patternName != null) {
+						if (patternName.endsWith(":email")) {
+							return new Email(element.attributeValue("name"));
+						} else if (patternName.endsWith(":fax")) {
+							return new Fax(element.attributeValue("name"));
+						} else if (patternName.endsWith(":sms")) {
+							return new Sms(element.attributeValue("name"));
+
+						} else if (patternName.endsWith(":voice")) {
+							return new Voice(element.attributeValue("name"));
+
+						}
+					}
+				}
+			}
+		}
+
+		return new Activity(element.getName(), element.attributeValue("name"));
+	}
+
+	/**
 	 * parse special scopes for example: email, sms, voice and fax
 	 * 
 	 * @param element
@@ -325,7 +391,9 @@ public final class BpelParser extends AbstractParser {
 	private final List<Activity> getOperationPath(Element element) {
 		List<Activity> activities = new ArrayList<Activity>();
 		while (element.getParent() != null) {
-			activities.add(new Activity(element.getName(), element.attributeValue("name")));
+
+			Activity activity = parseBpelActivity(element);
+			activities.add(activity);
 			element = element.getParent();
 
 		}

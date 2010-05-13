@@ -24,12 +24,20 @@ public final class WorkspaceTree extends BasicTree {
 
 	private static final long serialVersionUID = -14952772269846358L;
 
+	/**
+	 * Constructor
+	 */
 	public WorkspaceTree() {
 		super();
 		setRootVisible(false);
 		setCellRenderer(new WorkspaceTreeRenderer());
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param multiWorkspace
+	 */
 	public WorkspaceTree(MultiWorkspace multiWorkspace) {
 		this();
 		treeModel.setRoot(multiWorkspace);
@@ -57,7 +65,6 @@ public final class WorkspaceTree extends BasicTree {
 					rnd.setFont(rnd.getFont().deriveFont(Font.BOLD));
 
 				}
-
 			}
 
 			return rnd;

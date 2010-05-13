@@ -158,11 +158,13 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 			} else if (value instanceof Activity) {
 				Activity activity = (Activity) value;
 				if (!activities.isEmpty()) {
-					if (activities.get(0).toString().equals(activity.toString())) {
-						rnd.setForeground(Color.red);
-						rnd.setFont(rnd.getFont().deriveFont(Font.BOLD));
-					}
 
+					if (activities.get(0).toString().equals(activity.toString())) {
+						if (compareByTreeActivities(activity)) {
+							rnd.setForeground(Color.red);
+							rnd.setFont(rnd.getFont().deriveFont(Font.BOLD));
+						}
+					}
 				}
 				if (activity.getActivtyType() != null) {
 					rnd.setIcon(activity.getActivtyType().getImageIcon());
@@ -171,6 +173,37 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 			rnd.setFocusable(true);
 			return rnd;
 
+		}
+
+		/**
+		 * compare by tree path
+		 * 
+		 * @param activityInTree
+		 * @return
+		 */
+		private final boolean compareByTreeActivities(Activity activityInTree) {
+			for (Activity activity : activities) {
+				if (activityInTree == null) {
+					return false;
+				}
+				if (activity.getName() == null && activity.getActivtyType() == null) {
+					if (!activity.toString().equals(activityInTree.toString())) {
+						return false;
+					}
+				} else if (activity.getName() == null) {
+					if (!activity.getActivtyType().equals(activityInTree.getActivtyType())) {
+						return false;
+					}
+				} else {
+					if (!activity.getName().equals(activityInTree.getName()) || !activity.getActivtyType().equals(activityInTree.getActivtyType())) {
+						return false;
+					}
+				}
+
+				activityInTree = activityInTree.getParentActivity();
+			}
+
+			return true;
 		}
 	}
 

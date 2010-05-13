@@ -13,7 +13,7 @@ public class CaseOtherwise extends Activity {
 	 * @param name
 	 */
 	public CaseOtherwise(String name) {
-		super(ActivityType.CASE, name);
+		super(ActivityType.OTHERWISE, name);
 	}
 
 	public CaseOtherwise() {
