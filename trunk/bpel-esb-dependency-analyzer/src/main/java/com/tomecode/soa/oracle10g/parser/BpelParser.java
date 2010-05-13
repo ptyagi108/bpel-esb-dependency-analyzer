@@ -20,6 +20,7 @@ import com.tomecode.soa.oracle10g.bpel.activity.CaseOtherwise;
 import com.tomecode.soa.oracle10g.bpel.activity.Catch;
 import com.tomecode.soa.oracle10g.bpel.activity.Email;
 import com.tomecode.soa.oracle10g.bpel.activity.Fax;
+import com.tomecode.soa.oracle10g.bpel.activity.HumanTask;
 import com.tomecode.soa.oracle10g.bpel.activity.Invoke;
 import com.tomecode.soa.oracle10g.bpel.activity.OnMessage;
 import com.tomecode.soa.oracle10g.bpel.activity.PartnerLink;
@@ -275,13 +276,13 @@ public final class BpelParser extends AbstractParser {
 						if (patternName.endsWith(":email")) {
 							return new Email(element.attributeValue("name"));
 						} else if (patternName.endsWith(":fax")) {
-							return new Fax(element.attributeValue("name"));
+				return new Fax(element.attributeValue("name"));
 						} else if (patternName.endsWith(":sms")) {
 							return new Sms(element.attributeValue("name"));
-
 						} else if (patternName.endsWith(":voice")) {
 							return new Voice(element.attributeValue("name"));
-
+						} else if (patternName.endsWith(":workflow")) {
+							return new HumanTask(element.attributeValue("name"));
 						}
 					}
 				}
@@ -325,7 +326,13 @@ public final class BpelParser extends AbstractParser {
 						root.addActivity(voice);
 						parseBpelProcessActivities(element.elements(), voice, strukture);
 						return;
+					} else if (patternName.endsWith(":workflow")) {
+						HumanTask humanTask = new HumanTask(element.attributeValue("name"));
+						root.addActivity(humanTask);
+						parseBpelProcessActivities(element.elements(), humanTask, strukture);
+						return;
 					}
+
 				}
 			}
 		}

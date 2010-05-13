@@ -41,6 +41,7 @@ public final class IconFactory {
 	public static final ImageIcon VOICE = new ImageIcon(IconFactory.class.getResource("voice.gif"));
 	public static final ImageIcon PARTNERLINK = new ImageIcon(IconFactory.class.getResource("partnerLink.gif"));
 	public static final ImageIcon VARIABLE = new ImageIcon(IconFactory.class.getResource("variable.gif"));
+	public static final ImageIcon HUMANTASK = new ImageIcon(IconFactory.class.getResource("humanTask.gif"));
 
 	private IconFactory() {
 	}
