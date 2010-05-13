@@ -162,7 +162,7 @@ public final class WorkspacePanel extends JPanel {
 			@Override
 			public final void valueChanged(TreeSelectionEvent e) {
 				CardLayout cardLayout = (CardLayout) pCardPanel.getLayout();
-
+				processStructureTree.clearSelectedOperationsTreePath();
 				if (e.getPath().getLastPathComponent() instanceof Workspace) {
 					Workspace workspace = (Workspace) e.getPath().getLastPathComponent();
 					txtProjectPath.setText(workspace.getFile().toString());
@@ -229,7 +229,7 @@ public final class WorkspacePanel extends JPanel {
 			// txtProcessFolder.setText(bpelProcess.getBpelXmlFile().getParent());
 		}
 		if (activities == null) {
-			processStructureTree.clearSelectedOpertiaons();
+			processStructureTree.clearSelectedOperationsTreePath();
 		} else {
 			processStructureTree.addSelectedActivities(activities);
 		}

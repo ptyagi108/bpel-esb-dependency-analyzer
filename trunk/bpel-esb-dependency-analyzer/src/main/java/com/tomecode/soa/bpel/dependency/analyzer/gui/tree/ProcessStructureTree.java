@@ -44,7 +44,7 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 	 */
 	private final JPopupMenu popupMenu;
 
-	private final List<Activity> activities;
+	private final List<Activity> selectedActivityWithOperationPath;
 
 	private WorkspaceUtilsPanel workspaceUtilsPanel;
 
@@ -54,7 +54,7 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 	public ProcessStructureTree(WorkspaceUtilsPanel workspaceUtilsPanel) {
 		super();
 		this.workspaceUtilsPanel = workspaceUtilsPanel;
-		activities = new ArrayList<Activity>();
+		selectedActivityWithOperationPath = new ArrayList<Activity>();
 		treePathRenderer = new SelectTreePathRenderer();
 		popupMenu = new JPopupMenu();
 		popupMenu.add(createMenuItem("Find Usage for Variable", "findUsageVariable"));
@@ -126,18 +126,19 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 	 * @param bpelProcessStrukture
 	 */
 	public final void addBpelProcessStrukture(BpelProcessStrukture bpelProcessStrukture) {
+		selectedActivityWithOperationPath.clear();
 		treeModel.setRoot(bpelProcessStrukture);
 		expandAllNodes(new TreePath(bpelProcessStrukture));
 	}
 
 	public final void addSelectedActivities(List<Activity> activities) {
-		this.activities.clear();
-		this.activities.addAll(activities);
+		this.selectedActivityWithOperationPath.clear();
+		this.selectedActivityWithOperationPath.addAll(activities);
 		updateUI();
 	}
 
-	public final void clearSelectedOpertiaons() {
-		activities.clear();
+	public final void clearSelectedOperationsTreePath() {
+		selectedActivityWithOperationPath.clear();
 	}
 
 	/**
@@ -157,9 +158,9 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 				rnd.setIcon(IconFactory.PROCESS);
 			} else if (value instanceof Activity) {
 				Activity activity = (Activity) value;
-				if (!activities.isEmpty()) {
+				if (!selectedActivityWithOperationPath.isEmpty()) {
 
-					if (activities.get(0).toString().equals(activity.toString())) {
+					if (selectedActivityWithOperationPath.get(0).toString().equals(activity.toString())) {
 						if (compareByTreeActivities(activity)) {
 							rnd.setForeground(Color.red);
 							rnd.setFont(rnd.getFont().deriveFont(Font.BOLD));
@@ -182,7 +183,7 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 		 * @return
 		 */
 		private final boolean compareByTreeActivities(Activity activityInTree) {
-			for (Activity activity : activities) {
+			for (Activity activity : selectedActivityWithOperationPath) {
 				if (activityInTree == null) {
 					return false;
 				}
