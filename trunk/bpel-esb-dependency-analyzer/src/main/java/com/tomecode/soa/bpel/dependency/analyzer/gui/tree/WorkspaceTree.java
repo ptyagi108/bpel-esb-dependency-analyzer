@@ -7,6 +7,8 @@ import java.awt.Font;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.oracle10g.MultiWorkspace;
@@ -41,6 +43,27 @@ public final class WorkspaceTree extends BasicTree {
 	public WorkspaceTree(MultiWorkspace multiWorkspace) {
 		this();
 		treeModel.setRoot(multiWorkspace);
+		expandProjectNodes(new TreePath(multiWorkspace));
+	}
+
+	/**
+	 * expand all nodes
+	 * 
+	 * @param parent
+	 */
+	protected final void expandProjectNodes(TreePath parent) {
+		TreeNode node = (TreeNode) parent.getLastPathComponent();
+		if (node.getChildCount() >= 0) {
+			for (int i = 0; i <= node.getChildCount() - 1; i++) {
+				TreePath path = parent.pathByAddingChild(node.getChildAt(i));
+				if (path.getLastPathComponent() instanceof Project) {
+					expandPath(parent);
+				} else {
+					expandProjectNodes(path);
+				}
+			}
+		}
+		expandPath(parent);
 	}
 
 	/**
