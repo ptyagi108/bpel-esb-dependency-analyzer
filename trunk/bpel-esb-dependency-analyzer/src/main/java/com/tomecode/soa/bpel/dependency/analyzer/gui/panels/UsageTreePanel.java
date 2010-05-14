@@ -10,7 +10,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
-import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.BasicTree;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.UsageTree;
 import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsage;
 import com.tomecode.soa.bpel.dependency.analyzer.utils.Usage;
 
@@ -23,7 +23,7 @@ public final class UsageTreePanel extends JPanel {
 
 	private static final long serialVersionUID = 2752156559028598059L;
 
-	private final BasicTree basicTree;
+	private final UsageTree basicTree;
 
 	private final FindUsageTreeRenderer rendererTree;
 
@@ -34,7 +34,7 @@ public final class UsageTreePanel extends JPanel {
 	 */
 	public UsageTreePanel(FindUsage result) {
 		setLayout(new BorderLayout());
-		basicTree = new BasicTree();
+		basicTree = new UsageTree();
 		rendererTree = new FindUsageTreeRenderer();
 		basicTree.setCellRenderer(rendererTree);
 		add(new JScrollPane(basicTree), BorderLayout.CENTER);

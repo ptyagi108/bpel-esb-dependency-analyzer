@@ -276,7 +276,7 @@ public final class BpelParser extends AbstractParser {
 						if (patternName.endsWith(":email")) {
 							return new Email(element.attributeValue("name"));
 						} else if (patternName.endsWith(":fax")) {
-				return new Fax(element.attributeValue("name"));
+							return new Fax(element.attributeValue("name"));
 						} else if (patternName.endsWith(":sms")) {
 							return new Sms(element.attributeValue("name"));
 						} else if (patternName.endsWith(":voice")) {

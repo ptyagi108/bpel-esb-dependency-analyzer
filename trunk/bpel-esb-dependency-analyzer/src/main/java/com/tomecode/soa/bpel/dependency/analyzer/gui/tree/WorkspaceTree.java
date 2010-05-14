@@ -3,6 +3,7 @@ package com.tomecode.soa.bpel.dependency.analyzer.gui.tree;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -33,6 +34,7 @@ public final class WorkspaceTree extends BasicTree {
 		super();
 		setRootVisible(false);
 		setCellRenderer(new WorkspaceTreeRenderer());
+		createMenuItem("Find Usage for BPEL project", "findUsageBpelProject");
 	}
 
 	/**
@@ -92,5 +94,23 @@ public final class WorkspaceTree extends BasicTree {
 
 			return rnd;
 		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
+	}
+
+	@Override
+	public void showPopupMenu(int x, int y) {
+		TreePath treePath = this.getSelectionPath();
+		if (treePath != null) {
+			if (treePath.getLastPathComponent() instanceof BpelProject) {
+				enableMenuItem("findUsageBpelProject", true);
+			} else {
+				enableMenuItem(null, false);
+			}
+		}
+		popupMenu.show(this, x, y);
 	}
 }

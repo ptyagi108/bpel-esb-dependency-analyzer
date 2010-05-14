@@ -1,6 +1,7 @@
 package com.tomecode.soa.bpel.dependency.analyzer.gui.tree;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -65,5 +66,17 @@ public final class ProjectOperationTree extends BasicTree {
 
 			return rnd;
 		}
+	}
+
+	@Override
+	public void showPopupMenu(int x, int y) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 }

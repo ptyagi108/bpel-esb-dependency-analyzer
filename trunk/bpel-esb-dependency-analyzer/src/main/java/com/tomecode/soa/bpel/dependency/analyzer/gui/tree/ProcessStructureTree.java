@@ -5,13 +5,9 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
@@ -39,11 +35,6 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 
 	private final SelectTreePathRenderer treePathRenderer;
 
-	/**
-	 * simple popup menu
-	 */
-	private final JPopupMenu popupMenu;
-
 	private final List<Activity> selectedActivityWithOperationPath;
 
 	private WorkspaceUtilsPanel workspaceUtilsPanel;
@@ -56,18 +47,10 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 		this.workspaceUtilsPanel = workspaceUtilsPanel;
 		selectedActivityWithOperationPath = new ArrayList<Activity>();
 		treePathRenderer = new SelectTreePathRenderer();
-		popupMenu = new JPopupMenu();
-		popupMenu.add(createMenuItem("Find Usage for Variable", "findUsageVariable"));
-		popupMenu.add(createMenuItem("Find Usage for PartnerLink", "findUsagePartnerLink"));
+		createMenuItem("Find Usage for Variable", "findUsageVariable");
+		createMenuItem("Find Usage for PartnerLink", "findUsagePartnerLink");
 		setCellRenderer(treePathRenderer);
 
-		addMouseListener(new MouseAdapter() {
-			public final void mouseClicked(MouseEvent e) {
-				if (e.getButton() == MouseEvent.BUTTON3) {
-					showPopupMenu(e.getX(), e.getY());
-				}
-			}
-		});
 	}
 
 	/**
@@ -76,7 +59,7 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 	 * @param x
 	 * @param y
 	 */
-	private final void showPopupMenu(int x, int y) {
+	public final void showPopupMenu(int x, int y) {
 		TreePath treePath = this.getSelectionPath();
 		if (treePath != null) {
 			if (treePath.getLastPathComponent() instanceof Variable) {
@@ -88,36 +71,6 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 			}
 			popupMenu.show(this, x, y);
 		}
-	}
-
-	/**
-	 * enable/disable menu item in {@link #popupMenu}
-	 * 
-	 * @param actionCmd
-	 * @param enable
-	 */
-	private final void enableMenuItem(String actionCmd, boolean enable) {
-		for (int i = 0; i <= popupMenu.getComponentCount() - 1; i++) {
-			if (popupMenu.getComponent(i) instanceof JMenuItem) {
-				JMenuItem menuItem = (JMenuItem) popupMenu.getComponent(i);
-				if (actionCmd == null) {
-					menuItem.setEnabled(enable);
-				} else {
-					if (actionCmd.equals(menuItem.getActionCommand())) {
-						menuItem.setEnabled(enable);
-					} else {
-						menuItem.setEnabled(false);
-					}
-				}
-			}
-		}
-	}
-
-	private final JMenuItem createMenuItem(String title, String actionCmd) {
-		JMenuItem item = new JMenuItem(title);
-		item.setActionCommand(actionCmd);
-		item.addActionListener(this);
-		return item;
 	}
 
 	/**

@@ -21,6 +21,11 @@ public final class MultiWorkspace implements TreeNode {
 
 	private File file;
 
+	/**
+	 * Constructor - wokspace folder
+	 * 
+	 * @param workspaceFolder
+	 */
 	public MultiWorkspace(File workspaceFolder) {
 		workspaces = new ArrayList<Workspace>();
 		file = workspaceFolder;
