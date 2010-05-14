@@ -74,7 +74,7 @@ public final class WorkspaceUtilsPanel extends JTabbedPane {
 	 * @param title
 	 */
 	private final void addData(FindUsage usage, String title) {
-		UsageTreePanel panel = findUsageTreePanel("BPEL project is used");
+		UsageTreePanel panel = findUsageTreePanel(title);
 		if (panel != null) {
 			panel.addData(usage);
 		}
