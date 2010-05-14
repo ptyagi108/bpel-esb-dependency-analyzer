@@ -6,8 +6,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.List;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -66,33 +64,26 @@ public final class WorkspacePanel extends JPanel {
 	 */
 	private final ProcessStructureTree processStructureTree;
 
-	/**
-	 * path of selected bpel process
-	 */
-	// private final JTextArea txtProcessFolder;
-
 	private final JTextField txtError;
 
 	private final JTextField txtErrorWsdl;
 
-	private final DefaultListModel listDependency;
-
 	private final JTextField txtProjectPath;
 
-	private MultiWorkspace multiWorkspace;
-
+	/**
+	 * Simple panel for display utilities
+	 */
 	private WorkspaceUtilsPanel workspaceUtilsPanel;
 
 	/**
 	 * Constructor
 	 * 
-	 * @param workspace
+	 * @param multiWorkspace
 	 */
 	public WorkspacePanel(MultiWorkspace multiWorkspace) {
 		super(new BorderLayout());
-		this.multiWorkspace = multiWorkspace;
 		this.workspaceUtilsPanel = new WorkspaceUtilsPanel();
-		this.workspaceTree = new WorkspaceTree(multiWorkspace);
+		this.workspaceTree = new WorkspaceTree(multiWorkspace, workspaceUtilsPanel);
 		this.projectOperationTree = new ProjectOperationTree();
 		this.projectEsbServiceTree = new ProjectEsbServiceTree();
 		this.processStructureTree = new ProcessStructureTree(workspaceUtilsPanel);
@@ -112,16 +103,9 @@ public final class WorkspacePanel extends JPanel {
 		JPanel pBpelProject = PanelFactory.createBorderLayout();
 		pBpelProject.add(spProjectBase, BorderLayout.CENTER);
 
-		listDependency = new DefaultListModel();
-		JList list = new JList(listDependency);
-
 		JPanel pProjectDetail = PanelFactory.createBorderLayout();
 
 		pProjectDetail.add(workspaceUtilsPanel, BorderLayout.CENTER);
-		workspaceUtilsPanel.addServiceUsedIn();
-		// tabbedPane.add("Service being used in", new JScrollPane(list));
-		// pProjectDetail.add(PanelFactory.wrapWithTile("Service being used in:",
-		// new JScrollPane(list)), BorderLayout.CENTER);
 
 		spProjectBase.add(pProjectDetail);
 
@@ -181,7 +165,8 @@ public final class WorkspacePanel extends JPanel {
 				} else if (e.getPath().getLastPathComponent() instanceof BpelProject) {
 					BpelProject bpelProject = (BpelProject) e.getPath().getLastPathComponent();
 					if (bpelProject != null) {
-						selectBpelProcess(bpelProject);
+						projectOperationTree.addBpelProcessOperations(bpelProject.getBpelOperations());
+						processStructureTree.addBpelProcessStrukture(bpelProject.getBpelProcessStrukture());
 						// txtProcessFolder.setText(bpelProcess.getBpelXmlFile().getParent());
 					}
 					cardLayout.show(pCardPanel, P_BPEL_TREE);
@@ -247,16 +232,4 @@ public final class WorkspacePanel extends JPanel {
 
 	}
 
-	private final void selectBpelProcess(BpelProject bpelProcess) {
-		projectOperationTree.addBpelProcessOperations(bpelProcess.getBpelOperations());
-		processStructureTree.addBpelProcessStrukture(bpelProcess.getBpelProcessStrukture());
-
-		listDependency.clear();
-
-		List<BpelProject> listUsage = this.multiWorkspace.findBpelUsages(bpelProcess);
-		for (BpelProject usageBpelProcess : listUsage) {
-			listDependency.addElement(usageBpelProcess);
-		}
-
-	}
 }

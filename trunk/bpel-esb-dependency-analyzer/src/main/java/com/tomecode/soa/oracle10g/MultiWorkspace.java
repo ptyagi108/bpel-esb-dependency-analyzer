@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
-import com.tomecode.soa.oracle10g.bpel.BpelProject;
+import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageBpelProjectResult;
 import com.tomecode.soa.oracle10g.parser.ServiceParserException;
 
 /**
@@ -31,8 +31,9 @@ public final class MultiWorkspace implements TreeNode {
 		file = workspaceFolder;
 	}
 
-	public final void addWorkspace(Workspace w) {
-		workspaces.add(w);
+	public final void addWorkspace(Workspace workspace) {
+		workspace.setMultiWorkspace(this);
+		workspaces.add(workspace);
 	}
 
 	public void addException(File jwsFile, ServiceParserException e) {
@@ -41,22 +42,6 @@ public final class MultiWorkspace implements TreeNode {
 
 	public final List<Workspace> getWorkspaces() {
 		return workspaces;
-	}
-
-	/**
-	 * find usage for bpel process
-	 * 
-	 * @param bpelProcess
-	 * @return
-	 */
-	public final List<BpelProject> findBpelUsages(BpelProject bpelProcess) {
-		List<BpelProject> list = new ArrayList<BpelProject>();
-
-		for (Workspace workspace : workspaces) {
-			list.addAll(workspace.findBpelUsages(bpelProcess));
-		}
-
-		return list;
 	}
 
 	public final File getFile() {
@@ -96,6 +81,12 @@ public final class MultiWorkspace implements TreeNode {
 	@Override
 	public boolean isLeaf() {
 		return workspaces.isEmpty();
+	}
+
+	public final void findUsage(FindUsageBpelProjectResult usage) {
+		for (Workspace workspace : workspaces) {
+			workspace.findUsage(usage);
+		}
 	}
 
 }

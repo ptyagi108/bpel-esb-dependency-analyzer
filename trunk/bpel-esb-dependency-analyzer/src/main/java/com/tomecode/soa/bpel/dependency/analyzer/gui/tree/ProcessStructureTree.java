@@ -40,7 +40,10 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 	private WorkspaceUtilsPanel workspaceUtilsPanel;
 
 	/**
+	 * 
 	 * Constructor
+	 * 
+	 * @param workspaceUtilsPanel
 	 */
 	public ProcessStructureTree(WorkspaceUtilsPanel workspaceUtilsPanel) {
 		super();

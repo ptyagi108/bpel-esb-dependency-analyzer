@@ -5,6 +5,7 @@ import java.util.Enumeration;
 import javax.swing.tree.TreeNode;
 
 import com.tomecode.soa.oracle10g.bpel.activity.Activity;
+import com.tomecode.soa.process.Project;
 
 /**
  * 
@@ -12,6 +13,8 @@ import com.tomecode.soa.oracle10g.bpel.activity.Activity;
  * 
  */
 public final class Usage implements TreeNode {
+
+	private Project project;
 
 	private Activity activity;
 
@@ -22,6 +25,14 @@ public final class Usage implements TreeNode {
 	 */
 	public Usage(Activity activity) {
 		this.activity = activity;
+	}
+
+	public Usage(Project project) {
+		this.project = project;
+	}
+
+	public final Project getProject() {
+		return project;
 	}
 
 	public final Activity getActivity() {
@@ -64,6 +75,9 @@ public final class Usage implements TreeNode {
 	}
 
 	public final String toString() {
-		return activity.toString();
+		if (activity != null) {
+			return activity.toString();
+		}
+		return project.toString();
 	}
 }

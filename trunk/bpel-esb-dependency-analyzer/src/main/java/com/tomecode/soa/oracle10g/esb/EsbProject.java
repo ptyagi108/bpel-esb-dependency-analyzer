@@ -7,8 +7,10 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 
+import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.oracle10g.esb.BasicEsbNode.EsbNodeType;
 import com.tomecode.soa.process.Project;
 import com.tomecode.soa.process.ProjectType;
@@ -211,5 +213,10 @@ public final class EsbProject extends Project {
 			}
 		}
 
+	}
+
+	@Override
+	public final ImageIcon getIcon() {
+		return IconFactory.ESB;
 	}
 }

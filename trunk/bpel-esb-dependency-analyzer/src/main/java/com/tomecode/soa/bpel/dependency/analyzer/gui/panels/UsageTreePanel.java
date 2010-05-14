@@ -32,13 +32,12 @@ public final class UsageTreePanel extends JPanel {
 	 * 
 	 * @param result
 	 */
-	public UsageTreePanel(FindUsage result) {
+	public UsageTreePanel() {
 		setLayout(new BorderLayout());
 		basicTree = new UsageTree();
 		rendererTree = new FindUsageTreeRenderer();
 		basicTree.setCellRenderer(rendererTree);
 		add(new JScrollPane(basicTree), BorderLayout.CENTER);
-		basicTree.addData(result);
 	}
 
 	/**
@@ -69,7 +68,12 @@ public final class UsageTreePanel extends JPanel {
 				}
 			} else if (value instanceof Usage) {
 				Usage usage = (Usage) value;
-				ImageIcon icon = usage.getActivity().getActivtyType().getImageIcon();
+				ImageIcon icon = null;
+				if (usage.getActivity() != null) {
+					icon = usage.getActivity().getActivtyType().getImageIcon();
+				} else if (usage.getProject() != null) {
+					icon = usage.getProject().getIcon();
+				}
 				if (icon != null) {
 					rnd.setIcon(icon);
 				}

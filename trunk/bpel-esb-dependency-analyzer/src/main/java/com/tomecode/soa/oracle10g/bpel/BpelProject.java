@@ -5,9 +5,11 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
+import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.process.Project;
 import com.tomecode.soa.process.ProjectType;
 
@@ -139,6 +141,15 @@ public final class BpelProject extends Project {
 
 	public final BpelProcessStrukture getBpelProcessStrukture() {
 		return bpelProcessStrukture;
+	}
+
+	public final boolean compare(BpelProject bpelProject) {
+		return (bpelXmlFile.equals(bpelProject.getBpelXmlFile()));
+	}
+
+	@Override
+	public final ImageIcon getIcon() {
+		return IconFactory.PROCESS;
 	}
 
 }

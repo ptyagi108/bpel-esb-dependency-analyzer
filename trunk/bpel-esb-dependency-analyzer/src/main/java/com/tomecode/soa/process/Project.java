@@ -1,6 +1,9 @@
 package com.tomecode.soa.process;
 
+import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
+
+import com.tomecode.soa.oracle10g.Workspace;
 
 /**
  * 
@@ -11,6 +14,7 @@ import javax.swing.tree.TreeNode;
  */
 public abstract class Project implements TreeNode {
 
+	private Workspace workspace;
 	/**
 	 * if true then project is in *.jws
 	 */
@@ -45,5 +49,15 @@ public abstract class Project implements TreeNode {
 	public final void setInJws(boolean isInJws) {
 		this.isInJws = isInJws;
 	}
+
+	public final Workspace getWorkspace() {
+		return workspace;
+	}
+
+	public final void setWorkspace(Workspace workspace) {
+		this.workspace = workspace;
+	}
+
+	public abstract ImageIcon getIcon();
 
 }

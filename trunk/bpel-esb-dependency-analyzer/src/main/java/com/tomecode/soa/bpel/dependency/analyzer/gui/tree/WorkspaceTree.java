@@ -11,7 +11,9 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import com.tomecode.soa.bpel.dependency.analyzer.gui.panels.WorkspaceUtilsPanel;
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
+import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageBpelProjectResult;
 import com.tomecode.soa.oracle10g.MultiWorkspace;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.esb.EsbProject;
@@ -27,11 +29,16 @@ public final class WorkspaceTree extends BasicTree {
 
 	private static final long serialVersionUID = -14952772269846358L;
 
+	private WorkspaceUtilsPanel workspaceUtilsPanel;
+
 	/**
 	 * Constructor
+	 * 
+	 * @param workspaceUtilsPanel
 	 */
-	public WorkspaceTree() {
+	private WorkspaceTree(WorkspaceUtilsPanel workspaceUtilsPanel) {
 		super();
+		this.workspaceUtilsPanel = workspaceUtilsPanel;
 		setRootVisible(false);
 		setCellRenderer(new WorkspaceTreeRenderer());
 		createMenuItem("Find Usage for BPEL project", "findUsageBpelProject");
@@ -42,8 +49,8 @@ public final class WorkspaceTree extends BasicTree {
 	 * 
 	 * @param multiWorkspace
 	 */
-	public WorkspaceTree(MultiWorkspace multiWorkspace) {
-		this();
+	public WorkspaceTree(MultiWorkspace multiWorkspace, WorkspaceUtilsPanel workspaceUtilsPanel) {
+		this(workspaceUtilsPanel);
 		treeModel.setRoot(multiWorkspace);
 		expandProjectNodes(new TreePath(multiWorkspace));
 	}
@@ -98,7 +105,17 @@ public final class WorkspaceTree extends BasicTree {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand().equals("findUsageBpelProject")) {
+			BpelProject bpelProject = (BpelProject) getSelectionPath().getLastPathComponent();
 
+			FindUsageBpelProjectResult usage = new FindUsageBpelProjectResult(bpelProject);
+			if (bpelProject.getWorkspace().getMultiWorkspace() != null) {
+				bpelProject.getWorkspace().getMultiWorkspace().findUsage(usage);
+			} else {
+				bpelProject.getWorkspace().findUsage(usage);
+			}
+			workspaceUtilsPanel.showFindUsageBpelProject(usage);
+		}
 	}
 
 	@Override

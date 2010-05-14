@@ -1,13 +1,12 @@
 package com.tomecode.soa.oracle10g;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Vector;
 
 import javax.swing.tree.TreeNode;
 
+import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageBpelProjectResult;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
 import com.tomecode.soa.process.Project;
@@ -20,6 +19,11 @@ import com.tomecode.soa.process.ProjectType;
  * 
  */
 public final class Workspace implements TreeNode {
+
+	/**
+	 * owner
+	 */
+	private MultiWorkspace multiWorkspace;
 
 	private String name;
 
@@ -49,8 +53,9 @@ public final class Workspace implements TreeNode {
 		return projects;
 	}
 
-	public final void addProject(Project service) {
-		this.projects.add(service);
+	public final void addProject(Project project) {
+		project.setWorkspace(this);
+		this.projects.add(project);
 	}
 
 	public final File getFile() {
@@ -92,34 +97,6 @@ public final class Workspace implements TreeNode {
 		return projects.isEmpty();
 	}
 
-	/**
-	 * find usage for bpel process (only bpel )
-	 * 
-	 * @param usage
-	 * @return
-	 */
-	public final List<BpelProject> findBpelUsages(BpelProject usage) {
-		List<BpelProject> list = new ArrayList<BpelProject>();
-
-		for (Project project : projects) {
-			if (project.getType() == ProjectType.ORACLE10G_BPEL) {
-				BpelProject bpel = (BpelProject) project;
-				if (!bpel.equals(usage)) {
-					for (PartnerLinkBinding partnerLinkBinding : bpel.getPartnerLinkBindings()) {
-						if (partnerLinkBinding.getDependencyProject() != null) {
-							if (partnerLinkBinding.getDependencyProject().equals(usage)) {
-								list.add(partnerLinkBinding.getParent());
-							}
-						}
-					}
-				}
-			}
-		}
-
-		return list;
-		// return new ArrayList<Bpel>();
-	}
-
 	public final String toString() {
 		return name;
 	}
@@ -131,4 +108,39 @@ public final class Workspace implements TreeNode {
 	public final void setName(String name) {
 		this.name = name;
 	}
+
+	public final MultiWorkspace getMultiWorkspace() {
+		return multiWorkspace;
+	}
+
+	public final void setMultiWorkspace(MultiWorkspace multiWorkspace) {
+		this.multiWorkspace = multiWorkspace;
+	}
+
+	/**
+	 * where bpel process is used...
+	 * 
+	 * @param usage
+	 */
+	public final void findUsage(FindUsageBpelProjectResult usage) {
+		for (Project project : projects) {
+			if (project.getType() == ProjectType.ORACLE10G_BPEL) {
+				BpelProject bpel = (BpelProject) project;
+				if (!bpel.compare(usage.getBpelProject())) {
+					for (PartnerLinkBinding partnerLinkBinding : bpel.getPartnerLinkBindings()) {
+						if (partnerLinkBinding.getDependencyProject() != null) {
+							if (partnerLinkBinding.getDependencyProject() instanceof BpelProject) {
+								if (((BpelProject) partnerLinkBinding.getDependencyProject()).compare(usage.getBpelProject())) {
+									usage.addUsage(partnerLinkBinding.getParent());
+								}
+							}
+
+						}
+					}
+				}
+			}
+		}
+
+	}
+
 }
