@@ -15,13 +15,16 @@ import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.Operation;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
 import com.tomecode.soa.oracle10g.bpel.activity.Activity;
+import com.tomecode.soa.oracle10g.bpel.activity.Assign;
 import com.tomecode.soa.oracle10g.bpel.activity.Case;
 import com.tomecode.soa.oracle10g.bpel.activity.CaseOtherwise;
 import com.tomecode.soa.oracle10g.bpel.activity.Catch;
 import com.tomecode.soa.oracle10g.bpel.activity.Email;
 import com.tomecode.soa.oracle10g.bpel.activity.Fax;
+import com.tomecode.soa.oracle10g.bpel.activity.FlowN;
 import com.tomecode.soa.oracle10g.bpel.activity.HumanTask;
 import com.tomecode.soa.oracle10g.bpel.activity.Invoke;
+import com.tomecode.soa.oracle10g.bpel.activity.OnAlarm;
 import com.tomecode.soa.oracle10g.bpel.activity.OnMessage;
 import com.tomecode.soa.oracle10g.bpel.activity.PartnerLink;
 import com.tomecode.soa.oracle10g.bpel.activity.Receive;
@@ -31,6 +34,10 @@ import com.tomecode.soa.oracle10g.bpel.activity.Throw;
 import com.tomecode.soa.oracle10g.bpel.activity.Transform;
 import com.tomecode.soa.oracle10g.bpel.activity.Variable;
 import com.tomecode.soa.oracle10g.bpel.activity.Voice;
+import com.tomecode.soa.oracle10g.bpel.activity.Wait;
+import com.tomecode.soa.oracle10g.bpel.activity.While;
+import com.tomecode.soa.oracle10g.bpel.activity.Assign.AssignOperation;
+import com.tomecode.soa.oracle10g.bpel.activity.Assign.OperationType;
 
 /**
  * Parser for Oracle 10g BPEL process
@@ -78,6 +85,7 @@ public final class BpelParser extends AbstractParser {
 			bpelXmlFile = new File(file + File.separator + "bpel" + File.separator + "bpel.xml");
 		}
 
+		System.out.println(bpelXmlFile);
 		Element bpelXml = parseXml(bpelXmlFile);
 		return parseBpelXml(bpelXml, bpelXmlFile);
 	}
@@ -152,8 +160,8 @@ public final class BpelParser extends AbstractParser {
 	private final void parseBpelProcessActivities(List<?> elements, Activity root, BpelProcessStrukture strukture) {
 		for (Object e : elements) {
 			Element element = (Element) e;
-			if (element.getName().equals("sequence") || element.getName().equals("switch") || element.getName().equals("flow") || element.getName().equals("flowN") || element.getName().equals("faultHandlers") || element.getName().equals("eventHandlers")
-					|| element.getName().equals("catchAll") || element.getName().equals("onAlarm") || element.getName().equals("compensationHandler") || element.getName().equals("pick") || element.getName().equals("variables") || element.getName().equals("partnerLinks")) {
+			if (element.getName().equals("sequence") || element.getName().equals("switch") || element.getName().equals("flow") || element.getName().equals("faultHandlers") || element.getName().equals("eventHandlers") || element.getName().equals("catchAll")
+					|| element.getName().equals("compensationHandler") || element.getName().equals("pick") || element.getName().equals("variables") || element.getName().equals("partnerLinks")) {
 				Activity activity = new Activity(element.getName(), element.attributeValue("name"));
 				root.addActivity(activity);
 				parseBpelProcessActivities(element.elements(), activity, strukture);
@@ -180,35 +188,23 @@ public final class BpelParser extends AbstractParser {
 				root.addActivity(catchActivity);
 				parseBpelProcessActivities(element.elements(), catchActivity, strukture);
 			} else if (element.getName().equals("assign")) {
-				Element eAnnotation = element.element("annotation");
-				if (eAnnotation != null) {
-					Element ePattern = eAnnotation.element("pattern");
-					if (ePattern != null && "transformation".equals(ePattern.getText())) {
-						Transform transform = new Transform(element.attributeValue("name"), null, null);
-						root.addActivity(transform);
-					} else {
-						Activity activity = new Activity(element.getName(), element.attributeValue("name"));
-						root.addActivity(activity);
-					}
-
-				} else {
-					Activity activity = new Activity(element.getName(), element.attributeValue("name"));
-					root.addActivity(activity);
-				}
+				parseAssignActivity(element, root);
 			} else if (element.getName().equals("case")) {
 				Element eAnnotation = element.element("annotation");
 				if (eAnnotation != null) {
 					Element ePattern = eAnnotation.element("pattern");
 					if (ePattern != null) {
 						if (ePattern.attributeValue("patternName") != null && "case".equals(ePattern.attributeValue("patternName"))) {
-							Case caseActivity = new Case(ePattern.getText());
+							Case caseActivity = new Case(ePattern.getText(), getVariableFromExpression(element.attributeValue("condition")));
 							root.addActivity(caseActivity);
 							parseBpelProcessActivities(element.elements(), caseActivity, strukture);
 						}
 					}
 				} else {
-					Activity activity = new Activity(element.getName(), element.attributeValue("name"));
-					root.addActivity(activity);
+					Case caseActivity = new Case(element.getName(), getVariableFromExpression(element.attributeValue("condition")));
+					root.addActivity(caseActivity);
+					parseBpelProcessActivities(element.elements(), caseActivity, strukture);
+
 				}
 			} else if (element.getName().equals("otherwise")) {
 				CaseOtherwise caseOtherwise = new CaseOtherwise("otherwise");
@@ -217,6 +213,30 @@ public final class BpelParser extends AbstractParser {
 
 			} else if (element.getName().equals("scope")) {
 				parseSpecialScopes(element, root, strukture);
+			} else if (element.getName().equals("onAlarm")) {
+				String variable = getVariableFromExpression(element.attributeValue("until"));
+				if (variable == null) {
+					variable = getVariableFromExpression(element.attributeValue("for"));
+				}
+				OnAlarm onAlarm = new OnAlarm(variable);
+				root.addActivity(onAlarm);
+				parseBpelProcessActivities(element.elements(), onAlarm, strukture);
+			} else if (element.getName().equals("wait")) {
+				String variable = getVariableFromExpression(element.attributeValue("until"));
+				if (variable == null) {
+					variable = getVariableFromExpression(element.attributeValue("for"));
+				}
+				Wait wait = new Wait(element.attributeValue("name"), variable);
+				root.addActivity(wait);
+
+			} else if (element.getName().equals("while")) {
+				While whileActivity = new While(element.attributeValue("name"), getVariableFromExpression(element.attributeValue("condition")));
+				root.addActivity(whileActivity);
+				parseBpelProcessActivities(element.elements(), whileActivity, strukture);
+			} else if (element.getName().equals("flowN")) {
+				FlowN flowN = new FlowN(element.attributeValue("name"), getVariableFromExpression(element.attributeValue("N")), element.attributeValue("indexVariable"));
+				root.addActivity(flowN);
+				parseBpelProcessActivities(element.elements(), flowN, strukture);
 			} else if (element.getName().equals("annotation")) {
 				//
 			} else {
@@ -224,6 +244,150 @@ public final class BpelParser extends AbstractParser {
 				root.addActivity(activity);
 			}
 		}
+	}
+
+	/**
+	 * parse assing activity
+	 * 
+	 * @param element
+	 * @param root
+	 */
+	private final void parseAssignActivity(Element element, Activity root) {
+		Element eAnnotation = element.element("annotation");
+		if (eAnnotation != null) {
+			Element ePattern = eAnnotation.element("pattern");
+			if (ePattern != null && "transformation".equals(ePattern.getText())) {
+				Transform transform = parseTransform(element);// new
+				// Transform(element.attributeValue("name"),
+				// null, null);
+				root.addActivity(transform);
+			} else {
+				Assign assign = new Assign(element.attributeValue("name"));
+				parseAssignOperation(assign, element);
+				root.addActivity(assign);
+			}
+
+		} else {
+			Assign assign = new Assign(element.attributeValue("name"));
+			parseAssignOperation(assign, element);
+			root.addActivity(assign);
+		}
+
+	}
+
+	/**
+	 * pase operation in assign
+	 * 
+	 * @param assign
+	 * @param element
+	 */
+	private final void parseAssignOperation(Assign assign, Element eAssign) {
+		List<?> list = eAssign.elements();
+		for (Object e : list) {
+			Element eOperation = (Element) e;
+			// System.out.println(eOperation.getName());
+			if (eOperation.getName().equals("copy")) {
+				assign.addOperations(parseOperationCopyInAssign(OperationType.COPY, eOperation));
+			} else if (eOperation.getName().equals("append")) {
+				assign.addOperations(parseOperationCopyInAssign(OperationType.APPEND, eOperation));
+			} else if (eOperation.getName().equals("insertAfter")) {
+				assign.addOperations(parseOperationCopyInAssign(OperationType.INSERT_AFTER, eOperation));
+			} else if (eOperation.getName().equals("insertBefore")) {
+				assign.addOperations(parseOperationCopyInAssign(OperationType.INSERT_BEFORE, eOperation));
+			} else if (eOperation.getName().equals("copyList")) {
+				assign.addOperations(parseOperationCopyInAssign(OperationType.COPYLIST, eOperation));
+			} else if (eOperation.getName().equals("remove")) {
+				assign.addOperations(parseOperationCopyInAssign(OperationType.REMOVE, eOperation));
+			} else if (eOperation.getName().equals("rename")) {
+				assign.addOperations(parseOperationCopyInAssign(OperationType.RENAME, eOperation));
+			}
+
+		}
+	}
+
+	/**
+	 * parse expresion
+	 * 
+	 * @param expression
+	 * @return
+	 */
+	private final String getVariableFromExpression(String expression) {
+		if (expression != null) {
+			int index = expression.indexOf("getVariableData('");
+			if (index != -1) {
+				expression = expression.substring(index + "getVariableData('".length());
+				index = expression.indexOf("'");
+				if (index != -1) {
+					return expression.substring(0, index);
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * parse {@link Transform} activity
+	 * 
+	 * @param element
+	 * @return
+	 */
+	private final Transform parseTransform(Element element) {
+		String name = element.attributeValue("name");
+		String fromVariable = null, toVariable = null;
+
+		Element eCopy = element.element("copy");
+		if (eCopy == null) {
+			return new Transform(name, fromVariable, toVariable);
+		}
+
+		Element eFrom = eCopy.element("from");
+
+		if (eFrom != null) {
+			if (eFrom.attributeValue("variable") != null) {
+				fromVariable = eFrom.attributeValue("variable");
+			} else if (eFrom.attributeValue("expression") != null) {
+				fromVariable = eFrom.attributeValue("expression");
+				if (fromVariable != null) {
+					fromVariable = getVariableFromExpression(fromVariable);
+				}
+			}
+		}
+
+		Element eTo = eCopy.element("to");
+		if (eTo != null) {
+			toVariable = eTo.attributeValue("variable");
+		}
+
+		return new Transform(name, fromVariable, toVariable);
+	}
+
+	/**
+	 * parse assign operation = copy
+	 * 
+	 * @param eOperation
+	 * @return
+	 */
+	private final AssignOperation parseOperationCopyInAssign(OperationType type, Element eOperation) {
+		Element eFrom = eOperation.element("from");
+
+		String from = null;
+		if (eFrom != null) {
+			if (eFrom.attributeValue("variable") != null) {
+				from = eFrom.attributeValue("variable");
+			} else if (eFrom.attributeValue("expression") != null) {
+				from = eFrom.attributeValue("expression");
+				if (from != null) {
+					from = getVariableFromExpression(from);
+				}
+
+			}
+		}
+		String to = null;
+		Element eTo = eOperation.element("to");
+		if (eTo != null) {
+			to = eTo.attributeValue("variable");
+		}
+		return new AssignOperation(type, from, to);
 	}
 
 	/**
@@ -254,13 +418,14 @@ public final class BpelParser extends AbstractParser {
 					return new Transform(element.attributeValue("name"), null, null);
 				}
 			}
+			return new Assign(element.attributeValue("name"));
 		} else if (element.getName().equals("case")) {
 			Element eAnnotation = element.element("annotation");
 			if (eAnnotation != null) {
 				Element ePattern = eAnnotation.element("pattern");
 				if (ePattern != null) {
 					if (ePattern.attributeValue("patternName") != null && "case".equals(ePattern.attributeValue("patternName"))) {
-						return new Case(ePattern.getText());
+						return new Case(ePattern.getText(), getVariableFromExpression(element.attributeValue("condition")));
 					}
 				}
 			}
@@ -287,6 +452,14 @@ public final class BpelParser extends AbstractParser {
 					}
 				}
 			}
+		} else if (element.getName().equals("onAlarm")) {
+			return new OnAlarm(null);
+		} else if (element.getName().equals("wait")) {
+			return new Wait(element.attributeValue("name"), null);
+		} else if (element.getName().equals("while")) {
+			return new While(element.attributeValue("name"), null);
+		} else if (element.getName().equals("flowN")) {
+			return new FlowN(element.attributeValue("name"), null, null);
 		}
 
 		return new Activity(element.getName(), element.attributeValue("name"));

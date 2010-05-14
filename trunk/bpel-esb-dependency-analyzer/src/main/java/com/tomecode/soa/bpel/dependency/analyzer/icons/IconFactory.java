@@ -42,6 +42,9 @@ public final class IconFactory {
 	public static final ImageIcon PARTNERLINK = new ImageIcon(IconFactory.class.getResource("partnerLink.gif"));
 	public static final ImageIcon VARIABLE = new ImageIcon(IconFactory.class.getResource("variable.gif"));
 	public static final ImageIcon HUMANTASK = new ImageIcon(IconFactory.class.getResource("humanTask.gif"));
+	public static final ImageIcon TRANSFORM = new ImageIcon(IconFactory.class.getResource("transform.gif"));
+	public static final ImageIcon WAIT = new ImageIcon(IconFactory.class.getResource("wait.gif"));
+	public static final ImageIcon WHILE = new ImageIcon(IconFactory.class.getResource("while.gif"));
 
 	private IconFactory() {
 	}

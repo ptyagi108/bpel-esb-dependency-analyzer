@@ -17,7 +17,4 @@ public final class Email extends Activity {
 		super(ActivityType.EMAIL, name);
 	}
 
-	// public final String toString() {
-	// return (name != null ? name : super.toString());
-	// }
 }

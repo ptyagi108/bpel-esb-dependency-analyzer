@@ -1,5 +1,7 @@
 package com.tomecode.soa.oracle10g.bpel.activity;
 
+import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageVariableResult;
+
 /**
  * Transform activity in bpel process
  * 
@@ -32,7 +34,12 @@ public final class Transform extends Activity {
 		return toVariable;
 	}
 
-	// public final String toString() {
-	// return (name != null ? name : super.toString());
-	// }
+	public final void findVariable(FindUsageVariableResult usage) {
+		if (fromVariable != null && fromVariable.equals(usage.getVariable().toString())) {
+			usage.addUsage(this);
+		} else if (toVariable != null && toVariable.equals(usage.getVariable().toString())) {
+			usage.addUsage(this);
+		}
+	}
+
 }

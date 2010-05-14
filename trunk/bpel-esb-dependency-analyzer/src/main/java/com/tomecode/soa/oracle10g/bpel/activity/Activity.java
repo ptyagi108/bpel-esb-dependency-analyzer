@@ -48,11 +48,17 @@ public class Activity implements TreeNode {
 	public Activity(String type) {
 		this();
 		this.type = type;
+		if ("case".equals(type)) {
+			toString();
+		}
 		this.activtyType = ActivityType.parseActivtyType(type);
 	}
 
 	public Activity(String type, String name) {
 		this(type);
+		if ("case".equals(type)) {
+			toString();
+		}
 		this.name = name;
 	}
 
@@ -60,6 +66,9 @@ public class Activity implements TreeNode {
 		this();
 		this.activtyType = type;
 		this.type = activtyType.toString();
+		if ("case".equals(type.toString())) {
+			toString();
+		}
 		this.name = name;
 	}
 
@@ -133,13 +142,16 @@ public class Activity implements TreeNode {
 			if (activity.getActivtyType() != null) {
 				if (activity.getActivtyType().isContainsVariable()) {
 					findVariableInActivty(findUsageVariableResult, activity);
-				} else {
-					activity.findUsage(findUsageVariableResult);
 				}
-			} else {
-				activity.findUsage(findUsageVariableResult);
 			}
+
+			activity.findVariable(findUsageVariableResult);
+			activity.findUsage(findUsageVariableResult);
 		}
+	}
+
+	public void findVariable(FindUsageVariableResult findUsageVariableResult) {
+
 	}
 
 	/**
@@ -152,12 +164,9 @@ public class Activity implements TreeNode {
 			if (activity.getActivtyType() != null) {
 				if (activity.getActivtyType().isContainsVariable()) {
 					findPartnerLinkInActivty(findUsagePartnerLinkResult, activity);
-				} else {
-					activity.findUsage(findUsagePartnerLinkResult);
 				}
-			} else {
-				activity.findUsage(findUsagePartnerLinkResult);
 			}
+			activity.findUsage(findUsagePartnerLinkResult);
 		}
 	}
 

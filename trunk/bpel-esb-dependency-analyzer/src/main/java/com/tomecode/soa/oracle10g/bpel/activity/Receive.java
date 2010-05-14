@@ -43,8 +43,4 @@ public final class Receive extends Activity {
 		return variable;
 	}
 
-	// public final String toString() {
-	// return (name != null ? name : super.toString());
-	// }
-
 }

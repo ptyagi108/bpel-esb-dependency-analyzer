@@ -36,7 +36,18 @@ public final class FindUsageVariableResult implements FindUsage {
 	}
 
 	public void addUsage(Activity activity) {
-		activities.add(new Usage(activity));
+		if (!contains(activity)) {
+			activities.add(new Usage(activity));
+		}
+	}
+
+	private final boolean contains(Activity activity) {
+		for (Usage usage : activities) {
+			if (usage.getActivity().equals(activity)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

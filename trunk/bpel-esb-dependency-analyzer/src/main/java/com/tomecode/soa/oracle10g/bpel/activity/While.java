@@ -3,23 +3,22 @@ package com.tomecode.soa.oracle10g.bpel.activity;
 import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageVariableResult;
 
 /**
- * case from switch in bpel process
+ * wait activity in bpel process
  * 
  * @author Tomas Frastia
  * 
  */
-public final class Case extends Activity {
+public final class While extends Activity {
 
 	private String variable;
 
 	/**
 	 * Constructor
 	 * 
-	 * @param name
 	 * @param variable
 	 */
-	public Case(String name, String variable) {
-		super(ActivityType.CASE, name);
+	public While(String name, String variable) {
+		super(ActivityType.WHILE, name);
 		this.variable = variable;
 	}
 
@@ -28,5 +27,4 @@ public final class Case extends Activity {
 			findUsageVariableResult.addUsage(this);
 		}
 	}
-
 }

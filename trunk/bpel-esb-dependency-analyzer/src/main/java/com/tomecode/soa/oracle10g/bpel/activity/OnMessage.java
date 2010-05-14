@@ -1,5 +1,7 @@
 package com.tomecode.soa.oracle10g.bpel.activity;
 
+import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageVariableResult;
+
 /**
  * OnMessage actvity in bpel process
  * 
@@ -44,6 +46,12 @@ public final class OnMessage extends Activity {
 
 	public final String getOperation() {
 		return operation;
+	}
+
+	public final void findVariable(FindUsageVariableResult findUsageVariableResult) {
+		if (variable != null && findUsageVariableResult.getVariable().toString().equals(variable)) {
+			findUsageVariableResult.addUsage(this);
+		}
 	}
 
 }

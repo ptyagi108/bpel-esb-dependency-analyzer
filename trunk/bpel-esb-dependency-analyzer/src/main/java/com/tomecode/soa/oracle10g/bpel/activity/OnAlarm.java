@@ -3,23 +3,17 @@ package com.tomecode.soa.oracle10g.bpel.activity;
 import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageVariableResult;
 
 /**
- * case from switch in bpel process
+ * onAlarm activity in bpel process
  * 
  * @author Tomas Frastia
  * 
  */
-public final class Case extends Activity {
+public final class OnAlarm extends Activity {
 
 	private String variable;
 
-	/**
-	 * Constructor
-	 * 
-	 * @param name
-	 * @param variable
-	 */
-	public Case(String name, String variable) {
-		super(ActivityType.CASE, name);
+	public OnAlarm(String variable) {
+		super(ActivityType.ONALARM, null);
 		this.variable = variable;
 	}
 
@@ -28,5 +22,4 @@ public final class Case extends Activity {
 			findUsageVariableResult.addUsage(this);
 		}
 	}
-
 }
