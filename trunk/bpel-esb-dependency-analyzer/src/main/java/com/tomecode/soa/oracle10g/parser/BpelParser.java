@@ -26,6 +26,7 @@ import com.tomecode.soa.oracle10g.bpel.activity.HumanTask;
 import com.tomecode.soa.oracle10g.bpel.activity.Invoke;
 import com.tomecode.soa.oracle10g.bpel.activity.OnAlarm;
 import com.tomecode.soa.oracle10g.bpel.activity.OnMessage;
+import com.tomecode.soa.oracle10g.bpel.activity.Pager;
 import com.tomecode.soa.oracle10g.bpel.activity.PartnerLink;
 import com.tomecode.soa.oracle10g.bpel.activity.Receive;
 import com.tomecode.soa.oracle10g.bpel.activity.Reply;
@@ -446,6 +447,8 @@ public final class BpelParser extends AbstractParser {
 							return new Sms(element.attributeValue("name"));
 						} else if (patternName.endsWith(":voice")) {
 							return new Voice(element.attributeValue("name"));
+						} else if (patternName.endsWith(":pager")) {
+							return new Pager(element.attributeValue("name"));
 						} else if (patternName.endsWith(":workflow")) {
 							return new HumanTask(element.attributeValue("name"));
 						}
@@ -498,6 +501,11 @@ public final class BpelParser extends AbstractParser {
 						Voice voice = new Voice(element.attributeValue("name"));
 						root.addActivity(voice);
 						parseBpelProcessActivities(element.elements(), voice, strukture);
+						return;
+					} else if (patternName.endsWith(":pager")) {
+						Pager pager = new Pager(element.attributeValue("name"));
+						root.addActivity(pager);
+						parseBpelProcessActivities(element.elements(), pager, strukture);
 						return;
 					} else if (patternName.endsWith(":workflow")) {
 						HumanTask humanTask = new HumanTask(element.attributeValue("name"));
