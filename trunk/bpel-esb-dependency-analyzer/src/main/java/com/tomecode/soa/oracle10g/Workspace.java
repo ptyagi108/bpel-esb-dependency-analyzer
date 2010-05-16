@@ -3,7 +3,11 @@ package com.tomecode.soa.oracle10g;
 import java.io.File;
 import java.util.List;
 
+import javax.swing.ImageIcon;
+
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.BasicNode;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
+import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageProjectResult;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
@@ -18,7 +22,7 @@ import com.tomecode.soa.project.ProjectType;
  * @author Tomas Frastia
  * 
  */
-public final class Workspace extends BasicNode<Project> {
+public final class Workspace extends BasicNode<Project> implements IconNode {
 
 	/**
 	 * owner
@@ -127,6 +131,11 @@ public final class Workspace extends BasicNode<Project> {
 				// esbSvc.getEsbOperations().get(0).get
 			}
 		}
+	}
+
+	@Override
+	public ImageIcon getIcon() {
+		return IconFactory.WORKSPACE;
 	}
 
 }

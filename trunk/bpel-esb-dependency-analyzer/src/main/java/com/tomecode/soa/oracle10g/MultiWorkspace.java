@@ -3,7 +3,11 @@ package com.tomecode.soa.oracle10g;
 import java.io.File;
 import java.util.List;
 
+import javax.swing.ImageIcon;
+
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.BasicNode;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
+import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageProjectResult;
 import com.tomecode.soa.oracle10g.parser.ServiceParserException;
 
@@ -12,7 +16,7 @@ import com.tomecode.soa.oracle10g.parser.ServiceParserException;
  * 
  * @author Tomas Frastia
  */
-public final class MultiWorkspace extends BasicNode<Workspace> {
+public final class MultiWorkspace extends BasicNode<Workspace> implements IconNode {
 
 	/**
 	 * workspace folder
@@ -68,6 +72,11 @@ public final class MultiWorkspace extends BasicNode<Workspace> {
 		for (Workspace workspace : childs) {
 			workspace.findUsageEsb(usage);
 		}
+	}
+
+	@Override
+	public ImageIcon getIcon() {
+		return IconFactory.WORKSPACE;
 	}
 
 }
