@@ -134,7 +134,7 @@ public final class Operation implements TreeNode, IconNode {
 	}
 
 	public final String toString() {
-		return name + (operation == null ? "" : ":" + operation);
+		return name + (operation == null ? "" : " - " + operation);
 	}
 
 	@Override
