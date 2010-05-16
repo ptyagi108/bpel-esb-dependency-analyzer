@@ -12,8 +12,8 @@ import javax.swing.tree.TreeCellRenderer;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.UsageTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
-import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsage;
-import com.tomecode.soa.bpel.dependency.analyzer.utils.Usage;
+import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsage;
+import com.tomecode.soa.bpel.dependency.analyzer.usages.Usage;
 
 /**
  * 

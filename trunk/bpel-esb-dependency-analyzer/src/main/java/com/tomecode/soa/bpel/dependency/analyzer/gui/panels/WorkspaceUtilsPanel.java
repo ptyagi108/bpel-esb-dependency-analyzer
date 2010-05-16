@@ -2,10 +2,10 @@ package com.tomecode.soa.bpel.dependency.analyzer.gui.panels;
 
 import javax.swing.JTabbedPane;
 
-import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsage;
-import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageProjectResult;
-import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsagePartnerLinkResult;
-import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageVariableResult;
+import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsage;
+import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsagePartnerLinkResult;
+import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageProjectResult;
+import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageVariableResult;
 
 /**
  * 

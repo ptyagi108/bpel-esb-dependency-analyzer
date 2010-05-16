@@ -15,8 +15,8 @@ import javax.swing.tree.TreePath;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.panels.WorkspaceUtilsPanel;
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
-import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsagePartnerLinkResult;
-import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageVariableResult;
+import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsagePartnerLinkResult;
+import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageVariableResult;
 import com.tomecode.soa.oracle10g.bpel.BpelProcessStrukture;
 import com.tomecode.soa.oracle10g.bpel.activity.Activity;
 import com.tomecode.soa.oracle10g.bpel.activity.PartnerLink;

@@ -1,4 +1,4 @@
-package com.tomecode.soa.bpel.dependency.analyzer.utils;
+package com.tomecode.soa.bpel.dependency.analyzer.usages;
 
 import java.util.Enumeration;
 

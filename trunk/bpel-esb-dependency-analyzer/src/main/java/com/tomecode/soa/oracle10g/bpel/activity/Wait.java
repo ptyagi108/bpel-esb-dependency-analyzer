@@ -1,6 +1,6 @@
 package com.tomecode.soa.oracle10g.bpel.activity;
 
-import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageVariableResult;
+import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageVariableResult;
 
 /**
  * wait activity in bpel process

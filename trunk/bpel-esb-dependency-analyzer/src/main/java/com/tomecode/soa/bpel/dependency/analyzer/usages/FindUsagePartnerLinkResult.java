@@ -1,4 +1,4 @@
-package com.tomecode.soa.bpel.dependency.analyzer.utils;
+package com.tomecode.soa.bpel.dependency.analyzer.usages;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -7,35 +7,36 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 
-import com.tomecode.soa.project.Project;
+import com.tomecode.soa.oracle10g.bpel.activity.Activity;
+import com.tomecode.soa.oracle10g.bpel.activity.PartnerLink;
 
 /**
  * 
  * @author Tomas Frastia
  * 
  */
-public final class FindUsageProjectResult implements FindUsage {
+public final class FindUsagePartnerLinkResult implements FindUsage {
 
-	private final Project project;
+	private PartnerLink partnerLink;
 
 	private List<Usage> activities;
 
 	/**
 	 * Constructor
 	 * 
-	 * @param bpelProject
+	 * @param variable
 	 */
-	public FindUsageProjectResult(Project project) {
-		this.project = project;
+	public FindUsagePartnerLinkResult(PartnerLink partnerLink) {
+		this.partnerLink = partnerLink;
 		this.activities = new ArrayList<Usage>();
 	}
 
-	public final Project getProject() {
-		return project;
+	public final PartnerLink getPartnerLink() {
+		return partnerLink;
 	}
 
-	public void addUsage(Project project) {
-		activities.add(new Usage(project));
+	public void addUsage(Activity activity) {
+		activities.add(new Usage(activity));
 	}
 
 	@Override
@@ -74,11 +75,11 @@ public final class FindUsageProjectResult implements FindUsage {
 	}
 
 	public final String toString() {
-		return project.toString();
+		return partnerLink.toString();
 	}
 
 	@Override
 	public final ImageIcon getIcon() {
-		return project.getIcon();
+		return partnerLink.getActivtyType().getImageIcon();
 	}
 }

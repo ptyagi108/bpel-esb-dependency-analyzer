@@ -3,8 +3,8 @@ package com.tomecode.soa.oracle10g.bpel.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsagePartnerLinkResult;
-import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageVariableResult;
+import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsagePartnerLinkResult;
+import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageVariableResult;
 
 /**
  * Assign in bpel process

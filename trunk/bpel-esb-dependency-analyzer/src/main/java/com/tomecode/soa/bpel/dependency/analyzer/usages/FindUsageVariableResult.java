@@ -1,4 +1,4 @@
-package com.tomecode.soa.bpel.dependency.analyzer.utils;
+package com.tomecode.soa.bpel.dependency.analyzer.usages;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -8,16 +8,16 @@ import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 
 import com.tomecode.soa.oracle10g.bpel.activity.Activity;
-import com.tomecode.soa.oracle10g.bpel.activity.PartnerLink;
+import com.tomecode.soa.oracle10g.bpel.activity.Variable;
 
 /**
  * 
  * @author Tomas Frastia
  * 
  */
-public final class FindUsagePartnerLinkResult implements FindUsage {
+public final class FindUsageVariableResult implements FindUsage {
 
-	private PartnerLink partnerLink;
+	private Variable variable;
 
 	private List<Usage> activities;
 
@@ -26,17 +26,28 @@ public final class FindUsagePartnerLinkResult implements FindUsage {
 	 * 
 	 * @param variable
 	 */
-	public FindUsagePartnerLinkResult(PartnerLink partnerLink) {
-		this.partnerLink = partnerLink;
+	public FindUsageVariableResult(Variable variable) {
+		this.variable = variable;
 		this.activities = new ArrayList<Usage>();
 	}
 
-	public final PartnerLink getPartnerLink() {
-		return partnerLink;
+	public final Variable getVariable() {
+		return variable;
 	}
 
 	public void addUsage(Activity activity) {
-		activities.add(new Usage(activity));
+		if (!contains(activity)) {
+			activities.add(new Usage(activity));
+		}
+	}
+
+	private final boolean contains(Activity activity) {
+		for (Usage usage : activities) {
+			if (usage.getActivity().equals(activity)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -75,11 +86,12 @@ public final class FindUsagePartnerLinkResult implements FindUsage {
 	}
 
 	public final String toString() {
-		return partnerLink.toString();
+		return variable.toString();
 	}
 
 	@Override
 	public final ImageIcon getIcon() {
-		return partnerLink.getActivtyType().getImageIcon();
+		return variable.getActivtyType().getImageIcon();
 	}
+
 }
