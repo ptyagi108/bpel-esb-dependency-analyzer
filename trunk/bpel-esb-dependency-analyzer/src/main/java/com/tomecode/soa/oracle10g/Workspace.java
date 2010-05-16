@@ -125,10 +125,13 @@ public final class Workspace extends BasicNode<Project> implements IconNode {
 	public final void findUsageEsb(FindUsageProjectResult usage) {
 		for (Project project : childs) {
 			if (project.getType() == ProjectType.ORACLE10G_ESB) {
-				EsbProject esbProject = (EsbProject) usage.getProject();
-				List<EsbSvc> esbSvcs = esbProject.getAllEsbSvc();
-				// EsbSvc esbSvc= (EsbSvc) esbSvcs.get(0).get());
-				// esbSvc.getEsbOperations().get(0).get
+				EsbProject esbProject = (EsbProject) project;
+				if (!esbProject.equals(usage.getProject())) {
+					List<EsbSvc> esbSvcs = esbProject.getAllEsbSvc();
+					for (EsbSvc esbSvc : esbSvcs) {
+						esbSvc.findUsage(usage);
+					}
+				}
 			}
 		}
 	}

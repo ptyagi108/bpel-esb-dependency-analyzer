@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.BasicNode;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
+import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageProjectResult;
 
 /**
  * Esb service
@@ -101,7 +102,13 @@ public final class EsbSvc extends BasicNode<EsbOperation> implements BasicEsbNod
 		this.soapEndpointURI = soapEndpointURI;
 	}
 
+	/**
+	 * add neww {@link EsbOperation} and set parent {@link EsbSvc}
+	 * 
+	 * @param esbOperation
+	 */
 	public final void addEsbOperation(EsbOperation esbOperation) {
+		esbOperation.setEsbSvc(this);
 		childs.add(esbOperation);
 	}
 
@@ -152,6 +159,12 @@ public final class EsbSvc extends BasicNode<EsbOperation> implements BasicEsbNod
 	@Override
 	public ImageIcon getIcon() {
 		return IconFactory.SERVICE;
+	}
+
+	public final void findUsage(FindUsageProjectResult usage) {
+		for (EsbOperation esbOperation : childs) {
+			esbOperation.findUsage(usage);
+		}
 	}
 
 }

@@ -107,7 +107,7 @@ public final class BpelOperationTree extends BasicTree {
 
 			usage = new FindUsageProjectResult(esbServiceNode.getProject());
 			if (esbServiceNode.getProject().getWorkspace().getMultiWorkspace() != null) {
-				esbServiceNode.getProject().getWorkspace().getMultiWorkspace().findUsageBpel(usage);
+				esbServiceNode.getProject().getWorkspace().getMultiWorkspace().findUsageEsb(usage);
 			} else {
 				esbServiceNode.getProject().getWorkspace().findUsageEsb(usage);
 			}

@@ -90,7 +90,7 @@ public final class WorkspaceTree extends BasicTree {
 			if (value instanceof IconNode) {
 				rnd.setIcon(((IconNode) value).getIcon());
 			}
-			
+
 			if (value instanceof Project) {
 				if (!((Project) value).isInJws()) {
 					rnd.setForeground(Color.BLACK);
@@ -122,7 +122,7 @@ public final class WorkspaceTree extends BasicTree {
 
 			usage = new FindUsageProjectResult(project);
 			if (project.getWorkspace().getMultiWorkspace() != null) {
-				project.getWorkspace().getMultiWorkspace().findUsageBpel(usage);
+				project.getWorkspace().getMultiWorkspace().findUsageEsb(usage);
 			} else {
 				project.getWorkspace().findUsageEsb(usage);
 			}

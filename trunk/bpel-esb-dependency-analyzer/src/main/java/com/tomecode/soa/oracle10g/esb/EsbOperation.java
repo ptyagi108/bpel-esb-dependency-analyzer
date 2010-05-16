@@ -10,6 +10,7 @@ import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.DependencyNode;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.EsbServiceNode;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
+import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageProjectResult;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.project.Project;
 
@@ -26,6 +27,7 @@ public final class EsbOperation extends BasicNode<DependencyNode> implements Bas
 
 	private String wsdlOperation;
 
+	private EsbSvc esbSvc;
 	private final List<EsbRoutingRule> esbRoutingRules;
 
 	/**
@@ -101,6 +103,22 @@ public final class EsbOperation extends BasicNode<DependencyNode> implements Bas
 	@Override
 	public ImageIcon getIcon() {
 		return IconFactory.OPERATION;
+	}
+
+	public final EsbSvc getEsbSvc() {
+		return esbSvc;
+	}
+
+	public final void setEsbSvc(EsbSvc esbSvc) {
+		this.esbSvc = esbSvc;
+	}
+
+	public final void findUsage(FindUsageProjectResult usage) {
+		for (DependencyNode dependencyNode : childs) {
+			if (dependencyNode.getProject().equals(usage.getProject())) {
+				usage.addUsage(esbSvc.getOwnerEsbProject());
+			}
+		}
 	}
 
 }
