@@ -2,11 +2,13 @@ package com.tomecode.soa.oracle10g.esb;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Vector;
 
-import javax.swing.tree.TreeNode;
+import javax.swing.ImageIcon;
+
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.BasicNode;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
+import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 
 /**
  * Oracle 10g - service group
@@ -14,7 +16,7 @@ import javax.swing.tree.TreeNode;
  * @author Tomas Frastia
  * 
  */
-public final class EsbGrp implements BasicEsbNode {
+public final class EsbGrp extends BasicNode<BasicEsbNode> implements BasicEsbNode, IconNode {
 
 	private EsbProject ownerEsbProject;
 	/**
@@ -30,13 +32,10 @@ public final class EsbGrp implements BasicEsbNode {
 	 */
 	private String qname;
 
-	private final Vector<BasicEsbNode> basicEsbNodes;
-
 	/**
 	 * Constructor
 	 */
 	public EsbGrp() {
-		basicEsbNodes = new Vector<BasicEsbNode>();
 	}
 
 	/**
@@ -66,42 +65,7 @@ public final class EsbGrp implements BasicEsbNode {
 	}
 
 	public final void addBasicEsbNode(BasicEsbNode basicEsbNode) {
-		basicEsbNodes.add(basicEsbNode);
-	}
-
-	@Override
-	public Enumeration<?> children() {
-		return basicEsbNodes.elements();
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return basicEsbNodes.isEmpty();
-	}
-
-	@Override
-	public TreeNode getChildAt(int childIndex) {
-		return basicEsbNodes.get(childIndex);
-	}
-
-	@Override
-	public int getChildCount() {
-		return basicEsbNodes.size();
-	}
-
-	@Override
-	public int getIndex(TreeNode node) {
-		return basicEsbNodes.indexOf(node);
-	}
-
-	@Override
-	public TreeNode getParent() {
-		return null;
-	}
-
-	@Override
-	public boolean isLeaf() {
-		return basicEsbNodes.isEmpty();
+		childs.add(basicEsbNode);
 	}
 
 	@Override
@@ -119,7 +83,7 @@ public final class EsbGrp implements BasicEsbNode {
 	}
 
 	public final EsbGrp findEsbGrpByQname(String qname) {
-		for (BasicEsbNode basicEsbNode : basicEsbNodes) {
+		for (BasicEsbNode basicEsbNode : childs) {
 			if (basicEsbNode.getType() == EsbNodeType.ESBGRP) {
 				if (basicEsbNode.getQname().equals(qname)) {
 					return (EsbGrp) basicEsbNode.get();
@@ -145,7 +109,7 @@ public final class EsbGrp implements BasicEsbNode {
 	}
 
 	public final EsbProject findEsbProjectByQname(String qName, URL serviceURL) {
-		for (BasicEsbNode basicEsbNode : basicEsbNodes) {
+		for (BasicEsbNode basicEsbNode : childs) {
 			if (basicEsbNode.getType() == EsbNodeType.ESBSYS) {
 				if (basicEsbNode.getQname().equals(qName)) {
 					return ((EsbSys) basicEsbNode.get()).getOwnerEsbProject();
@@ -173,12 +137,12 @@ public final class EsbGrp implements BasicEsbNode {
 		return null;
 	}
 
-	public final Vector<BasicEsbNode> getBasicEsbNodes() {
-		return basicEsbNodes;
+	public final List<BasicEsbNode> getBasicEsbNodes() {
+		return childs;
 	}
 
 	protected final void findAllEsbSvc(List<EsbSvc> esbSvcs) {
-		for (BasicEsbNode basicEsbNode : basicEsbNodes) {
+		for (BasicEsbNode basicEsbNode : childs) {
 			if (basicEsbNode.getType() == EsbNodeType.ESBSYS) {
 				EsbSys esbSys = (EsbSys) basicEsbNode.get();
 				esbSys.findAllEsbSvc(esbSvcs);
@@ -189,6 +153,11 @@ public final class EsbGrp implements BasicEsbNode {
 				esbSvcs.add((EsbSvc) basicEsbNode.get());
 			}
 		}
+	}
+
+	@Override
+	public ImageIcon getIcon() {
+		return IconFactory.SERVICE_GROUPE;
 	}
 
 }

@@ -2,10 +2,13 @@ package com.tomecode.soa.oracle10g.esb;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.List;
 
-import javax.swing.tree.TreeNode;
+import javax.swing.ImageIcon;
+
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.BasicNode;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
+import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 
 /**
  * Esb service
@@ -13,8 +16,11 @@ import javax.swing.tree.TreeNode;
  * @author Frastia Tomas
  * 
  */
-public final class EsbSvc implements BasicEsbNode {
+public final class EsbSvc extends BasicNode<EsbOperation> implements BasicEsbNode, IconNode {
 
+	/**
+	 * esb svc file
+	 */
 	private File file;
 	private String name;
 	private String qName;
@@ -25,21 +31,22 @@ public final class EsbSvc implements BasicEsbNode {
 
 	private String soapEndpointURI;
 
-	private Vector<EsbOperation> esbOperations;
-
+	/**
+	 * owner project
+	 */
 	private EsbProject ownerEsbProject;
 
 	/**
 	 * Constructor
 	 */
 	public EsbSvc() {
-		esbOperations = new Vector<EsbOperation>();
 	}
 
 	/**
-	 * 
 	 * Constructor
 	 * 
+	 * @param file
+	 *            svcc file
 	 * @param name
 	 * @param qName
 	 */
@@ -95,42 +102,7 @@ public final class EsbSvc implements BasicEsbNode {
 	}
 
 	public final void addEsbOperation(EsbOperation esbOperation) {
-		esbOperations.add(esbOperation);
-	}
-
-	@Override
-	public Enumeration<?> children() {
-		return null;
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return !esbOperations.isEmpty();
-	}
-
-	@Override
-	public TreeNode getChildAt(int childIndex) {
-		return esbOperations.get(childIndex);
-	}
-
-	@Override
-	public int getChildCount() {
-		return esbOperations.size();
-	}
-
-	@Override
-	public int getIndex(TreeNode node) {
-		return esbOperations.indexOf(node);
-	}
-
-	@Override
-	public TreeNode getParent() {
-		return null;
-	}
-
-	@Override
-	public boolean isLeaf() {
-		return esbOperations.isEmpty();
+		childs.add(esbOperation);
 	}
 
 	public String toString() {
@@ -154,6 +126,13 @@ public final class EsbSvc implements BasicEsbNode {
 		return EsbNodeType.ESBSVC;
 	}
 
+	/**
+	 * find {@link EsbProject} by qname
+	 * 
+	 * @param qName
+	 * @param sericeURL
+	 * @return
+	 */
 	public final EsbProject findEsbProjectByQname(String qName, URL sericeURL) {
 		if (this.qName.equalsIgnoreCase(qName)) {
 			if (this.concreteWSDLURL != null) {
@@ -166,8 +145,13 @@ public final class EsbSvc implements BasicEsbNode {
 		return null;
 	}
 
-	public final Vector<EsbOperation> getEsbOperations() {
-		return esbOperations;
+	public final List<EsbOperation> getEsbOperations() {
+		return childs;
+	}
+
+	@Override
+	public ImageIcon getIcon() {
+		return IconFactory.SERVICE;
 	}
 
 }

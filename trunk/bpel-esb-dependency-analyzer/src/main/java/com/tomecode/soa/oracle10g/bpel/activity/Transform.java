@@ -34,6 +34,9 @@ public final class Transform extends Activity {
 		return toVariable;
 	}
 
+	/**
+	 * find variable in activity
+	 */
 	public final void findVariable(FindUsageVariableResult usage) {
 		if (fromVariable != null && fromVariable.equals(usage.getVariable().toString())) {
 			usage.addUsage(this);

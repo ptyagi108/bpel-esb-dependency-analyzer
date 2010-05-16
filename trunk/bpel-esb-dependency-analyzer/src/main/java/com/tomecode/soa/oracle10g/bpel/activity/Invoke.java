@@ -51,6 +51,9 @@ public final class Invoke extends Activity {
 		return outputVariable;
 	}
 
+	/**
+	 * find partnerLink in activity
+	 */
 	public final void findPartnerLink(FindUsagePartnerLinkResult usage) {
 		if (partnerLink != null && usage.getPartnerLink().getName().equals(partnerLink)) {
 			usage.addUsage(this);

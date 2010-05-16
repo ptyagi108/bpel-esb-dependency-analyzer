@@ -22,6 +22,7 @@ public final class Receive extends Activity {
 	 * * Constructor
 	 * 
 	 * @param name
+	 *            activity name
 	 * @param variable
 	 * @param partnerLink
 	 * @param operation
@@ -45,6 +46,9 @@ public final class Receive extends Activity {
 		return variable;
 	}
 
+	/**
+	 * find partnerLink in activity
+	 */
 	public final void findPartnerLink(FindUsagePartnerLinkResult usage) {
 		if (partnerLink != null && usage.getPartnerLink().getName().equals(partnerLink)) {
 			usage.addUsage(this);

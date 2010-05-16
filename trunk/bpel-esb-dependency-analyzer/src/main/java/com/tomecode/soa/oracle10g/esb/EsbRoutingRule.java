@@ -14,6 +14,12 @@ public final class EsbRoutingRule implements TreeNode {
 	private String qname;
 	private String serviceQName;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param qname
+	 * @param serviceQName
+	 */
 	public EsbRoutingRule(String qname, String serviceQName) {
 		this.qname = qname;
 		this.serviceQName = serviceQName;

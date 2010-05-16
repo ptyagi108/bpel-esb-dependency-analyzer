@@ -42,4 +42,13 @@ public final class PortType {
 		wsdlOperations.add(wsdlOperation);
 	}
 
+	public final boolean existWsldOperation(String wsdlOperation) {
+		for (WsdlOperation operation : wsdlOperations) {
+			if (operation.getName().equals(wsdlOperation)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 }

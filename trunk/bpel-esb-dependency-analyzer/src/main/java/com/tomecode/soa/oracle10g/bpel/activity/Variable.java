@@ -18,6 +18,7 @@ public final class Variable extends Activity {
 	 * Constructor
 	 * 
 	 * @param name
+	 *            activity name
 	 * @param messageType
 	 * @param strukture
 	 */

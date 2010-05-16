@@ -1,31 +1,22 @@
 package com.tomecode.soa.oracle10g.bpel.activity;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
-import javax.swing.tree.TreeNode;
-
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.BasicNode;
 import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsagePartnerLinkResult;
 import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageVariableResult;
 
 /**
  * 
- * BPEL Activity
+ * BPEL Activities
  * 
  * @author Tomas Frastia
  * 
  */
-public class Activity implements TreeNode {
+public class Activity extends BasicNode<Activity> {
 
 	/**
 	 * actvity type
 	 */
 	private ActivityType activtyType;
-
-	/**
-	 * child activities
-	 */
-	private final Vector<Activity> activities;
 
 	/**
 	 * parent activity
@@ -40,7 +31,6 @@ public class Activity implements TreeNode {
 	 * Constructor
 	 */
 	public Activity() {
-		this.activities = new Vector<Activity>();
 	}
 
 	/**
@@ -51,9 +41,6 @@ public class Activity implements TreeNode {
 	public Activity(String type) {
 		this();
 		this.type = type;
-		if ("case".equals(type)) {
-			toString();
-		}
 		this.activtyType = ActivityType.parseActivtyType(type);
 	}
 
@@ -67,9 +54,6 @@ public class Activity implements TreeNode {
 	 */
 	public Activity(String type, String name) {
 		this(type);
-		if ("case".equals(type)) {
-			toString();
-		}
 		this.name = name;
 	}
 
@@ -85,15 +69,17 @@ public class Activity implements TreeNode {
 		this();
 		this.activtyType = type;
 		this.type = activtyType.toString();
-		if ("case".equals(type.toString())) {
-			toString();
-		}
 		this.name = name;
 	}
 
+	/**
+	 * add activity and set parent
+	 * 
+	 * @param activity
+	 */
 	public final void addActivity(Activity activity) {
 		activity.setParent(this);
-		this.activities.add(activity);
+		childs.add(activity);
 	}
 
 	public final ActivityType getActivtyType() {
@@ -104,47 +90,12 @@ public class Activity implements TreeNode {
 		this.parent = parent;
 	}
 
+	public final Activity getParent() {
+		return parent;
+	}
+
 	public final String getName() {
 		return name;
-	}
-
-	@Override
-	public Enumeration<?> children() {
-		return activities.elements();
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return !activities.isEmpty();
-	}
-
-	@Override
-	public TreeNode getChildAt(int childIndex) {
-		return activities.get(childIndex);
-	}
-
-	@Override
-	public int getChildCount() {
-		return activities.size();
-	}
-
-	@Override
-	public int getIndex(TreeNode node) {
-		return activities.indexOf(node);
-	}
-
-	@Override
-	public TreeNode getParent() {
-		return this.parent;
-	}
-
-	public Activity getParentActivity() {
-		return this.parent;
-	}
-
-	@Override
-	public boolean isLeaf() {
-		return activities.isEmpty();
 	}
 
 	public String toString() {
@@ -157,7 +108,7 @@ public class Activity implements TreeNode {
 	 * @param findUsageVariableResult
 	 */
 	public final void findUsage(FindUsageVariableResult findUsageVariableResult) {
-		for (Activity activity : activities) {
+		for (Activity activity : this.childs) {
 			if (activity.getActivtyType() != null) {
 				if (activity.getActivtyType().isContainsVariable()) {
 					findVariableInActivty(findUsageVariableResult, activity);
@@ -183,7 +134,7 @@ public class Activity implements TreeNode {
 	 * @param findUsagePartnerLinkResult
 	 */
 	public final void findUsage(FindUsagePartnerLinkResult findUsagePartnerLinkResult) {
-		for (Activity activity : activities) {
+		for (Activity activity : childs) {
 
 			activity.findPartnerLink(findUsagePartnerLinkResult);
 			activity.findUsage(findUsagePartnerLinkResult);

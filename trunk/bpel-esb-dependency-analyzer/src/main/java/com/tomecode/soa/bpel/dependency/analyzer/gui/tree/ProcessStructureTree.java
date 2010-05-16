@@ -157,7 +157,7 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 					}
 				}
 
-				activityInTree = activityInTree.getParentActivity();
+				activityInTree = activityInTree.getParent();
 			}
 
 			return true;
@@ -170,8 +170,8 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 			Variable variable = (Variable) getSelectionPath().getLastPathComponent();
 			FindUsageVariableResult result = new FindUsageVariableResult(variable);
 
-			if (variable.getParentActivity() != null && variable.getParentActivity().getParentActivity() != null) {
-				variable.getParentActivity().getParentActivity().findUsage(result);
+			if (variable.getParent() != null && variable.getParent().getParent() != null) {
+				variable.getParent().getParent().findUsage(result);
 			}
 			workspaceUtilsPanel.showFindUsageVariable(result);
 		} else if ("findUsagePartnerLink".equals(e.getActionCommand())) {
@@ -179,8 +179,8 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 
 			FindUsagePartnerLinkResult result = new FindUsagePartnerLinkResult(partnerLink);
 
-			if (partnerLink.getParentActivity() != null && partnerLink.getParentActivity().getParentActivity() != null) {
-				partnerLink.getParentActivity().getParentActivity().findUsage(result);
+			if (partnerLink.getParent() != null && partnerLink.getParent().getParent() != null) {
+				partnerLink.getParent().getParent().findUsage(result);
 			}
 
 			workspaceUtilsPanel.showFindUsagePartnerLink(result);

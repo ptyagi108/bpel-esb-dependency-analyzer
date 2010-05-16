@@ -12,7 +12,7 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.panels.WorkspaceUtilsPanel;
-import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
 import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageProjectResult;
 import com.tomecode.soa.oracle10g.MultiWorkspace;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
@@ -87,16 +87,14 @@ public final class WorkspaceTree extends BasicTree {
 
 			DefaultTreeCellRenderer rnd = (DefaultTreeCellRenderer) new DefaultTreeCellRenderer().getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 
-			if (value instanceof BpelProject) {
-				rnd.setIcon(IconFactory.PROCESS);
-			} else if (value instanceof EsbProject) {
-				rnd.setIcon(IconFactory.ESB);
+			if (value instanceof IconNode) {
+				rnd.setIcon(((IconNode) value).getIcon());
 			}
+			
 			if (value instanceof Project) {
 				if (!((Project) value).isInJws()) {
 					rnd.setForeground(Color.BLACK);
 					rnd.setFont(rnd.getFont().deriveFont(Font.BOLD));
-
 				}
 			}
 

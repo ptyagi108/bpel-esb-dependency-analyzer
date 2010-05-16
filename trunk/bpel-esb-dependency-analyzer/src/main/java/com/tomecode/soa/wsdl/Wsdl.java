@@ -39,4 +39,12 @@ public final class Wsdl {
 		this.portType = portType;
 	}
 
+	public final boolean existWsldOperation(String wsdlOperation) {
+		if (portType != null) {
+			return portType.existWsldOperation(wsdlOperation);
+		}
+
+		return false;
+	}
+
 }

@@ -220,9 +220,4 @@ public final class EsbProject extends Project {
 		return IconFactory.ESB;
 	}
 
-	@Override
-	public boolean compare(Project project) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 }

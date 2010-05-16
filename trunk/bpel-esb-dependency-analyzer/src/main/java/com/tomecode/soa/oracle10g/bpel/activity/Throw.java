@@ -26,7 +26,4 @@ public final class Throw extends Activity {
 		return faultVariable;
 	}
 
-	// public final String toString() {
-	// return (name != null ? name : super.toString());
-	// }
 }

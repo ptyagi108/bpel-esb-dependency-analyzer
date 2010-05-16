@@ -1,12 +1,9 @@
 package com.tomecode.soa.oracle10g;
 
 import java.io.File;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Vector;
 
-import javax.swing.tree.TreeNode;
-
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.BasicNode;
 import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageProjectResult;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
@@ -21,24 +18,26 @@ import com.tomecode.soa.project.ProjectType;
  * @author Tomas Frastia
  * 
  */
-public final class Workspace implements TreeNode {
+public final class Workspace extends BasicNode<Project> {
 
 	/**
 	 * owner
 	 */
 	private MultiWorkspace multiWorkspace;
 
+	/**
+	 * workspace name
+	 */
 	private String name;
-
+	/**
+	 * jws file
+	 */
 	private File file;
-
-	private final Vector<Project> projects;
 
 	/**
 	 * Constructor
 	 */
 	public Workspace() {
-		this.projects = new Vector<Project>();
 	}
 
 	/**
@@ -52,52 +51,22 @@ public final class Workspace implements TreeNode {
 		this.name = jwsFile.getName().replace(".jws", "");
 	}
 
-	public final Vector<Project> getProjects() {
-		return projects;
+	public final List<Project> getProjects() {
+		return childs;
 	}
 
+	/**
+	 * add new {@link Project} and set parent
+	 * 
+	 * @param project
+	 */
 	public final void addProject(Project project) {
 		project.setWorkspace(this);
-		this.projects.add(project);
+		childs.add(project);
 	}
 
 	public final File getFile() {
 		return file;
-	}
-
-	@Override
-	public Enumeration<?> children() {
-		return projects.elements();
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return !projects.isEmpty();
-	}
-
-	@Override
-	public TreeNode getChildAt(int childIndex) {
-		return projects.get(childIndex);
-	}
-
-	@Override
-	public int getChildCount() {
-		return projects.size();
-	}
-
-	@Override
-	public int getIndex(TreeNode node) {
-		return projects.indexOf(node);
-	}
-
-	@Override
-	public TreeNode getParent() {
-		return null;
-	}
-
-	@Override
-	public boolean isLeaf() {
-		return projects.isEmpty();
 	}
 
 	public final String toString() {
@@ -126,7 +95,7 @@ public final class Workspace implements TreeNode {
 	 * @param usage
 	 */
 	public final void findUsageBpel(FindUsageProjectResult usage) {
-		for (Project project : projects) {
+		for (Project project : childs) {
 			if (project.getType() == ProjectType.ORACLE10G_BPEL) {
 				BpelProject bpel = (BpelProject) project;
 
@@ -151,7 +120,7 @@ public final class Workspace implements TreeNode {
 	}
 
 	public final void findUsageEsb(FindUsageProjectResult usage) {
-		for (Project project : projects) {
+		for (Project project : childs) {
 			if (project.getType() == ProjectType.ORACLE10G_ESB) {
 				EsbProject esbProject = (EsbProject) usage.getProject();
 				List<EsbSvc> esbSvcs = esbProject.getAllEsbSvc();

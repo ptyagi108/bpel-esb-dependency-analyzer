@@ -11,11 +11,9 @@ import com.tomecode.soa.oracle10g.MultiWorkspace;
 import com.tomecode.soa.oracle10g.Workspace;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
-import com.tomecode.soa.oracle10g.esb.BasicEsbNode;
-import com.tomecode.soa.oracle10g.esb.EsbGrp;
+import com.tomecode.soa.oracle10g.esb.EsbOperation;
 import com.tomecode.soa.oracle10g.esb.EsbProject;
 import com.tomecode.soa.oracle10g.esb.EsbSvc;
-import com.tomecode.soa.oracle10g.esb.EsbSys;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.project.ProjectType;
 
@@ -126,7 +124,7 @@ public final class MultiWorkspaceParser extends AbstractParser {
 							if (url.getFile().startsWith("/orabpel")) {
 								BpelProject bpelProject = findBpelProjectForEsb(multiWorkspace, url.getFile());
 								if (bpelProject != null) {
-									esbSvc.getOwnerEsbProject().addDependency(bpelProject);
+									compareEsbAndBpelOperation(esbSvc, bpelProject);
 								}
 
 							}
@@ -136,6 +134,26 @@ public final class MultiWorkspaceParser extends AbstractParser {
 			}
 
 		}
+	}
+
+	/**
+	 * check, whether bpel project wsdl-operation is in esb service
+	 * 
+	 * @param esbSvc
+	 * @param bpelProject
+	 */
+	private final void compareEsbAndBpelOperation(EsbSvc esbSvc, BpelProject bpelProject) {
+		for (EsbOperation esbOperation : esbSvc.getEsbOperations()) {
+			if (bpelProject.getWsdl() != null) {
+				if (bpelProject.getWsdl().existWsldOperation(esbOperation.getWsdlOperation())) {
+					esbSvc.getOwnerEsbProject().addDependency(bpelProject);
+					esbOperation.addDepdendencyProject(bpelProject);
+
+				}
+			}
+
+		}
+
 	}
 
 	/**
@@ -282,33 +300,32 @@ public final class MultiWorkspaceParser extends AbstractParser {
 			for (Project project : workspace.getProjects()) {
 				if (project.getType() == ProjectType.ORACLE10G_ESB) {
 					EsbProject esbProject = (EsbProject) project;
-					// mal by nacitat vsetky projekty atd.
-					analyzeEsbDependencies(multiWorkspace, esbProject.getBasicEsbNodes());
+
+					analyzeEsbDependencies(multiWorkspace, esbProject);
 				}
 			}
 		}
 	}
 
-	private final void analyzeEsbDependencies(MultiWorkspace multiWorkspace, List<BasicEsbNode> basicEsbNodes) {
-		for (BasicEsbNode basicEsbNode : basicEsbNodes) {
-			if (basicEsbNode.get() instanceof EsbSvc) {
-				EsbSvc esbSvc = (EsbSvc) basicEsbNode.get();
-				URL url = parseWsdlToUrl(esbSvc.getWsdlURL());
-				if (url != null) {
-					String qName = esbParser.convertWsdlToQname(url);
-					Project esbProject = findEsbProjectByQname(qName, url, multiWorkspace);
-					if (esbProject != null) {
-						esbSvc.getOwnerEsbProject().addDependency(esbProject);
-					}
+	/**
+	 * analyze esb service dependecies
+	 * 
+	 * @param multiWorkspace
+	 * @param sourceEsbProject
+	 */
+	private final void analyzeEsbDependencies(MultiWorkspace multiWorkspace, EsbProject sourceEsbProject) {
+		for (EsbSvc esbSvc : sourceEsbProject.getAllEsbSvc()) {
+			URL url = parseWsdlToUrl(esbSvc.getWsdlURL());
+			if (url != null) {
+				String qName = esbParser.convertWsdlToQname(url);
+				EsbProject esbProject = findEsbProjectByQname(qName, url, multiWorkspace);
+				if (esbProject != null) {
+					esbSvc.getOwnerEsbProject().addDependency(esbProject);
+					// /esbSvc.get
+					esbSvc.getEsbOperations().get(0).addDepdendencyProject(esbProject);
 				}
-
-			} else if (basicEsbNode.get() instanceof EsbSys) {
-				EsbSys esbSys = (EsbSys) basicEsbNode.get();
-				analyzeEsbDependencies(multiWorkspace, esbSys.getBasicEsbNodes());
-			} else if (basicEsbNode.get() instanceof EsbGrp) {
-				EsbGrp esbGrp = (EsbGrp) basicEsbNode.get();
-				analyzeEsbDependencies(multiWorkspace, esbGrp.getBasicEsbNodes());
 			}
+
 		}
 	}
 
@@ -322,7 +339,7 @@ public final class MultiWorkspaceParser extends AbstractParser {
 	 * @param workspace
 	 * @return
 	 */
-	private final Project findEsbProjectByQname(String qName, URL serviceURL, MultiWorkspace multiWorkspace) {
+	private final EsbProject findEsbProjectByQname(String qName, URL serviceURL, MultiWorkspace multiWorkspace) {
 		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
 			for (Project project : workspace.getProjects()) {
 				if (project.getType() == ProjectType.ORACLE10G_ESB) {

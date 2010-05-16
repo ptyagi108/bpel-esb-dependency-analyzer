@@ -1,10 +1,6 @@
 package com.tomecode.soa.oracle10g.bpel;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
-import javax.swing.tree.TreeNode;
-
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.BasicNode;
 import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsagePartnerLinkResult;
 import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageVariableResult;
 import com.tomecode.soa.oracle10g.bpel.activity.Activity;
@@ -19,67 +15,38 @@ import com.tomecode.soa.oracle10g.bpel.activity.Variable;
  * @author Tomas Frastia
  * 
  */
-public final class BpelProcessStrukture implements TreeNode {
+public final class BpelProcessStrukture extends BasicNode<Activity> {
 
-	private final Vector<Activity> activities;
+	private BpelProject bpelProject;
 
-	private BpelProject bpelProcess;
-
+	/**
+	 * Constructor
+	 */
 	public BpelProcessStrukture() {
-		this.activities = new Vector<Activity>();
+		super();
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param bpelProcess
+	 */
 	public BpelProcessStrukture(BpelProject bpelProcess) {
 		this();
-		this.bpelProcess = bpelProcess;
+		this.bpelProject = bpelProcess;
 	}
 
 	public final void addActivity(Activity activity) {
-		this.activities.add(activity);
-	}
-
-	@Override
-	public Enumeration<?> children() {
-		return activities.elements();
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return !activities.isEmpty();
-	}
-
-	@Override
-	public TreeNode getChildAt(int childIndex) {
-		return activities.get(childIndex);
-	}
-
-	@Override
-	public int getChildCount() {
-		return activities.size();
-	}
-
-	@Override
-	public int getIndex(TreeNode node) {
-		return activities.indexOf(node);
-	}
-
-	@Override
-	public TreeNode getParent() {
-		return bpelProcess;
-	}
-
-	@Override
-	public boolean isLeaf() {
-		return activities.isEmpty();
+		childs.add(activity);
 	}
 
 	public final String toString() {
-		return bpelProcess.toString();
+		return bpelProject.toString();
 	}
 
 	public final FindUsagePartnerLinkResult findUsage(PartnerLink partnerLink) {
 		FindUsagePartnerLinkResult findUsagePartnerLinkResult = new FindUsagePartnerLinkResult(partnerLink);
-		for (Activity activity : activities) {
+		for (Activity activity : childs) {
 			activity.findUsage(findUsagePartnerLinkResult);
 		}
 		return findUsagePartnerLinkResult;
@@ -87,7 +54,7 @@ public final class BpelProcessStrukture implements TreeNode {
 
 	public final FindUsageVariableResult findUsage(Variable variable) {
 		FindUsageVariableResult findUsageVariableResult = new FindUsageVariableResult(variable);
-		for (Activity activity : activities) {
+		for (Activity activity : childs) {
 			activity.findUsage(findUsageVariableResult);
 		}
 		return findUsageVariableResult;

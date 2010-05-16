@@ -17,7 +17,4 @@ public final class Sms extends Activity {
 		super(ActivityType.SMS, name);
 	}
 
-	// public final String toString() {
-	// return (name != null ? name : super.toString());
-	// }
 }

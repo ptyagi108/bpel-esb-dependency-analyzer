@@ -49,6 +49,9 @@ public final class OnMessage extends Activity {
 		return operation;
 	}
 
+	/**
+	 * find variable in activity
+	 */
 	public final void findVariable(FindUsageVariableResult findUsageVariableResult) {
 		if (variable != null && findUsageVariableResult.getVariable().toString().equals(variable)) {
 			findUsageVariableResult.addUsage(this);
@@ -57,6 +60,9 @@ public final class OnMessage extends Activity {
 		}
 	}
 
+	/**
+	 * find partnerLink in activity
+	 */
 	public final void findPartnerLink(FindUsagePartnerLinkResult usage) {
 		if (partnerLink != null && usage.getPartnerLink().getName().equals(partnerLink)) {
 			usage.addUsage(this);

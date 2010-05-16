@@ -16,6 +16,9 @@ public class CaseOtherwise extends Activity {
 		super(ActivityType.OTHERWISE, name);
 	}
 
+	/**
+	 * Constructor
+	 */
 	public CaseOtherwise() {
 		this(null);
 	}

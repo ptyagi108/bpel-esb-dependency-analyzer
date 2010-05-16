@@ -5,18 +5,27 @@ import java.util.Enumeration;
 import javax.swing.tree.TreeNode;
 
 import com.tomecode.soa.oracle10g.esb.EsbProject;
+import com.tomecode.soa.project.Project;
 
 /**
+ * 
+ * Simple helper tree node for esb project - wraper treeNode for
+ * {@link EsbProject} wich does not show project dependencies
  * 
  * @author Tomas Frastia
  * 
  */
-public final class EsbServiceNode implements TreeNode {
+public final class EsbServiceNode implements TreeNode, DependencyNode {
 
 	private static final long serialVersionUID = -2232894399903425396L;
 
 	private EsbProject esbProject;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param esbProject
+	 */
 	public EsbServiceNode(EsbProject esbProject) {
 		this.esbProject = esbProject;
 	}
@@ -57,5 +66,10 @@ public final class EsbServiceNode implements TreeNode {
 
 	public final String toString() {
 		return esbProject.toString();
+	}
+
+	@Override
+	public Project getProject() {
+		return esbProject;
 	}
 }

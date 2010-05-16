@@ -1,8 +1,8 @@
 package com.tomecode.soa.project;
 
-import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
 import com.tomecode.soa.oracle10g.Workspace;
 
 /**
@@ -12,7 +12,7 @@ import com.tomecode.soa.oracle10g.Workspace;
  * @author Frastia Tomas
  * 
  */
-public abstract class Project implements TreeNode {
+public abstract class Project implements TreeNode, IconNode {
 
 	private Workspace workspace;
 	/**
@@ -57,15 +57,5 @@ public abstract class Project implements TreeNode {
 	public final void setWorkspace(Workspace workspace) {
 		this.workspace = workspace;
 	}
-
-	public abstract ImageIcon getIcon();
-
-	/**
-	 * compare two {@link Project}
-	 * 
-	 * @param project
-	 * @return
-	 */
-	public abstract boolean compare(Project project);
 
 }

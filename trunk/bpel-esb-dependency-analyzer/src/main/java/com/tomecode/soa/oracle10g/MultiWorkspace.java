@@ -1,12 +1,9 @@
 package com.tomecode.soa.oracle10g;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
-import javax.swing.tree.TreeNode;
-
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.BasicNode;
 import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageProjectResult;
 import com.tomecode.soa.oracle10g.parser.ServiceParserException;
 
@@ -15,10 +12,11 @@ import com.tomecode.soa.oracle10g.parser.ServiceParserException;
  * 
  * @author Tomas Frastia
  */
-public final class MultiWorkspace implements TreeNode {
+public final class MultiWorkspace extends BasicNode<Workspace> {
 
-	private final List<Workspace> workspaces;
-
+	/**
+	 * workspace folder
+	 */
 	private File file;
 
 	/**
@@ -27,13 +25,17 @@ public final class MultiWorkspace implements TreeNode {
 	 * @param workspaceFolder
 	 */
 	public MultiWorkspace(File workspaceFolder) {
-		workspaces = new ArrayList<Workspace>();
 		file = workspaceFolder;
 	}
 
+	/**
+	 * add new {@link Workspace} and set parent
+	 * 
+	 * @param workspace
+	 */
 	public final void addWorkspace(Workspace workspace) {
 		workspace.setMultiWorkspace(this);
-		workspaces.add(workspace);
+		childs.add(workspace);
 	}
 
 	public void addException(File jwsFile, ServiceParserException e) {
@@ -41,62 +43,31 @@ public final class MultiWorkspace implements TreeNode {
 	}
 
 	public final List<Workspace> getWorkspaces() {
-		return workspaces;
+		return childs;
 	}
 
 	public final File getFile() {
 		return file;
 	}
 
-	@Override
-	public Enumeration<?> children() {
-		return null;
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return !workspaces.isEmpty();
-	}
-
-	@Override
-	public TreeNode getChildAt(int childIndex) {
-		return workspaces.get(childIndex);
-	}
-
-	@Override
-	public int getChildCount() {
-		return workspaces.size();
-	}
-
-	@Override
-	public int getIndex(TreeNode node) {
-		return workspaces.indexOf(node);
-	}
-
-	@Override
-	public TreeNode getParent() {
-		return null;
-	}
-
-	@Override
-	public boolean isLeaf() {
-		return workspaces.isEmpty();
-	}
-
+	/**
+	 * find usage for bpel project
+	 */
 	public final void findUsageBpel(FindUsageProjectResult usage) {
-		for (Workspace workspace : workspaces) {
+		for (Workspace workspace : childs) {
 			workspace.findUsageBpel(usage);
 		}
 	}
+
+	/**
+	 * find usage for esb project
+	 * 
+	 * @param usage
+	 */
 	public final void findUsageEsb(FindUsageProjectResult usage) {
-		for (Workspace workspace : workspaces) {
+		for (Workspace workspace : childs) {
 			workspace.findUsageEsb(usage);
 		}
 	}
-//	public final void findUsage2(FindUsageProjectResult usage) {
-//		for (Workspace workspace : workspaces) {
-//			workspace.findUsage2(usage);
-//		}
-//	}
 
 }

@@ -1,68 +1,48 @@
 package com.tomecode.soa.oracle10g.bpel;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
+import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.BasicNode;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.DependencyNode;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
+import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
+import com.tomecode.soa.project.Project;
+
 /**
+ * 
+ * list of activities (invoke, receive, ...) wich contains operations
  * 
  * @author Tomas Frastia
  * 
  */
-public final class BpelOperations implements TreeNode {
-	private BpelProject bpelProcess;
+public final class BpelOperations extends BasicNode<Operation> implements DependencyNode, IconNode {
+
+	private BpelProject bpelProject;
 
 	/**
-	 * {@link Operation}
+	 * Constructor
 	 */
-	private final Vector<Operation> operations;
-
 	public BpelOperations() {
-		this.operations = new Vector<Operation>();
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param process
+	 */
 	public BpelOperations(BpelProject process) {
 		this();
-		this.bpelProcess = process;
+		this.bpelProject = process;
 
 	}
 
 	public final void addOperation(Operation operation) {
-		operations.add(operation);
-	}
-
-	public final Vector<Operation> getOperations() {
-		return operations;
+		childs.add(operation);
 	}
 
 	public final BpelProject getBpelProcess() {
-		return bpelProcess;
-	}
-
-	@Override
-	public Enumeration<?> children() {
-		return operations.elements();
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return !operations.isEmpty();
-	}
-
-	@Override
-	public TreeNode getChildAt(int childIndex) {
-		return operations.get(childIndex);
-	}
-
-	@Override
-	public int getChildCount() {
-		return operations.size();
-	}
-
-	@Override
-	public int getIndex(TreeNode node) {
-		return operations.indexOf(node);
+		return bpelProject;
 	}
 
 	@Override
@@ -70,12 +50,17 @@ public final class BpelOperations implements TreeNode {
 		return null;
 	}
 
-	@Override
-	public boolean isLeaf() {
-		return operations.isEmpty();
+	public final String toString() {
+		return bpelProject.toString();
 	}
 
-	public final String toString() {
-		return bpelProcess.toString();
+	@Override
+	public Project getProject() {
+		return bpelProject;
+	}
+
+	@Override
+	public ImageIcon getIcon() {
+		return IconFactory.PROCESS;
 	}
 }

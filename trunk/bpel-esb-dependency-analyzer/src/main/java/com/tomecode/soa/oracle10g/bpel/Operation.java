@@ -3,10 +3,12 @@ package com.tomecode.soa.oracle10g.bpel;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.EmptyNode;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
 import com.tomecode.soa.oracle10g.bpel.activity.Activity;
 import com.tomecode.soa.oracle10g.bpel.activity.ActivityType;
 import com.tomecode.soa.project.Project;
@@ -18,7 +20,7 @@ import com.tomecode.soa.project.ProjectType;
  * @author Tomas Frastia
  * 
  */
-public final class Operation implements TreeNode {
+public final class Operation implements TreeNode, IconNode {
 
 	private final ActivityType activtyType;
 	private String activity;
@@ -133,6 +135,14 @@ public final class Operation implements TreeNode {
 
 	public final String toString() {
 		return name + (operation == null ? "" : ":" + operation);
+	}
+
+	@Override
+	public ImageIcon getIcon() {
+		if (activities != null) {
+			return activtyType.getImageIcon();
+		}
+		return null;
 	}
 
 }

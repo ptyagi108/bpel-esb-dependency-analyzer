@@ -9,13 +9,13 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.EsbServiceNode;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
-import com.tomecode.soa.oracle10g.esb.EsbGrp;
 import com.tomecode.soa.oracle10g.esb.EsbProject;
-import com.tomecode.soa.oracle10g.esb.EsbSvc;
-import com.tomecode.soa.oracle10g.esb.EsbSys;
 
 /**
+ * 
+ * show esb project services
  * 
  * 
  * @author Tomas Frastia
@@ -25,12 +25,20 @@ public final class ProjectEsbServiceTree extends BasicTree {
 
 	private static final long serialVersionUID = -6785404093212997928L;
 
+	/**
+	 * Constructor
+	 */
 	public ProjectEsbServiceTree() {
 		super();
 		setCellRenderer(new EsbServiceTreeRenederer());
 
 	}
 
+	/**
+	 * add new {@link EsbProject}
+	 * 
+	 * @param esbProject
+	 */
 	public final void addEsbProject(EsbProject esbProject) {
 		EsbServiceNode esbServiceNode = new EsbServiceNode(esbProject);
 		treeModel.setRoot(esbServiceNode);
@@ -38,6 +46,7 @@ public final class ProjectEsbServiceTree extends BasicTree {
 	}
 
 	/**
+	 * custom renderen for esb services tree
 	 * 
 	 * @author Tomas Frastia
 	 * 
@@ -50,14 +59,15 @@ public final class ProjectEsbServiceTree extends BasicTree {
 
 			if (value instanceof EsbServiceNode) {
 				rnd.setIcon(IconFactory.ESB);
-			} else if (value instanceof EsbSvc) {
-				rnd.setIcon(IconFactory.SERVICE);
-			} else if (value instanceof EsbSys) {
-				rnd.setIcon(IconFactory.SYSTEM);
-			} else if (value instanceof EsbGrp) {
-				rnd.setIcon(IconFactory.SERVICE_GROUPE);
 			}
 
+			if (value instanceof IconNode) {
+				rnd.setIcon(((IconNode) value).getIcon());
+			}
+
+			if (!(value instanceof IconNode)) {
+				toString();
+			}
 			return rnd;
 		}
 	}

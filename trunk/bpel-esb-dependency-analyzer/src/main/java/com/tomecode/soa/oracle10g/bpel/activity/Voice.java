@@ -17,7 +17,4 @@ public final class Voice extends Activity {
 		super(ActivityType.VOICE, name);
 	}
 
-	// public final String toString() {
-	// return (name != null ? name : super.toString());
-	// }
 }

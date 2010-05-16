@@ -11,10 +11,14 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.UsageTree;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
 import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsage;
 import com.tomecode.soa.bpel.dependency.analyzer.utils.Usage;
 
 /**
+ * 
+ * panel show usage for variables, partnerLinks, projects ...etc
+ * 
  * 
  * @author Tomas Frastia
  * 
@@ -60,12 +64,8 @@ public final class UsageTreePanel extends JPanel {
 		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
 			DefaultTreeCellRenderer rnd = (DefaultTreeCellRenderer) new DefaultTreeCellRenderer().getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 
-			if (value instanceof FindUsage) {
-				FindUsage findUsage = (FindUsage) value;
-				ImageIcon icon = findUsage.getIcon();
-				if (icon != null) {
-					rnd.setIcon(icon);
-				}
+			if (value instanceof IconNode) {
+				rnd.setIcon(((IconNode) value).getIcon());
 			} else if (value instanceof Usage) {
 				Usage usage = (Usage) value;
 				ImageIcon icon = null;

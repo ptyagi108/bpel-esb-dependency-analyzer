@@ -22,6 +22,9 @@ public final class Wait extends Activity {
 		this.variable = variable;
 	}
 
+	/**
+	 * find variable in activity
+	 */
 	public final void findVariable(FindUsageVariableResult findUsageVariableResult) {
 		if (variable != null && findUsageVariableResult.getVariable().toString().equals(variable)) {
 			findUsageVariableResult.addUsage(this);

@@ -25,6 +25,9 @@ public final class FlowN extends Activity {
 		this.indexVariable = indexVariable;
 	}
 
+	/**
+	 * find variable in activity
+	 */
 	public final void findVariable(FindUsageVariableResult findUsageVariableResult) {
 		if (n != null && findUsageVariableResult.getVariable().toString().equals(n)) {
 			findUsageVariableResult.addUsage(this);

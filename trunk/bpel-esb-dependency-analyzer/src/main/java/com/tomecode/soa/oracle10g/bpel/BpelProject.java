@@ -26,7 +26,9 @@ public final class BpelProject extends Project {
 	private String id;
 
 	private String src;
-
+	/**
+	 * *.bpel file
+	 */
 	private File bpelXmlFile;
 
 	/**
@@ -163,14 +165,6 @@ public final class BpelProject extends Project {
 	@Override
 	public final ImageIcon getIcon() {
 		return IconFactory.PROCESS;
-	}
-
-	@Override
-	public final boolean compare(Project project) {
-		if (project.getType() == ProjectType.ORACLE10G_BPEL) {
-			return compareByBpelXml((BpelProject) project);
-		}
-		return false;
 	}
 
 }
