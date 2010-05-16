@@ -24,7 +24,7 @@ import com.tomecode.soa.oracle10g.esb.EsbProject;
  * @author Tomas Frastia
  * 
  */
-public final class ProjectEsbServiceTree extends BasicTree {
+public final class EsbServiceTree extends BasicTree {
 
 	private static final long serialVersionUID = -6785404093212997928L;
 
@@ -32,8 +32,10 @@ public final class ProjectEsbServiceTree extends BasicTree {
 
 	/**
 	 * Constructor
+	 * 
+	 * @param workspaceUtilsPanel
 	 */
-	public ProjectEsbServiceTree(WorkspaceUtilsPanel workspaceUtilsPanel) {
+	public EsbServiceTree(WorkspaceUtilsPanel workspaceUtilsPanel) {
 		super();
 		this.workspaceUtilsPanel = workspaceUtilsPanel;
 		setCellRenderer(new EsbServiceTreeRenederer());
@@ -53,7 +55,7 @@ public final class ProjectEsbServiceTree extends BasicTree {
 	}
 
 	/**
-	 * custom renderen for esb services tree
+	 * tree cell renderer for {@link EsbServiceTree}
 	 * 
 	 * @author Tomas Frastia
 	 * 
