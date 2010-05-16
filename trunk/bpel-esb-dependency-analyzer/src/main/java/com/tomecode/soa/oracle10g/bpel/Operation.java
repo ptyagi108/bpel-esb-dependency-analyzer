@@ -94,10 +94,6 @@ public final class Operation implements TreeNode, IconNode {
 
 		BpelProject project = partnerLinkBinding.getDependencyBpelProject();
 		if (project != null) {
-			// BpelProject bpelProcess = (BpelProject)
-			// partnerLinkBinding.getDependencyBpelProject();
-			// if (bpelProcess == null || bpelProcess.getBpelOperations() ==
-			// null) {
 			if (project.getBpelOperations() == null) {
 				return new ErrorNode("ERROR:not found " + partnerLinkBinding.getName(), partnerLinkBinding.getWsdlLocation(), null);
 			}

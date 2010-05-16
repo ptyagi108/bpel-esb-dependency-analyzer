@@ -84,8 +84,8 @@ public final class WorkspacePanel extends JPanel {
 		super(new BorderLayout());
 		this.workspaceUtilsPanel = new WorkspaceUtilsPanel();
 		this.workspaceTree = new WorkspaceTree(multiWorkspace, workspaceUtilsPanel);
-		this.projectOperationTree = new ProjectOperationTree();
-		this.projectEsbServiceTree = new ProjectEsbServiceTree();
+		this.projectOperationTree = new ProjectOperationTree(workspaceUtilsPanel);
+		this.projectEsbServiceTree = new ProjectEsbServiceTree(workspaceUtilsPanel);
 		this.processStructureTree = new ProcessStructureTree(workspaceUtilsPanel);
 		final JSplitPane spWorkspace = PanelFactory.createSplitPanel();
 		spWorkspace.add(PanelFactory.createBorderLayout("Project Dependencies", new JScrollPane(workspaceTree)));
