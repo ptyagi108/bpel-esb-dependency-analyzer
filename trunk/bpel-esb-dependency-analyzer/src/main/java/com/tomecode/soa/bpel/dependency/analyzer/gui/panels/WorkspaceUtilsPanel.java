@@ -3,7 +3,7 @@ package com.tomecode.soa.bpel.dependency.analyzer.gui.panels;
 import javax.swing.JTabbedPane;
 
 import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsage;
-import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageBpelProjectResult;
+import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageProjectResult;
 import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsagePartnerLinkResult;
 import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageVariableResult;
 
@@ -63,8 +63,17 @@ public final class WorkspaceUtilsPanel extends JTabbedPane {
 	 * 
 	 * @param usage
 	 */
-	public final void showFindUsageBpelProject(FindUsageBpelProjectResult usage) {
+	public final void showFindUsageBpelProject(FindUsageProjectResult usage) {
 		addData(usage, "BPEL project is used");
+	}
+
+	/**
+	 * show tab - "ESB project is used" - and add usage data
+	 * 
+	 * @param usage
+	 */
+	public final void showFindUsageEsbProject(FindUsageProjectResult usage) {
+		addData(usage, "ESB project is used");
 	}
 
 	/**

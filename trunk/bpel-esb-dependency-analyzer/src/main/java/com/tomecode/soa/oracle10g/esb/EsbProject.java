@@ -219,4 +219,10 @@ public final class EsbProject extends Project {
 	public final ImageIcon getIcon() {
 		return IconFactory.ESB;
 	}
+
+	@Override
+	public boolean compare(Project project) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

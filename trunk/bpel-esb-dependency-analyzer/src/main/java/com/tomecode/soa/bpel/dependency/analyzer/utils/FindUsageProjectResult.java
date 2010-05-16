@@ -7,8 +7,6 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 
-import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
-import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.process.Project;
 
 /**
@@ -16,9 +14,9 @@ import com.tomecode.soa.process.Project;
  * @author Tomas Frastia
  * 
  */
-public final class FindUsageBpelProjectResult implements FindUsage {
+public final class FindUsageProjectResult implements FindUsage {
 
-	private BpelProject bpelProject;
+	private final Project project;
 
 	private List<Usage> activities;
 
@@ -27,13 +25,13 @@ public final class FindUsageBpelProjectResult implements FindUsage {
 	 * 
 	 * @param bpelProject
 	 */
-	public FindUsageBpelProjectResult(BpelProject bpelProject) {
-		this.bpelProject = bpelProject;
+	public FindUsageProjectResult(Project project) {
+		this.project = project;
 		this.activities = new ArrayList<Usage>();
 	}
 
-	public final BpelProject getBpelProject() {
-		return bpelProject;
+	public final Project getProject() {
+		return project;
 	}
 
 	public void addUsage(Project project) {
@@ -76,11 +74,11 @@ public final class FindUsageBpelProjectResult implements FindUsage {
 	}
 
 	public final String toString() {
-		return bpelProject.toString();
+		return project.toString();
 	}
 
 	@Override
 	public final ImageIcon getIcon() {
-		return IconFactory.PROCESS;
+		return project.getIcon();
 	}
 }

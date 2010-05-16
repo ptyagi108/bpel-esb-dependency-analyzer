@@ -143,13 +143,21 @@ public final class BpelProject extends Project {
 		return bpelProcessStrukture;
 	}
 
-	public final boolean compare(BpelProject bpelProject) {
+	public final boolean compareByBpelXml(BpelProject bpelProject) {
 		return (bpelXmlFile.equals(bpelProject.getBpelXmlFile()));
 	}
 
 	@Override
 	public final ImageIcon getIcon() {
 		return IconFactory.PROCESS;
+	}
+
+	@Override
+	public final boolean compare(Project project) {
+		if (project.getType() == ProjectType.ORACLE10G_BPEL) {
+			return compareByBpelXml((BpelProject) project);
+		}
+		return false;
 	}
 
 }

@@ -60,4 +60,12 @@ public abstract class Project implements TreeNode {
 
 	public abstract ImageIcon getIcon();
 
+	/**
+	 * compare two {@link Project}
+	 * 
+	 * @param project
+	 * @return
+	 */
+	public abstract boolean compare(Project project);
+
 }

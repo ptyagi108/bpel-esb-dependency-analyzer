@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
-import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageBpelProjectResult;
+import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageProjectResult;
 import com.tomecode.soa.oracle10g.parser.ServiceParserException;
 
 /**
@@ -83,10 +83,20 @@ public final class MultiWorkspace implements TreeNode {
 		return workspaces.isEmpty();
 	}
 
-	public final void findUsage(FindUsageBpelProjectResult usage) {
+	public final void findUsageBpel(FindUsageProjectResult usage) {
 		for (Workspace workspace : workspaces) {
-			workspace.findUsage(usage);
+			workspace.findUsageBpel(usage);
 		}
 	}
+	public final void findUsageEsb(FindUsageProjectResult usage) {
+		for (Workspace workspace : workspaces) {
+			workspace.findUsageEsb(usage);
+		}
+	}
+//	public final void findUsage2(FindUsageProjectResult usage) {
+//		for (Workspace workspace : workspaces) {
+//			workspace.findUsage2(usage);
+//		}
+//	}
 
 }

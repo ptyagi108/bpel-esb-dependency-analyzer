@@ -13,7 +13,7 @@ import javax.swing.tree.TreePath;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.panels.WorkspaceUtilsPanel;
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
-import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageBpelProjectResult;
+import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageProjectResult;
 import com.tomecode.soa.oracle10g.MultiWorkspace;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.esb.EsbProject;
@@ -42,6 +42,7 @@ public final class WorkspaceTree extends BasicTree {
 		setRootVisible(false);
 		setCellRenderer(new WorkspaceTreeRenderer());
 		createMenuItem("Find Usage for BPEL project", "findUsageBpelProject");
+		createMenuItem("Find Usage for ESB project", "findUsageESBproject");
 	}
 
 	/**
@@ -105,17 +106,31 @@ public final class WorkspaceTree extends BasicTree {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("findUsageBpelProject")) {
-			BpelProject bpelProject = (BpelProject) getSelectionPath().getLastPathComponent();
+		FindUsageProjectResult usage = null;
 
-			FindUsageBpelProjectResult usage = new FindUsageBpelProjectResult(bpelProject);
-			if (bpelProject.getWorkspace().getMultiWorkspace() != null) {
-				bpelProject.getWorkspace().getMultiWorkspace().findUsage(usage);
+		if (e.getActionCommand().equals("findUsageBpelProject")) {
+			Project project = (Project) getSelectionPath().getLastPathComponent();
+			usage = new FindUsageProjectResult(project);
+			if (project.getWorkspace().getMultiWorkspace() != null) {
+				project.getWorkspace().getMultiWorkspace().findUsageBpel(usage);
 			} else {
-				bpelProject.getWorkspace().findUsage(usage);
+				project.getWorkspace().findUsageBpel(usage);
 			}
+
 			workspaceUtilsPanel.showFindUsageBpelProject(usage);
+
+		} else if (e.getActionCommand().equals("findUsageESBproject")) {
+			Project project = (Project) getSelectionPath().getLastPathComponent();
+
+			usage = new FindUsageProjectResult(project);
+			if (project.getWorkspace().getMultiWorkspace() != null) {
+				project.getWorkspace().getMultiWorkspace().findUsageBpel(usage);
+			} else {
+				project.getWorkspace().findUsageEsb(usage);
+			}
+			workspaceUtilsPanel.showFindUsageEsbProject(usage);
 		}
+
 	}
 
 	@Override
@@ -124,6 +139,8 @@ public final class WorkspaceTree extends BasicTree {
 		if (treePath != null) {
 			if (treePath.getLastPathComponent() instanceof BpelProject) {
 				enableMenuItem("findUsageBpelProject", true);
+			} else if (treePath.getLastPathComponent() instanceof EsbProject) {
+				enableMenuItem("findUsageESBproject", true);
 			} else {
 				enableMenuItem(null, false);
 			}
