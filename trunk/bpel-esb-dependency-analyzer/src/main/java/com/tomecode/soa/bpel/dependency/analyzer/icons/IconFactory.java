@@ -46,6 +46,7 @@ public final class IconFactory {
 	public static final ImageIcon WAIT = new ImageIcon(IconFactory.class.getResource("wait.gif"));
 	public static final ImageIcon WHILE = new ImageIcon(IconFactory.class.getResource("while.gif"));
 	public static final ImageIcon PAGER = new ImageIcon(IconFactory.class.getResource("pager.gif"));
+	public static final ImageIcon OPERATION = new ImageIcon(IconFactory.class.getResource("operation.gif"));
 
 	private IconFactory() {
 	}
