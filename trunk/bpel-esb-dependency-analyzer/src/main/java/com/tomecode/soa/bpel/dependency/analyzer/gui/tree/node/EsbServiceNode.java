@@ -2,8 +2,10 @@ package com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node;
 
 import java.util.Enumeration;
 
+import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 
+import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.oracle10g.esb.EsbProject;
 import com.tomecode.soa.project.Project;
 
@@ -15,7 +17,7 @@ import com.tomecode.soa.project.Project;
  * @author Tomas Frastia
  * 
  */
-public final class EsbServiceNode implements TreeNode, DependencyNode {
+public final class EsbServiceNode implements TreeNode, DependencyNode, IconNode {
 
 	private static final long serialVersionUID = -2232894399903425396L;
 
@@ -71,5 +73,10 @@ public final class EsbServiceNode implements TreeNode, DependencyNode {
 	@Override
 	public Project getProject() {
 		return esbProject;
+	}
+
+	@Override
+	public ImageIcon getIcon() {
+		return IconFactory.ESB;
 	}
 }

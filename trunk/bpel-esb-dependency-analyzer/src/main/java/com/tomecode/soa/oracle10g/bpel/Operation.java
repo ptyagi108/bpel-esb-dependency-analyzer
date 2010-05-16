@@ -11,8 +11,6 @@ import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
 import com.tomecode.soa.oracle10g.bpel.activity.Activity;
 import com.tomecode.soa.oracle10g.bpel.activity.ActivityType;
-import com.tomecode.soa.project.Project;
-import com.tomecode.soa.project.ProjectType;
 
 /**
  * Partner link operation
@@ -81,7 +79,12 @@ public final class Operation implements TreeNode, IconNode {
 	@Override
 	public boolean getAllowsChildren() {
 		if (partnerLinkBinding != null) {
-			return (partnerLinkBinding.getDependencyProject() != null);
+			if (partnerLinkBinding.getDependencyBpelProject() != null) {
+				return true;
+			}
+			if (partnerLinkBinding.getDependencyEsbProject() != null) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -89,13 +92,19 @@ public final class Operation implements TreeNode, IconNode {
 	@Override
 	public TreeNode getChildAt(int childIndex) {
 
-		Project project = (Project) partnerLinkBinding.getDependencyProject();
-		if (project.getType() == ProjectType.ORACLE10G_BPEL) {
-			BpelProject bpelProcess = (BpelProject) partnerLinkBinding.getDependencyProject();
-			if (bpelProcess == null || bpelProcess.getBpelOperations() == null) {
+		BpelProject project = partnerLinkBinding.getDependencyBpelProject();
+		if (project != null) {
+			// BpelProject bpelProcess = (BpelProject)
+			// partnerLinkBinding.getDependencyBpelProject();
+			// if (bpelProcess == null || bpelProcess.getBpelOperations() ==
+			// null) {
+			if (project.getBpelOperations() == null) {
 				return new ErrorNode("ERROR:not found " + partnerLinkBinding.getName(), partnerLinkBinding.getWsdlLocation(), null);
 			}
-			return bpelProcess.getBpelOperations();
+			return project.getBpelOperations();
+		} else if (partnerLinkBinding.getDependencyEsbProject() != null) {
+			return partnerLinkBinding.getDependencyEsbProject();
+
 		}
 		return new EmptyNode(project);
 
@@ -113,7 +122,7 @@ public final class Operation implements TreeNode, IconNode {
 
 	@Override
 	public TreeNode getParent() {
-		return partnerLinkBinding.getDependencyProject();
+		return partnerLinkBinding.getDependencyEsbProject();
 	}
 
 	@Override
@@ -126,7 +135,7 @@ public final class Operation implements TreeNode, IconNode {
 	}
 
 	public final BpelProject getPartnerLinkBpelProcess() {
-		return (BpelProject) partnerLinkBinding.getDependencyProject();
+		return partnerLinkBinding.getDependencyBpelProject();
 	}
 
 	public final ActivityType getActivtyType() {

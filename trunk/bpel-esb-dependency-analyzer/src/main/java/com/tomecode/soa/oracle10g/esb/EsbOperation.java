@@ -29,17 +29,10 @@ public final class EsbOperation extends BasicNode<DependencyNode> implements Bas
 	private final List<EsbRoutingRule> esbRoutingRules;
 
 	/**
-	 * list of depedencies for project
-	 */
-	// private final Vector<Project> dependencyProjects;
-//	private final List<DependencyNode> dependencyProjects;
-
-	/**
 	 * Constructor
 	 */
 	public EsbOperation() {
 		esbRoutingRules = new ArrayList<EsbRoutingRule>();
-	//	dependencyProjects = new ArrayList<DependencyNode>();
 	}
 
 	/**
@@ -65,41 +58,6 @@ public final class EsbOperation extends BasicNode<DependencyNode> implements Bas
 	public final void addOperation(EsbOperation esbOperation) {
 		esbOperation.addOperation(esbOperation);
 	}
-
-//	@Override
-//	public Enumeration<?> children() {
-//		return null;
-//	}
-//
-//	@Override
-//	public final boolean getAllowsChildren() {
-//		return dependencyProjects.isEmpty();// esbRoutingRules.isEmpty();
-//	}
-//
-//	@Override
-//	public TreeNode getChildAt(int childIndex) {
-//		return dependencyProjects.get(childIndex);// esbRoutingRules.get(childIndex);
-//	}
-//
-//	@Override
-//	public int getChildCount() {
-//		return dependencyProjects.size();// esbRoutingRules.size();
-//	}
-//
-//	@Override
-//	public int getIndex(TreeNode node) {
-//		return dependencyProjects.indexOf(node);// esbRoutingRules.indexOf(node);
-//	}
-//
-//	@Override
-//	public TreeNode getParent() {
-//		return this;
-//	}
-//
-//	@Override
-//	public boolean isLeaf() {
-//		return dependencyProjects.isEmpty();// esbRoutingRules.isEmpty();
-//	}
 
 	public final void addRoutingRule(EsbRoutingRule esbRoutingRule) {
 		esbRoutingRules.add(esbRoutingRule);

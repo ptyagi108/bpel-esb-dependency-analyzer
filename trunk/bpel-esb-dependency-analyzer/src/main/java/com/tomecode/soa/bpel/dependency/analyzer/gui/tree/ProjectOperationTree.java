@@ -8,11 +8,8 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
-import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.EmptyNode;
-import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
 import com.tomecode.soa.oracle10g.bpel.BpelOperations;
-import com.tomecode.soa.oracle10g.bpel.Operation;
-import com.tomecode.soa.oracle10g.esb.EsbProject;
 
 /**
  * 
@@ -54,14 +51,8 @@ public final class ProjectOperationTree extends BasicTree {
 
 			DefaultTreeCellRenderer rnd = (DefaultTreeCellRenderer) new DefaultTreeCellRenderer().getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 
-			if (value instanceof BpelOperations) {
-				rnd.setIcon(IconFactory.PROCESS);
-			} else if (value instanceof Operation) {
-				rnd.setIcon(((Operation) value).getActivtyType().getImageIcon());
-			} else if (value instanceof EsbProject) {
-				rnd.setIcon(IconFactory.ESB);
-			} else if (value instanceof EmptyNode) {
-				rnd.setIcon(IconFactory.ESB);
+			if (value instanceof IconNode) {
+				rnd.setIcon(((IconNode) value).getIcon());
 			}
 
 			return rnd;
@@ -70,13 +61,11 @@ public final class ProjectOperationTree extends BasicTree {
 
 	@Override
 	public void showPopupMenu(int x, int y) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 }

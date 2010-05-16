@@ -104,11 +104,10 @@ public final class Workspace extends BasicNode<Project> {
 
 					if (!bpel.compareByBpelXml(usageBpelProject)) {
 						for (PartnerLinkBinding partnerLinkBinding : bpel.getPartnerLinkBindings()) {
-							if (partnerLinkBinding.getDependencyProject() != null) {
-								if (partnerLinkBinding.getDependencyProject() instanceof BpelProject) {
-									if (((BpelProject) partnerLinkBinding.getDependencyProject()).compareByBpelXml(usageBpelProject)) {
-										usage.addUsage(partnerLinkBinding.getParent());
-									}
+							if (partnerLinkBinding.getDependencyBpelProject() != null) {
+
+								if (partnerLinkBinding.getDependencyBpelProject().compareByBpelXml(usageBpelProject)) {
+									usage.addUsage(partnerLinkBinding.getParent());
 								}
 
 							}

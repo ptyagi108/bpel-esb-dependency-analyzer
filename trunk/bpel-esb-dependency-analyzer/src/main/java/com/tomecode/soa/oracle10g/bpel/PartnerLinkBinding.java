@@ -1,6 +1,10 @@
 package com.tomecode.soa.oracle10g.bpel;
 
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.DependencyNode;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.EsbServiceNode;
+import com.tomecode.soa.oracle10g.esb.EsbProject;
 import com.tomecode.soa.project.Project;
+import com.tomecode.soa.project.ProjectType;
 
 /**
  * Contains data for partnerlink
@@ -13,7 +17,9 @@ public final class PartnerLinkBinding {
 	private String name;
 	private String wsdlLocation;
 
-	private Project dependencyProject;
+	private EsbServiceNode dependencyEsbProject;
+
+	private BpelProject dependencyBpelProject;
 
 	private BpelProject parent;
 
@@ -40,13 +46,23 @@ public final class PartnerLinkBinding {
 		return wsdlLocation;
 	}
 
-	public final Project getDependencyProject() {
-		return dependencyProject;
+	public final DependencyNode getDependencyEsbProject() {
+		return dependencyEsbProject;
+	}
+
+	public final BpelProject getDependencyBpelProject() {
+		return dependencyBpelProject;
 	}
 
 	public final void setDependencyProject(Project project) {
-		this.dependencyProject = project;
-		this.parseError = null;
+		if (project != null) {
+			if (project.getType() == ProjectType.ORACLE10G_ESB) {
+				this.dependencyEsbProject = new EsbServiceNode((EsbProject) project);
+			} else {
+				this.dependencyBpelProject = (BpelProject) project;
+			}
+			this.parseError = null;
+		}
 	}
 
 	public void setParent(BpelProject parent) {

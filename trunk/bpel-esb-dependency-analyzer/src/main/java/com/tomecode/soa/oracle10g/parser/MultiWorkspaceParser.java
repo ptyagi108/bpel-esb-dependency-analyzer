@@ -98,7 +98,7 @@ public final class MultiWorkspaceParser extends AbstractParser {
 				if (project.getType() == ProjectType.ORACLE10G_BPEL) {
 					BpelProject bpelProject = (BpelProject) project;
 					for (PartnerLinkBinding partnerLinkBinding : bpelProject.getPartnerLinkBindings()) {
-						if (partnerLinkBinding.getDependencyProject() == null) {
+						if (partnerLinkBinding.getDependencyEsbProject() == null) {
 
 							URL urlWsdl = parseWsdlToUrl(partnerLinkBinding.getWsdlLocation());
 							if (urlWsdl != null) {
@@ -276,7 +276,7 @@ public final class MultiWorkspaceParser extends AbstractParser {
 				if (service.getType() == ProjectType.ORACLE10G_BPEL) {
 					BpelProject bpel = (BpelProject) service;
 					for (PartnerLinkBinding partnerLinkBinding : bpel.getPartnerLinkBindings()) {
-						if (partnerLinkBinding.getDependencyProject() == null) {
+						if (partnerLinkBinding.getDependencyEsbProject() == null) {
 							try {
 								bpelParser.parseBpelByWsdl(partnerLinkBinding);
 							} catch (ServiceParserException e) {
