@@ -90,26 +90,25 @@ public final class WorkspacePanel extends JPanel {
 		final JSplitPane spWorkspace = PanelFactory.createSplitPanel();
 		spWorkspace.add(PanelFactory.createBorderLayout("Project Dependencies", new JScrollPane(workspaceTree)));
 		spWorkspace.setDividerLocation(200);
+
 		JSplitPane spProjectTrees = PanelFactory.createSplitPanel();
 		spProjectTrees.add(PanelFactory.createBorderLayout("Project dependencies by Operations", new JScrollPane(projectOperationTree)));
 		spProjectTrees.add(PanelFactory.createBorderLayout("Project Structure", new JScrollPane(processStructureTree)));
 		spProjectTrees.setDividerLocation(350);
 
-		final JSplitPane spProjectBase = PanelFactory.createSplitPanel();
-		spProjectBase.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		spProjectBase.setDividerLocation(350);
-		spProjectBase.add(spProjectTrees);
+		//
+		final JSplitPane spPanels = PanelFactory.createSplitPanel();
+		spPanels.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		spPanels.setDividerLocation(350);
 
 		JPanel pBpelProject = PanelFactory.createBorderLayout();
-		pBpelProject.add(spProjectBase, BorderLayout.CENTER);
-
+		pBpelProject.add(spProjectTrees, BorderLayout.CENTER);
 		JPanel pProjectDetail = PanelFactory.createBorderLayout();
-
 		pProjectDetail.add(workspaceUtilsPanel, BorderLayout.CENTER);
 
-		spProjectBase.add(pProjectDetail);
-
 		final JPanel pCardPanel = new JPanel(new CardLayout());
+		spPanels.add(pCardPanel);
+
 		// frist panel is empty panel
 		pCardPanel.add(PanelFactory.createBorderLayout(), P_WORKSPACE_EMPTY);
 
@@ -130,6 +129,11 @@ public final class WorkspacePanel extends JPanel {
 
 		JPanel pEsbProject = PanelFactory.createBorderLayout();
 		pEsbProject.add(PanelFactory.wrapWithTile("Esb Services:", new JScrollPane(projectEsbServiceTree)), BorderLayout.CENTER);
+
+		final JSplitPane spEsbPanel = PanelFactory.createSplitPanel();
+		spEsbPanel.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		spEsbPanel.setDividerLocation(350);
+
 		pCardPanel.add(pEsbProject, P_ESB_TREE);
 
 		JPanel pWorkspace = PanelFactory.createBorderLayout();
@@ -143,13 +147,15 @@ public final class WorkspacePanel extends JPanel {
 
 			@Override
 			public void componentResized(ComponentEvent e) {
-				spProjectBase.setDividerLocation((e.getComponent().getSize().height - 140));
-				spProjectBase.updateUI();
+				spPanels.setDividerLocation((e.getComponent().getSize().height - 140));
+				spPanels.updateUI();
 			}
 		});
 
-		spWorkspace.add(pCardPanel);
+		spPanels.add(pProjectDetail);
 
+		// spWorkspace.add(pCardPanel);
+		spWorkspace.add(spPanels);
 		add(spWorkspace, BorderLayout.CENTER);
 
 		// select bpel proces
