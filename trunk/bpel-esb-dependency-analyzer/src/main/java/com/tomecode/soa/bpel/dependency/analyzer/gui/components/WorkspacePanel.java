@@ -16,7 +16,7 @@ import javax.swing.event.TreeSelectionListener;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.panels.WorkspaceUtilsPanel;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.ProcessStructureTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.ProjectEsbServiceTree;
-import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.ProjectOperationTree;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.BpelOperationTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.WorkspaceTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
 import com.tomecode.soa.oracle10g.MultiWorkspace;
@@ -52,9 +52,9 @@ public final class WorkspacePanel extends JPanel {
 	 */
 	private final WorkspaceTree workspaceTree;
 	/**
-	 * {@link ProjectOperationTree}
+	 * {@link BpelOperationTree}
 	 */
-	private final ProjectOperationTree projectOperationTree;
+	private final BpelOperationTree projectOperationTree;
 	/**
 	 * {@link ProjectEsbServiceTree}
 	 */
@@ -84,7 +84,7 @@ public final class WorkspacePanel extends JPanel {
 		super(new BorderLayout());
 		this.workspaceUtilsPanel = new WorkspaceUtilsPanel();
 		this.workspaceTree = new WorkspaceTree(multiWorkspace, workspaceUtilsPanel);
-		this.projectOperationTree = new ProjectOperationTree(workspaceUtilsPanel);
+		this.projectOperationTree = new BpelOperationTree(workspaceUtilsPanel);
 		this.projectEsbServiceTree = new ProjectEsbServiceTree(workspaceUtilsPanel);
 		this.processStructureTree = new ProcessStructureTree(workspaceUtilsPanel);
 		final JSplitPane spWorkspace = PanelFactory.createSplitPanel();

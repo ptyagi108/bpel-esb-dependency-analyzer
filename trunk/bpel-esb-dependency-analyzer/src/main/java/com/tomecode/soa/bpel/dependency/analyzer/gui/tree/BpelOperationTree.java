@@ -21,7 +21,7 @@ import com.tomecode.soa.oracle10g.bpel.BpelOperations;
  * @author Tomas Frastia
  * 
  */
-public final class ProjectOperationTree extends BasicTree {
+public final class BpelOperationTree extends BasicTree {
 
 	private static final long serialVersionUID = -3750125284965106516L;
 
@@ -33,10 +33,10 @@ public final class ProjectOperationTree extends BasicTree {
 	 * 
 	 * @param workspaceUtilsPanel
 	 */
-	public ProjectOperationTree(WorkspaceUtilsPanel workspaceUtilsPanel) {
+	public BpelOperationTree(WorkspaceUtilsPanel workspaceUtilsPanel) {
 		super();
 		this.workspaceUtilsPanel = workspaceUtilsPanel;
-		setCellRenderer(new OperationTreeRenderer());
+		setCellRenderer(new BpelOperationTreeRenderer());
 		createMenuItem("Find Usage for BPEL project", "findUsageBpelProject");
 		createMenuItem("Find Usage for ESB project", "findUsageESBproject");
 	}
@@ -53,10 +53,12 @@ public final class ProjectOperationTree extends BasicTree {
 
 	/**
 	 * 
+	 * tree cell renderer for {@link BpelOperationTree}
+	 * 
 	 * @author Tomas Frastia
 	 * 
 	 */
-	private final class OperationTreeRenderer implements TreeCellRenderer {
+	private final class BpelOperationTreeRenderer implements TreeCellRenderer {
 
 		public final Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
 
