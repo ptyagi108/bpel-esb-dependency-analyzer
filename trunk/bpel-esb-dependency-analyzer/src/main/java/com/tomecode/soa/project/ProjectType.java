@@ -1,4 +1,4 @@
-package com.tomecode.soa.process;
+package com.tomecode.soa.project;
 
 /**
  * Project type is type of BPEL or ESB

@@ -5,7 +5,7 @@ import java.util.Enumeration;
 import javax.swing.tree.TreeNode;
 
 import com.tomecode.soa.oracle10g.bpel.activity.Activity;
-import com.tomecode.soa.process.Project;
+import com.tomecode.soa.project.Project;
 
 /**
  * 

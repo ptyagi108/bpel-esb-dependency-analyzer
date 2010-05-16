@@ -7,7 +7,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 
-import com.tomecode.soa.process.Project;
+import com.tomecode.soa.project.Project;
 
 /**
  * 

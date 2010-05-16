@@ -1,4 +1,4 @@
-package com.tomecode.soa.process;
+package com.tomecode.soa.project;
 
 import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;

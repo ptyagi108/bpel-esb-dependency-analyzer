@@ -12,8 +12,8 @@ import javax.swing.tree.TreeNode;
 
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.oracle10g.esb.BasicEsbNode.EsbNodeType;
-import com.tomecode.soa.process.Project;
-import com.tomecode.soa.process.ProjectType;
+import com.tomecode.soa.project.Project;
+import com.tomecode.soa.project.ProjectType;
 
 /**
  * Contains esbsvc,esbgrp, esb files in project

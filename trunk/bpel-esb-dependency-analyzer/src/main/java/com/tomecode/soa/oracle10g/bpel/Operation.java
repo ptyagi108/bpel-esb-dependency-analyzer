@@ -9,8 +9,8 @@ import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.EmptyNode;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
 import com.tomecode.soa.oracle10g.bpel.activity.Activity;
 import com.tomecode.soa.oracle10g.bpel.activity.ActivityType;
-import com.tomecode.soa.process.Project;
-import com.tomecode.soa.process.ProjectType;
+import com.tomecode.soa.project.Project;
+import com.tomecode.soa.project.ProjectType;
 
 /**
  * Partner link operation

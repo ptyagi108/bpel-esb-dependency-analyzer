@@ -17,7 +17,7 @@ import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageProjectResult;
 import com.tomecode.soa.oracle10g.MultiWorkspace;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.esb.EsbProject;
-import com.tomecode.soa.process.Project;
+import com.tomecode.soa.project.Project;
 
 /**
  * Display all BPEL/ESB projects in workspace

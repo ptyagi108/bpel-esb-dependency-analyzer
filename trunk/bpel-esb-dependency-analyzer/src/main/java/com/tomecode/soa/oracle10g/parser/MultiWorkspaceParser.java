@@ -16,8 +16,8 @@ import com.tomecode.soa.oracle10g.esb.EsbGrp;
 import com.tomecode.soa.oracle10g.esb.EsbProject;
 import com.tomecode.soa.oracle10g.esb.EsbSvc;
 import com.tomecode.soa.oracle10g.esb.EsbSys;
-import com.tomecode.soa.process.Project;
-import com.tomecode.soa.process.ProjectType;
+import com.tomecode.soa.project.Project;
+import com.tomecode.soa.project.ProjectType;
 
 /**
  * 

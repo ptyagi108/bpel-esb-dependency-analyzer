@@ -1,6 +1,6 @@
 package com.tomecode.soa.oracle10g.bpel;
 
-import com.tomecode.soa.process.Project;
+import com.tomecode.soa.project.Project;
 
 /**
  * Contains data for partnerlink
