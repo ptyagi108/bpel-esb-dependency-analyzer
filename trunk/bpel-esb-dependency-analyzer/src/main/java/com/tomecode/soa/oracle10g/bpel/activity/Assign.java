@@ -3,6 +3,7 @@ package com.tomecode.soa.oracle10g.bpel.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsagePartnerLinkResult;
 import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageVariableResult;
 
 /**
@@ -40,6 +41,9 @@ public final class Assign extends Activity {
 
 		private OperationType type;
 
+		private String fromPartnerLink;
+		private String toPartnerLink;
+
 		private String from;
 		private String to;
 
@@ -49,11 +53,22 @@ public final class Assign extends Activity {
 		 * @param type
 		 * @param from
 		 * @param to
+		 * @param partnerLink
 		 */
-		public AssignOperation(OperationType type, String from, String to) {
+		public AssignOperation(OperationType type, String from, String to, String fromPartnerLink, String toPartnerLink) {
 			this.type = type;
 			this.from = from;
 			this.to = to;
+			this.fromPartnerLink = fromPartnerLink;
+			this.toPartnerLink = toPartnerLink;
+		}
+
+		public final String getFromPartnerLink() {
+			return fromPartnerLink;
+		}
+
+		public final String getToPartnerLink() {
+			return toPartnerLink;
 		}
 
 		public final OperationType getType() {
@@ -80,6 +95,9 @@ public final class Assign extends Activity {
 		COPY, APPEND, INSERT_AFTER, INSERT_BEFORE, COPYLIST, REMOVE, RENAME;
 	}
 
+	/**
+	 * find variable in assign
+	 */
 	public final void findVariable(FindUsageVariableResult findUsageVariableResult) {
 		for (AssignOperation operation : operations) {
 			if (operation.getFrom() != null && operation.getFrom().equals(findUsageVariableResult.getVariable().getName())) {
@@ -89,4 +107,18 @@ public final class Assign extends Activity {
 			}
 		}
 	}
+
+	/**
+	 * find partnerlink in assign
+	 */
+	public final void findPartnerLink(FindUsagePartnerLinkResult usage) {
+		for (AssignOperation operation : operations) {
+			if (operation.getFromPartnerLink() != null && operation.getFromPartnerLink().equals(usage.getPartnerLink().getName())) {
+				usage.addUsage(this);
+			} else if (operation.getToPartnerLink() != null && operation.getToPartnerLink().equals(usage.getPartnerLink().getName())) {
+				usage.addUsage(this);
+			}
+		}
+	}
+
 }

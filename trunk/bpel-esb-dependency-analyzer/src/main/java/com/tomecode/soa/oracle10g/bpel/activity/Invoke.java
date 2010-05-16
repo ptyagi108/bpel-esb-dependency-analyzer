@@ -1,5 +1,7 @@
 package com.tomecode.soa.oracle10g.bpel.activity;
 
+import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsagePartnerLinkResult;
+
 /**
  * Invoke bpel activity
  * 
@@ -49,11 +51,9 @@ public final class Invoke extends Activity {
 		return outputVariable;
 	}
 
-//	public final String toString() {
-//		return (name != null ? name : super.toString());
-//	}
-
-	public boolean abstractHasVariable(Variable variable) {
-		return false;
+	public final void findPartnerLink(FindUsagePartnerLinkResult usage) {
+		if (partnerLink != null && usage.getPartnerLink().getName().equals(partnerLink)) {
+			usage.addUsage(this);
+		}
 	}
 }

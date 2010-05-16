@@ -1,5 +1,7 @@
 package com.tomecode.soa.oracle10g.bpel.activity;
 
+import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsagePartnerLinkResult;
+
 /**
  * 
  * 
@@ -43,4 +45,9 @@ public final class Receive extends Activity {
 		return variable;
 	}
 
+	public final void findPartnerLink(FindUsagePartnerLinkResult usage) {
+		if (partnerLink != null && usage.getPartnerLink().getName().equals(partnerLink)) {
+			usage.addUsage(this);
+		}
+	}
 }

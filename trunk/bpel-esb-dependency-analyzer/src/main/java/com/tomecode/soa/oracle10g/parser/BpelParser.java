@@ -86,7 +86,6 @@ public final class BpelParser extends AbstractParser {
 			bpelXmlFile = new File(file + File.separator + "bpel" + File.separator + "bpel.xml");
 		}
 
-		System.out.println(bpelXmlFile);
 		Element bpelXml = parseXml(bpelXmlFile);
 		return parseBpelXml(bpelXml, bpelXmlFile);
 	}
@@ -371,6 +370,7 @@ public final class BpelParser extends AbstractParser {
 	private final AssignOperation parseOperationCopyInAssign(OperationType type, Element eOperation) {
 		Element eFrom = eOperation.element("from");
 
+		String fromPartnerLink = null, toPartnerLink = null;
 		String from = null;
 		if (eFrom != null) {
 			if (eFrom.attributeValue("variable") != null) {
@@ -380,15 +380,20 @@ public final class BpelParser extends AbstractParser {
 				if (from != null) {
 					from = getVariableFromExpression(from);
 				}
-
+			} else if (eFrom.attributeValue("partnerLink") != null) {
+				fromPartnerLink = eFrom.attributeValue("partnerLink");
 			}
 		}
 		String to = null;
 		Element eTo = eOperation.element("to");
 		if (eTo != null) {
 			to = eTo.attributeValue("variable");
+			if (eTo.attributeValue("partnerLink") != null) {
+				toPartnerLink = eTo.attributeValue("partnerLink");
+			}
 		}
-		return new AssignOperation(type, from, to);
+
+		return new AssignOperation(type, from, to, fromPartnerLink, toPartnerLink);
 	}
 
 	/**

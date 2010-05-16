@@ -27,6 +27,9 @@ public class Activity implements TreeNode {
 	 */
 	private final Vector<Activity> activities;
 
+	/**
+	 * parent activity
+	 */
 	private Activity parent;
 
 	private String type;
@@ -54,6 +57,14 @@ public class Activity implements TreeNode {
 		this.activtyType = ActivityType.parseActivtyType(type);
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param type
+	 *            {@link ActivityType}
+	 * @param name
+	 *            name of activity
+	 */
 	public Activity(String type, String name) {
 		this(type);
 		if ("case".equals(type)) {
@@ -62,6 +73,14 @@ public class Activity implements TreeNode {
 		this.name = name;
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param type
+	 *            {@link ActivityType}
+	 * @param name
+	 *            name of activity
+	 */
 	public Activity(ActivityType type, String name) {
 		this();
 		this.activtyType = type;
@@ -154,6 +173,10 @@ public class Activity implements TreeNode {
 
 	}
 
+	public void findPartnerLink(FindUsagePartnerLinkResult findUsagePartnerLinkResult) {
+
+	}
+
 	/**
 	 * find usage for {@link PartnerLink}
 	 * 
@@ -161,35 +184,9 @@ public class Activity implements TreeNode {
 	 */
 	public final void findUsage(FindUsagePartnerLinkResult findUsagePartnerLinkResult) {
 		for (Activity activity : activities) {
-			if (activity.getActivtyType() != null) {
-				if (activity.getActivtyType().isContainsVariable()) {
-					findPartnerLinkInActivty(findUsagePartnerLinkResult, activity);
-				}
-			}
-			activity.findUsage(findUsagePartnerLinkResult);
-		}
-	}
 
-	/**
-	 * find usage for partnerLink in activities
-	 * 
-	 * @param findUsagePartnerLinkResult
-	 * @param activity
-	 */
-	private final void findPartnerLinkInActivty(FindUsagePartnerLinkResult findUsagePartnerLinkResult, Activity activity) {
-		if (activity.getActivtyType() == ActivityType.RECEIVE) {
-			if (findUsagePartnerLinkResult.getPartnerLink().getName().equals(((Receive) activity).getPartnerLink())) {
-				findUsagePartnerLinkResult.addUsage(activity);
-			}
-		} else if (activity.getActivtyType() == ActivityType.INVOKE) {
-			Invoke invoke = (Invoke) activity;
-			if (findUsagePartnerLinkResult.getPartnerLink().getName().equals(invoke.getPartnerLink())) {
-				findUsagePartnerLinkResult.addUsage(activity);
-			}
-		} else if (activity.getActivtyType() == ActivityType.REPLY) {
-			if (findUsagePartnerLinkResult.getPartnerLink().getName().equals(((Reply) activity).getPartnerLink())) {
-				findUsagePartnerLinkResult.addUsage(activity);
-			}
+			activity.findPartnerLink(findUsagePartnerLinkResult);
+			activity.findUsage(findUsagePartnerLinkResult);
 		}
 	}
 

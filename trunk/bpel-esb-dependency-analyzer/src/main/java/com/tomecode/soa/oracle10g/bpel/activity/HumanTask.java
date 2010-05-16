@@ -16,4 +16,5 @@ public final class HumanTask extends Activity {
 	public HumanTask(String name) {
 		super(ActivityType.HUMANTASK, name);
 	}
+
 }

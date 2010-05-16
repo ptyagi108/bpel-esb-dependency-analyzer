@@ -1,5 +1,6 @@
 package com.tomecode.soa.oracle10g.bpel.activity;
 
+import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsagePartnerLinkResult;
 import com.tomecode.soa.bpel.dependency.analyzer.utils.FindUsageVariableResult;
 
 /**
@@ -51,6 +52,14 @@ public final class OnMessage extends Activity {
 	public final void findVariable(FindUsageVariableResult findUsageVariableResult) {
 		if (variable != null && findUsageVariableResult.getVariable().toString().equals(variable)) {
 			findUsageVariableResult.addUsage(this);
+		} else if (headerVariable != null && findUsageVariableResult.getVariable().toString().equals(headerVariable)) {
+			findUsageVariableResult.addUsage(this);
+		}
+	}
+
+	public final void findPartnerLink(FindUsagePartnerLinkResult usage) {
+		if (partnerLink != null && usage.getPartnerLink().getName().equals(partnerLink)) {
+			usage.addUsage(this);
 		}
 	}
 
