@@ -39,6 +39,7 @@ import com.tomecode.soa.oracle10g.bpel.activity.Wait;
 import com.tomecode.soa.oracle10g.bpel.activity.While;
 import com.tomecode.soa.oracle10g.bpel.activity.Assign.AssignOperation;
 import com.tomecode.soa.oracle10g.bpel.activity.Assign.OperationType;
+import com.tomecode.soa.wsdl.parser.WsdlParser;
 
 /**
  * Parser for Oracle 10g BPEL process
@@ -52,6 +53,18 @@ public final class BpelParser extends AbstractParser {
 	 * list of parsed process
 	 */
 	private final List<BpelProject> parsedProcess = new ArrayList<BpelProject>();
+
+	/**
+	 * wsdl parser
+	 */
+	private final WsdlParser wsdlParser;
+
+	/**
+	 * Constrcutor
+	 */
+	public BpelParser() {
+		wsdlParser = new WsdlParser();
+	}
 
 	/**
 	 * parse bpel process from url
@@ -87,7 +100,11 @@ public final class BpelParser extends AbstractParser {
 		}
 
 		Element bpelXml = parseXml(bpelXmlFile);
-		return parseBpelXml(bpelXml, bpelXmlFile);
+		BpelProject bpelProject = parseBpelXml(bpelXml, bpelXmlFile);
+
+		File wsdl = new File(bpelXmlFile.getParent() + File.separator + bpelProject.toString() + ".wsdl");
+		bpelProject.setWsdl(wsdlParser.parseWsdl(wsdl));
+		return bpelProject;
 	}
 
 	/**

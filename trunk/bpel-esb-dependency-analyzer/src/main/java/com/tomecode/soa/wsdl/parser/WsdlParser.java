@@ -20,20 +20,36 @@ import com.tomecode.soa.wsdl.WsdlOperation;
  */
 public final class WsdlParser extends AbstractParser {
 
+	/**
+	 * Constructor
+	 */
 	public WsdlParser() {
 
 	}
 
-	public final Wsdl parseWsdl(File file) throws ServiceParserException {
-		Element element = parseXml(file);
+	/**
+	 * parse wsdl file
+	 * 
+	 * @param file
+	 * @return
+	 */
+	public final Wsdl parseWsdl(File file) {
+		if (file.exists()) {
+			try {
+				Element element = parseXml(file);
+				Wsdl wsdl = new Wsdl(file, element.attributeValue("name"));
 
-		Wsdl wsdl = new Wsdl(file, element.attributeValue("name"));
-
-		Element ePortType = element.element("portType");
-		if (ePortType != null) {
-			wsdl.setPortType(parsePortType(ePortType));
+				Element ePortType = element.element("portType");
+				if (ePortType != null) {
+					wsdl.setPortType(parsePortType(ePortType));
+				}
+				return wsdl;
+			} catch (ServiceParserException e) {
+				e.printStackTrace();
+			}
 		}
-		return wsdl;
+
+		return null;
 	}
 
 	/**

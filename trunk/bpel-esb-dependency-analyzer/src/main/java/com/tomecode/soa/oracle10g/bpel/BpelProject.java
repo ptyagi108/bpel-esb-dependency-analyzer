@@ -12,6 +12,7 @@ import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.project.ProjectType;
+import com.tomecode.soa.wsdl.Wsdl;
 
 /**
  * 
@@ -36,6 +37,10 @@ public final class BpelProject extends Project {
 	private final BpelOperations bpelOperations;
 
 	private final BpelProcessStrukture bpelProcessStrukture;
+	/**
+	 * bpel process wsdl
+	 */
+	private Wsdl wsdl;
 
 	/**
 	 * Constructor
@@ -80,6 +85,14 @@ public final class BpelProject extends Project {
 
 	public final File getBpelXmlFile() {
 		return bpelXmlFile;
+	}
+
+	public final Wsdl getWsdl() {
+		return wsdl;
+	}
+
+	public final void setWsdl(Wsdl wsdl) {
+		this.wsdl = wsdl;
 	}
 
 	@Override
