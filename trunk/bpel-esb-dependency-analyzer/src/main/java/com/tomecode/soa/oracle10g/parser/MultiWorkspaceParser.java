@@ -81,58 +81,71 @@ public final class MultiWorkspaceParser extends AbstractParser {
 
 		}
 
-		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
-			analysesBpelDependencies(workspace);
-			analysesEsbDependencies(workspace);
-			analysesDepBetweenBpelEsb(workspace);
-		}
+		analysesBpelDependencies(multiWorkspace);
+		analysesEsbDependencies(multiWorkspace);
+		analysesDepBetweenBpelEsb(multiWorkspace);
 
 		return multiWorkspace;
 	}
 
-	private final void analysesDepBetweenBpelEsb(Workspace workspace) {
-		for (Project project : workspace.getProjects()) {
-			if (project.getType() == ProjectType.ORACLE10G_BPEL) {
-				BpelProject bpelProject = (BpelProject) project;
-				for (PartnerLinkBinding partnerLinkBinding : bpelProject.getPartnerLinkBindings()) {
-					if (partnerLinkBinding.getDependencyProject() == null) {
+	/**
+	 * analysis of dependencies between BPEL and ESB
+	 * 
+	 * @param multiWorkspace
+	 */
+	private final void analysesDepBetweenBpelEsb(MultiWorkspace multiWorkspace) {
+		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
 
-						URL urlWsdl = parseWsdlToUrl(partnerLinkBinding.getWsdlLocation());
-						if (urlWsdl != null) {
-							String qName = esbParser.convertWsdlToQname(urlWsdl);
-							if (qName != null) {
-								Project qNameProject = findEsbProjectByQname(qName, urlWsdl, workspace);
-								if (qNameProject != null) {
-									partnerLinkBinding.setDependencyProject(qNameProject);
+			for (Project project : workspace.getProjects()) {
+				if (project.getType() == ProjectType.ORACLE10G_BPEL) {
+					BpelProject bpelProject = (BpelProject) project;
+					for (PartnerLinkBinding partnerLinkBinding : bpelProject.getPartnerLinkBindings()) {
+						if (partnerLinkBinding.getDependencyProject() == null) {
+
+							URL urlWsdl = parseWsdlToUrl(partnerLinkBinding.getWsdlLocation());
+							if (urlWsdl != null) {
+								String qName = esbParser.convertWsdlToQname(urlWsdl);
+								if (qName != null) {
+									Project qNameProject = findEsbProjectByQname(qName, urlWsdl, multiWorkspace);
+									if (qNameProject != null) {
+										partnerLinkBinding.setDependencyProject(qNameProject);
+									}
 								}
+
 							}
 
 						}
-
 					}
-				}
-			} else if (project.getType() == ProjectType.ORACLE10G_ESB) {
-				EsbProject esbProject = (EsbProject) project;
+				} else if (project.getType() == ProjectType.ORACLE10G_ESB) {
+					EsbProject esbProject = (EsbProject) project;
 
-				List<EsbSvc> esbSvcs = esbProject.getAllEsbSvc();
-				for (EsbSvc esbSvc : esbSvcs) {
-					URL url = parseWsdlToUrl(esbSvc.getWsdlURL());
-					if (url != null) {
-						if (url.getFile().startsWith("/orabpel")) {
-							BpelProject bpelProject = findBpelProjectForEsb(workspace, url.getFile());
-							if (bpelProject != null) {
-								esbSvc.getOwnerEsbProject().addDependency(bpelProject);
+					List<EsbSvc> esbSvcs = esbProject.getAllEsbSvc();
+					for (EsbSvc esbSvc : esbSvcs) {
+						URL url = parseWsdlToUrl(esbSvc.getWsdlURL());
+						if (url != null) {
+							if (url.getFile().startsWith("/orabpel")) {
+								BpelProject bpelProject = findBpelProjectForEsb(multiWorkspace, url.getFile());
+								if (bpelProject != null) {
+									esbSvc.getOwnerEsbProject().addDependency(bpelProject);
+								}
+
 							}
-
 						}
 					}
 				}
 			}
-		}
 
+		}
 	}
 
-	private final BpelProject findBpelProjectForEsb(Workspace workspace, String url) {
+	/**
+	 * find bpel project for esb service
+	 * 
+	 * @param multiWorkspace
+	 * @param url
+	 * @return
+	 */
+	private final BpelProject findBpelProjectForEsb(MultiWorkspace multiWorkspace, String url) {
 		int index = url.indexOf("?wsdl");
 		if (index != -1) {
 			url = url.replace("?", ".");
@@ -141,19 +154,28 @@ public final class MultiWorkspaceParser extends AbstractParser {
 			if (index != -1) {
 				url = url.substring(0, index);
 				String processName = url.substring(url.lastIndexOf("/") + 1, index);
-				return findBpelByName(workspace, processName);
+				return findBpelByName(multiWorkspace, processName);
 			}
 
 		}
 		return null;
 	}
 
-	private final BpelProject findBpelByName(Workspace workspace, String bpelProcessName) {
-		for (Project project : workspace.getProjects()) {
-			if (project.getType() == ProjectType.ORACLE10G_BPEL) {
-				BpelProject bpelProject = (BpelProject) project;
-				if (bpelProject.toString().equals(bpelProcessName)) {
-					return bpelProject;
+	/**
+	 * find bpel process by name in {@link MultiWorkspace}
+	 * 
+	 * @param multiWorkspace
+	 * @param bpelProcessName
+	 * @return if not found, return <b>null</b>
+	 */
+	private final BpelProject findBpelByName(MultiWorkspace multiWorkspace, String bpelProcessName) {
+		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+			for (Project project : workspace.getProjects()) {
+				if (project.getType() == ProjectType.ORACLE10G_BPEL) {
+					BpelProject bpelProject = (BpelProject) project;
+					if (bpelProject.toString().equals(bpelProcessName)) {
+						return bpelProject;
+					}
 				}
 			}
 		}
@@ -230,18 +252,19 @@ public final class MultiWorkspaceParser extends AbstractParser {
 	 * 
 	 * @param workspace
 	 */
-	private final void analysesBpelDependencies(Workspace workspace) {
-		// analyze of bpel dependecy
-		for (Project service : workspace.getProjects()) {
-			if (service.getType() == ProjectType.ORACLE10G_BPEL) {
-				BpelProject bpel = (BpelProject) service;
-				for (PartnerLinkBinding partnerLinkBinding : bpel.getPartnerLinkBindings()) {
-					if (partnerLinkBinding.getDependencyProject() == null) {
-						try {
-							bpelParser.parseBpelByWsdl(partnerLinkBinding);
-						} catch (ServiceParserException e) {
-							// TODO dokoncit
-							e.printStackTrace();
+	private final void analysesBpelDependencies(MultiWorkspace multiWorkspace) {
+		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+			for (Project service : workspace.getProjects()) {
+				if (service.getType() == ProjectType.ORACLE10G_BPEL) {
+					BpelProject bpel = (BpelProject) service;
+					for (PartnerLinkBinding partnerLinkBinding : bpel.getPartnerLinkBindings()) {
+						if (partnerLinkBinding.getDependencyProject() == null) {
+							try {
+								bpelParser.parseBpelByWsdl(partnerLinkBinding);
+							} catch (ServiceParserException e) {
+								// TODO dokoncit
+								e.printStackTrace();
+							}
 						}
 					}
 				}
@@ -249,25 +272,31 @@ public final class MultiWorkspaceParser extends AbstractParser {
 		}
 	}
 
-	private final void analysesEsbDependencies(Workspace workspace) {
-
-		for (Project project : workspace.getProjects()) {
-			if (project.getType() == ProjectType.ORACLE10G_ESB) {
-				EsbProject esbProject = (EsbProject) project;
-				// mal by nacitat vsetky projekty atd.
-				analyzeEsbDependencies(esbProject.getBasicEsbNodes(), workspace);
+	/**
+	 * analysis of dependecies between esb projects
+	 * 
+	 * @param multiWorkspace
+	 */
+	private final void analysesEsbDependencies(MultiWorkspace multiWorkspace) {
+		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+			for (Project project : workspace.getProjects()) {
+				if (project.getType() == ProjectType.ORACLE10G_ESB) {
+					EsbProject esbProject = (EsbProject) project;
+					// mal by nacitat vsetky projekty atd.
+					analyzeEsbDependencies(multiWorkspace, esbProject.getBasicEsbNodes());
+				}
 			}
 		}
 	}
 
-	private final void analyzeEsbDependencies(List<BasicEsbNode> basicEsbNodes, Workspace workspace) {
+	private final void analyzeEsbDependencies(MultiWorkspace multiWorkspace, List<BasicEsbNode> basicEsbNodes) {
 		for (BasicEsbNode basicEsbNode : basicEsbNodes) {
 			if (basicEsbNode.get() instanceof EsbSvc) {
 				EsbSvc esbSvc = (EsbSvc) basicEsbNode.get();
 				URL url = parseWsdlToUrl(esbSvc.getWsdlURL());
 				if (url != null) {
 					String qName = esbParser.convertWsdlToQname(url);
-					Project esbProject = findEsbProjectByQname(qName, url, workspace);
+					Project esbProject = findEsbProjectByQname(qName, url, multiWorkspace);
 					if (esbProject != null) {
 						esbSvc.getOwnerEsbProject().addDependency(esbProject);
 					}
@@ -275,10 +304,10 @@ public final class MultiWorkspaceParser extends AbstractParser {
 
 			} else if (basicEsbNode.get() instanceof EsbSys) {
 				EsbSys esbSys = (EsbSys) basicEsbNode.get();
-				analyzeEsbDependencies(esbSys.getBasicEsbNodes(), workspace);
+				analyzeEsbDependencies(multiWorkspace, esbSys.getBasicEsbNodes());
 			} else if (basicEsbNode.get() instanceof EsbGrp) {
 				EsbGrp esbGrp = (EsbGrp) basicEsbNode.get();
-				analyzeEsbDependencies(esbGrp.getBasicEsbNodes(), workspace);
+				analyzeEsbDependencies(multiWorkspace, esbGrp.getBasicEsbNodes());
 			}
 		}
 	}
@@ -293,13 +322,15 @@ public final class MultiWorkspaceParser extends AbstractParser {
 	 * @param workspace
 	 * @return
 	 */
-	private final Project findEsbProjectByQname(String qName, URL serviceURL, Workspace workspace) {
-		for (Project project : workspace.getProjects()) {
-			if (project.getType() == ProjectType.ORACLE10G_ESB) {
-				EsbProject esbProject = (EsbProject) project;
-				EsbProject fProject = esbProject.findEsbProjectByQname(qName, serviceURL);
-				if (fProject != null) {
-					return fProject;
+	private final Project findEsbProjectByQname(String qName, URL serviceURL, MultiWorkspace multiWorkspace) {
+		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+			for (Project project : workspace.getProjects()) {
+				if (project.getType() == ProjectType.ORACLE10G_ESB) {
+					EsbProject esbProject = (EsbProject) project;
+					EsbProject fProject = esbProject.findEsbProjectByQname(qName, serviceURL);
+					if (fProject != null) {
+						return fProject;
+					}
 				}
 			}
 		}
