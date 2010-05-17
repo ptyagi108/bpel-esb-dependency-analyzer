@@ -97,6 +97,11 @@ public final class FrmOpenWorkspace extends Dialog {
 		textFieldName.addKeyListener(new KeyAdapter() {
 			public final void keyReleased(KeyEvent e) {
 				workspaceName = textFieldName.getText().trim();
+				enableButton(e, isMultipleWorkspace);
+			}
+
+			public final void keyTyped(KeyEvent e) {
+				enableButton(e, isMultipleWorkspace);
 			}
 		});
 		addToButtonLayout(buttonOpen);
@@ -132,6 +137,13 @@ public final class FrmOpenWorkspace extends Dialog {
 	private final void enableButton(KeyEvent e, boolean isMultipleWorkspace) {
 		File workspace = new File(textFieldPath.getText());
 		if (workspace.isDirectory() && workspace.exists()) {
+
+			if (isMultipleWorkspace) {
+				if (textFieldName.getText().trim().length() == 0) {
+					buttonOpen.setEnabled(false);
+					return;
+				}
+			}
 			buttonOpen.setEnabled(true);
 			if ((e != null) && e.getKeyCode() == KeyEvent.VK_ENTER) {
 				if (isMultipleWorkspace) {
