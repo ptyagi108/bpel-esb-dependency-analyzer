@@ -8,6 +8,7 @@ import javax.swing.tree.TreeNode;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.EmptyNode;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.EsbServiceNode;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
 import com.tomecode.soa.oracle10g.bpel.activity.Activity;
 import com.tomecode.soa.oracle10g.bpel.activity.ActivityType;
@@ -99,7 +100,7 @@ public final class Operation implements TreeNode, IconNode {
 			}
 			return project.getBpelOperations();
 		} else if (partnerLinkBinding.getDependencyEsbProject() != null) {
-			return partnerLinkBinding.getDependencyEsbProject();
+			return new EsbServiceNode(partnerLinkBinding.getDependencyEsbProject());
 
 		}
 		return new EmptyNode(project);

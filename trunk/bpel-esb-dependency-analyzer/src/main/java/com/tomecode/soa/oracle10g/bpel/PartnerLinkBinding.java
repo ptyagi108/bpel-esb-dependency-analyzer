@@ -55,20 +55,6 @@ public final class PartnerLinkBinding {
 		return dependencyBpelProject;
 	}
 
-	// public final void setDependencyProject(Project project) {
-	// if (project != null) {
-	//
-	// if (project.getType() == ProjectType.ORACLE10G_ESB) {
-	// this.dependencyEsbProject = (EsbProject) project;// new
-	// // EsbServiceNode((EsbProject)
-	// // project);
-	// } else {
-	// this.dependencyBpelProject = (BpelProject) project;
-	// }
-	// this.parseError = null;
-	// }
-	// }
-
 	public final void setDependencyEsbProject(EsbProject dependencyEsbProject) {
 		this.dependencyEsbProject = dependencyEsbProject;
 	}
