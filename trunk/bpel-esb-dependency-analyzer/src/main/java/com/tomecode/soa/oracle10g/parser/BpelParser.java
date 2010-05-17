@@ -625,13 +625,13 @@ public final class BpelParser extends AbstractParser {
 
 			if (url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
 				String processName = getProcessNameFromUrl(url.toString());
-				partnerLinkBinding.setDependencyProject(findParsedProcess(processName));
+				partnerLinkBinding.setDependencyBpelProject(findParsedProcess(processName));
 			} else {
 				// parse file dependencie
 				File file = new File(url.getFile());
 				BpelProject parseBpelProcess = findParsedProcess(file);
 				if (parseBpelProcess != null) {
-					partnerLinkBinding.setDependencyProject(parseBpelProcess);
+					partnerLinkBinding.setDependencyBpelProject(parseBpelProcess);//setDependencyProject(parseBpelProcess);
 				} else {
 					parseBpelXml(file.getParentFile());
 				}
@@ -641,7 +641,7 @@ public final class BpelParser extends AbstractParser {
 			int index = partnerLinkBinding.getWsdlLocation().lastIndexOf(".");
 			if (index != -1) {
 				String processName = partnerLinkBinding.getWsdlLocation().substring(0, index);
-				partnerLinkBinding.setDependencyProject(findParsedProcess(processName));
+				partnerLinkBinding.setDependencyBpelProject(findParsedProcess(processName));
 			} else {
 				partnerLinkBinding.setParseErrror(e);
 			}
