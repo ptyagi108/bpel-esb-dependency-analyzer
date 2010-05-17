@@ -11,6 +11,8 @@ import com.tomecode.soa.project.Project;
 
 /**
  * 
+ * impl class for project usage
+ * 
  * @author Tomas Frastia
  * 
  */
@@ -18,7 +20,7 @@ public final class FindUsageProjectResult implements FindUsage {
 
 	private final Project project;
 
-	private List<Usage> activities;
+	private List<Usage> usages;
 
 	/**
 	 * Constructor
@@ -27,15 +29,37 @@ public final class FindUsageProjectResult implements FindUsage {
 	 */
 	public FindUsageProjectResult(Project project) {
 		this.project = project;
-		this.activities = new ArrayList<Usage>();
+		this.usages = new ArrayList<Usage>();
 	}
 
 	public final Project getProject() {
 		return project;
 	}
 
-	public void addUsage(Project project) {
-		activities.add(new Usage(project));
+	/**
+	 * adding new project usage if not exists
+	 * 
+	 * @param project
+	 */
+	public final void addUsage(Project project) {
+		if (!existUsage(project)) {
+			usages.add(new Usage(project));
+		}
+	}
+
+	/**
+	 * check , whether usage exists
+	 * 
+	 * @param project
+	 * @return
+	 */
+	private final boolean existUsage(Project project) {
+		for (Usage usage : usages) {
+			if (usage.getProject().equals(project)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -45,22 +69,22 @@ public final class FindUsageProjectResult implements FindUsage {
 
 	@Override
 	public boolean getAllowsChildren() {
-		return !activities.isEmpty();
+		return !usages.isEmpty();
 	}
 
 	@Override
 	public TreeNode getChildAt(int childIndex) {
-		return activities.get(childIndex);
+		return usages.get(childIndex);
 	}
 
 	@Override
 	public int getChildCount() {
-		return activities.size();
+		return usages.size();
 	}
 
 	@Override
 	public int getIndex(TreeNode node) {
-		return activities.indexOf(node);
+		return usages.indexOf(node);
 	}
 
 	@Override
@@ -70,7 +94,7 @@ public final class FindUsageProjectResult implements FindUsage {
 
 	@Override
 	public boolean isLeaf() {
-		return activities.isEmpty();
+		return usages.isEmpty();
 	}
 
 	public final String toString() {

@@ -103,25 +103,37 @@ public final class Workspace extends BasicNode<Project> implements IconNode {
 			if (project.getType() == ProjectType.ORACLE10G_BPEL) {
 				BpelProject bpel = (BpelProject) project;
 
-				if (usage.getProject().getType() == ProjectType.ORACLE10G_BPEL) {
-					BpelProject usageBpelProject = (BpelProject) usage.getProject();
+				BpelProject usageBpelProject = (BpelProject) usage.getProject();
 
-					if (!bpel.compareByBpelXml(usageBpelProject)) {
-						for (PartnerLinkBinding partnerLinkBinding : bpel.getPartnerLinkBindings()) {
-							if (partnerLinkBinding.getDependencyBpelProject() != null) {
+				if (!bpel.compareByBpelXml(usageBpelProject)) {
+					for (PartnerLinkBinding partnerLinkBinding : bpel.getPartnerLinkBindings()) {
+						if (partnerLinkBinding.getDependencyBpelProject() != null) {
 
-								if (partnerLinkBinding.getDependencyBpelProject().compareByBpelXml(usageBpelProject)) {
-									usage.addUsage(partnerLinkBinding.getParent());
-								}
-
+							if (partnerLinkBinding.getDependencyBpelProject().compareByBpelXml(usageBpelProject)) {
+								usage.addUsage(partnerLinkBinding.getParent());
 							}
+
 						}
+					}
+
+				}
+			} else if (project.getType() == ProjectType.ORACLE10G_ESB) {
+				EsbProject esbProject = (EsbProject) project;
+				if (!esbProject.equals(usage.getProject())) {
+					List<EsbSvc> esbSvcs = esbProject.getAllEsbSvc();
+					for (EsbSvc esbSvc : esbSvcs) {
+						esbSvc.findUsage(usage);
 					}
 				}
 			}
 		}
 	}
 
+	/**
+	 * find usage for esb project
+	 * 
+	 * @param usage
+	 */
 	public final void findUsageEsb(FindUsageProjectResult usage) {
 		for (Project project : childs) {
 			if (project.getType() == ProjectType.ORACLE10G_ESB) {
@@ -132,6 +144,17 @@ public final class Workspace extends BasicNode<Project> implements IconNode {
 						esbSvc.findUsage(usage);
 					}
 				}
+			} else if (project.getType() == ProjectType.ORACLE10G_BPEL) {
+				BpelProject bpelProject = (BpelProject) project;
+				List<PartnerLinkBinding> partnerLinkBindings = bpelProject.getPartnerLinkBindings();
+				for (PartnerLinkBinding partnerLinkBinding : partnerLinkBindings) {
+					if (partnerLinkBinding.getDependencyEsbProject() != null) {
+						if (partnerLinkBinding.getDependencyEsbProject().equals(usage.getProject())) {
+							usage.addUsage(partnerLinkBinding.getParent());
+						}
+					}
+				}
+
 			}
 		}
 	}
