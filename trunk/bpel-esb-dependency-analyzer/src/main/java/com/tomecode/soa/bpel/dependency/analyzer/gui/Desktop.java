@@ -181,7 +181,7 @@ public final class Desktop extends Frame implements ActionListener {
 		try {
 			MultiWorkspace multiWorkspace = new MultiWorkspaceParser().parse(workspaceFolder);
 			String name = multiWorkspace.getWorkspaces().isEmpty() ? "not found workspace" : multiWorkspace.getWorkspaces().get(0).getName();
-			SettingsManager.addRecentFile(name, multiWorkspace.getFile());
+			SettingsManager.addRecentFile(name, "W", multiWorkspace.getFile());
 			workspaceTabb.addTable(name, multiWorkspace);
 		} catch (ServiceParserException e) {
 			FrmError.showMe(e.getMessage(), e);
@@ -192,7 +192,7 @@ public final class Desktop extends Frame implements ActionListener {
 	private final void openNewMultipleWorkspace(String name, File workspaceFolder) {
 		try {
 			MultiWorkspace multiWorkspace = new MultiWorkspaceParser().parse(workspaceFolder);
-			SettingsManager.addRecentFile(name, multiWorkspace.getFile());
+			SettingsManager.addRecentFile(name, "M", multiWorkspace.getFile());
 			workspaceTabb.addTable(name, multiWorkspace);
 		} catch (ServiceParserException e) {
 			FrmError.showMe(e.getMessage(), e);

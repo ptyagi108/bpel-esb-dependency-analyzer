@@ -40,10 +40,12 @@ public final class SettingsManager {
 				String line = null;
 				while ((line = br.readLine()) != null) {
 					String[] strings = line.split("::");
-					if (strings.length == 2) {
-						files.add(new RecentFile(strings[0], new File(strings[1])));
+					if (strings.length == 3) {
+						files.add(new RecentFile(strings[0], strings[1], new File(strings[2])));
+					} else if (strings.length == 2) {
+						files.add(new RecentFile(strings[0], "W", new File(strings[1])));
 					} else {
-						files.add(new RecentFile(strings[0], new File(strings[0])));
+						files.add(new RecentFile(strings[0], "W", new File(strings[0])));
 					}
 
 				}
@@ -82,15 +84,20 @@ public final class SettingsManager {
 		return file;
 	}
 
-	public final static void addRecentFile(String name, File file) {
+	public final static void addRecentFile(String name, String type, File file) {
 		List<RecentFile> recentFiles = getRecentFiles();
 		if (!containsRecentFiles(name, file, recentFiles)) {
-			recentFiles.add(0, new RecentFile(name, file));
+			recentFiles.add(0, new RecentFile(name, type, file));
 		}
 		writeRecentFiles(recentFiles);
 	}
 
-	private static void writeRecentFiles(List<RecentFile> recentFiles) {
+	/**
+	 * write list of {@link RecentFile} to setting file
+	 * 
+	 * @param recentFiles
+	 */
+	private static final void writeRecentFiles(List<RecentFile> recentFiles) {
 
 		BufferedWriter bw = null;
 		try {

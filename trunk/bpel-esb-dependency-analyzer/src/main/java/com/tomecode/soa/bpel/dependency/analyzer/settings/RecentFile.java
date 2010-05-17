@@ -13,6 +13,11 @@ import com.tomecode.soa.oracle10g.Workspace;
 public final class RecentFile {
 
 	/**
+	 * workspace type: IF <b>M</b> then is multiworkspace if <b>W</b> is simple
+	 * workspace
+	 */
+	private String type;
+	/**
 	 * workspace name
 	 */
 	private String name;
@@ -29,8 +34,9 @@ public final class RecentFile {
 	 * @param file
 	 *            {@link Workspace} folder
 	 */
-	public RecentFile(String name, File file) {
+	public RecentFile(String name, String type, File file) {
 		this.name = name;
+		this.type = type;
 		this.file = file;
 	}
 
@@ -38,6 +44,15 @@ public final class RecentFile {
 		return name;
 	}
 
+	public final String getType() {
+		return type;
+	}
+
+	/**
+	 * workpsace file
+	 * 
+	 * @return
+	 */
 	public final File getFile() {
 		return file;
 	}
