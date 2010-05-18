@@ -3,6 +3,8 @@
 
 = Getting Started with bpel-esb-dependency-analyzer =
 
+Requirements: Java 1.6
+
 
 ===How to open a Workspace or Multi Workspaces===
 
