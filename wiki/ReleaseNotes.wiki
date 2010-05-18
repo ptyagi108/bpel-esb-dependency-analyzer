@@ -6,14 +6,40 @@
 
 = Details =
 
-Version 0.3
-  * first stable version
-  * analysis dependence between BPEL projects for Oracle SOA 10g
+Version 0.6
+	bug-fix:
+		findUsage for ESB project does not show findUsage panel
+	news:
+		* "Project Dependency" tree - new popup menu - contains new menu items:
+													'Find Usages for BPEL project'
+													'Find Usages for ESB project'
+		* "Project Structure" tree - new popup menu - contains new menu items:
+																* 'Find Usages for Variable'
+																* 'Find Usages for PartnerLink'
 
+																
+Version 0.5-b02
+	bug-fix:
+		* bpel parser
+		* workspace tree refresh
+		* workspace/process tree selection
+		* GUI
+	news:
+		* multi-workspace parser: analysis of several projects in several workspace
+		* changes in the Oracel 10g BPEL parsers - parsing of new activities: email, voice, fax, sms, transformation, etc.
+		* parsing the Oracle 10g BPEL projects that not included in Oracle 10g Jdeveloper workspace (*.jws) - but are in file system
+			
+		
 Version 0.5-b01
-  * fix bug in BPEL parser for Oracle SOA 10g
+  * fix some bux in BPEL parser for Oracle SOA 10g
   * ESB(Enterprise Service Bus) parser for Oracle SOA 10g
   * analysis dependence between ESB projects
   * analysis dependence between BPEL and ESB projects
   * automatic detection workspace name for Oracle SOA 10g
   * utility for recently files open -  quick menu
+
+
+Version 0.3
+  * first stable version
+  * analysis dependence between BPEL projects for Oracle SOA 10g
+ 
