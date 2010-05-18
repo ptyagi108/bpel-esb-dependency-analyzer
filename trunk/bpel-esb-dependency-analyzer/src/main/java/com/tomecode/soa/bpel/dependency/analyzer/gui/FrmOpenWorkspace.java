@@ -60,7 +60,7 @@ public final class FrmOpenWorkspace extends Dialog {
 	 * @param owner
 	 */
 	public FrmOpenWorkspace(Frame owner, final boolean isMultipleWorkspace, HideNotifiListener notifiListener) {
-		super(owner, "Open BPEL workspace", 600, 140, false, true, true, true);
+		super(owner, "Open Oracle 10g BPEL/ESB workspace", 600, 140, false, true, true, true);
 		buttonOpen = new JButton("Open");
 		this.addHideListeners(notifiListener);
 		buttonOpen.setEnabled(false);
