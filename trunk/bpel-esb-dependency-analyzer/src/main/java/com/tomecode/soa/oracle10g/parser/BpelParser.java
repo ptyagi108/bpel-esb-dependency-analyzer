@@ -572,7 +572,7 @@ public final class BpelParser extends AbstractParser {
 		if (listOfElements != null) {
 			for (Object e : listOfElements) {
 				Element element = (Element) e;
-				if (element.getName().equals("receive") || element.getName().equals("invoke") || element.getName().equals("reply")) {
+				if (element.getName().equals("receive") || element.getName().equals("invoke") || element.getName().equals("reply") || element.getName().equals("onMessage")) {
 
 					if (element.attributeValue("partnerLink") == null) {
 						new NullPointerException("").printStackTrace();
@@ -631,7 +631,7 @@ public final class BpelParser extends AbstractParser {
 				File file = new File(url.getFile());
 				BpelProject parseBpelProcess = findParsedProcess(file);
 				if (parseBpelProcess != null) {
-					partnerLinkBinding.setDependencyBpelProject(parseBpelProcess);//setDependencyProject(parseBpelProcess);
+					partnerLinkBinding.setDependencyBpelProject(parseBpelProcess);// setDependencyProject(parseBpelProcess);
 				} else {
 					parseBpelXml(file.getParentFile());
 				}

@@ -140,6 +140,9 @@ public final class Operation implements TreeNode, IconNode {
 	}
 
 	public final String toString() {
+		if (name == null) {
+			return (operation == null ? "" : operation);
+		}
 		return name + (operation == null ? "" : " - " + operation);
 	}
 
