@@ -92,7 +92,7 @@ public final class WorkspacePanel extends JPanel {
 		spWorkspace.setDividerLocation(200);
 
 		JSplitPane spProjectTrees = PanelFactory.createSplitPanel();
-		spProjectTrees.add(PanelFactory.createBorderLayout("Project dependencies by Operations", new JScrollPane(projectOperationTree)));
+		spProjectTrees.add(PanelFactory.createBorderLayout("Depending on activity-based operations", new JScrollPane(projectOperationTree)));
 		spProjectTrees.add(PanelFactory.createBorderLayout("Project Structure", new JScrollPane(processStructureTree)));
 		spProjectTrees.setDividerLocation(350);
 
