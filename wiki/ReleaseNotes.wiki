@@ -1,11 +1,5 @@
 #summary Release notes
 
-= Release notes =
-
-
-
-= Details =
-
 Version 0.6
 	bug-fix:
 		findUsage for ESB project does not show findUsage panel
