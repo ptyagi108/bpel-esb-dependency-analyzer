@@ -1,5 +1,5 @@
-#summary Getting Started with bpel-esb-dependency-analyzer.
-#labels Phase-Implementation
+#summary Getting Started with bpel-esb-dependency-analyzer (version 0.6).
+#labels Phase-Implementation,0.6,gettingstarted
 
 = Getting Started with bpel-esb-dependency-analyzer =
 
