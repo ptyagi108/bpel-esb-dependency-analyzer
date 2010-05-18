@@ -1,17 +1,18 @@
 #summary Release notes
 
 *Version 0.6*
-	bug-fix:
-		findUsage for ESB project does not show findUsage panel
-	news:
-		* "Project Dependency" tree - new popup menu - contains new menu items:
-													'Find Usages for BPEL project'
-													'Find Usages for ESB project'
-		* "Project Structure" tree - new popup menu - contains new menu items:
-																* 'Find Usages for Variable'
-																* 'Find Usages for PartnerLink'
+        *bug-fix:*
+                * findUsage for ESB project does not show findUsage panel
 
-																
+        *news:*
+                * "Project Dependency" tree - new popup menu - contains new menu items:
+                                  'Find Usages for BPEL project'
+                                  'Find Usages for ESB project'
+                * "Project Structure" tree - new popup menu - contains new menu items:
+                                  'Find Usages for Variable'
+                                  'Find Usages for PartnerLink'
+
+	
 *Version 0.5-b02*
 	*bug-fix:*
 		* bpel parser
