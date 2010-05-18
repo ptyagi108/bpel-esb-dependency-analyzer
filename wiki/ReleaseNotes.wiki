@@ -6,11 +6,9 @@
 
         *news:*
                 * "Project Dependency" tree - new popup menu - contains new menu items:
-                                  'Find Usages for BPEL project'
-                                  'Find Usages for ESB project'
+                                  'Find Usages for BPEL projects or ESB services'
                 * "Project Structure" tree - new popup menu - contains new menu items:
-                                  'Find Usages for Variable'
-                                  'Find Usages for PartnerLink'
+                                  'Find Usages for Variable or PartnerLink'
 
 	
 *Version 0.5-b02*
