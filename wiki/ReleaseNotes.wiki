@@ -1,10 +1,10 @@
 #summary Release notes
 
 *Version 0.6*
-        *bug-fix:*
+        * bug-fix:*
                 * findUsage for ESB project does not show findUsage panel
 
-        *news:*
+        * news:*
                 * "Project Dependency" tree - new popup menu - contains new menu items:
                                   'Find Usages for BPEL projects or ESB services'
                 * "Project Structure" tree - new popup menu - contains new menu items:
@@ -12,12 +12,12 @@
 
 	
 *Version 0.5-b02*
-	*bug-fix:*
+	* bug-fix:*
 		* bpel parser
 		* workspace tree refresh
 		* workspace/process tree selection
 		* GUI
-	*news:*
+	* news:*
 		* multi-workspace parser: analysis of several projects in several workspace
 		* changes in the Oracel 10g BPEL parsers - parsing of new activities: email, voice, fax, sms, transformation, etc.
 		* parsing the Oracle 10g BPEL projects that not included in Oracle 10g Jdeveloper workspace (*.jws) - but are in file system
