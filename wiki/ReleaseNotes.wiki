@@ -10,7 +10,7 @@
                                   'Find Usages for ESB project'
                 * "Project Structure" tree - new popup menu - contains new menu items:
                                   'Find Usages for Variable'
-                                  'Find Usages for PartnerLink'
+                                  'Find Usages for PartnerLink '
 
 	
 *Version 0.5-b02*
