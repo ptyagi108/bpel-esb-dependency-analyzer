@@ -24,3 +24,15 @@ bpel-esb-dependency-analyzer allows to open workspaces in two ways:
       http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/projectDependencies.gif
  "Depending on activity-based operations" shows the dependencies on the BPEL processes or ESB services that are called from activities(receive, invoke, etc.) that contain WSLD operations
       http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/activityOperationDependnecies.gif
+ "Project Structure" shows all activities in BPEL process
+      http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/projectStructure.gif
+ "Esb Services" shows all systems, groups, etc. This tree shows dependencies to WSDL operations
+      http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/esbServiceTree.gif
+ 
+===Find Usages...=== 
+
+ The first two trees containing the popup menu wich contains two items, *_Find Usage for BPEL project_* and *_Find Usage for ESB project_*
+      http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/findUsageForProjects.gif
+ "Project Structure" tree containing the popup menu wich contains two items, *_Find Usage for Partner Link_* and *_Find Usage for Variable_*
+      http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/findUsageForPartnerLink.gif
+      http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/findUsageForVariables.gif
