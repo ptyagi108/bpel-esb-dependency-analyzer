@@ -20,5 +20,7 @@ bpel-esb-dependency-analyzer allows to open workspaces in two ways:
 
 ===Analysis of dependencies between BPEL and ESB projects===
 
-*"Project Dependencies"* shows the dependencies between BPEL and ESB projects
+ "Project Dependencies"* shows the dependencies between BPEL and ESB projects
       http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/projectDependencies.gif
+ "Depending on activity-based operations" shows the dependencies on the BPEL processes or ESB services that are called from activities(receive, invoke, etc.) that contain WSLD operations
+      http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/activityOperationDependnecies.gif
