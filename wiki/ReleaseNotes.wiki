@@ -1,6 +1,6 @@
 #summary Release notes
 
-Version 0.6
+*Version 0.6*
 	bug-fix:
 		findUsage for ESB project does not show findUsage panel
 	news:
@@ -12,19 +12,19 @@ Version 0.6
 																* 'Find Usages for PartnerLink'
 
 																
-Version 0.5-b02
-	bug-fix:
+*Version 0.5-b02*
+	*bug-fix:*
 		* bpel parser
 		* workspace tree refresh
 		* workspace/process tree selection
 		* GUI
-	news:
+	*news:*
 		* multi-workspace parser: analysis of several projects in several workspace
 		* changes in the Oracel 10g BPEL parsers - parsing of new activities: email, voice, fax, sms, transformation, etc.
 		* parsing the Oracle 10g BPEL projects that not included in Oracle 10g Jdeveloper workspace (*.jws) - but are in file system
 			
 		
-Version 0.5-b01
+*Version 0.5-b01*
   * fix some bux in BPEL parser for Oracle SOA 10g
   * ESB(Enterprise Service Bus) parser for Oracle SOA 10g
   * analysis dependence between ESB projects
