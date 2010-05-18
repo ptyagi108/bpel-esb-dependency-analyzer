@@ -4,10 +4,9 @@
 = Getting Started with bpel-esb-dependency-analyzer =
 
 
-*How to open a Workspace or Multi Workspaces*
+===How to open a Workspace or Multi Workspaces===
 
-   	
-    bpel-esb-dependency-analyzer allows to open workspaces in two ways:
+bpel-esb-dependency-analyzer allows to open workspaces in two ways:
 
     # Open one Workspace – analysis of dependencies between projects in one workspace.
       * File --> Open*
@@ -17,3 +16,9 @@
       http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/frmOpenMulti.gif
 
 
+
+
+===Analysis of dependencies between BPEL and ESB projects===
+
+*"Project Dependencies"* shows the dependencies between BPEL and ESB projects
+      http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/projectDependencies.gif
