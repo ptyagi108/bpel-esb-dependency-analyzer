@@ -18,6 +18,7 @@ import com.tomecode.soa.project.Project;
  */
 public final class BpelOperations extends BasicNode<Operation> implements DependencyNode, IconNode {
 
+	private static final long serialVersionUID = 8366150968471755335L;
 	private BpelProject bpelProject;
 
 	/**

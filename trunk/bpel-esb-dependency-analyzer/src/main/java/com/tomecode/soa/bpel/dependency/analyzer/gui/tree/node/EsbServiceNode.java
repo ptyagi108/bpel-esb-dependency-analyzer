@@ -38,7 +38,7 @@ public final class EsbServiceNode implements TreeNode, DependencyNode, IconNode 
 
 	@Override
 	public Enumeration<?> children() {
-		return esbProject.getBasicEsbNodes().elements();
+		return null;
 	}
 
 	@Override

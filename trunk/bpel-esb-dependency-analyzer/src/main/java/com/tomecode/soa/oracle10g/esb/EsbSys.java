@@ -18,6 +18,7 @@ import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
  */
 public final class EsbSys extends BasicNode<BasicEsbNode> implements BasicEsbNode, IconNode {
 
+	private static final long serialVersionUID = -5469410851019923440L;
 	private EsbProject ownerEsbProject;
 	private File esbSysFile;
 	private String name;

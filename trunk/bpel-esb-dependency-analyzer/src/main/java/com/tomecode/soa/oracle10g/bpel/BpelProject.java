@@ -21,7 +21,9 @@ import com.tomecode.soa.wsdl.Wsdl;
  * @author Tomas Frastia
  * 
  */
-public final class BpelProject extends Project {
+public final class BpelProject extends Project  {
+
+	private static final long serialVersionUID = 267257551834214909L;
 
 	private String id;
 

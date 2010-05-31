@@ -12,6 +12,8 @@ import com.tomecode.soa.oracle10g.bpel.BpelProcessStrukture;
  */
 public final class Variable extends Activity {
 
+	private static final long serialVersionUID = 1387914145237466640L;
+
 	private BpelProcessStrukture strukture;
 
 	/**

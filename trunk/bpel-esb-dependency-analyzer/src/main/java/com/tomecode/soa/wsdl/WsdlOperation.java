@@ -1,13 +1,16 @@
 package com.tomecode.soa.wsdl;
 
+import java.io.Serializable;
+
 /**
  * operation in wsdl
  * 
  * @author Tomas Frastia
  * 
  */
-public final class WsdlOperation {
+public final class WsdlOperation implements Serializable {
 
+	private static final long serialVersionUID = 8680563798539886063L;
 	/**
 	 * wsdl operation name
 	 */

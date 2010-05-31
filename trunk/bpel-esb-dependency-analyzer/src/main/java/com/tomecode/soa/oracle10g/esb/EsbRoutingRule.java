@@ -1,5 +1,6 @@
 package com.tomecode.soa.oracle10g.esb;
 
+import java.io.Serializable;
 import java.util.Enumeration;
 
 import javax.swing.tree.TreeNode;
@@ -9,8 +10,9 @@ import javax.swing.tree.TreeNode;
  * @author Frastia Tomas
  * 
  */
-public final class EsbRoutingRule implements TreeNode {
+public final class EsbRoutingRule implements TreeNode, Serializable {
 
+	private static final long serialVersionUID = -342513167744595428L;
 	private String qname;
 	private String serviceQName;
 

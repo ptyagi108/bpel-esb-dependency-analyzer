@@ -8,6 +8,8 @@ package com.tomecode.soa.oracle10g.bpel.activity;
  */
 public final class Email extends Activity {
 
+	private static final long serialVersionUID = 1523369652771148368L;
+
 	/**
 	 * Constructor
 	 * 

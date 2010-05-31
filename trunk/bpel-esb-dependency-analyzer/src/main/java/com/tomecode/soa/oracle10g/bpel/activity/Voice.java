@@ -8,6 +8,8 @@ package com.tomecode.soa.oracle10g.bpel.activity;
  */
 public final class Voice extends Activity {
 
+	private static final long serialVersionUID = -7771451840355025106L;
+
 	/**
 	 * Constructor
 	 * 

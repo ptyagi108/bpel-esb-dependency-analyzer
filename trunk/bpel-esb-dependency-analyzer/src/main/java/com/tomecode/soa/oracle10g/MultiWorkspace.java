@@ -18,6 +18,7 @@ import com.tomecode.soa.oracle10g.parser.ServiceParserException;
  */
 public final class MultiWorkspace extends BasicNode<Workspace> implements IconNode {
 
+	private static final long serialVersionUID = 5467653582353248725L;
 	/**
 	 * workspace folder
 	 */

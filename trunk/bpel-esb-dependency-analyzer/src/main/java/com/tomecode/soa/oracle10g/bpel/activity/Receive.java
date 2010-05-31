@@ -12,6 +12,8 @@ import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsagePartnerLinkResu
  */
 public final class Receive extends Activity {
 
+	private static final long serialVersionUID = 1068491215667638987L;
+
 	private String variable;
 
 	private String partnerLink;

@@ -8,6 +8,8 @@ package com.tomecode.soa.oracle10g.bpel.activity;
  */
 public final class Reply extends Activity {
 
+	private static final long serialVersionUID = 5210081469434718236L;
+
 	private String variable;
 
 	private String partnerLink;

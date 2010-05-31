@@ -84,12 +84,31 @@ public final class SettingsManager {
 		return file;
 	}
 
-	public final static void addRecentFile(String name, String type, File file) {
+	/**
+	 * set new type and change order for {@link RecentFile}
+	 * 
+	 * @param type
+	 * @param index
+	 */
+	public final static void addRecentFile(String type, int index) {
 		List<RecentFile> recentFiles = getRecentFiles();
-		if (!containsRecentFiles(name, file, recentFiles)) {
-			recentFiles.add(0, new RecentFile(name, type, file));
-		}
+		RecentFile recentFile = recentFiles.remove(index);
+		recentFile.setType(type);
+		recentFiles.add(0, recentFile);
 		writeRecentFiles(recentFiles);
+	}
+
+	/**
+	 * add new {@link RecentFile}
+	 * 
+	 * @param type
+	 * @param name
+	 * @param file
+	 */
+	public static final void addRecentFile(String type, String name, File file) {
+		List<RecentFile> recentFiles = getRecentFiles();
+		RecentFile recentFile = new RecentFile(name, type, file);
+		recentFiles.add(0, recentFile);
 	}
 
 	/**
@@ -121,12 +140,11 @@ public final class SettingsManager {
 		}
 	}
 
-	private static final boolean containsRecentFiles(String name, File file, List<RecentFile> recentFiles) {
-		for (RecentFile recentFile : recentFiles) {
-			if (recentFile.equals(name, file)) {
-				return true;
-			}
+	public static final RecentFile getRecentFile(int index) {
+		List<RecentFile> recentFiles = getRecentFiles();
+		if (index >= recentFiles.size()) {
+			return null;
 		}
-		return false;
+		return recentFiles.get(index);
 	}
 }

@@ -8,6 +8,8 @@ package com.tomecode.soa.oracle10g.bpel.activity;
  */
 public final class Catch extends Activity {
 
+	private static final long serialVersionUID = 3511714056068910893L;
+
 	private String faultVariable;
 
 	/**

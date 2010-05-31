@@ -1,5 +1,7 @@
 package com.tomecode.soa.oracle10g.bpel;
 
+import java.io.Serializable;
+
 import com.tomecode.soa.oracle10g.esb.EsbProject;
 
 /**
@@ -8,7 +10,9 @@ import com.tomecode.soa.oracle10g.esb.EsbProject;
  * @author Tomas Frastia
  * 
  */
-public final class PartnerLinkBinding {
+public final class PartnerLinkBinding implements Serializable {
+
+	private static final long serialVersionUID = -2868489731373353648L;
 
 	private String name;
 	private String wsdlLocation;

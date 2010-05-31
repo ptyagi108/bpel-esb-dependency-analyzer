@@ -9,6 +9,8 @@ package com.tomecode.soa.oracle10g.bpel.activity;
  */
 public final class Throw extends Activity {
 
+	private static final long serialVersionUID = -6296106634300381880L;
+
 	private String faultVariable;
 
 	/**

@@ -8,6 +8,8 @@ package com.tomecode.soa.oracle10g.bpel.activity;
  */
 public final class Sms extends Activity {
 
+	private static final long serialVersionUID = 509780617476931941L;
+
 	/**
 	 * Constructor
 	 * 

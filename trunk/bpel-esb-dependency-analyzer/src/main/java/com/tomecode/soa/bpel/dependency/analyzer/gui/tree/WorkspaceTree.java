@@ -13,6 +13,7 @@ import javax.swing.tree.TreePath;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.panels.WorkspaceUtilsPanel;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
+import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageProjectResult;
 import com.tomecode.soa.oracle10g.MultiWorkspace;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
@@ -41,8 +42,8 @@ public final class WorkspaceTree extends BasicTree {
 		this.workspaceUtilsPanel = workspaceUtilsPanel;
 		setRootVisible(false);
 		setCellRenderer(new WorkspaceTreeRenderer());
-		createMenuItem("Find Usage for BPEL project", "findUsageBpelProject");
-		createMenuItem("Find Usage for ESB project", "findUsageESBproject");
+		createMenuItem("Find Usage for BPEL project", "findUsageBpelProject", IconFactory.SEARCH);
+		createMenuItem("Find Usage for ESB project", "findUsageESBproject", IconFactory.SEARCH);
 	}
 
 	/**

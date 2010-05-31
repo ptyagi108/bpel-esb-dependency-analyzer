@@ -9,11 +9,13 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.List;
 
+import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.components.TabbedManager;
+import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.bpel.dependency.analyzer.settings.RecentFile;
 import com.tomecode.soa.bpel.dependency.analyzer.settings.SettingsManager;
 import com.tomecode.soa.oracle10g.MultiWorkspace;
@@ -67,12 +69,12 @@ public final class Desktop extends Frame implements ActionListener {
 	 */
 	private final JMenu createMenuFile() {
 		JMenu menu = new JMenu("File");
-		menu.add(createMenuItem("Open"));
-		menu.add(createMenuItem("Open Multi-Workspace"));
+		menu.add(createMenuItem("Open", IconFactory.WORKSPACE));
+		menu.add(createMenuItem("Open Multi-Workspace", IconFactory.WORKSPACE));
 		menu.addSeparator();
 		menu.add(menuRecentFiles);
 		menu.addSeparator();
-		menu.add(createMenuItem("Exit"));
+		menu.add(createMenuItem("Exit", IconFactory.EXIT));
 		menu.setMnemonic(KeyEvent.VK_ALT);
 
 		reloadMenuRecentFiles();
@@ -88,8 +90,9 @@ public final class Desktop extends Frame implements ActionListener {
 	private final void reloadMenuRecentFiles() {
 		List<RecentFile> files = SettingsManager.getRecentFiles();
 		menuRecentFiles.removeAll();
-		for (RecentFile recentFile : files) {
-			menuRecentFiles.add(createMenuItemOpenRecentFiles(recentFile.getName() + " - " + recentFile.getFile().getPath(), recentFile.getFile().getPath()));
+		for (int i = 0; i <= files.size() - 1; i++) {
+			RecentFile recentFile = files.get(i);
+			menuRecentFiles.add(createMenuItemOpenRecentFiles(recentFile, i));
 		}
 		menuRecentFiles.updateUI();
 	}
@@ -100,9 +103,12 @@ public final class Desktop extends Frame implements ActionListener {
 	 * @param name
 	 * @return
 	 */
-	private final JMenuItem createMenuItem(String name) {
+	private final JMenuItem createMenuItem(String name, Icon icon) {
 		JMenuItem menuItem = new JMenuItem(name);
 		menuItem.setActionCommand(name);
+		if (icon != null) {
+			menuItem.setIcon(icon);
+		}
 		menuItem.addActionListener(this);
 		return menuItem;
 	}
@@ -114,20 +120,23 @@ public final class Desktop extends Frame implements ActionListener {
 	 * @param filePath
 	 * @return
 	 */
-	private final JMenuItem createMenuItemOpenRecentFiles(String text, String filePath) {
-		JMenuItem menuItem = new JMenuItem(text);
-		menuItem.setActionCommand(filePath);
+	private final JMenuItem createMenuItemOpenRecentFiles(RecentFile recentFile, int index) {
+		JMenuItem menuItem = new JMenuItem(recentFile.getName() + " - " + recentFile.getFile().getPath());
+		menuItem.setActionCommand(String.valueOf(index));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public final void actionPerformed(ActionEvent e) {
-				File workspaceFolder = new File(e.getActionCommand());
-				openNewWorkspace(workspaceFolder);
+				int index = Integer.parseInt(e.getActionCommand());
+				File workspaceFolder = SettingsManager.getRecentFiles().get(index).getFile();
+				openNewWorkspace(workspaceFolder, index);
 			}
 		});
 		return menuItem;
 	}
 
 	public static final void main(String[] args) {
+		System.setProperty("sun.java2d.d3d", "false");
+
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				new Desktop().setVisible(true);
@@ -154,7 +163,7 @@ public final class Desktop extends Frame implements ActionListener {
 			@Override
 			public final void hideForm(Object... returnObj) {
 				if (returnObj != null && returnObj.length != 0) {
-					openNewWorkspace((File) returnObj[0]);
+					openNewWorkspace((File) returnObj[0], -1);
 				}
 			}
 		});
@@ -165,7 +174,7 @@ public final class Desktop extends Frame implements ActionListener {
 			@Override
 			public final void hideForm(Object... returnObj) {
 				if (returnObj != null && returnObj.length != 0) {
-					openNewMultipleWorkspace((String) returnObj[0], (File) returnObj[1]);
+					openNewMultipleWorkspace((String) returnObj[0], (File) returnObj[1], -1);
 				}
 			}
 		});
@@ -174,14 +183,32 @@ public final class Desktop extends Frame implements ActionListener {
 	/**
 	 * open new {@link Workspace}
 	 * 
-	 * @param name
-	 * @param workspace
+	 * @param workspaceFolder
+	 *            bpel/esb workspace folder
+	 * @param index
+	 *            from {@link RecentFile}
 	 */
-	private final void openNewWorkspace(File workspaceFolder) {
+	private final void openNewWorkspace(File workspaceFolder, int index) {
 		try {
 			MultiWorkspace multiWorkspace = new MultiWorkspaceParser().parse(workspaceFolder);
-			String name = multiWorkspace.getWorkspaces().isEmpty() ? "not found workspace" : multiWorkspace.getWorkspaces().get(0).getName();
-			SettingsManager.addRecentFile(name, "W", multiWorkspace.getFile());
+
+			RecentFile recentFile = SettingsManager.getRecentFile(index);
+			String name = null;
+			if (recentFile != null) {
+				name = recentFile.getName();
+			} else {
+				name = multiWorkspace.getWorkspaces().isEmpty() ? "not found workspace" : multiWorkspace.getWorkspaces().get(0).getName();
+			}
+
+			// String name = multiWorkspace.getWorkspaces().isEmpty() ?
+			// "not found workspace" :
+			// multiWorkspace.getWorkspaces().get(0).getName();
+			if (index == -1) {
+				SettingsManager.addRecentFile("W", name, workspaceFolder);
+			} else {
+				SettingsManager.addRecentFile("W", index);
+			}
+
 			workspaceTabb.addTable(name, multiWorkspace);
 		} catch (ServiceParserException e) {
 			FrmError.showMe(e.getMessage(), e);
@@ -189,10 +216,21 @@ public final class Desktop extends Frame implements ActionListener {
 		reloadMenuRecentFiles();
 	}
 
-	private final void openNewMultipleWorkspace(String name, File workspaceFolder) {
+	/**
+	 * open new {@link MultiWorkspace}
+	 * 
+	 * @param name
+	 * @param workspaceFolder
+	 * @param index
+	 */
+	private final void openNewMultipleWorkspace(String name, File workspaceFolder, int index) {
 		try {
 			MultiWorkspace multiWorkspace = new MultiWorkspaceParser().parse(workspaceFolder);
-			SettingsManager.addRecentFile(name, "M", multiWorkspace.getFile());
+			if (index == -1) {
+				SettingsManager.addRecentFile("W", name, workspaceFolder);
+			} else {
+				SettingsManager.addRecentFile("M", index);
+			}
 			workspaceTabb.addTable(name, multiWorkspace);
 		} catch (ServiceParserException e) {
 			FrmError.showMe(e.getMessage(), e);

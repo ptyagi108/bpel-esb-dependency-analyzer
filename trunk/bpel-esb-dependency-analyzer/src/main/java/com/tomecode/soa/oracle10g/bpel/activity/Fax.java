@@ -8,6 +8,8 @@ package com.tomecode.soa.oracle10g.bpel.activity;
  */
 public final class Fax extends Activity {
 
+	private static final long serialVersionUID = 1088119687553235066L;
+
 	/**
 	 * Constructor
 	 * 

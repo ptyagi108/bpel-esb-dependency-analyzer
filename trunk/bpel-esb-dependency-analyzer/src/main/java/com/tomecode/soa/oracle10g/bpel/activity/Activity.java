@@ -13,6 +13,8 @@ import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageVariableResult;
  */
 public class Activity extends BasicNode<Activity> {
 
+	private static final long serialVersionUID = -6772380545433052884L;
+
 	/**
 	 * actvity type
 	 */

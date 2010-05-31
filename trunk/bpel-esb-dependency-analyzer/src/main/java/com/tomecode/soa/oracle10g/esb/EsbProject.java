@@ -23,6 +23,8 @@ import com.tomecode.soa.project.ProjectType;
  */
 public final class EsbProject extends Project {
 
+	private static final long serialVersionUID = 1517251079778988223L;
+
 	/**
 	 * project name
 	 */
@@ -30,18 +32,18 @@ public final class EsbProject extends Project {
 
 	private File projectFolder;
 
-	private final Vector<BasicEsbNode> basicEsbNodes;
+	private final List<BasicEsbNode> basicEsbNodes;
 	/**
 	 * list of esbsvc
 	 */
-	private final Vector<Project> esbProjectsDependecies;
+	private final List<Project> esbProjectsDependecies;
 
 	/**
 	 * Constructor
 	 */
 	public EsbProject() {
 		super(ProjectType.ORACLE10G_ESB);
-		basicEsbNodes = new Vector<BasicEsbNode>();
+		basicEsbNodes = new ArrayList<BasicEsbNode>();
 		esbProjectsDependecies = new Vector<Project>();
 	}
 
@@ -57,7 +59,7 @@ public final class EsbProject extends Project {
 		this.name = name;
 	}
 
-	public final Vector<BasicEsbNode> getBasicEsbNodes() {
+	public final List<BasicEsbNode> getBasicEsbNodes() {
 		return basicEsbNodes;
 	}
 
@@ -75,7 +77,7 @@ public final class EsbProject extends Project {
 
 	@Override
 	public Enumeration<?> children() {
-		return esbProjectsDependecies.elements();
+		return null;
 	}
 
 	@Override
@@ -110,6 +112,10 @@ public final class EsbProject extends Project {
 
 	public final String toString() {
 		return (projectFolder != null) ? projectFolder.getName() : name;
+	}
+
+	public final List<Project> getEsbProjectsDependecies() {
+		return esbProjectsDependecies;
 	}
 
 	/**

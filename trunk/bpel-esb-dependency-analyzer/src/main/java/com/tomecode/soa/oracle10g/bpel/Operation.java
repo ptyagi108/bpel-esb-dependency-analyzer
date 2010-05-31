@@ -1,5 +1,6 @@
 package com.tomecode.soa.oracle10g.bpel;
 
+import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -19,8 +20,10 @@ import com.tomecode.soa.oracle10g.bpel.activity.ActivityType;
  * @author Tomas Frastia
  * 
  */
-public final class Operation implements TreeNode, IconNode {
+public final class Operation implements TreeNode, IconNode, Serializable {
 
+	private static final long serialVersionUID = -5643471889740129373L;
+	
 	private final ActivityType activtyType;
 	private String activity;
 

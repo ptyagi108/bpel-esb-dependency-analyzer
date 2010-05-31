@@ -10,6 +10,8 @@ import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsagePartnerLinkResu
  */
 public final class Invoke extends Activity {
 
+	private static final long serialVersionUID = 4576862167470771828L;
+
 	private String inputVariable;
 
 	private String outputVariable;

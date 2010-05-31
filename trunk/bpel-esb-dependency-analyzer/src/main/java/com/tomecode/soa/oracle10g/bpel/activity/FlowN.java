@@ -10,6 +10,8 @@ import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageVariableResult;
  */
 public final class FlowN extends Activity {
 
+	private static final long serialVersionUID = 8165417878176837717L;
+
 	private String n;
 
 	private String indexVariable;

@@ -10,11 +10,14 @@ import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageVariableResult;
  */
 public final class While extends Activity {
 
+	private static final long serialVersionUID = 912793397218119096L;
+
 	private String variable;
 
 	/**
 	 * Constructor
 	 * 
+	 * @param name
 	 * @param variable
 	 */
 	public While(String name, String variable) {

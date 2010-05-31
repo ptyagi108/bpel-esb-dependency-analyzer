@@ -10,11 +10,14 @@ import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageVariableResult;
  */
 public final class Wait extends Activity {
 
+	private static final long serialVersionUID = 8837403543290074974L;
+
 	private String variable;
 
 	/**
 	 * Constructor
 	 * 
+	 * @param name
 	 * @param variable
 	 */
 	public Wait(String name, String variable) {

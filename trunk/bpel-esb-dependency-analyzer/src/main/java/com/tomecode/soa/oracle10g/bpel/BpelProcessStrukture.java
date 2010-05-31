@@ -17,6 +17,8 @@ import com.tomecode.soa.oracle10g.bpel.activity.Variable;
  */
 public final class BpelProcessStrukture extends BasicNode<Activity> {
 
+	private static final long serialVersionUID = -8082029461398462336L;
+
 	private BpelProject bpelProject;
 
 	/**

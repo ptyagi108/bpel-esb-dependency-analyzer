@@ -18,6 +18,8 @@ import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
  */
 public final class EsbGrp extends BasicNode<BasicEsbNode> implements BasicEsbNode, IconNode {
 
+	private static final long serialVersionUID = -5057011739449470393L;
+
 	private EsbProject ownerEsbProject;
 	/**
 	 * service group file

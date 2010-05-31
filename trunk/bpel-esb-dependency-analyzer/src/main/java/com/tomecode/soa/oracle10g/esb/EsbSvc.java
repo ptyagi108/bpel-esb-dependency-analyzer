@@ -19,6 +19,7 @@ import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageProjectResult;
  */
 public final class EsbSvc extends BasicNode<EsbOperation> implements BasicEsbNode, IconNode {
 
+	private static final long serialVersionUID = -1114897174017288770L;
 	/**
 	 * esb svc file
 	 */

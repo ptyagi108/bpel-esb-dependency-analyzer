@@ -8,6 +8,8 @@ package com.tomecode.soa.oracle10g.bpel.activity;
  */
 public final class Pager extends Activity {
 
+	private static final long serialVersionUID = 3262302996646664193L;
+
 	/**
 	 * Constructor
 	 * 

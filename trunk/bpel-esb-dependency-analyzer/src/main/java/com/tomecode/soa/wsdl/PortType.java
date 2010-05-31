@@ -1,5 +1,6 @@
 package com.tomecode.soa.wsdl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,9 @@ import java.util.List;
  * @author Tomas Frastia
  * 
  */
-public final class PortType {
+public final class PortType implements Serializable {
+
+	private static final long serialVersionUID = 4682224733979729749L;
 
 	private String name;
 

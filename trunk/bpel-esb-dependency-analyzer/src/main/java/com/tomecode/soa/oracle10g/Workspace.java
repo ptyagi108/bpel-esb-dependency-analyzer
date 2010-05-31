@@ -1,6 +1,7 @@
 package com.tomecode.soa.oracle10g;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -22,7 +23,9 @@ import com.tomecode.soa.project.ProjectType;
  * @author Tomas Frastia
  * 
  */
-public final class Workspace extends BasicNode<Project> implements IconNode {
+public final class Workspace extends BasicNode<Project> implements IconNode, Serializable {
+
+	private static final long serialVersionUID = -3328038478792839666L;
 
 	/**
 	 * owner

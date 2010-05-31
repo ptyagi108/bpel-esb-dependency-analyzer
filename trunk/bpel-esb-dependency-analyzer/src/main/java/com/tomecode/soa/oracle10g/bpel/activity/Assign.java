@@ -14,6 +14,8 @@ import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageVariableResult;
  */
 public final class Assign extends Activity {
 
+	private static final long serialVersionUID = -181327215657391550L;
+
 	private final List<AssignOperation> operations;
 
 	/**

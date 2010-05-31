@@ -7,6 +7,9 @@ package com.tomecode.soa.oracle10g.bpel.activity;
  * 
  */
 public class CaseOtherwise extends Activity {
+
+	private static final long serialVersionUID = -4292260142977278326L;
+
 	/**
 	 * Constructor
 	 * 

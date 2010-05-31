@@ -10,6 +10,8 @@ import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageVariableResult;
  */
 public final class Case extends Activity {
 
+	private static final long serialVersionUID = 804854324731704322L;
+
 	private String variable;
 
 	/**

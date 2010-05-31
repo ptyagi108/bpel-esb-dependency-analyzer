@@ -50,8 +50,8 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 		this.workspaceUtilsPanel = workspaceUtilsPanel;
 		selectedActivityWithOperationPath = new ArrayList<Activity>();
 		treePathRenderer = new SelectTreePathRenderer();
-		createMenuItem("Find Usage for Variable", "findUsageVariable");
-		createMenuItem("Find Usage for PartnerLink", "findUsagePartnerLink");
+		createMenuItem("Find Usage for Variable", "findUsageVariable", IconFactory.SEARCH);
+		createMenuItem("Find Usage for PartnerLink", "findUsagePartnerLink", IconFactory.SEARCH);
 		setCellRenderer(treePathRenderer);
 
 	}

@@ -10,6 +10,8 @@ import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageVariableResult;
  */
 public final class Transform extends Activity {
 
+	private static final long serialVersionUID = 752167762231326145L;
+
 	private String fromVariable;
 	private String toVariable;
 

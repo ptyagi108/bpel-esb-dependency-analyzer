@@ -11,6 +11,8 @@ import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageVariableResult;
  */
 public final class OnMessage extends Activity {
 
+	private static final long serialVersionUID = 1604503742786050538L;
+
 	private String variable;
 	private String partnerLink;
 	private String operation;

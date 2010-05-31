@@ -10,8 +10,15 @@ import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageVariableResult;
  */
 public final class OnAlarm extends Activity {
 
+	private static final long serialVersionUID = 8364805233236556426L;
+
 	private String variable;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param variable
+	 */
 	public OnAlarm(String variable) {
 		super(ActivityType.ONALARM, null);
 		this.variable = variable;

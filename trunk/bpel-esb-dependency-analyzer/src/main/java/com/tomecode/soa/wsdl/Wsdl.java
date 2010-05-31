@@ -1,6 +1,7 @@
 package com.tomecode.soa.wsdl;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * 
@@ -10,7 +11,9 @@ import java.io.File;
  * @author Tomas Frastia
  * 
  */
-public final class Wsdl {
+public final class Wsdl implements Serializable {
+
+	private static final long serialVersionUID = 2802713997788570698L;
 
 	private File file;
 

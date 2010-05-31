@@ -10,6 +10,8 @@ import com.tomecode.soa.oracle10g.bpel.BpelProcessStrukture;
  */
 public final class PartnerLink extends Activity {
 
+	private static final long serialVersionUID = -6888516272264499697L;
+
 	private String partnerLinkType;
 
 	private String myRole;

@@ -23,6 +23,8 @@ import com.tomecode.soa.project.Project;
  */
 public final class EsbOperation extends BasicNode<DependencyNode> implements BasicEsbNode, IconNode {
 
+	private static final long serialVersionUID = 7634028314194386738L;
+
 	private String qname;
 
 	private String wsdlOperation;

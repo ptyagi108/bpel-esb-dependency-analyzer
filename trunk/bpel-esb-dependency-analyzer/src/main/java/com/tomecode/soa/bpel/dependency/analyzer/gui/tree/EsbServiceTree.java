@@ -39,8 +39,8 @@ public final class EsbServiceTree extends BasicTree {
 		super();
 		this.workspaceUtilsPanel = workspaceUtilsPanel;
 		setCellRenderer(new EsbServiceTreeRenederer());
-		createMenuItem("Find Usage for BPEL project", "findUsageBpelProject");
-		createMenuItem("Find Usage for ESB project", "findUsageESBproject");
+		createMenuItem("Find Usage for BPEL project", "findUsageBpelProject", IconFactory.SEARCH);
+		createMenuItem("Find Usage for ESB project", "findUsageESBproject", IconFactory.SEARCH);
 	}
 
 	/**

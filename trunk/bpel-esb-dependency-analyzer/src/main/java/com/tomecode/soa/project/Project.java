@@ -1,5 +1,7 @@
 package com.tomecode.soa.project;
 
+import java.io.Serializable;
+
 import javax.swing.tree.TreeNode;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
@@ -12,8 +14,9 @@ import com.tomecode.soa.oracle10g.Workspace;
  * @author Frastia Tomas
  * 
  */
-public abstract class Project implements TreeNode, IconNode {
+public abstract class Project implements TreeNode, IconNode, Serializable {
 
+	private static final long serialVersionUID = 4360951852708549931L;
 	private Workspace workspace;
 	/**
 	 * if true then project is in *.jws

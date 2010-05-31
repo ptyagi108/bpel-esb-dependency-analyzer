@@ -1,12 +1,15 @@
 package com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
-public abstract class BasicNode<E extends TreeNode> implements TreeNode {
+public abstract class BasicNode<E extends TreeNode> implements TreeNode, Serializable {
+
+	private static final long serialVersionUID = 7912979253082585806L;
 
 	protected List<E> childs;
 
