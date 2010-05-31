@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.components.TabbedManager;
+import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.oracle10g.Workspace;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.util.gui.Dialog;
@@ -61,6 +62,7 @@ public final class FrmOpenWorkspace extends Dialog {
 	 */
 	public FrmOpenWorkspace(Frame owner, final boolean isMultipleWorkspace, HideNotifiListener notifiListener) {
 		super(owner, "Open Oracle 10g BPEL/ESB workspace", 600, 140, false, true, true, true);
+		setIconImage(IconFactory.WORKSPACE.getImage());
 		buttonOpen = new JButton("Open");
 		this.addHideListeners(notifiListener);
 		buttonOpen.setEnabled(false);
