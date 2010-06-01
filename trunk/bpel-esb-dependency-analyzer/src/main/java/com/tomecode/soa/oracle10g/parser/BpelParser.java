@@ -9,6 +9,7 @@ import java.util.List;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
+import com.tomecode.soa.oracle10g.Workspace;
 import com.tomecode.soa.oracle10g.bpel.BpelOperations;
 import com.tomecode.soa.oracle10g.bpel.BpelProcessStrukture;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
@@ -625,7 +626,11 @@ public final class BpelParser extends AbstractParser {
 
 			if (url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
 				String processName = getProcessNameFromUrl(url.toString());
-				partnerLinkBinding.setDependencyBpelProject(findParsedProcess(processName));
+				if (partnerLinkBinding.getParent().toString().equals("BPELProcess1")) {
+					toString();
+				}
+				partnerLinkBinding.setDependencyBpelProject(findParsedProcess(processName, partnerLinkBinding.getParent().getBpelXmlFile()));
+				// partnerLinkBinding.setDependencyBpelProject(findParsedProcess(partnerLinkBinding.getParent()));
 			} else {
 				// parse file dependencie
 				File file = new File(url.getFile());
@@ -641,7 +646,7 @@ public final class BpelParser extends AbstractParser {
 			int index = partnerLinkBinding.getWsdlLocation().lastIndexOf(".");
 			if (index != -1) {
 				String processName = partnerLinkBinding.getWsdlLocation().substring(0, index);
-				partnerLinkBinding.setDependencyBpelProject(findParsedProcess(processName));
+				partnerLinkBinding.setDependencyBpelProject(findParsedProcess(processName, partnerLinkBinding.getParent().getBpelXmlFile()));
 			} else {
 				partnerLinkBinding.setParseErrror(e);
 			}
@@ -666,15 +671,25 @@ public final class BpelParser extends AbstractParser {
 		return null;
 	}
 
-	private final BpelProject findParsedProcess(String processName) {
+	/**
+	 * find {@link BpelProject} in list of {@link #parsedProcess}
+	 * 
+	 * @param processName
+	 * @return if not found return null
+	 */
+	private final BpelProject findParsedProcess(String name, File bpelXml) {
 		for (BpelProject bpelProcess : parsedProcess) {
 			if (bpelProcess.getId() != null) {
-				if (bpelProcess.getId().equals(processName)) {
-					return bpelProcess;
+				if (bpelProcess.getId().equals(name)) {
+					if (compareByWorksapce(bpelProcess.getBpelXmlFile(), bpelXml)) {
+						return bpelProcess;
+					}
 				}
 			} else if (bpelProcess.getSrc() != null) {
-				if (bpelProcess.getSrc().equals(processName)) {
-					return bpelProcess;
+				if (bpelProcess.getSrc().equals(name)) {
+					if (compareByWorksapce(bpelProcess.getBpelXmlFile(), bpelXml)) {
+						return bpelProcess;
+					}
 				}
 			}
 		}
@@ -698,4 +713,51 @@ public final class BpelParser extends AbstractParser {
 		return null;
 	}
 
+	/**
+	 * compare two {@link BpelProject} by {@link Workspace}
+	 * 
+	 * @param target
+	 * @param source
+	 * @return
+	 */
+	private final boolean compareByWorksapce(File targetBpelXml, File sourceBpelXml) {
+		File targetFile = findJws(targetBpelXml);
+		File sourceFile = findJws(sourceBpelXml);
+		if (targetFile == null || sourceFile == null) {
+			return false;
+		}
+		return targetFile.toString().equals(sourceFile.toString());
+	}
+
+	private final File findJws(File file) {
+		while (null != (file = file.getParentFile())) {
+			File[] files = file.listFiles();
+			if (files != null) {
+				for (File f : files) {
+					if (f.isFile() && f.getName().endsWith(".jws")) {
+						return f;
+					}
+				}
+			}
+		}
+
+		// if (file != null) {
+		// File[] files = file.getParentFile().listFiles();
+		// if (files != null) {
+		// for (File f : files) {
+		// if (f.isFile() && f.getName().endsWith(".jws")) {
+		// return f;
+		// }
+		// if (file.isDirectory()) {
+		// File jws = findAllJws(f.getParentFile());
+		// if (jws != null) {
+		// return jws;
+		// }
+		// }
+		//
+		// }
+		// }
+		// }
+		return null;
+	}
 }
