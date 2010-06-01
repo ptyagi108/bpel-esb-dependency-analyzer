@@ -21,7 +21,7 @@ import com.tomecode.soa.wsdl.Wsdl;
  * @author Tomas Frastia
  * 
  */
-public final class BpelProject extends Project  {
+public final class BpelProject extends Project {
 
 	private static final long serialVersionUID = 267257551834214909L;
 
@@ -119,7 +119,7 @@ public final class BpelProject extends Project  {
 			return partnerLinkBinding.getDependencyEsbProject();
 		}
 
-		return new ErrorNode("not found process[" + partnerLinkBinding.getName() + "]", partnerLinkBinding.getWsdlLocation(), partnerLinkBinding.getParseErrror());
+		return new ErrorNode("not found service - " + partnerLinkBinding.getName() + "", partnerLinkBinding.getWsdlLocation(), partnerLinkBinding.getParseErrror());
 	}
 
 	@Override

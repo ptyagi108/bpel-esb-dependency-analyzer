@@ -1,6 +1,9 @@
 package com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node;
 
+import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
+
+import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 
 /**
  * 
@@ -9,7 +12,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
  * @author Tomas Frastia
  * 
  */
-public final class ErrorNode extends DefaultMutableTreeNode {
+public final class ErrorNode extends DefaultMutableTreeNode implements IconNode {
 
 	private static final long serialVersionUID = -8551806046326442886L;
 
@@ -48,6 +51,11 @@ public final class ErrorNode extends DefaultMutableTreeNode {
 
 	public final String getErrorText() {
 		return errorText;
+	}
+
+	@Override
+	public final ImageIcon getIcon() {
+		return IconFactory.ERROR;
 	}
 
 }
