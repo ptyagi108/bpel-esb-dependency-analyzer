@@ -22,6 +22,7 @@ import org.jgraph.graph.GraphModel;
 
 import com.jgraph.layout.JGraphFacade;
 import com.jgraph.layout.organic.JGraphOrganicLayout;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.cellview.CellViewFactory;
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
@@ -53,6 +54,8 @@ public final class WorkspaceVisualPanel extends JPanel {
 		graphModel = new DefaultGraphModel();
 		graph = new JGraph(graphModel);
 		graph.setBackground(new Color(218, 218, 218));
+
+		graph.getGraphLayoutCache().setFactory(new CellViewFactory());
 		// graph.setGridEnabled(true);
 		// graph.setGridColor(Color.red);
 		// graph.setGridVisible(true);
@@ -194,18 +197,28 @@ public final class WorkspaceVisualPanel extends JPanel {
 		edge.setSource(sourcePort.getChildAt(0));
 		edge.setTarget(targetPort.getChildAt(0));
 
+		Point2D point = null;
+		if (sourcePort.getUserObject().equals(targetPort.getUserObject())) {
+			point = new Point2D.Double(GraphConstants.PERMILLE / 2, -10);
+		} else {
+			point = new Point2D.Double(GraphConstants.PERMILLE / 2, 10);
+		}
+		edge.setUserObject("aaa");
+
+		GraphConstants.setLabelPosition(edgeAttrib, point);
 		return edge;
 	}
 
-//	private final Point2D calcCellPosition(int i) {
-//		int gridWidth = (int) Math.sqrt(i);
-//
-//		if (i != 0) {
-//			return new Point2D.Double(20 + (60 * (i % gridWidth)), 20 + (40 * (i / gridWidth)));
-//		} else {
-//			return new Point2D.Double(20, 20);
-//		}
-//	}
+	// private final Point2D calcCellPosition(int i) {
+	// int gridWidth = (int) Math.sqrt(i);
+	//
+	// if (i != 0) {
+	// return new Point2D.Double(20 + (60 * (i % gridWidth)), 20 + (40 * (i /
+	// gridWidth)));
+	// } else {
+	// return new Point2D.Double(20, 20);
+	// }
+	// }
 
 	/**
 	 * Hook from GraphEd to set attributes of a new cell
@@ -214,13 +227,17 @@ public final class WorkspaceVisualPanel extends JPanel {
 	private final Map<?, ?> createCellAttributesBpel(Point2D point) {
 
 		Map<?, ?> map = new Hashtable();
+
 		// Snap the Point to the Grid
 
 		// if (graph != null) {
-		// point = graph.snap((Point2D) point.clone());
+		point = graph.snap((Point2D) point.clone());
 		// } else {
 		// point = (Point2D) point.clone();
 		// }
+
+		CellViewFactory.setRoundRectView(map);
+
 		// Add a Bounds Attribute to the Map
 		GraphConstants.setBounds(map, new Rectangle2D.Double(point.getX(), point.getY(), 0, 0));
 		// Make sure the cell is resized on insert
@@ -252,8 +269,10 @@ public final class WorkspaceVisualPanel extends JPanel {
 		Map<?, ?> map = new Hashtable();
 		// Snap the Point to the Grid
 
+		CellViewFactory.setRoundRectView(map);
+
 		// if (graph != null) {
-		// point = graph.snap((Point2D) point.clone());
+		point = graph.snap((Point2D) point.clone());
 		// } else {
 		// point = (Point2D) point.clone();
 		// }
