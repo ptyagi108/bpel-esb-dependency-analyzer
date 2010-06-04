@@ -16,7 +16,7 @@ public final class RecentFile {
 	 * workspace type: IF <b>M</b> then is multiworkspace if <b>W</b> is simple
 	 * workspace
 	 */
-	private String type;
+	private RecentFileType type;
 	/**
 	 * workspace name
 	 */
@@ -35,6 +35,17 @@ public final class RecentFile {
 	 *            {@link Workspace} folder
 	 */
 	public RecentFile(String name, String type, File file) {
+		this(name, RecentFileType.parseType(type), file);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 * @param type
+	 * @param file
+	 */
+	public RecentFile(String name, RecentFileType type, File file) {
 		this.name = name;
 		this.type = type;
 		this.file = file;
@@ -44,11 +55,11 @@ public final class RecentFile {
 		return name;
 	}
 
-	public final String getType() {
+	public final RecentFileType getType() {
 		return type;
 	}
 
-	public final void setType(String type) {
+	public final void setType(RecentFileType type) {
 		this.type = type;
 	}
 
@@ -66,6 +77,48 @@ public final class RecentFile {
 	}
 
 	public final String toString() {
-		return name + "::" + file.getPath();
+		return name + ":" + (type == null ? "" : type) + ":" + file.getPath();
+	}
+
+	/**
+	 * 
+	 * Recent file type
+	 * 
+	 * @author Tomas Frastia
+	 * 
+	 */
+	public static enum RecentFileType {
+		ORACLE10G_MULTIPLE_WORKSPACE("oracle10gMutliWorkspace"), ORACLE10G_WORKSPACE("oracle10gWorkspace"), UNKNOWN("");
+
+		private final String value;
+
+		/**
+		 * Constructor
+		 * 
+		 * @param type
+		 *            value in xml
+		 */
+		private RecentFileType(String type) {
+			this.value = type;
+		}
+
+		/**
+		 * parse {@link RecentFileType} by xmlValue
+		 * 
+		 * @param type
+		 * @return
+		 */
+		public final static RecentFileType parseType(String type) {
+			for (RecentFileType recentFileType : values()) {
+				if (recentFileType.value.equalsIgnoreCase(type)) {
+					return recentFileType;
+				}
+			}
+			return UNKNOWN;
+		}
+
+		public final String getXmlValue() {
+			return value;
+		}
 	}
 }

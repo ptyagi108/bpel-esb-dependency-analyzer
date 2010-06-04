@@ -1,15 +1,19 @@
 package com.tomecode.soa.bpel.dependency.analyzer.settings;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
+
 import com.tomecode.soa.bpel.dependency.analyzer.gui.FrmError;
+import com.tomecode.soa.bpel.dependency.analyzer.settings.RecentFile.RecentFileType;
 
 /**
  * 
@@ -20,8 +24,26 @@ import com.tomecode.soa.bpel.dependency.analyzer.gui.FrmError;
  */
 public final class SettingsManager {
 
-	private SettingsManager() {
+	private ReloadRecentMenuListener reloadRecentMenuListener;
 
+	/**
+	 * singleton instance
+	 */
+	private static SettingsManager me;
+
+	private final SAXReader saxReader;
+
+	/**
+	 * list of parsed {@link RecentFile}
+	 */
+	private final List<RecentFile> recentFiles;
+
+	/**
+	 * Constructor
+	 */
+	private SettingsManager() {
+		saxReader = new SAXReader();
+		recentFiles = new ArrayList<RecentFile>();
 	}
 
 	/**
@@ -29,40 +51,55 @@ public final class SettingsManager {
 	 * 
 	 * @return
 	 */
-	public static final List<RecentFile> getRecentFiles() {
-		List<RecentFile> files = new ArrayList<RecentFile>();
-		File userHome = createRecentFile();
+	public final List<RecentFile> getRecentFiles() {
+		File userHome = createSettingsXml();
 		if (userHome != null) {
 
-			BufferedReader br = null;
 			try {
-				br = new BufferedReader(new FileReader(userHome));
-				String line = null;
-				while ((line = br.readLine()) != null) {
-					String[] strings = line.split("::");
-					if (strings.length == 3) {
-						files.add(new RecentFile(strings[0], strings[1], new File(strings[2])));
-					} else if (strings.length == 2) {
-						files.add(new RecentFile(strings[0], "W", new File(strings[1])));
-					} else {
-						files.add(new RecentFile(strings[0], "W", new File(strings[0])));
-					}
-
-				}
-
-			} catch (IOException e) {
-				FrmError.showMe(e.getMessage(), e);
-			} finally {
-				if (br != null) {
-					try {
-						br.close();
-					} catch (IOException e) {
-					}
+				Document document = saxReader.read(userHome);
+				parseSettings(document.getRootElement());
+			} catch (Exception e) {
+				if (!e.getMessage().contains("Error on line 1 of document")) {
+					FrmError.showMe("Failed read settings file", e);
 				}
 			}
 		}
 
-		return files;
+		return recentFiles;
+	}
+
+	/**
+	 * parse settings xml
+	 * 
+	 * @param rootElement
+	 */
+	private final void parseSettings(Element rootElement) {
+		recentFiles.clear();
+		if (rootElement != null) {
+			if (rootElement.getName().equals("settings")) {
+				Element eRecentFiles = rootElement.element("recentFiles");
+				if (eRecentFiles != null) {
+					parseRecentFiles(eRecentFiles);
+				}
+			}
+		}
+	}
+
+	/**
+	 * parse recent files
+	 * 
+	 * @param eRecentFiles
+	 */
+	private final void parseRecentFiles(Element eRecentFiles) {
+		List<?> eRecentFilesList = eRecentFiles.elements("recentFile");
+		if (eRecentFilesList != null) {
+			for (Object o : eRecentFilesList) {
+				Element e = (Element) o;
+				if (e.getName().equals("recentFile")) {
+					recentFiles.add(new RecentFile(e.attributeValue("name"), e.attributeValue("type"), new File(e.getTextTrim())));
+				}
+			}
+		}
 	}
 
 	/**
@@ -71,8 +108,8 @@ public final class SettingsManager {
 	 * @param fileName
 	 * @return
 	 */
-	private final static File createRecentFile() {
-		File file = new File(System.getProperty("user.home") + File.separator + "bed.settings");
+	private final File createSettingsXml() {
+		File file = new File(System.getProperty("user.home") + File.separator + "bed.settings.xml");
 		if (!file.exists()) {
 			try {
 				file.createNewFile();
@@ -90,12 +127,12 @@ public final class SettingsManager {
 	 * @param type
 	 * @param index
 	 */
-	public final static void addRecentFile(String type, int index) {
-		List<RecentFile> recentFiles = getRecentFiles();
+	public final void addRecentFile(RecentFileType type, int index) {
 		RecentFile recentFile = recentFiles.remove(index);
 		recentFile.setType(type);
 		recentFiles.add(0, recentFile);
 		writeRecentFiles(recentFiles);
+		reloadRecentMenuListener.changesInRecentFiles();
 	}
 
 	/**
@@ -105,10 +142,11 @@ public final class SettingsManager {
 	 * @param name
 	 * @param file
 	 */
-	public static final void addRecentFile(String type, String name, File file) {
-		List<RecentFile> recentFiles = getRecentFiles();
+	public final void addRecentFile(String name, RecentFileType type, File file) {
 		RecentFile recentFile = new RecentFile(name, type, file);
 		recentFiles.add(0, recentFile);
+		writeRecentFiles(recentFiles);
+		reloadRecentMenuListener.changesInRecentFiles();
 	}
 
 	/**
@@ -116,35 +154,85 @@ public final class SettingsManager {
 	 * 
 	 * @param recentFiles
 	 */
-	private static final void writeRecentFiles(List<RecentFile> recentFiles) {
-
-		BufferedWriter bw = null;
+	private final void writeRecentFiles(List<RecentFile> recentFiles) {
+		Document document = null;
 		try {
-			File file = createRecentFile();
-			if (file != null) {
-				bw = new BufferedWriter(new FileWriter(createRecentFile()));
-				for (RecentFile recentFile : recentFiles) {
-					bw.write(recentFile.toString() + "\n");
-				}
+			document = saxReader.read(createSettingsXml());
+		} catch (Exception e) {
+			if (!e.getMessage().contains("Error on line 1 of document")) {
+				FrmError.showMe("Failed read settings file", e);
 			}
+		}
 
-		} catch (IOException e) {
-			FrmError.showMe(e.getMessage(), e);
+		if (document == null) {
+			document = DocumentHelper.createDocument();
+			document.addElement("settings");
+		}
+
+		Element rootElement = document.getRootElement();
+		writeRecentFiles(rootElement);
+		XMLWriter output = null;
+		try {
+			output = new XMLWriter(new FileWriter(createSettingsXml()));
+			output.write(document);
+		} catch (Exception e) {
+			FrmError.showMe("failed save settings file", e);
 		} finally {
-			if (bw != null) {
+			if (output != null) {
 				try {
-					bw.close();
-				} catch (IOException e) {
+					output.close();
+				} catch (Exception e) {
+					FrmError.showMe("failed save settings file", e);
 				}
 			}
 		}
+
 	}
 
-	public static final RecentFile getRecentFile(int index) {
+	/**
+	 * write recnet files
+	 * 
+	 * @param rootElement
+	 */
+	private final void writeRecentFiles(Element rootElement) {
+		Element eRecentFiles = rootElement.element("recentFiles");
+		if (eRecentFiles != null) {
+			rootElement.remove(eRecentFiles);
+		}
+		eRecentFiles = DocumentHelper.createElement("recentFiles");
+		rootElement.add(eRecentFiles);
+
+		for (RecentFile recentFile : recentFiles) {
+			Element eRecentFile = DocumentHelper.createElement("recentFile");
+			eRecentFile.addAttribute("name", recentFile.getName());
+			eRecentFile.addAttribute("type", recentFile.getType().getXmlValue());
+			eRecentFile.addText(recentFile.getFile().getPath());
+			eRecentFiles.add(eRecentFile);
+		}
+	}
+
+	public final RecentFile getRecentFile(int index) {
 		List<RecentFile> recentFiles = getRecentFiles();
 		if (index >= recentFiles.size()) {
 			return null;
 		}
 		return recentFiles.get(index);
+	}
+
+	public final void setReloadRecentMenuListener(ReloadRecentMenuListener reloadRecentMenuListener) {
+		this.reloadRecentMenuListener = reloadRecentMenuListener;
+	}
+
+	/**
+	 * get singleton instance
+	 * 
+	 * @return
+	 */
+	public final static SettingsManager getInstance() {
+
+		if (me == null) {
+			me = new SettingsManager();
+		}
+		return me;
 	}
 }
