@@ -19,12 +19,13 @@ import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.bpel.dependency.analyzer.settings.RecentFile;
 import com.tomecode.soa.bpel.dependency.analyzer.settings.ReloadRecentMenuListener;
 import com.tomecode.soa.bpel.dependency.analyzer.settings.SettingsManager;
+import com.tomecode.soa.dependency.analyzer.utils.Utils;
 import com.tomecode.util.gui.Frame;
 import com.tomecode.util.gui.HideNotifiListener;
 
 /**
  * 
- * Desktop form
+ * Desktop form - main form
  * 
  * @author Tomas Frastia
  * 
@@ -32,19 +33,26 @@ import com.tomecode.util.gui.HideNotifiListener;
 public final class Desktop extends Frame implements ActionListener, ReloadRecentMenuListener {
 
 	private static final long serialVersionUID = -9130398154838815230L;
-
+	/**
+	 * contains all recent files
+	 */
 	private JMenu menuRecentFiles;
 
 	private final JMenuBar rootMenuBar;
 
 	private final TabbedManager workspaceTabb;
 
+	/**
+	 * Constructor
+	 */
 	private Desktop() {
-		super("BPEL and ESB Dependency analyzer", 1044, 644, true, true);
+		super("SOA: BPEL and ESB Dependency analyzer", 1044, 644, true, true);
+		setIconImage(IconFactory.BDA_SMALL.getImage());
 		SettingsManager.getInstance().setReloadRecentMenuListener(this);
 		rootMenuBar = new JMenuBar();
 		menuRecentFiles = new JMenu("Recent Files");
 		rootMenuBar.add(createMenuFile());
+		rootMenuBar.add(createMenuHelp());
 		workspaceTabb = new TabbedManager();
 		addToContainer(rootMenuBar, BorderLayout.NORTH);
 		addToContainer(workspaceTabb, BorderLayout.CENTER);
@@ -66,16 +74,30 @@ public final class Desktop extends Frame implements ActionListener, ReloadRecent
 	 * @return
 	 */
 	private final JMenu createMenuFile() {
-		JMenu menu = new JMenu("File");
-		menu.add(createMenuItem("Open", IconFactory.WORKSPACE));
-		menu.add(createMenuItem("Open Multi-Workspace", IconFactory.WORKSPACE));
-		menu.addSeparator();
-		menu.add(menuRecentFiles);
-		menu.addSeparator();
-		menu.add(createMenuItem("Exit", IconFactory.EXIT));
-		menu.setMnemonic(KeyEvent.VK_ALT);
+		JMenu mFile = new JMenu("File");
+		mFile.add(createMenuItem("Open", IconFactory.WORKSPACE));
+		mFile.add(createMenuItem("Open Multi-Workspace", IconFactory.WORKSPACE));
+		mFile.addSeparator();
+		mFile.add(menuRecentFiles);
+		mFile.addSeparator();
+		mFile.add(createMenuItem("Exit", IconFactory.EXIT));
+		mFile.setMnemonic(KeyEvent.VK_ALT);
 		changesInRecentFiles();
-		return menu;
+		return mFile;
+	}
+
+	/**
+	 * create menu help
+	 * 
+	 * @return
+	 */
+	private final JMenu createMenuHelp() {
+		JMenu mFile = new JMenu("Help");
+		mFile.add(createMenuItem("Report Issue", IconFactory.ISSUES));
+		mFile.addSeparator();
+		mFile.add(createMenuItem("About...", IconFactory.ABOUT));
+		mFile.setMnemonic(KeyEvent.VK_ALT);
+		return mFile;
 	}
 
 	/**
@@ -133,6 +155,10 @@ public final class Desktop extends Frame implements ActionListener, ReloadRecent
 			newMultiWorkspace();
 		} else if (e.getActionCommand().equals("Exit")) {
 			System.exit(0);
+		} else if (e.getActionCommand().equals("Report Issue")) {
+			Utils.openInDefaultBrowser("http://code.google.com/p/bpel-esb-dependency-analyzer/issues/list");
+		} else if (e.getActionCommand().equals("About...")) {
+			FrmAbout.showMe(this);
 		}
 	}
 

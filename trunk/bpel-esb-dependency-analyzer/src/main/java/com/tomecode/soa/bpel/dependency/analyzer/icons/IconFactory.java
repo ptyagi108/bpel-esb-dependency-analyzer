@@ -51,7 +51,13 @@ public final class IconFactory {
 	public static final ImageIcon SEARCH = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/search.png"));
 	public static final ImageIcon ERROR = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/error.png"));
 	public static final ImageIcon EXIT = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/exit.png"));
+	public static final ImageIcon ISSUES = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/issues.png"));
+	public static final ImageIcon BDA_SMALL = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/bpel_dependency_analyzer_small.png"));
+	public static final ImageIcon BDA = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/bpel_dependency_analyzer.png"));
+	public static final ImageIcon ABOUT = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/about.png"));
 
+	
+	
 	private IconFactory() {
 	}
 
