@@ -1,4 +1,16 @@
 #summary Release notes
+#labels ReleaseNotes
+
+*Version 0.7*
+        * bug-fix:*
+                * reworking menu "File->Recent Files"
+                * NullPointerException in Oracle BPEL 10g praser        
+
+        * news:*
+                * a simple visualizer(version 0.1) of dependencies between BPEL projects and ESB services and etc.
+                * export visualizer graph to picture (now supports export to JPEG or PNG)
+                * a simple changes in GUI
+                
 
 *Version 0.6*
         * bug-fix:*
