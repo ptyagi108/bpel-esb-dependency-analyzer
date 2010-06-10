@@ -1,7 +1,7 @@
 package com.tomecode.soa.oracle10g.bpel.activity;
 
-import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsagePartnerLinkResult;
-import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageVariableResult;
+import com.tomecode.soa.dependency.analyzer.usages.FindUsagePartnerLinkResult;
+import com.tomecode.soa.dependency.analyzer.usages.FindUsageVariableResult;
 
 /**
  * OnMessage actvity in bpel process

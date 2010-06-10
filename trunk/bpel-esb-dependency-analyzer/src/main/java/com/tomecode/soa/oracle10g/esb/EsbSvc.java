@@ -6,10 +6,10 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
-import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.BasicNode;
-import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
-import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
-import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageProjectResult;
+import com.tomecode.soa.dependency.analyzer.gui.tree.node.BasicNode;
+import com.tomecode.soa.dependency.analyzer.gui.tree.node.IconNode;
+import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
+import com.tomecode.soa.dependency.analyzer.usages.FindUsageProjectResult;
 
 /**
  * Esb service

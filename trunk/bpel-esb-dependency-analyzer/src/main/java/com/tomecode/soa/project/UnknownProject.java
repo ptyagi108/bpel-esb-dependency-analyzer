@@ -5,7 +5,7 @@ import java.util.Enumeration;
 import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 
-import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
+import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
 
 /**

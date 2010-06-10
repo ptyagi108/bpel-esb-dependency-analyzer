@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.swing.tree.TreeNode;
 
-import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
+import com.tomecode.soa.dependency.analyzer.gui.tree.node.IconNode;
 import com.tomecode.soa.oracle10g.Workspace;
 
 /**

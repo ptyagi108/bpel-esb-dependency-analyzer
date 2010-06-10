@@ -2,7 +2,7 @@ package com.tomecode.soa.oracle10g.bpel.activity;
 
 import javax.swing.ImageIcon;
 
-import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
+import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
 
 /***
  * 
