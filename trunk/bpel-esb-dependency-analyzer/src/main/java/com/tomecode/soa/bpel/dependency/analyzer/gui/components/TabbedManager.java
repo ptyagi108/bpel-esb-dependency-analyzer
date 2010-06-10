@@ -4,6 +4,8 @@ import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 
 import javax.swing.AbstractAction;
@@ -25,11 +27,19 @@ public final class TabbedManager extends JTabbedPane {
 
 	private static final long serialVersionUID = 3518536729848293337L;
 
+	private WorkspaceChangeListener changeListener;
+	/**
+	 * helper reference
+	 */
+	private static TabbedManager me;
+
 	/**
 	 * Constructor
 	 */
-	public TabbedManager() {
+	public TabbedManager(WorkspaceChangeListener changeListener) {
 		super();
+		me = this;
+		this.changeListener = changeListener;
 		KeyStroke ctrlTab = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.CTRL_DOWN_MASK);
 		// registering ctrl+tab key
 		setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.singleton(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0)));
@@ -52,7 +62,51 @@ public final class TabbedManager extends JTabbedPane {
 	}
 
 	public final void addTable(String name, MultiWorkspace multiWorkspace) {
-		addTab(name, new WorkspacePanel(multiWorkspace));
+		addTab(name, new WorkspacePanel(multiWorkspace, changeListener));
 		setSelectedIndex(getTabCount() - 1);
+	}
+
+	public final static TabbedManager getInstance() {
+		return me;
+	}
+
+	/**
+	 * zoom in selected/displayed visual panel
+	 */
+	public final void zoomInSelectedVisualPanel() {
+		WorkspacePanel workspacePanel = (WorkspacePanel) getComponent(getSelectedIndex());
+		workspacePanel.getVisualPanel().zoomIn();
+	}
+
+	public final void zoomOutSelectedVisualPanel() {
+		WorkspacePanel workspacePanel = (WorkspacePanel) getComponent(getSelectedIndex());
+		workspacePanel.getVisualPanel().zoomOut();
+	}
+
+	public final void zoomResetSelectedVisualPanel() {
+		WorkspacePanel workspacePanel = (WorkspacePanel) getComponent(getSelectedIndex());
+		workspacePanel.getVisualPanel().zoomReset();
+	}
+
+	/***
+	 * export visual graph to file in selected tabb
+	 * 
+	 * @param file
+	 * @throws IOException
+	 */
+	public final void exportToPng(File file) throws IOException {
+		WorkspacePanel workspacePanel = (WorkspacePanel) getComponent(getSelectedIndex());
+		workspacePanel.getVisualPanel().exportToPng(file);
+	}
+
+	/**
+	 * export visual graph to file in selected tabb
+	 * 
+	 * @param file
+	 * @throws Exception
+	 */
+	public final void exportToJpg(File file) throws Exception {
+		WorkspacePanel workspacePanel = (WorkspacePanel) getComponent(getSelectedIndex());
+		workspacePanel.getVisualPanel().exportToJpg(file);
 	}
 }

@@ -83,7 +83,24 @@ public final class MultiWorkspaceParser extends AbstractParser {
 		analysesEsbDependencies(multiWorkspace);
 		analysesDepBetweenBpelEsb(multiWorkspace);
 
+		analysesBpelProjectDependencies(multiWorkspace);
 		return multiWorkspace;
+	}
+
+	/**
+	 * fix for bpel projects tree
+	 * 
+	 * @param multiWorkspace
+	 */
+	private final void analysesBpelProjectDependencies(MultiWorkspace multiWorkspace) {
+		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+			for (Project project : workspace.getProjects()) {
+				if (project.getType() == ProjectType.ORACLE10G_BPEL) {
+					((BpelProject) project).analysisProjectDependencies();
+				}
+			}
+		}
+
 	}
 
 	/**

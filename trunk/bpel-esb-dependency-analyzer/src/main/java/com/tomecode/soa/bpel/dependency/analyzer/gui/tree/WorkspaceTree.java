@@ -11,7 +11,8 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import com.tomecode.soa.bpel.dependency.analyzer.gui.panels.WorkspaceUtilsPanel;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.FrmProjectInfo;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.panels.UtilsPanel;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageProjectResult;
@@ -30,20 +31,22 @@ public final class WorkspaceTree extends BasicTree {
 
 	private static final long serialVersionUID = -14952772269846358L;
 
-	private WorkspaceUtilsPanel workspaceUtilsPanel;
+	private UtilsPanel workspaceUtilsPanel;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param workspaceUtilsPanel
 	 */
-	private WorkspaceTree(WorkspaceUtilsPanel workspaceUtilsPanel) {
+	private WorkspaceTree(UtilsPanel workspaceUtilsPanel) {
 		super();
 		this.workspaceUtilsPanel = workspaceUtilsPanel;
 		setRootVisible(false);
 		setCellRenderer(new WorkspaceTreeRenderer());
 		createMenuItem("Find Usage for BPEL project", "findUsageBpelProject", IconFactory.SEARCH);
 		createMenuItem("Find Usage for ESB project", "findUsageESBproject", IconFactory.SEARCH);
+		popupMenu.addSeparator();
+		createMenuItem("Properties...", "infoAboutProject", IconFactory.ABOUT);
 	}
 
 	/**
@@ -51,7 +54,7 @@ public final class WorkspaceTree extends BasicTree {
 	 * 
 	 * @param multiWorkspace
 	 */
-	public WorkspaceTree(MultiWorkspace multiWorkspace, WorkspaceUtilsPanel workspaceUtilsPanel) {
+	public WorkspaceTree(MultiWorkspace multiWorkspace, UtilsPanel workspaceUtilsPanel) {
 		this(workspaceUtilsPanel);
 		treeModel.setRoot(multiWorkspace);
 		expandProjectNodes(new TreePath(multiWorkspace));
@@ -128,20 +131,24 @@ public final class WorkspaceTree extends BasicTree {
 				project.getWorkspace().findUsageEsb(usage);
 			}
 			workspaceUtilsPanel.showFindUsageEsbProject(usage);
+		} else if (e.getActionCommand().equals("infoAboutProject")) {
+			Project project = (Project) getSelectionPath().getLastPathComponent();
+			FrmProjectInfo.showMe(project);
 		}
 
 	}
 
 	@Override
-	public void showPopupMenu(int x, int y) {
+	public final void showPopupMenu(int x, int y) {
+		enableMenuItem(null, false);
 		TreePath treePath = this.getSelectionPath();
 		if (treePath != null) {
 			if (treePath.getLastPathComponent() instanceof BpelProject) {
 				enableMenuItem("findUsageBpelProject", true);
+				enableMenuItem("infoAboutProject", true);
 			} else if (treePath.getLastPathComponent() instanceof EsbProject) {
 				enableMenuItem("findUsageESBproject", true);
-			} else {
-				enableMenuItem(null, false);
+				enableMenuItem("infoAboutProject", true);
 			}
 		}
 		popupMenu.show(this, x, y);

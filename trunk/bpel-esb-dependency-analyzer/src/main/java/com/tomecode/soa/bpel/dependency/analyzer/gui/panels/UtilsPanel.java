@@ -2,6 +2,7 @@ package com.tomecode.soa.bpel.dependency.analyzer.gui.panels;
 
 import javax.swing.JTabbedPane;
 
+import com.tomecode.soa.bpel.dependency.analyzer.gui.components.WorkspacePanel;
 import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsage;
 import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsagePartnerLinkResult;
 import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageProjectResult;
@@ -14,14 +15,16 @@ import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageVariableResult;
  * @author Tomas Frastia
  * 
  */
-public final class WorkspaceUtilsPanel extends JTabbedPane {
+public final class UtilsPanel extends JTabbedPane {
 
 	private static final long serialVersionUID = -8171342255621764543L;
+
+	private UtilsPanelListener utilsPanelListener;
 
 	/**
 	 * Constructor
 	 */
-	public WorkspaceUtilsPanel() {
+	public UtilsPanel() {
 
 	}
 
@@ -86,6 +89,7 @@ public final class WorkspaceUtilsPanel extends JTabbedPane {
 		UsageTreePanel panel = findUsageTreePanel(title);
 		if (panel != null) {
 			panel.addData(usage);
+			utilsPanelListener.show();
 		}
 		updateUI();
 	}
@@ -109,5 +113,31 @@ public final class WorkspaceUtilsPanel extends JTabbedPane {
 		}
 
 		return panel;
+	}
+
+	public final void setListener(UtilsPanelListener utilsPanelListener) {
+		this.utilsPanelListener = utilsPanelListener;
+	}
+
+	/**
+	 * 
+	 * simple interface for notifi {@link WorkspacePanel} for display/hide
+	 * {@link UtilsPanel}
+	 * 
+	 * 
+	 * @author Tomas Frastia
+	 * 
+	 */
+	public static interface UtilsPanelListener {
+
+		/**
+		 * dispaly {@link UtilsPanel} in {@link WorkspacePanel}
+		 */
+		void show();
+
+		/**
+		 * hide {@link UtilsPanel} in {@link WorkspacePanel}
+		 */
+		void hide();
 	}
 }

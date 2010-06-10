@@ -8,7 +8,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
-import com.tomecode.soa.bpel.dependency.analyzer.gui.panels.WorkspaceUtilsPanel;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.panels.UtilsPanel;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.EsbServiceNode;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
@@ -28,14 +28,14 @@ public final class EsbServiceTree extends BasicTree {
 
 	private static final long serialVersionUID = -6785404093212997928L;
 
-	private final WorkspaceUtilsPanel workspaceUtilsPanel;
+	private final UtilsPanel workspaceUtilsPanel;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param workspaceUtilsPanel
 	 */
-	public EsbServiceTree(WorkspaceUtilsPanel workspaceUtilsPanel) {
+	public EsbServiceTree(UtilsPanel workspaceUtilsPanel) {
 		super();
 		this.workspaceUtilsPanel = workspaceUtilsPanel;
 		setCellRenderer(new EsbServiceTreeRenederer());

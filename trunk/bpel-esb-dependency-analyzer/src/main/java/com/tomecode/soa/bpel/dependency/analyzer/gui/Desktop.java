@@ -15,6 +15,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import com.tomecode.soa.bpel.dependency.analyzer.gui.components.TabbedManager;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.components.WorkspaceChangeListener;
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.bpel.dependency.analyzer.settings.RecentFile;
 import com.tomecode.soa.bpel.dependency.analyzer.settings.ReloadRecentMenuListener;
@@ -30,7 +31,7 @@ import com.tomecode.util.gui.HideNotifiListener;
  * @author Tomas Frastia
  * 
  */
-public final class Desktop extends Frame implements ActionListener, ReloadRecentMenuListener {
+public final class Desktop extends Frame implements ActionListener, ReloadRecentMenuListener, WorkspaceChangeListener {
 
 	private static final long serialVersionUID = -9130398154838815230L;
 	/**
@@ -42,6 +43,8 @@ public final class Desktop extends Frame implements ActionListener, ReloadRecent
 
 	private final TabbedManager workspaceTabb;
 
+	private static Frame me;
+
 	/**
 	 * Constructor
 	 */
@@ -52,8 +55,9 @@ public final class Desktop extends Frame implements ActionListener, ReloadRecent
 		rootMenuBar = new JMenuBar();
 		menuRecentFiles = new JMenu("Recent Files");
 		rootMenuBar.add(createMenuFile());
+		rootMenuBar.add(createMenuVisual());
 		rootMenuBar.add(createMenuHelp());
-		workspaceTabb = new TabbedManager();
+		workspaceTabb = new TabbedManager(this);
 		addToContainer(rootMenuBar, BorderLayout.NORTH);
 		addToContainer(workspaceTabb, BorderLayout.CENTER);
 
@@ -66,6 +70,7 @@ public final class Desktop extends Frame implements ActionListener, ReloadRecent
 
 		});
 
+		me = this;
 	}
 
 	/**
@@ -75,12 +80,12 @@ public final class Desktop extends Frame implements ActionListener, ReloadRecent
 	 */
 	private final JMenu createMenuFile() {
 		JMenu mFile = new JMenu("File");
-		mFile.add(createMenuItem("Open", IconFactory.WORKSPACE));
-		mFile.add(createMenuItem("Open Multi-Workspace", IconFactory.WORKSPACE));
+		mFile.add(createMenuItem("Open Workspace", IconFactory.WORKSPACE, true));
+		mFile.add(createMenuItem("Open Multi-Workspace", IconFactory.WORKSPACE, true));
 		mFile.addSeparator();
 		mFile.add(menuRecentFiles);
 		mFile.addSeparator();
-		mFile.add(createMenuItem("Exit", IconFactory.EXIT));
+		mFile.add(createMenuItem("Exit", IconFactory.EXIT, true));
 		mFile.setMnemonic(KeyEvent.VK_ALT);
 		changesInRecentFiles();
 		return mFile;
@@ -93,11 +98,28 @@ public final class Desktop extends Frame implements ActionListener, ReloadRecent
 	 */
 	private final JMenu createMenuHelp() {
 		JMenu mFile = new JMenu("Help");
-		mFile.add(createMenuItem("Report Issue", IconFactory.ISSUES));
+		mFile.add(createMenuItem("Report Issue", IconFactory.ISSUES, true));
 		mFile.addSeparator();
-		mFile.add(createMenuItem("About...", IconFactory.ABOUT));
-		mFile.setMnemonic(KeyEvent.VK_ALT);
+		mFile.add(createMenuItem("About...", IconFactory.ABOUT, true));
 		return mFile;
+	}
+
+	/**
+	 * create edit file
+	 * 
+	 * @return
+	 */
+	// TODO: dokoncit zoomovanie + pridanei printu
+
+	private final JMenu createMenuVisual() {
+		JMenu mVisual = new JMenu("Visual");
+		mVisual.add(createMenuItem("Zoom In", IconFactory.ZOOM_IN, false));
+		mVisual.add(createMenuItem("Zoom Out", IconFactory.ZOOM_OUT, false));
+		mVisual.add(createMenuItem("Reset Zoom", IconFactory.ZOOM_RESET, false));
+		mVisual.addSeparator();
+		mVisual.add(createMenuItem("Export", IconFactory.EXPORT, false));
+
+		return mVisual;
 	}
 
 	/**
@@ -106,12 +128,13 @@ public final class Desktop extends Frame implements ActionListener, ReloadRecent
 	 * @param name
 	 * @return
 	 */
-	private final JMenuItem createMenuItem(String name, Icon icon) {
+	private final JMenuItem createMenuItem(String name, Icon icon, boolean enable) {
 		JMenuItem menuItem = new JMenuItem(name);
 		menuItem.setActionCommand(name);
 		if (icon != null) {
 			menuItem.setIcon(icon);
 		}
+		menuItem.setEnabled(enable);
 		menuItem.addActionListener(this);
 		return menuItem;
 	}
@@ -149,7 +172,7 @@ public final class Desktop extends Frame implements ActionListener, ReloadRecent
 
 	@Override
 	public final void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("Open")) {
+		if (e.getActionCommand().equals("Open  Workspace")) {
 			newWorkspace();
 		} else if (e.getActionCommand().equals("Open Multi-Workspace")) {
 			newMultiWorkspace();
@@ -159,6 +182,15 @@ public final class Desktop extends Frame implements ActionListener, ReloadRecent
 			Utils.openInDefaultBrowser("http://code.google.com/p/bpel-esb-dependency-analyzer/issues/list");
 		} else if (e.getActionCommand().equals("About...")) {
 			FrmAbout.showMe(this);
+		} else if (e.getActionCommand().equals("Zoom In")) {
+			workspaceTabb.zoomInSelectedVisualPanel();
+		} else if (e.getActionCommand().equals("Zoom Out")) {
+			workspaceTabb.zoomOutSelectedVisualPanel();
+		} else if (e.getActionCommand().equals("Reset Zoom")) {
+			workspaceTabb.zoomResetSelectedVisualPanel();
+		} else if (e.getActionCommand().equals("Export")) {
+			// workspaceTabb.exportVisualPanel();
+			FrmExportVisualDependencies.showMe();
 		}
 	}
 
@@ -196,6 +228,34 @@ public final class Desktop extends Frame implements ActionListener, ReloadRecent
 			menuRecentFiles.add(createMenuItemOpenRecentFiles(recentFile, i));
 		}
 		menuRecentFiles.updateUI();
+	}
+
+	@Override
+	public final void displayVisualPanel() {
+		enableEditMenuItems(true);
+	}
+
+	@Override
+	public final void hideVisualPanel() {
+		enableEditMenuItems(false);
+	}
+
+	/**
+	 * set true/false for items in 'edit' menu
+	 * 
+	 * @param enable
+	 */
+	private final void enableEditMenuItems(boolean enable) {
+		JMenu mEdit = rootMenuBar.getMenu(1);
+		for (int i = 0; i <= mEdit.getItemCount() - 1; i++) {
+			if (mEdit.getItem(i) != null) {
+				mEdit.getItem(i).setEnabled(enable);
+			}
+		}
+	}
+
+	public final static Frame getFrame() {
+		return me;
 	}
 
 }

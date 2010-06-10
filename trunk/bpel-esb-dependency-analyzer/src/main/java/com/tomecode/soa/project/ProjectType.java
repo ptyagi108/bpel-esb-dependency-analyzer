@@ -12,9 +12,24 @@ public enum ProjectType {
 	/**
 	 * ORACLE 10g BPEL process project
 	 */
-	ORACLE10G_BPEL,
+	ORACLE10G_BPEL("Oracle SOA Suit 10g - BPEL"),
 	/**
 	 * ORACLE 10g ESB service project
 	 */
-	ORACLE10G_ESB;
+	ORACLE10G_ESB("Oracle SOA Suit 10g - ESB"),
+	/**
+	 * unknown project
+	 */
+	UNKNOWN("Unknown");
+
+	private final String title;
+
+	private ProjectType(String title) {
+		this.title = title;
+	}
+
+	public final String getTitle() {
+		return title;
+	}
+
 }

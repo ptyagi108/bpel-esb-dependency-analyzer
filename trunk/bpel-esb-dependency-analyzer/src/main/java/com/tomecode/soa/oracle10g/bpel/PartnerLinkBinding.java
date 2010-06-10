@@ -3,6 +3,7 @@ package com.tomecode.soa.oracle10g.bpel;
 import java.io.Serializable;
 
 import com.tomecode.soa.oracle10g.esb.EsbProject;
+import com.tomecode.soa.project.UnknownProject;
 
 /**
  * Contains data for partnerlink
@@ -13,8 +14,13 @@ import com.tomecode.soa.oracle10g.esb.EsbProject;
 public final class PartnerLinkBinding implements Serializable {
 
 	private static final long serialVersionUID = -2868489731373353648L;
-
+	/**
+	 * partner link name
+	 */
 	private String name;
+	/**
+	 * wsdl file location
+	 */
 	private String wsdlLocation;
 
 	/**
@@ -26,9 +32,9 @@ public final class PartnerLinkBinding implements Serializable {
 	 */
 	private BpelProject dependencyBpelProject;
 
-	private BpelProject parent;
+	private UnknownProject unknownProject;
 
-	private Exception parseError;
+	private BpelProject parent;
 
 	/**
 	 * Constructor
@@ -61,10 +67,16 @@ public final class PartnerLinkBinding implements Serializable {
 
 	public final void setDependencyEsbProject(EsbProject dependencyEsbProject) {
 		this.dependencyEsbProject = dependencyEsbProject;
+		if (dependencyEsbProject != null) {
+			unknownProject = null;
+		}
 	}
 
 	public final void setDependencyBpelProject(BpelProject dependencyBpelProject) {
 		this.dependencyBpelProject = dependencyBpelProject;
+		if (dependencyBpelProject != null) {
+			unknownProject = null;
+		}
 	}
 
 	public void setParent(BpelProject parent) {
@@ -75,12 +87,15 @@ public final class PartnerLinkBinding implements Serializable {
 		return parent;
 	}
 
-	public final Exception getParseErrror() {
-		return parseError;
+	public final String toString() {
+		return name;
 	}
 
-	public final void setParseErrror(Exception parseErrror) {
-		this.parseError = parseErrror;
+	public final UnknownProject getUnknownProject() {
+		return unknownProject;
 	}
 
+	public final void setUnknownProject(UnknownProject unknownProject) {
+		this.unknownProject = unknownProject;
+	}
 }

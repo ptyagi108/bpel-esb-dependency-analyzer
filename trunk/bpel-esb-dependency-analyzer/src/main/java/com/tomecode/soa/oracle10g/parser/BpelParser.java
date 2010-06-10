@@ -40,6 +40,7 @@ import com.tomecode.soa.oracle10g.bpel.activity.Wait;
 import com.tomecode.soa.oracle10g.bpel.activity.While;
 import com.tomecode.soa.oracle10g.bpel.activity.Assign.AssignOperation;
 import com.tomecode.soa.oracle10g.bpel.activity.Assign.OperationType;
+import com.tomecode.soa.project.UnknownProject;
 import com.tomecode.soa.wsdl.parser.WsdlParser;
 
 /**
@@ -576,12 +577,17 @@ public final class BpelParser extends AbstractParser {
 				if (element.getName().equals("receive") || element.getName().equals("invoke") || element.getName().equals("reply") || element.getName().equals("onMessage")) {
 
 					if (element.attributeValue("partnerLink") == null) {
+						// TODO: ///
 						new NullPointerException("").printStackTrace();
 					} else {
 						if (element.attributeValue("partnerLink").equals(partnerLinkName)) {
 							BpelOperations bpelOperations = bpelProject.getBpelOperations();
 							Operation operation = new Operation(element.getName(), element.attributeValue("name"), element.attributeValue("operation"), bpelProject, bpelOperations.getBpelProcess().findPartnerLinkBinding(element.attributeValue("partnerLink")),
 									getOperationPath(element));
+
+							if (partnerLinkName.equals("BPELProcess11")) {
+								toString();
+							}
 							bpelOperations.addOperation(operation);
 						}
 					}
@@ -620,16 +626,19 @@ public final class BpelParser extends AbstractParser {
 	 * @throws DocumentException
 	 */
 	public final void parseBpelByWsdl(PartnerLinkBinding partnerLinkBinding) throws ServiceParserException {
-
 		try {
 			URL url = new URL(partnerLinkBinding.getWsdlLocation());
 
 			if (url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
 				String processName = getProcessNameFromUrl(url.toString());
-				if (partnerLinkBinding.getParent().toString().equals("BPELProcess1")) {
-					toString();
+
+				BpelProject bpelProject = findParsedProcess(processName, partnerLinkBinding.getParent().getBpelXmlFile());
+				if (bpelProject == null) {
+					partnerLinkBinding.setUnknownProject(new UnknownProject(partnerLinkBinding));
+				} else {
+					partnerLinkBinding.setDependencyBpelProject(bpelProject);
 				}
-				partnerLinkBinding.setDependencyBpelProject(findParsedProcess(processName, partnerLinkBinding.getParent().getBpelXmlFile()));
+
 				// partnerLinkBinding.setDependencyBpelProject(findParsedProcess(partnerLinkBinding.getParent()));
 			} else {
 				// parse file dependencie
@@ -646,9 +655,14 @@ public final class BpelParser extends AbstractParser {
 			int index = partnerLinkBinding.getWsdlLocation().lastIndexOf(".");
 			if (index != -1) {
 				String processName = partnerLinkBinding.getWsdlLocation().substring(0, index);
-				partnerLinkBinding.setDependencyBpelProject(findParsedProcess(processName, partnerLinkBinding.getParent().getBpelXmlFile()));
+				BpelProject findBpelProject = findParsedProcess(processName, partnerLinkBinding.getParent().getBpelXmlFile());
+				if (findBpelProject != null) {
+					partnerLinkBinding.setDependencyBpelProject(findBpelProject);
+				} else {
+					partnerLinkBinding.setUnknownProject(new UnknownProject(partnerLinkBinding));
+				}
 			} else {
-				partnerLinkBinding.setParseErrror(e);
+				partnerLinkBinding.setUnknownProject(new UnknownProject(partnerLinkBinding));
 			}
 		}
 	}

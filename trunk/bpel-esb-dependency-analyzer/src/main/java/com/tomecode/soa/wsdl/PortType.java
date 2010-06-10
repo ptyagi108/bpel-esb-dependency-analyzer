@@ -16,6 +16,9 @@ public final class PortType implements Serializable {
 
 	private String name;
 
+	/**
+	 * wsdl operations
+	 */
 	private List<WsdlOperation> wsdlOperations;
 
 	/**

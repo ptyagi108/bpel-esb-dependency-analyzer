@@ -6,6 +6,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.List;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -13,19 +14,22 @@ import javax.swing.JTextField;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
-import com.tomecode.soa.bpel.dependency.analyzer.gui.panels.WorkspaceUtilsPanel;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.panels.UtilsPanel;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.panels.UtilsPanel.UtilsPanelListener;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.BpelOperationTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.EsbServiceTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.ProcessStructureTree;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.WorkspaceTree;
-import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
+import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.oracle10g.MultiWorkspace;
 import com.tomecode.soa.oracle10g.Workspace;
 import com.tomecode.soa.oracle10g.bpel.BpelOperations;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.Operation;
+import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
 import com.tomecode.soa.oracle10g.bpel.activity.Activity;
 import com.tomecode.soa.oracle10g.esb.EsbProject;
+import com.tomecode.soa.project.UnknownProject;
 import com.tomecode.util.gui.PanelFactory;
 
 /**
@@ -38,15 +42,26 @@ import com.tomecode.util.gui.PanelFactory;
 public final class WorkspacePanel extends JPanel {
 
 	private static final long serialVersionUID = 1530206367436072362L;
-	private static final String P_WORKSPACE_EMPTY = "p.workspace.empty";
 
-	private static final String P_WORKSPACE_DETAIL = "p.workspace.detail";
+	/**
+	 * display basic info about project
+	 */
+	private static final String P_ROOT_INFO_ABOUT_PROJECT = "p.root.info.about.project";
+	/**
+	 * display detail info about project
+	 */
+	private static final String P_ROOT_DETAIL_ABOUT_PROJECT = "p.root.detail.about.project";
 
-	private static final String P_BPEL_TREE = "p.bpel.tree";
+	private static final String P_ROOT_UNKNOWN_PROJECT = "p.root.unknown.project";
 
-	private static final String P_ESB_TREE = "p.esb.tree";
+	private final CardLayout layoutRootWorkspace;
 
-	private static final String P_ERROR = "p.error";
+	private final CardLayout layoutActivities;
+
+	private static final String P_ACTIVITIES_BPEL_TREE = "p.activities.bpel.tree";
+
+	private static final String P_ACTIVITIES_ESB_TREE = "p.activities.esb.tree";
+
 	/**
 	 * {@link WorkspaceTree}
 	 */
@@ -64,71 +79,126 @@ public final class WorkspacePanel extends JPanel {
 	 */
 	private final ProcessStructureTree processStructureTree;
 
-	private final JTextField txtError;
-
-	private final JTextField txtErrorWsdl;
-
-	private final JTextField txtProjectPath;
-
+	private final UnknownPanel unknownPanel;
 	/**
 	 * Simple panel for display utilities
 	 */
-	private WorkspaceUtilsPanel utilsPanel;
+	private UtilsPanel utilsPanel;
 
 	private WorkspaceVisualPanel visualPanel;
+
+	private final JTextField unknownProjectName;
+	private final JTextField unknownWsdl;
+	private final JTextField unknownDependencyProject;
+
+	private final JSplitPane spUtilsAndRoot;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param multiWorkspace
 	 */
-	public WorkspacePanel(MultiWorkspace multiWorkspace) {
+	public WorkspacePanel(MultiWorkspace multiWorkspace, final WorkspaceChangeListener workspaceChangeListener) {
 		super(new BorderLayout());
+		this.spUtilsAndRoot = PanelFactory.createSplitPanel();
+		this.spUtilsAndRoot.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		this.spUtilsAndRoot.setDividerLocation(500);
+		// this.workspaceChangeListener =workspaceChangeListener;
 		this.visualPanel = new WorkspaceVisualPanel();
-		this.utilsPanel = new WorkspaceUtilsPanel();
+		this.utilsPanel = new UtilsPanel();
 		this.workspaceTree = new WorkspaceTree(multiWorkspace, utilsPanel);
 		this.projectOperationTree = new BpelOperationTree(utilsPanel);
 		this.projectEsbServiceTree = new EsbServiceTree(utilsPanel);
 		this.processStructureTree = new ProcessStructureTree(utilsPanel);
-		final JSplitPane spWorkspace = PanelFactory.createSplitPanel();
-		spWorkspace.add(PanelFactory.createBorderLayout("Project Dependencies", new JScrollPane(workspaceTree)));
-		spWorkspace.setDividerLocation(200);
+		final JSplitPane spRootWorkspace = PanelFactory.createSplitPanel();
+		add(spRootWorkspace, BorderLayout.CENTER);
+		spRootWorkspace.add(PanelFactory.createBorderLayout("Project Dependencies", new JScrollPane(workspaceTree)));
+		spRootWorkspace.setDividerLocation(210);
 
-		JSplitPane spProjectTrees = PanelFactory.createSplitPanel();
-		spProjectTrees.add(PanelFactory.createBorderLayout("Depending on activity-based operations", new JScrollPane(projectOperationTree)));
-		spProjectTrees.add(PanelFactory.createBorderLayout("Project Structure", new JScrollPane(processStructureTree)));
-		spProjectTrees.setDividerLocation(350);
+		layoutRootWorkspace = new CardLayout();
+		layoutActivities = new CardLayout();
+		final JPanel pLayoutRoot = new JPanel(layoutRootWorkspace);
+		spRootWorkspace.add(pLayoutRoot);
 
-		//
-		final JSplitPane spVisualClasicPanel = PanelFactory.createSplitPanel();
-		spVisualClasicPanel.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		spVisualClasicPanel.setDividerLocation(350);
+		// panel cotains basic info about workspace and display when
+		// workspaceTree select workspace
+		JPanel pAboutWorkspace = PanelFactory.createBorderLayout();
+		pLayoutRoot.add(pAboutWorkspace, P_ROOT_INFO_ABOUT_PROJECT);
 
-		JPanel pBpelProject = PanelFactory.createBorderLayout();
-		pBpelProject.add(spProjectTrees, BorderLayout.CENTER);
-		JPanel pUtils = PanelFactory.createBorderLayout();
-		pUtils.add(utilsPanel, BorderLayout.CENTER);
+		// panel contains visualizer and dependency tree about selected project
+		JPanel pDetailProject = PanelFactory.createBorderLayout();
+		pLayoutRoot.add(pDetailProject, P_ROOT_DETAIL_ABOUT_PROJECT);
 
-		final JPanel pCardPanel = new JPanel(new CardLayout());
-		spVisualClasicPanel.add(visualPanel);// (pCardPanel);
+		JPanel pUnknownProject = PanelFactory.createBorderLayout("Unknown Project or Service");
+		pLayoutRoot.add(pUnknownProject, P_ROOT_UNKNOWN_PROJECT);
 
-		// frist panel is empty panel
-		pCardPanel.add(PanelFactory.createBorderLayout(), P_WORKSPACE_EMPTY);
+		JLabel unknownIcon = new JLabel();
+		unknownIcon.setIcon(IconFactory.UNKNOWN_BIG);
+		pUnknownProject.add(PanelFactory.wrapByBorderLayout(unknownIcon, BorderLayout.NORTH), BorderLayout.WEST);
 
-		pCardPanel.add(pBpelProject, P_BPEL_TREE);
+		JPanel pUnknownDetails = PanelFactory.createBorderLayout();
+		pUnknownProject.add(pUnknownDetails, BorderLayout.CENTER);
 
-		JPanel pError = PanelFactory.createBorderLayout("Parse Error");
-		txtError = new JTextField();
-		txtError.setEditable(false);
+		JPanel pUnknownFields = PanelFactory.createGridLayout(3, 0);
+		pUnknownDetails.add(pUnknownFields, BorderLayout.NORTH);
+		unknownPanel = new UnknownPanel(utilsPanel);
+		pUnknownDetails.add(unknownPanel, BorderLayout.CENTER);
+		unknownProjectName = new JTextField();
+		unknownProjectName.setEditable(false);
+		pUnknownFields.add(PanelFactory.wrapWithTile("Project name", unknownProjectName));
 
-		txtErrorWsdl = new JTextField();
-		txtErrorWsdl.setEditable(false);
+		unknownWsdl = new JTextField();
+		unknownWsdl.setEditable(false);
+		pUnknownFields.add(PanelFactory.wrapWithTile("WSDL", unknownWsdl));
 
-		JPanel pErrorRow = PanelFactory.createGridLayout(2, 1);
-		pErrorRow.add(PanelFactory.wrapWithLabelNorm("Error:", txtError, 16), BorderLayout.NORTH);
-		pErrorRow.add(PanelFactory.wrapWithLabelNorm("WSDL:", txtErrorWsdl, 10), BorderLayout.NORTH);
-		pError.add(pErrorRow, BorderLayout.NORTH);
-		pCardPanel.add(pError, P_ERROR);
+		unknownDependencyProject = new JTextField();
+		unknownDependencyProject.setEditable(false);
+		pUnknownFields.add(PanelFactory.wrapWithTile("Dependency from project", unknownDependencyProject));
+
+		final JSplitPane spVisualAndBasicGraph = PanelFactory.createSplitPanel();
+		spVisualAndBasicGraph.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		spVisualAndBasicGraph.setDividerLocation(350);
+		pDetailProject.add(spVisualAndBasicGraph, BorderLayout.CENTER);
+
+		JSplitPane spActivitiesTrees = PanelFactory.createSplitPanel();
+		spActivitiesTrees.add(PanelFactory.createBorderLayout("Depending on activity-based operations", new JScrollPane(projectOperationTree)));
+		spActivitiesTrees.add(PanelFactory.createBorderLayout("Project Structure", new JScrollPane(processStructureTree)));
+		spActivitiesTrees.setDividerLocation(350);
+
+		final JPanel pBpelProject = PanelFactory.createBorderLayout();
+		pBpelProject.add(spActivitiesTrees, BorderLayout.CENTER);
+		// JPanel pUtils = PanelFactory.createBorderLayout();
+		// pUtils.add(utilsPanel, BorderLayout.CENTER);
+
+		spVisualAndBasicGraph.add(visualPanel);// (pCardPanel);
+
+		final JPanel pActivities = new JPanel(layoutActivities);
+		spVisualAndBasicGraph.add(pActivities);
+
+		pActivities.add(pBpelProject, P_ACTIVITIES_BPEL_TREE);
+
+		utilsPanel.setListener(new UtilsPanelListener() {
+
+			@Override
+			public final void show() {
+				if (findUtilsPanelIndex() == -1) {
+					remove(spRootWorkspace);
+					spUtilsAndRoot.add(spRootWorkspace);
+					spUtilsAndRoot.add(utilsPanel);
+					add(spUtilsAndRoot, BorderLayout.CENTER);
+					updateUI();
+				}
+			}
+
+			@Override
+			public final void hide() {
+				if (findUtilsPanelIndex() != -1) {
+					remove(spUtilsAndRoot);
+					add(spRootWorkspace, BorderLayout.CENTER);
+					updateUI();
+				}
+			}
+		});
 
 		JPanel pEsbProject = PanelFactory.createBorderLayout();
 		pEsbProject.add(PanelFactory.wrapWithTile("Esb Services:", new JScrollPane(projectEsbServiceTree)), BorderLayout.CENTER);
@@ -137,69 +207,59 @@ public final class WorkspacePanel extends JPanel {
 		spEsbPanel.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		spEsbPanel.setDividerLocation(350);
 
-		pCardPanel.add(pEsbProject, P_ESB_TREE);
-
-		JPanel pWorkspace = PanelFactory.createBorderLayout();
-
-		txtProjectPath = new JTextField();
-		txtProjectPath.setEditable(false);
-		pWorkspace.add(PanelFactory.wrapWithTile("Project path", txtProjectPath), BorderLayout.NORTH);
-		pCardPanel.add(pWorkspace, P_WORKSPACE_DETAIL);
+		pActivities.add(pEsbProject, P_ACTIVITIES_ESB_TREE);
 
 		addComponentListener(new ComponentAdapter() {
 
 			@Override
 			public void componentResized(ComponentEvent e) {
-				spVisualClasicPanel.setDividerLocation((e.getComponent().getSize().height - 140));
-				spVisualClasicPanel.updateUI();
+				spVisualAndBasicGraph.setDividerLocation((e.getComponent().getSize().height - 140));
+				spVisualAndBasicGraph.updateUI();
 			}
 		});
 
-		spVisualClasicPanel.add(pCardPanel);// (pUtils);
-
-		// spWorkspace.add(pCardPanel);
-		spWorkspace.add(spVisualClasicPanel);
-		add(spWorkspace, BorderLayout.CENTER);
+		add(spRootWorkspace, BorderLayout.CENTER);
 
 		// select bpel proces
 		this.workspaceTree.addTreeSelectionListener(new TreeSelectionListener() {
 			@Override
 			public final void valueChanged(TreeSelectionEvent e) {
-				CardLayout cardLayout = (CardLayout) pCardPanel.getLayout();
-				processStructureTree.clearSelectedOperationsTreePath();
-				if (e.getPath().getLastPathComponent() instanceof Workspace) {
-					Workspace workspace = (Workspace) e.getPath().getLastPathComponent();
-					txtProjectPath.setText(workspace.getFile().toString());
-					visualPanel.clearCells();
-					cardLayout.show(pCardPanel, P_WORKSPACE_DETAIL);
-				} else if (e.getPath().getLastPathComponent() instanceof BpelProject) {
-					BpelProject bpelProject = (BpelProject) e.getPath().getLastPathComponent();
+
+				Object selectedComp = e.getPath().getLastPathComponent();
+				if (selectedComp instanceof Workspace) {
+					layoutRootWorkspace.show(pLayoutRoot, P_ROOT_INFO_ABOUT_PROJECT);
+					workspaceChangeListener.hideVisualPanel();
+				} else if (selectedComp instanceof BpelProject) {
+					BpelProject bpelProject = (BpelProject) selectedComp;
 					if (bpelProject != null) {
 						projectOperationTree.addBpelProcessOperations(bpelProject.getBpelOperations());
 						processStructureTree.addBpelProcessStrukture(bpelProject.getBpelProcessStrukture());
 						visualPanel.showGraphBpel(bpelProject);
 					}
-					cardLayout.show(pCardPanel, P_BPEL_TREE);
-				} else if (e.getPath().getLastPathComponent() instanceof ErrorNode) {
-					processStructureTree.clear();
-					projectOperationTree.clear();
-
-					ErrorNode errorNode = (ErrorNode) e.getPath().getLastPathComponent();
-					txtError.setText(errorNode.getErrorText());
-					txtErrorWsdl.setText(errorNode.getWsdl());
-					cardLayout.show(pCardPanel, P_ERROR);
-					visualPanel.clearCells();
-				} else if (e.getPath().getLastPathComponent() instanceof EsbProject) {
-					EsbProject esbProject = (EsbProject) e.getPath().getLastPathComponent();
+					layoutActivities.show(pActivities, P_ACTIVITIES_BPEL_TREE);
+					layoutRootWorkspace.show(pLayoutRoot, P_ROOT_DETAIL_ABOUT_PROJECT);
+					workspaceChangeListener.displayVisualPanel();
+				} else if (selectedComp instanceof EsbProject) {
+					EsbProject esbProject = (EsbProject) selectedComp;
 					projectEsbServiceTree.addEsbProject(esbProject);
 					visualPanel.showGraphEsb(esbProject);
-					
-					cardLayout.show(pCardPanel, P_ESB_TREE);
+					layoutActivities.show(pActivities, P_ACTIVITIES_ESB_TREE);
+					layoutRootWorkspace.show(pLayoutRoot, P_ROOT_DETAIL_ABOUT_PROJECT);
+					workspaceChangeListener.displayVisualPanel();
+				} else if (selectedComp instanceof UnknownProject) {
+					UnknownProject unknownProject = (UnknownProject) selectedComp;
+					PartnerLinkBinding partnerLinkBinding = unknownProject.getPartnerLinkBinding();
+					unknownProjectName.setText(unknownProject.toString());
+					unknownDependencyProject.setText(partnerLinkBinding.getParent().toString());
+					unknownWsdl.setText(partnerLinkBinding.getWsdlLocation());
+					unknownPanel.showAffectedProcess(partnerLinkBinding);
+					layoutRootWorkspace.show(pLayoutRoot, P_ROOT_UNKNOWN_PROJECT);
+					workspaceChangeListener.hideVisualPanel();
 				} else {
 					processStructureTree.clear();
 					projectOperationTree.clear();
 					visualPanel.clearCells();
-					cardLayout.show(pCardPanel, P_BPEL_TREE);
+					workspaceChangeListener.hideVisualPanel();
 				}
 
 			}
@@ -240,9 +300,34 @@ public final class WorkspacePanel extends JPanel {
 		if (activities == null) {
 			processStructureTree.clearSelectedOperationsTreePath();
 		} else {
-			processStructureTree.addSelectedActivities(activities);
+			processStructureTree.setSelectedActivities(activities);
 		}
+	}
 
+	public final WorkspaceVisualPanel getVisualPanel() {
+		return visualPanel;
+	}
+
+	/**
+	 * find {@link UtilsPanel} index
+	 * 
+	 * @return
+	 */
+	private final int findUtilsPanelIndex() {
+		for (int i = 0; i <= getComponentCount() - 1; i++) {
+			if (getComponent(i).equals(spUtilsAndRoot)) {
+				return i;
+			}
+			// if (getComponent(i).equals(spUtilsAndRoot) instanceof JSplitPane)
+			// {
+			// JSplitPane jSplitPane = ((JSplitPane) getComponent(i));
+			// if (jSplitPane.getName() != null &&
+			// jSplitPane.getName().equals("utils")) {
+			// return i;
+			// }
+			// }
+		}
+		return -1;
 	}
 
 }

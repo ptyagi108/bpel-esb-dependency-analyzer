@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.util.gui.Frame;
 import com.tomecode.util.gui.PanelFactory;
 
@@ -38,7 +39,7 @@ public final class FrmError extends Frame {
 	 */
 	private FrmError(String userMsg, Throwable e) {
 		super("Oops error... ;)", 600, 300, true, false);
-
+		setIconImage(IconFactory.BDA_SMALL.getImage());
 		bContinue = new JButton("Continue");
 		bContinue.addActionListener(new ActionListener() {
 			public final void actionPerformed(ActionEvent e) {

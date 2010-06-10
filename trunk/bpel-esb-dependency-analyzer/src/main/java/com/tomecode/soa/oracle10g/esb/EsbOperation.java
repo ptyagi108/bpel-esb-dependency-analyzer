@@ -76,6 +76,10 @@ public final class EsbOperation extends BasicNode<DependencyNode> implements Bas
 		return this;
 	}
 
+	public final List<DependencyNode> getDependencyNodes() {
+		return childs;
+	}
+
 	@Override
 	public EsbNodeType getType() {
 		return EsbNodeType.ESBOPERATION;

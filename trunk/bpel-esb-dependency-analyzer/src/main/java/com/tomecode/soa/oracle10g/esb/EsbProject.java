@@ -194,9 +194,9 @@ public final class EsbProject extends Project {
 		return null;
 	}
 
-	public final void addDependency(Project esbProject) {
-		if (!esbProjectsDependecies.contains(esbProject)) {
-			esbProjectsDependecies.add(esbProject);
+	public final void addDependency(Project project) {
+		if (!esbProjectsDependecies.contains(project)) {
+			esbProjectsDependecies.add(project);
 		}
 	}
 

@@ -71,4 +71,22 @@ public final class OnMessage extends Activity {
 		}
 	}
 
+	public final boolean compare(Activity activity) {
+		if (super.compare(activity)) {
+			if (activity instanceof OnMessage) {
+				OnMessage onMessage = (OnMessage) activity;
+				if (partnerLink != null && onMessage.getPartnerLink() != null) {
+					if (partnerLink.equals(onMessage.getPartnerLink())) {
+						if (operation != null && onMessage.getOperation() != null) {
+							return operation.equals(onMessage.getOperation());
+						}
+					}
+				}
+				if (operation != null && onMessage.getOperation() != null) {
+					return operation.equals(onMessage.getOperation());
+				}
+			}
+		}
+		return false;
+	}
 }

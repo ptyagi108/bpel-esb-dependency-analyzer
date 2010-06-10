@@ -56,4 +56,23 @@ public final class Receive extends Activity {
 			usage.addUsage(this);
 		}
 	}
+
+	public final boolean compare(Activity activity) {
+		if (super.compare(activity)) {
+			if (activity instanceof Receive) {
+				Receive receive = (Receive) activity;
+				if (partnerLink != null && receive.getPartnerLink() != null) {
+					if (partnerLink.equals(receive.getPartnerLink())) {
+						if (operation != null && receive.getOperation() != null) {
+							return operation.equals(receive.getOperation());
+						}
+					}
+				}
+				if (operation != null && receive.getOperation() != null) {
+					return operation.equals(receive.getOperation());
+				}
+			}
+		}
+		return false;
+	}
 }

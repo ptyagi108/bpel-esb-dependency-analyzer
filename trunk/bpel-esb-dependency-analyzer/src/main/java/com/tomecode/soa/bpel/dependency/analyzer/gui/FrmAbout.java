@@ -29,6 +29,8 @@ public final class FrmAbout extends Dialog {
 
 	private static final long serialVersionUID = -2549954953983634577L;
 
+	private static final String COPYRIGHT = "\u00a9";
+
 	private final JButton buttonOk;
 
 	/**
@@ -37,7 +39,7 @@ public final class FrmAbout extends Dialog {
 	 * @param owner
 	 */
 	public FrmAbout(Frame owner) {
-		super(owner, "About SOA: BPEL and ESB Dependency analyzer", 450, 175, false, true, false, true);
+		super(owner, "About SOA: BPEL and ESB Dependency analyzer", 450, 205, false, true, false, true);
 		setIconImage(IconFactory.BDA_SMALL.getImage());
 
 		panelRoot.removeAll();
@@ -61,12 +63,15 @@ public final class FrmAbout extends Dialog {
 		JPanel pCenter = PanelFactory.createBorderLayout(15, 15, 0, 15);
 		pCenter.add(iconLabel, BorderLayout.WEST);
 
-		JPanel pGrid = PanelFactory.createGridLayout(4, 1);
+		JPanel pGrid = PanelFactory.createGridLayout(7, 1);
 
 		pGrid.add(new JLabel("    "));
 		pGrid.add(new JLabel("    Version 0.7"));
+		pGrid.add(new JLabel("    "));
 		pGrid.add(createClickLabel("http://code.google.com/p/bpel-esb-dependency-analyzer/"));
 		pGrid.add(createClickLabel("http://www.tomecode.com"));
+		pGrid.add(new JLabel("    "));
+		pGrid.add(new JLabel("    " + COPYRIGHT + " Frastia Tomas"));
 		pCenter.add(PanelFactory.wrapByBorderLayout(pGrid, BorderLayout.NORTH), BorderLayout.CENTER);
 		panelRoot.add(pCenter, BorderLayout.CENTER);
 	}

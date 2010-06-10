@@ -43,4 +43,22 @@ public final class Reply extends Activity {
 		return variable;
 	}
 
+	public final boolean compare(Activity activity) {
+		if (super.compare(activity)) {
+			if (activity instanceof Reply) {
+				Reply reply = (Reply) activity;
+				if (partnerLink != null && reply.getPartnerLink() != null) {
+					if (partnerLink.equals(reply.getPartnerLink())) {
+						if (operation != null && reply.getOperation() != null) {
+							return operation.equals(reply.getOperation());
+						}
+					}
+				}
+				if (operation != null && reply.getOperation() != null) {
+					return operation.equals(reply.getOperation());
+				}
+			}
+		}
+		return false;
+	}
 }

@@ -1,16 +1,11 @@
 package com.tomecode.soa.bpel.dependency.analyzer.gui.tree;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 
-import javax.swing.JTree;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
-import com.tomecode.soa.bpel.dependency.analyzer.gui.panels.WorkspaceUtilsPanel;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.panels.UtilsPanel;
 import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.EsbServiceNode;
-import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageProjectResult;
 import com.tomecode.soa.oracle10g.bpel.BpelOperations;
@@ -26,7 +21,7 @@ public final class BpelOperationTree extends BasicTree {
 
 	private static final long serialVersionUID = -3750125284965106516L;
 
-	private final WorkspaceUtilsPanel workspaceUtilsPanel;
+	private final UtilsPanel workspaceUtilsPanel;
 
 	/**
 	 * 
@@ -34,10 +29,9 @@ public final class BpelOperationTree extends BasicTree {
 	 * 
 	 * @param workspaceUtilsPanel
 	 */
-	public BpelOperationTree(WorkspaceUtilsPanel workspaceUtilsPanel) {
+	public BpelOperationTree(UtilsPanel workspaceUtilsPanel) {
 		super();
 		this.workspaceUtilsPanel = workspaceUtilsPanel;
-		setCellRenderer(new BpelOperationTreeRenderer());
 		createMenuItem("Find Usage for BPEL project", "findUsageBpelProject", IconFactory.SEARCH);
 		createMenuItem("Find Usage for ESB project", "findUsageESBproject", IconFactory.SEARCH);
 	}
@@ -50,27 +44,6 @@ public final class BpelOperationTree extends BasicTree {
 	public final void addBpelProcessOperations(BpelOperations bpelOperations) {
 		treeModel.setRoot(bpelOperations);
 		expandPath(new TreePath(bpelOperations));
-	}
-
-	/**
-	 * 
-	 * tree cell renderer for {@link BpelOperationTree}
-	 * 
-	 * @author Tomas Frastia
-	 * 
-	 */
-	private final class BpelOperationTreeRenderer implements TreeCellRenderer {
-
-		public final Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-
-			DefaultTreeCellRenderer rnd = (DefaultTreeCellRenderer) new DefaultTreeCellRenderer().getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
-
-			if (value instanceof IconNode) {
-				rnd.setIcon(((IconNode) value).getIcon());
-			}
-
-			return rnd;
-		}
 	}
 
 	@Override

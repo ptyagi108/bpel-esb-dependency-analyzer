@@ -42,7 +42,7 @@ public final class FrmLoadingWorkspace extends Dialog {
 	 */
 	public FrmLoadingWorkspace(Frame owner) {
 		super(owner, "Loading workspace...", 400, 160, false, true, true, true);
-		setIconImage(IconFactory.SEARCH.getImage());
+		setIconImage(IconFactory.BDA_SMALL.getImage());
 		message = new JLabel();
 		progressBar = new JProgressBar(0, 50);
 		progressBar.setPreferredSize(new Dimension(100, 10));

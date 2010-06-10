@@ -165,4 +165,8 @@ public class Activity extends BasicNode<Activity> {
 			}
 		}
 	}
+
+	public boolean compare(Activity activity) {
+		return toString().equals(activity.toString());
+	}
 }

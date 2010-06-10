@@ -1,5 +1,6 @@
 package com.tomecode.soa.bpel.dependency.analyzer.gui.tree;
 
+import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -9,9 +10,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+
+import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.IconNode;
 
 /**
  * Basic tree
@@ -32,6 +37,7 @@ public abstract class BasicTree extends JTree implements ActionListener {
 	public BasicTree() {
 		setModel(treeModel);
 		treeModel.setRoot(null);
+		setCellRenderer(new IconTreeRenderer());
 		popupMenu = new JPopupMenu();
 		addMouseListener(new MouseAdapter() {
 			public final void mouseClicked(MouseEvent e) {
@@ -107,11 +113,28 @@ public abstract class BasicTree extends JTree implements ActionListener {
 				} else {
 					if (actionCmd.equals(menuItem.getActionCommand())) {
 						menuItem.setEnabled(enable);
-					} else {
-						menuItem.setEnabled(false);
 					}
 				}
 			}
+		}
+	}
+
+	/**
+	 * Icon renderer
+	 * 
+	 * @author Tomas Frastia
+	 * 
+	 */
+	public final class IconTreeRenderer implements TreeCellRenderer {
+
+		public final Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+			DefaultTreeCellRenderer rnd = (DefaultTreeCellRenderer) new DefaultTreeCellRenderer().getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
+
+			if (value instanceof IconNode) {
+				rnd.setIcon(((IconNode) value).getIcon());
+			}
+
+			return rnd;
 		}
 	}
 }

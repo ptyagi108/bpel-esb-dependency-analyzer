@@ -55,9 +55,15 @@ public final class IconFactory {
 	public static final ImageIcon BDA_SMALL = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/bpel_dependency_analyzer_small.png"));
 	public static final ImageIcon BDA = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/bpel_dependency_analyzer.png"));
 	public static final ImageIcon ABOUT = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/about.png"));
+	public static final ImageIcon UNKNOWN = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/unknown.png"));
+	public static final ImageIcon UNKNOWN_BIG = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/unknown_big.png"));
+	public static final ImageIcon ZOOM_IN = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/zoom_in.png"));
+	public static final ImageIcon ZOOM_OUT = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/zoom_out.png"));
+	public static final ImageIcon ZOOM_RESET = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/zoom_reset.png"));
+	public static final ImageIcon INFO = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/info.png"));
+	public static final ImageIcon EXPORT = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/export.png"));
+	public static final ImageIcon EXPORT_BIG = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/export_big.png"));
 
-	
-	
 	private IconFactory() {
 	}
 

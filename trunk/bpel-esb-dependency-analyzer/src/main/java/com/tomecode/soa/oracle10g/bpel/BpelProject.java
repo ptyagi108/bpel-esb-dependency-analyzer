@@ -1,17 +1,17 @@
 package com.tomecode.soa.oracle10g.bpel;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 
-import com.tomecode.soa.bpel.dependency.analyzer.gui.tree.node.ErrorNode;
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.project.ProjectType;
+import com.tomecode.soa.project.UnknownProject;
 import com.tomecode.soa.wsdl.Wsdl;
 
 /**
@@ -36,11 +36,22 @@ public final class BpelProject extends Project {
 	/**
 	 * {@link PartnerLinkBinding}
 	 */
-	private final Vector<PartnerLinkBinding> partnerLinkBindings;
+	private final List<PartnerLinkBinding> partnerLinkBindings;
+
+	/**
+	 * list of depedendecy {@link Project}
+	 */
+	private final List<Project> dependencyProjects;
 
 	private final BpelOperations bpelOperations;
 
 	private final BpelProcessStrukture bpelProcessStrukture;
+
+//	/**
+//	 * list of {@link EsbSvc} from which are dependency on me
+//	 */
+//	private final List<EsbSvc> dependenceEsbSvc;
+
 	/**
 	 * bpel process wsdl
 	 */
@@ -51,7 +62,8 @@ public final class BpelProject extends Project {
 	 */
 	public BpelProject() {
 		super(ProjectType.ORACLE10G_BPEL);
-		this.partnerLinkBindings = new Vector<PartnerLinkBinding>();
+		this.partnerLinkBindings = new ArrayList<PartnerLinkBinding>();
+		this.dependencyProjects = new ArrayList<Project>();
 		this.bpelOperations = new BpelOperations(this);
 		this.bpelProcessStrukture = new BpelProcessStrukture(this);
 	}
@@ -101,35 +113,40 @@ public final class BpelProject extends Project {
 
 	@Override
 	public Enumeration<?> children() {
-		return partnerLinkBindings.elements();
+		return null;
 	}
 
 	@Override
 	public boolean getAllowsChildren() {
-		return partnerLinkBindings.isEmpty();
+		return dependencyProjects.isEmpty();// partnerLinkBindings.isEmpty();
 	}
 
 	@Override
 	public TreeNode getChildAt(int childIndex) {
-		PartnerLinkBinding partnerLinkBinding = partnerLinkBindings.get(childIndex);
-
-		if (partnerLinkBinding.getDependencyBpelProject() != null) {
-			return partnerLinkBinding.getDependencyBpelProject();
-		} else if (partnerLinkBinding.getDependencyEsbProject() != null) {
-			return partnerLinkBinding.getDependencyEsbProject();
-		}
-
-		return new ErrorNode("not found service - " + partnerLinkBinding.getName() + "", partnerLinkBinding.getWsdlLocation(), partnerLinkBinding.getParseErrror());
+		// PartnerLinkBinding partnerLinkBinding =
+		// partnerLinkBindings.get(childIndex);
+		//
+		// if (partnerLinkBinding.getDependencyBpelProject() != null) {
+		// return partnerLinkBinding.getDependencyBpelProject();
+		// } else if (partnerLinkBinding.getDependencyEsbProject() != null) {
+		// return partnerLinkBinding.getDependencyEsbProject();
+		// }
+		//
+		// return new ErrorNode("not found service - " +
+		// partnerLinkBinding.getName() + "",
+		// partnerLinkBinding.getWsdlLocation(),
+		// partnerLinkBinding.getParseErrror());
+		return dependencyProjects.get(childIndex);
 	}
 
 	@Override
 	public int getChildCount() {
-		return partnerLinkBindings.size();
+		return dependencyProjects.size();// partnerLinkBindings.size();
 	}
 
 	@Override
 	public int getIndex(TreeNode node) {
-		return partnerLinkBindings.indexOf(node);
+		return dependencyProjects.indexOf(node);// partnerLinkBindings.indexOf(node);
 	}
 
 	@Override
@@ -172,4 +189,26 @@ public final class BpelProject extends Project {
 		return IconFactory.PROCESS;
 	}
 
+	/**
+	 * analysis of {@link Project} dependnecies
+	 */
+	public final void analysisProjectDependencies() {
+		dependencyProjects.clear();
+		for (PartnerLinkBinding partnerLinkBinding : partnerLinkBindings) {
+			if (partnerLinkBinding.getDependencyBpelProject() != null) {
+				if (!dependencyProjects.contains(partnerLinkBinding.getDependencyBpelProject())) {
+					dependencyProjects.add(partnerLinkBinding.getDependencyBpelProject());
+				}
+			} else if (partnerLinkBinding.getDependencyEsbProject() != null) {
+				if (!dependencyProjects.contains(partnerLinkBinding.getDependencyEsbProject())) {
+					dependencyProjects.add(partnerLinkBinding.getDependencyEsbProject());
+				}
+			} else {
+				dependencyProjects.add(new UnknownProject(partnerLinkBinding));
+			}
+		}
+
+	}
+	
+	
 }

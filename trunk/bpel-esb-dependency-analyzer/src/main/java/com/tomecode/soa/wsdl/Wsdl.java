@@ -21,6 +21,12 @@ public final class Wsdl implements Serializable {
 
 	private PortType portType;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param file
+	 * @param name
+	 */
 	public Wsdl(File file, String name) {
 		this.file = file;
 		this.name = name;

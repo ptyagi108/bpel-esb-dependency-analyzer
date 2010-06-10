@@ -61,4 +61,23 @@ public final class Invoke extends Activity {
 			usage.addUsage(this);
 		}
 	}
+
+	public final boolean compare(Activity activity) {
+		if (super.compare(activity)) {
+			if (activity instanceof Invoke) {
+				Invoke invoke = (Invoke) activity;
+				if (partnerLink != null && invoke.getPartnerLink() != null) {
+					if (partnerLink.equals(invoke.getPartnerLink())) {
+						if (operation != null && invoke.getOperation() != null) {
+							return operation.equals(invoke.getOperation());
+						}
+					}
+				}
+				if (operation != null && invoke.getOperation() != null) {
+					return operation.equals(invoke.getOperation());
+				}
+			}
+		}
+		return false;
+	}
 }

@@ -29,4 +29,7 @@ public final class WsdlOperation implements Serializable {
 		return name;
 	}
 
+	public final String toString() {
+		return name;
+	}
 }

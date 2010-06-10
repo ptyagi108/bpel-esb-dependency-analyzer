@@ -7,6 +7,12 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
+/**
+ * 
+ * @author Tomas Frastia
+ * 
+ * @param <E>
+ */
 public abstract class BasicNode<E extends TreeNode> implements TreeNode, Serializable {
 
 	private static final long serialVersionUID = 7912979253082585806L;

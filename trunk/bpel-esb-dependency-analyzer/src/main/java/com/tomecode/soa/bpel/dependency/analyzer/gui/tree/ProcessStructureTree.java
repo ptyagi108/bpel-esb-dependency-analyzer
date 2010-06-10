@@ -13,7 +13,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
-import com.tomecode.soa.bpel.dependency.analyzer.gui.panels.WorkspaceUtilsPanel;
+import com.tomecode.soa.bpel.dependency.analyzer.gui.panels.UtilsPanel;
 import com.tomecode.soa.bpel.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsagePartnerLinkResult;
 import com.tomecode.soa.bpel.dependency.analyzer.usages.FindUsageVariableResult;
@@ -37,7 +37,7 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 
 	private final List<Activity> selectedActivityWithOperationPath;
 
-	private WorkspaceUtilsPanel workspaceUtilsPanel;
+	private UtilsPanel workspaceUtilsPanel;
 
 	/**
 	 * 
@@ -45,7 +45,7 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 	 * 
 	 * @param workspaceUtilsPanel
 	 */
-	public ProcessStructureTree(WorkspaceUtilsPanel workspaceUtilsPanel) {
+	public ProcessStructureTree(UtilsPanel workspaceUtilsPanel) {
 		super();
 		this.workspaceUtilsPanel = workspaceUtilsPanel;
 		selectedActivityWithOperationPath = new ArrayList<Activity>();
@@ -63,14 +63,13 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 	 * @param y
 	 */
 	public final void showPopupMenu(int x, int y) {
+		enableMenuItem(null, false);
 		TreePath treePath = this.getSelectionPath();
 		if (treePath != null) {
 			if (treePath.getLastPathComponent() instanceof Variable) {
 				enableMenuItem("findUsageVariable", true);
 			} else if (treePath.getLastPathComponent() instanceof PartnerLink) {
 				enableMenuItem("findUsagePartnerLink", true);
-			} else {
-				enableMenuItem(null, false);
 			}
 			popupMenu.show(this, x, y);
 		}
@@ -87,8 +86,13 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 		expandAllNodes(new TreePath(bpelProcessStrukture));
 	}
 
-	public final void addSelectedActivities(List<Activity> activities) {
+	public final void setSelectedActivities(List<Activity> activities) {
 		this.selectedActivityWithOperationPath.clear();
+		this.selectedActivityWithOperationPath.addAll(activities);
+		updateUI();
+	}
+
+	public final void addSelectedActivities(List<Activity> activities) {
 		this.selectedActivityWithOperationPath.addAll(activities);
 		updateUI();
 	}
@@ -113,16 +117,18 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 			if (value instanceof BpelProcessStrukture) {
 				rnd.setIcon(IconFactory.PROCESS);
 			} else if (value instanceof Activity) {
+
 				Activity activity = (Activity) value;
 				if (!selectedActivityWithOperationPath.isEmpty()) {
-
-					if (selectedActivityWithOperationPath.get(0).toString().equals(activity.toString())) {
+					// compare selected last activty by name and operation
+					if (selectedActivityWithOperationPath.get(0).compare(activity)) {
 						if (compareByTreeActivities(activity)) {
 							rnd.setForeground(Color.red);
 							rnd.setFont(rnd.getFont().deriveFont(Font.BOLD));
 						}
 					}
 				}
+
 				if (activity.getActivtyType() != null) {
 					rnd.setIcon(activity.getActivtyType().getImageIcon());
 				}
@@ -162,6 +168,7 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 
 			return true;
 		}
+
 	}
 
 	@Override

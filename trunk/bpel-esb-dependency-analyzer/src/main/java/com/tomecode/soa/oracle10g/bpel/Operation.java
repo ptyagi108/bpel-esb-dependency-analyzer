@@ -23,19 +23,32 @@ import com.tomecode.soa.oracle10g.bpel.activity.ActivityType;
 public final class Operation implements TreeNode, IconNode, Serializable {
 
 	private static final long serialVersionUID = -5643471889740129373L;
-	
+
 	private final ActivityType activtyType;
 	private String activity;
 
+	/**
+	 * operation name
+	 */
 	private String name;
 
+	/**
+	 * wsdl operation
+	 */
 	private String operation;
 
 	private PartnerLinkBinding partnerLinkBinding;
 
 	private List<Activity> activities;
-
+	/**
+	 * ownere project
+	 */
 	private BpelProject ownerBpelProject;
+	/**
+	 * default value is true but if service not found (unknown ) then defualt
+	 * value is false
+	 */
+	private boolean visiblePartnerLinksDependnecie = true;
 
 	/**
 	 * Constructor
@@ -82,11 +95,17 @@ public final class Operation implements TreeNode, IconNode, Serializable {
 
 	@Override
 	public boolean getAllowsChildren() {
+		if (!visiblePartnerLinksDependnecie) {
+			return false;
+		}
 		if (partnerLinkBinding != null) {
 			if (partnerLinkBinding.getDependencyBpelProject() != null) {
 				return true;
 			}
 			if (partnerLinkBinding.getDependencyEsbProject() != null) {
+				return true;
+			}
+			if (partnerLinkBinding.getUnknownProject() != null) {
 				return true;
 			}
 		}
@@ -104,7 +123,8 @@ public final class Operation implements TreeNode, IconNode, Serializable {
 			return project.getBpelOperations();
 		} else if (partnerLinkBinding.getDependencyEsbProject() != null) {
 			return new EsbServiceNode(partnerLinkBinding.getDependencyEsbProject());
-
+		} else if (partnerLinkBinding.getUnknownProject() != null) {
+			return partnerLinkBinding.getUnknownProject();
 		}
 		return new EmptyNode(project);
 
@@ -157,4 +177,11 @@ public final class Operation implements TreeNode, IconNode, Serializable {
 		return null;
 	}
 
+	public final void setVisiblePartnerLinks(boolean visible) {
+		this.visiblePartnerLinksDependnecie = visible;
+	}
+
+	public final Operation clone() {
+		return new Operation(activity, name, operation, ownerBpelProject, partnerLinkBinding, activities);
+	}
 }
