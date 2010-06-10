@@ -172,7 +172,7 @@ public final class Desktop extends Frame implements ActionListener, ReloadRecent
 
 	@Override
 	public final void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("Open  Workspace")) {
+		if (e.getActionCommand().equals("Open Workspace")) {
 			newWorkspace();
 		} else if (e.getActionCommand().equals("Open Multi-Workspace")) {
 			newMultiWorkspace();
