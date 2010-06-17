@@ -1,5 +1,8 @@
 package com.tomecode.soa.dependency.analyzer.gui.panels;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.JTabbedPane;
 
 import com.tomecode.soa.dependency.analyzer.gui.components.WorkspacePanel;
@@ -25,7 +28,18 @@ public final class UtilsPanel extends JTabbedPane {
 	 * Constructor
 	 */
 	public UtilsPanel() {
-
+		addMouseListener(new MouseAdapter() {
+			public final void mouseClicked(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2) {
+					if (getSelectedIndex() != -1) {
+						removeTabAt(getSelectedIndex());
+						if (getTabCount() == 0) {
+							utilsPanelListener.hide();
+						}
+					}
+				}
+			}
+		});
 	}
 
 	/**

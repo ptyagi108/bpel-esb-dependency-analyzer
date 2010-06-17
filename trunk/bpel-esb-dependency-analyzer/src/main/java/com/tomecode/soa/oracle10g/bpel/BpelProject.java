@@ -47,10 +47,10 @@ public final class BpelProject extends Project {
 
 	private final BpelProcessStrukture bpelProcessStrukture;
 
-//	/**
-//	 * list of {@link EsbSvc} from which are dependency on me
-//	 */
-//	private final List<EsbSvc> dependenceEsbSvc;
+	// /**
+	// * list of {@link EsbSvc} from which are dependency on me
+	// */
+	// private final List<EsbSvc> dependenceEsbSvc;
 
 	/**
 	 * bpel process wsdl
@@ -209,6 +209,5 @@ public final class BpelProject extends Project {
 		}
 
 	}
-	
-	
+
 }

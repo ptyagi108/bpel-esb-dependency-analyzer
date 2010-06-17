@@ -86,11 +86,20 @@ public final class UnknownPanel extends JPanel {
 		UnknonwNode unknonwNode = new UnknonwNode();
 		for (int i = 0; i <= bpelOperations.getChildCount() - 1; i++) {
 			Operation operation = (Operation) bpelOperations.getChildAt(i);
-			if (operation.getPartnerLinkBpelProcess() == null) {
-				// add only operations/activity which use unknown project
-				if (operation.getPartnerLinkBinding().equals(partnerLinkBinding)) {
-					unknonwNode.addOperation(operation);
+
+			try {
+				if (operation.getPartnerLinkBinding() != null) {
+					if (operation.getPartnerLinkBpelProcess() == null) {
+						// add only operations/activity which use unknown
+						// project
+						if (operation.getPartnerLinkBinding().equals(partnerLinkBinding)) {
+							unknonwNode.addOperation(operation);
+						}
+					}
 				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 
 		}

@@ -497,6 +497,7 @@ public final class WorkspaceVisualPanel extends JPanel {
 		BufferedOutputStream out = null;
 		try {
 			out = new BufferedOutputStream(new FileOutputStream(file));
+			graph.setBackground(Color.white);
 			BufferedImage image = graph.getImage(graph.getBackground(), 10);
 			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
 			JPEGEncodeParam encpar = encoder.getDefaultJPEGEncodeParam(image);
@@ -505,6 +506,7 @@ public final class WorkspaceVisualPanel extends JPanel {
 			encoder.encode(image);
 			ImageIO.write(image, "jpg", out);
 		} finally {
+			graph.setBackground(defaultColor);
 			if (out != null) {
 				out.close();
 			}

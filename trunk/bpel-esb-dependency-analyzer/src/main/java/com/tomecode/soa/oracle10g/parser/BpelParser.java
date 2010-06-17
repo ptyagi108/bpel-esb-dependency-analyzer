@@ -674,6 +674,9 @@ public final class BpelParser extends AbstractParser {
 	 * @return
 	 */
 	private final BpelProject findParsedProcess(File file) {
+		if (file.getName().endsWith("BPELProcess7.wsdl")) {
+			file.toString();
+		}
 		if (file.getName().endsWith(".wsdl") || file.getName().endsWith("?wsdl")) {
 			file = new File(file.getParent() + File.separator + "bpel.xml");
 		}

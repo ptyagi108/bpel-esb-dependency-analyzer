@@ -177,14 +177,40 @@ public final class WorkspacePanel extends JPanel {
 
 		pActivities.add(pBpelProject, P_ACTIVITIES_BPEL_TREE);
 
+		// addComponentListener(new ComponentAdapter() {
+		//
+		// @Override
+		// public final void componentResized(ComponentEvent e) {
+		// Dimension dimension = e.getComponent().getSize();
+		// System.out.println("resise1 height:" +
+		// e.getComponent().getSize().height + " wigth:" +
+		// e.getComponent().getSize().width);
+		// int location = (int) (dimension.height - (dimension.height * 0.20));
+		// spUtilsAndRoot.setDividerLocation(location);
+		// spVisualAndBasicGraph.setDividerLocation(600);
+		// spVisualAndBasicGraph.setPreferredSize(new Dimension(dimension.width,
+		// 700));
+		// System.out.println("location" + location);
+		//				
+		// System.out.println("spVisualAndBasicGraph.getDividerLocation()" +
+		// spVisualAndBasicGraph.getDividerLocation());
+		// spVisualAndBasicGraph.updateUI();
+		// }
+		//
+		// });
+
 		utilsPanel.setListener(new UtilsPanelListener() {
 
 			@Override
 			public final void show() {
 				if (findUtilsPanelIndex() == -1) {
 					remove(spRootWorkspace);
-					spUtilsAndRoot.add(spRootWorkspace);
-					spUtilsAndRoot.add(utilsPanel);
+					if (spUtilsAndRoot.getComponentCount() == 1) {
+						spUtilsAndRoot.add(spRootWorkspace);
+						spUtilsAndRoot.add(utilsPanel);
+					} else if (spUtilsAndRoot.getComponentCount() == 2) {
+						spUtilsAndRoot.add(spRootWorkspace);
+					}
 					add(spUtilsAndRoot, BorderLayout.CENTER);
 					updateUI();
 				}
