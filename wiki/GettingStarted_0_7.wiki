@@ -46,6 +46,14 @@ Requirements: Java 1.6
       http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/findUsageForPartnerLink.gif
       http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/findUsageForVariables.gif
 
+
+===Unknown projects or services... ===
+
+ If you are selected an unknown project in tree of "Project Dependecies" then shows *"Unknown project panel"*, which displays basic information about the unknown service and list of activities wich uses by an unknown service.
+      http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/v0-7/unknownProjectPanel.gif
+
+
+
 ===Project Info...=== 
   
  The first tree contains a popup menu that contains the item * Properties *.
