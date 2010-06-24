@@ -11,7 +11,7 @@ import com.tomecode.soa.oracle10g.bpel.BpelProject;
 /**
  * 
  * simple tree for display activities in {@link BpelProject} which use
- * {@link UnknownPanel}
+ * {@link UnknownPanel}/
  * 
  * @author Tomas Frastia
  * 

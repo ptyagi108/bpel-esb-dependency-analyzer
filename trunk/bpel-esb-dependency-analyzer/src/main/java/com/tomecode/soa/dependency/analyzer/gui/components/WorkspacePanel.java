@@ -14,12 +14,12 @@ import javax.swing.JTextField;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
-import com.tomecode.soa.dependency.analyzer.gui.panels.UtilsPanel;
-import com.tomecode.soa.dependency.analyzer.gui.panels.UtilsPanel.UtilsPanelListener;
 import com.tomecode.soa.dependency.analyzer.gui.tree.BpelOperationTree;
 import com.tomecode.soa.dependency.analyzer.gui.tree.EsbServiceTree;
 import com.tomecode.soa.dependency.analyzer.gui.tree.ProcessStructureTree;
 import com.tomecode.soa.dependency.analyzer.gui.tree.WorkspaceTree;
+import com.tomecode.soa.dependency.analyzer.gui.utils.panels.UtilsPanel;
+import com.tomecode.soa.dependency.analyzer.gui.utils.panels.UtilsPanel.UtilsPanelListener;
 import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.oracle10g.MultiWorkspace;
 import com.tomecode.soa.oracle10g.Workspace;

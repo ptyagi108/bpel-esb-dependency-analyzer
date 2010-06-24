@@ -1,4 +1,4 @@
-package com.tomecode.soa.dependency.analyzer.gui.panels;
+package com.tomecode.soa.dependency.analyzer.gui.utils.panels;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

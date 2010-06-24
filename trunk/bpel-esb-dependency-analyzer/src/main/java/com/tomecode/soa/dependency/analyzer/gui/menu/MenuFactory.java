@@ -20,6 +20,26 @@ import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
 public final class MenuFactory {
 
 	/**
+	 * create {@link JMenuItem} by {@link MenuItems#ARROW_BACK}
+	 * 
+	 * @param actionListener
+	 * @return
+	 */
+	public final static JMenuItem createArrowBack(ActionListener actionListener) {
+		return createJMenuItem(MenuItems.ARROW_BACK, actionListener);
+	}
+
+	/**
+	 * create {@link JMenuItem} by {@link MenuItems#ARROW_FORWARD}
+	 * 
+	 * @param actionListener
+	 * @return
+	 */
+	public final static JMenuItem createArrowForward(ActionListener actionListener) {
+		return createJMenuItem(MenuItems.ARROW_FORWARD, actionListener);
+	}
+
+	/**
 	 * create {@link JMenuItem} by {@link MenuItems#FIND_USAGE_BPEL}
 	 * 
 	 * @param actionListener
@@ -120,8 +140,9 @@ public final class MenuFactory {
 	 */
 	public static enum MenuItems {
 
-		FIND_USAGE_BPEL("Find Usage for BPEL projec", "findUsageBpelProject", IconFactory.SEARCH), FIND_USAGE_ESB("Find Usage for ESB project", "findUsageESBproject", IconFactory.SEARCH), PROJECT_PROPERTIES("Properties...", "infoAboutProject", IconFactory.ABOUT), FIND_USAGE_VARIABLE(
-				"Find Usage for Variable", "findUsageVariable", IconFactory.SEARCH), FIND_USAGE_PARTNERLINK("Find Usage for PartnerLink", "findUsagePartnerLink", IconFactory.SEARCH);
+		ARROW_BACK("Back", "arrowBack", IconFactory.ARROW_BACK), ARROW_FORWARD("Forward", "arrowForward", IconFactory.ARROW_FORWARD), RELOAD_GRAPH("Reload", "reloadGraph", IconFactory.RELOAD_GRAPH), FIND_USAGE_BPEL("Find Usage for BPEL projec", "findUsageBpelProject",
+				IconFactory.SEARCH), FIND_USAGE_ESB("Find Usage for ESB project", "findUsageESBproject", IconFactory.SEARCH), PROJECT_PROPERTIES("Properties...", "infoAboutProject", IconFactory.ABOUT), FIND_USAGE_VARIABLE("Find Usage for Variable", "findUsageVariable",
+				IconFactory.SEARCH), FIND_USAGE_PARTNERLINK("Find Usage for PartnerLink", "findUsagePartnerLink", IconFactory.SEARCH);
 		private final String title;
 		private final String actionCmd;
 		private final ImageIcon imageIcon;

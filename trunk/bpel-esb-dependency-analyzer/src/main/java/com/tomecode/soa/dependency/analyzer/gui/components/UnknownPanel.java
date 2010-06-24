@@ -13,9 +13,9 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeNode;
 
-import com.tomecode.soa.dependency.analyzer.gui.panels.UtilsPanel;
 import com.tomecode.soa.dependency.analyzer.gui.tree.BpelUnknownOperationTree;
 import com.tomecode.soa.dependency.analyzer.gui.tree.ProcessStructureTree;
+import com.tomecode.soa.dependency.analyzer.gui.utils.panels.UtilsPanel;
 import com.tomecode.soa.oracle10g.bpel.BpelOperations;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.Operation;

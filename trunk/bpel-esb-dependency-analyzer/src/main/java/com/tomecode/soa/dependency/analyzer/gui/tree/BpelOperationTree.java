@@ -6,8 +6,8 @@ import javax.swing.tree.TreePath;
 
 import com.tomecode.soa.dependency.analyzer.gui.menu.MenuFactory;
 import com.tomecode.soa.dependency.analyzer.gui.menu.MenuFactory.MenuItems;
-import com.tomecode.soa.dependency.analyzer.gui.panels.UtilsPanel;
 import com.tomecode.soa.dependency.analyzer.gui.tree.node.EsbServiceNode;
+import com.tomecode.soa.dependency.analyzer.gui.utils.panels.UtilsPanel;
 import com.tomecode.soa.dependency.analyzer.usages.FindUsageProjectResult;
 import com.tomecode.soa.oracle10g.bpel.BpelOperations;
 

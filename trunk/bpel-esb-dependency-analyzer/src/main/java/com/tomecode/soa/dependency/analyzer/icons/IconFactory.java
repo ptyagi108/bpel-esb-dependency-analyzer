@@ -63,6 +63,9 @@ public final class IconFactory {
 	public static final ImageIcon INFO = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/info.png"));
 	public static final ImageIcon EXPORT = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/export.png"));
 	public static final ImageIcon EXPORT_BIG = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/export_big.png"));
+	public static final ImageIcon RELOAD_GRAPH = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/reload_graph.png"));
+	public static final ImageIcon ARROW_BACK = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/arrow_back.png"));
+	public static final ImageIcon ARROW_FORWARD = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/arrow_forward.png"));
 
 	private IconFactory() {
 	}

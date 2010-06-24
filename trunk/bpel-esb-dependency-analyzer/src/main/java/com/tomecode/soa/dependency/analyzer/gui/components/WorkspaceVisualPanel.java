@@ -43,8 +43,8 @@ import com.tomecode.soa.dependency.analyzer.gui.cellview.CellViewFactory;
 import com.tomecode.soa.dependency.analyzer.gui.cellview.SelfDefaultEdge;
 import com.tomecode.soa.dependency.analyzer.gui.menu.MenuFactory;
 import com.tomecode.soa.dependency.analyzer.gui.menu.MenuFactory.MenuItems;
-import com.tomecode.soa.dependency.analyzer.gui.panels.UtilsPanel;
 import com.tomecode.soa.dependency.analyzer.gui.tree.node.DependencyNode;
+import com.tomecode.soa.dependency.analyzer.gui.utils.panels.UtilsPanel;
 import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.dependency.analyzer.usages.FindUsageProjectResult;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
@@ -78,8 +78,7 @@ public final class WorkspaceVisualPanel extends JPanel implements ActionListener
 	 */
 	private final JGraph graph;
 
-	private JGraphFastOrganicLayout organicLayout;// JGraphOrganicLayout
-	// organicLayout;
+	private JGraphFastOrganicLayout organicLayout;
 
 	private final JGraphFacade facade;
 
@@ -143,7 +142,8 @@ public final class WorkspaceVisualPanel extends JPanel implements ActionListener
 
 		popupMenu = new JPopupMenu();
 		initPopupMenu();
-
+		MenuFactory.enableMenuItem(popupMenu, null, false);
+		MenuFactory.enableMenuItem(popupMenu, MenuItems.RELOAD_GRAPH.getActionCmd(), true);
 		graph.setMarqueeHandler(new PopupMarqueeHandler(this));
 	}
 
@@ -151,6 +151,11 @@ public final class WorkspaceVisualPanel extends JPanel implements ActionListener
 	 * add {@link JMenuItem} to {@link #popupMenu}
 	 */
 	private final void initPopupMenu() {
+		popupMenu.add(MenuFactory.createJMenuItem(MenuItems.RELOAD_GRAPH, this));
+		popupMenu.addSeparator();
+		popupMenu.add(MenuFactory.createArrowBack(this));
+		popupMenu.add(MenuFactory.createArrowForward(this));
+		popupMenu.addSeparator();
 		popupMenu.add(MenuFactory.createFindUsageBpel(this));
 		popupMenu.add(MenuFactory.createFindUsageEsb(this));
 		popupMenu.addSeparator();
@@ -171,7 +176,7 @@ public final class WorkspaceVisualPanel extends JPanel implements ActionListener
 			Project project = (Project) cell.getUserObject();
 
 			MenuFactory.enableMenuItem(popupMenu, null, false);
-			
+			MenuFactory.enableMenuItem(popupMenu, MenuItems.RELOAD_GRAPH.getActionCmd(), true);
 			if (project.getType() == ProjectType.ORACLE10G_BPEL) {
 				MenuFactory.enableMenuItem(popupMenu, MenuItems.FIND_USAGE_BPEL.getActionCmd(), true);
 				MenuFactory.enableMenuItem(popupMenu, MenuItems.PROJECT_PROPERTIES.getActionCmd(), true);
@@ -222,12 +227,7 @@ public final class WorkspaceVisualPanel extends JPanel implements ActionListener
 		}
 
 		graph.getGraphLayoutCache().insert(insertedObjects.toArray());
-
-		organicLayout.run(facade);
-
-		Map<?, ?> nested = facade.createNestedMap(true, true);
-		graph.getGraphLayoutCache().edit(nested);
-
+		reloadGraph();
 	}
 
 	private final void checkForceBySize(int size) {
@@ -507,11 +507,22 @@ public final class WorkspaceVisualPanel extends JPanel implements ActionListener
 		}
 
 		graph.getGraphLayoutCache().insert(insertedObjects.toArray());
+		reloadGraph();
+	}
 
-		organicLayout.run(facade);
-
-		Map<?, ?> nested = facade.createNestedMap(true, true);
-		graph.getGraphLayoutCache().edit(nested);
+	/**
+	 * display the selected project in the graph as root
+	 */
+	private final void showSelectedProject() {
+		if (graph.getSelectionCell() != null && graph.getSelectionCell() instanceof DefaultGraphCell) {
+			DefaultGraphCell cell = (DefaultGraphCell) graph.getSelectionCell();
+			Project project = (Project) cell.getUserObject();
+			if (project.getType() == ProjectType.ORACLE10G_BPEL) {
+				showGraphBpel((BpelProject) project);
+			} else if (project.getType() == ProjectType.ORACLE10G_ESB) {
+				showGraphEsb((EsbProject) project);
+			}
+		}
 	}
 
 	private final List<Project> filterUniqueProjects(List<EsbOperation> esbOperations) {
@@ -614,7 +625,22 @@ public final class WorkspaceVisualPanel extends JPanel implements ActionListener
 				Project project = (Project) cell.getUserObject();
 				utilsPanel.showFindUsageBpelProject(FindUsageProjectResult.createUsageForEsbProject(project));
 			}
+		} else if (e.getActionCommand().equals(MenuItems.RELOAD_GRAPH.getActionCmd())) {
+			reloadGraph();
+		} else if (e.getActionCommand().equals(MenuItems.ARROW_BACK.getActionCmd())) {
+
+		} else if (e.getActionCommand().equals(MenuItems.ARROW_FORWARD.getActionCmd())) {
+
 		}
+	}
+
+	/**
+	 * reload graph or refresh
+	 */
+	private final void reloadGraph() {
+		organicLayout.run(facade);
+		Map<?, ?> nested = facade.createNestedMap(true, true);
+		graph.getGraphLayoutCache().edit(nested);
 	}
 
 	/**
@@ -644,15 +670,17 @@ public final class WorkspaceVisualPanel extends JPanel implements ActionListener
 		public final boolean isForceMarqueeEvent(MouseEvent e) {
 			if (e.isShiftDown())
 				return false;
-			// If Right Mouse Button we want to Display the PopupMenu
-			if (SwingUtilities.isRightMouseButton(e)) {
+
+			if (SwingUtilities.isRightMouseButton(e) || (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() >= 2)) {
 				return true;
 			}
 			return super.isForceMarqueeEvent(e);
 		}
 
 		public final void mousePressed(final MouseEvent e) {
-			if (SwingUtilities.isRightMouseButton(e)) {
+			if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() >= 2) {
+				workspaceVisualPanel.showSelectedProject();
+			} else if (SwingUtilities.isRightMouseButton(e)) {
 				workspaceVisualPanel.showPopupMenu(e.getX(), e.getY());
 			} else {
 				super.mousePressed(e);
@@ -660,4 +688,5 @@ public final class WorkspaceVisualPanel extends JPanel implements ActionListener
 		}
 
 	}
+
 }
