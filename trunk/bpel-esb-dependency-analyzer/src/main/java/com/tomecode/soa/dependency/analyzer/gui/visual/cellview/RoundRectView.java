@@ -1,4 +1,4 @@
-package com.tomecode.soa.dependency.analyzer.gui.cellview;
+package com.tomecode.soa.dependency.analyzer.gui.visual.cellview;
 
 import java.awt.BasicStroke;
 import java.awt.Dimension;
