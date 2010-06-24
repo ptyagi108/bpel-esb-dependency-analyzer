@@ -5,7 +5,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JTabbedPane;
 
-import com.tomecode.soa.dependency.analyzer.gui.components.WorkspacePanel;
+import com.tomecode.soa.dependency.analyzer.gui.panels.WorkspacePanel;
 import com.tomecode.soa.dependency.analyzer.usages.FindUsage;
 import com.tomecode.soa.dependency.analyzer.usages.FindUsagePartnerLinkResult;
 import com.tomecode.soa.dependency.analyzer.usages.FindUsageProjectResult;

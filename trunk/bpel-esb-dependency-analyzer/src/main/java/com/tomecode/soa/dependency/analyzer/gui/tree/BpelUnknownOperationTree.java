@@ -4,8 +4,8 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.tree.TreePath;
 
-import com.tomecode.soa.dependency.analyzer.gui.components.UnknownPanel;
-import com.tomecode.soa.dependency.analyzer.gui.components.UnknownPanel.UnknonwNode;
+import com.tomecode.soa.dependency.analyzer.gui.panels.UnknownPanel;
+import com.tomecode.soa.dependency.analyzer.gui.panels.UnknownPanel.UnknonwNode;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 
 /**

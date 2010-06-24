@@ -1,4 +1,4 @@
-package com.tomecode.soa.dependency.analyzer.gui.components;
+package com.tomecode.soa.dependency.analyzer.gui.panels;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

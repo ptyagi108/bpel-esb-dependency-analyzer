@@ -13,7 +13,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.tomecode.soa.dependency.analyzer.gui.components.TabbedManager;
+import com.tomecode.soa.dependency.analyzer.gui.panels.TabbedManager;
 import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.oracle10g.Workspace;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;

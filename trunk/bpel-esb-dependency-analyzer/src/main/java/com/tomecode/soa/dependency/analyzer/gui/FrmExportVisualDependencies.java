@@ -14,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.tomecode.soa.dependency.analyzer.gui.components.TabbedManager;
+import com.tomecode.soa.dependency.analyzer.gui.panels.TabbedManager;
 import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
 import com.tomecode.util.gui.Dialog;
 import com.tomecode.util.gui.Frame;

@@ -14,8 +14,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import com.tomecode.soa.dependency.analyzer.gui.components.TabbedManager;
-import com.tomecode.soa.dependency.analyzer.gui.components.WorkspaceChangeListener;
+import com.tomecode.soa.dependency.analyzer.gui.panels.TabbedManager;
+import com.tomecode.soa.dependency.analyzer.gui.panels.WorkspaceChangeListener;
 import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.dependency.analyzer.settings.RecentFile;
 import com.tomecode.soa.dependency.analyzer.settings.ReloadRecentMenuListener;
