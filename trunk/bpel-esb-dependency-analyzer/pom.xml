@@ -4,7 +4,7 @@
 	<groupId>com.tomecode</groupId>
 	<artifactId>bpel-esb-dependency-analyzer</artifactId>
 	<name>bpel-esb-dependency-analyzer</name>
-	<version>0.6</version>
+	<version>0.7</version>
 	<packaging>jar</packaging>
 	<description>SOA analyzer for BPEL and ESB dependencies</description>
 

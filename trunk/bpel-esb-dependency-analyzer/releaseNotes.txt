@@ -1,0 +1,24 @@
+-fix bug
+	in order recent files in recenfile menu
+	
+- news:
+	simple visualizer for project dependnecies( zoomovanie, tlac...)
+	changes in icons
+	frm na loadovanie workspace - chyba zobrazovanie parsovanych suborov	
+
+
+dorobit visualizer na niekolko urovni  - verzia 0.8 
+
+
+aktivity -switch - onmessage sa zle zobrazuju v strome:ok
+find usage znovu zobrazovat : ok
+vlastne dependecie vykreslovat spravne: ok
+zobrazit prepojenie service na service (podobne ako partnerlink: ok
+
+
+zisitit ci bpelprocess1 nie je vlastnym klientom...
+
+
+
+
+!! ak hladam bpel process a existuje taky nazov ale zaroven sa nachadza v workspace ktorom je tak musim ho musim najst inde..dorobit komparator aj na wsdlka...

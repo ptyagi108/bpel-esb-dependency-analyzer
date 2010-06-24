@@ -20,6 +20,7 @@ import com.tomecode.soa.dependency.analyzer.gui.tree.ProcessStructureTree;
 import com.tomecode.soa.dependency.analyzer.gui.tree.WorkspaceTree;
 import com.tomecode.soa.dependency.analyzer.gui.utils.panels.UtilsPanel;
 import com.tomecode.soa.dependency.analyzer.gui.utils.panels.UtilsPanel.UtilsPanelListener;
+import com.tomecode.soa.dependency.analyzer.gui.visual.WorkspaceVisualPanel;
 import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.oracle10g.MultiWorkspace;
 import com.tomecode.soa.oracle10g.Workspace;
