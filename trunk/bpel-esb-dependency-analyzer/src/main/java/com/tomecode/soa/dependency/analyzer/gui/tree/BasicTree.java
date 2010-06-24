@@ -5,8 +5,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.Icon;
-import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -16,6 +14,7 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import com.tomecode.soa.dependency.analyzer.gui.menu.MenuFactory;
 import com.tomecode.soa.dependency.analyzer.gui.tree.node.IconNode;
 
 /**
@@ -49,24 +48,6 @@ public abstract class BasicTree extends JTree implements ActionListener {
 	}
 
 	public abstract void showPopupMenu(int x, int y);
-
-	/**
-	 * 
-	 * create {@link JMenuItem}
-	 * 
-	 * @param title
-	 * @param actionCmd
-	 * @return
-	 */
-	protected final void createMenuItem(String title, String actionCmd, Icon icon) {
-		JMenuItem item = new JMenuItem(title);
-		item.setActionCommand(actionCmd);
-		if (icon != null) {
-			item.setIcon(icon);
-		}
-		item.addActionListener(this);
-		popupMenu.add(item);
-	}
 
 	/**
 	 * expand all nodes
@@ -105,18 +86,19 @@ public abstract class BasicTree extends JTree implements ActionListener {
 	 * @param enable
 	 */
 	protected final void enableMenuItem(String actionCmd, boolean enable) {
-		for (int i = 0; i <= popupMenu.getComponentCount() - 1; i++) {
-			if (popupMenu.getComponent(i) instanceof JMenuItem) {
-				JMenuItem menuItem = (JMenuItem) popupMenu.getComponent(i);
-				if (actionCmd == null) {
-					menuItem.setEnabled(enable);
-				} else {
-					if (actionCmd.equals(menuItem.getActionCommand())) {
-						menuItem.setEnabled(enable);
-					}
-				}
-			}
-		}
+		// for (int i = 0; i <= popupMenu.getComponentCount() - 1; i++) {
+		// if (popupMenu.getComponent(i) instanceof JMenuItem) {
+		// JMenuItem menuItem = (JMenuItem) popupMenu.getComponent(i);
+		// if (actionCmd == null) {
+		// menuItem.setEnabled(enable);
+		// } else {
+		// if (actionCmd.equals(menuItem.getActionCommand())) {
+		// menuItem.setEnabled(enable);
+		// }
+		// }
+		// }
+		// }
+		MenuFactory.enableMenuItem(popupMenu, actionCmd, enable);
 	}
 
 	/**

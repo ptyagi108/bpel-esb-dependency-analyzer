@@ -8,6 +8,8 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
+import com.tomecode.soa.dependency.analyzer.gui.menu.MenuFactory;
+import com.tomecode.soa.dependency.analyzer.gui.menu.MenuFactory.MenuItems;
 import com.tomecode.soa.dependency.analyzer.gui.panels.UtilsPanel;
 import com.tomecode.soa.dependency.analyzer.gui.tree.node.EsbServiceNode;
 import com.tomecode.soa.dependency.analyzer.gui.tree.node.IconNode;
@@ -39,8 +41,8 @@ public final class EsbServiceTree extends BasicTree {
 		super();
 		this.workspaceUtilsPanel = workspaceUtilsPanel;
 		setCellRenderer(new EsbServiceTreeRenederer());
-		createMenuItem("Find Usage for BPEL project", "findUsageBpelProject", IconFactory.SEARCH);
-		createMenuItem("Find Usage for ESB project", "findUsageESBproject", IconFactory.SEARCH);
+		popupMenu.add(MenuFactory.createFindUsageBpel(this));
+		popupMenu.add(MenuFactory.createFindUsageEsb(this));
 	}
 
 	/**
@@ -86,9 +88,9 @@ public final class EsbServiceTree extends BasicTree {
 		TreePath treePath = this.getSelectionPath();
 		if (treePath != null) {
 			if (treePath.getLastPathComponent() instanceof BpelOperations) {
-				enableMenuItem("findUsageBpelProject", true);
+				enableMenuItem(MenuItems.FIND_USAGE_BPEL.getActionCmd(), true);
 			} else if (treePath.getLastPathComponent() instanceof EsbServiceNode) {
-				enableMenuItem("findUsageESBproject", true);
+				enableMenuItem(MenuItems.FIND_USAGE_ESB.getActionCmd(), true);
 			} else {
 				enableMenuItem(null, false);
 			}
@@ -98,29 +100,12 @@ public final class EsbServiceTree extends BasicTree {
 
 	@Override
 	public final void actionPerformed(ActionEvent e) {
-		FindUsageProjectResult usage = null;
-
-		if (e.getActionCommand().equals("findUsageBpelProject")) {
+		if (e.getActionCommand().equals(MenuItems.FIND_USAGE_BPEL.getActionCmd())) {
 			BpelOperations bpelOperations = (BpelOperations) getSelectionPath().getLastPathComponent();
-			usage = new FindUsageProjectResult(bpelOperations.getBpelProcess());
-			if (bpelOperations.getBpelProcess().getWorkspace().getMultiWorkspace() != null) {
-				bpelOperations.getBpelProcess().getWorkspace().getMultiWorkspace().findUsageBpel(usage);
-			} else {
-				bpelOperations.getBpelProcess().getWorkspace().findUsageBpel(usage);
-			}
-
-			workspaceUtilsPanel.showFindUsageBpelProject(usage);
-
-		} else if (e.getActionCommand().equals("findUsageESBproject")) {
+			workspaceUtilsPanel.showFindUsageBpelProject(FindUsageProjectResult.createUsageForBpelProject(bpelOperations));
+		} else if (e.getActionCommand().equals(MenuItems.FIND_USAGE_ESB.getActionCmd())) {
 			EsbServiceNode esbServiceNode = (EsbServiceNode) getSelectionPath().getLastPathComponent();
-
-			usage = new FindUsageProjectResult(esbServiceNode.getProject());
-			if (esbServiceNode.getProject().getWorkspace().getMultiWorkspace() != null) {
-				esbServiceNode.getProject().getWorkspace().getMultiWorkspace().findUsageEsb(usage);
-			} else {
-				esbServiceNode.getProject().getWorkspace().findUsageEsb(usage);
-			}
-			workspaceUtilsPanel.showFindUsageEsbProject(usage);
+			workspaceUtilsPanel.showFindUsageEsbProject(FindUsageProjectResult.createUsageForEsbProject(esbServiceNode));
 		}
 	}
 }

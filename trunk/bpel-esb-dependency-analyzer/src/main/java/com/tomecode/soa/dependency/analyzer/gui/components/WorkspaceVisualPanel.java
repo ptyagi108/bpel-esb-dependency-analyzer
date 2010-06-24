@@ -2,6 +2,9 @@ package com.tomecode.soa.dependency.analyzer.gui.components;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -15,11 +18,15 @@ import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 
 import org.jgraph.JGraph;
 import org.jgraph.graph.AttributeMap;
+import org.jgraph.graph.BasicMarqueeHandler;
 import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.DefaultGraphModel;
@@ -31,10 +38,15 @@ import com.jgraph.layout.organic.JGraphFastOrganicLayout;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import com.tomecode.soa.dependency.analyzer.gui.FrmProjectInfo;
 import com.tomecode.soa.dependency.analyzer.gui.cellview.CellViewFactory;
 import com.tomecode.soa.dependency.analyzer.gui.cellview.SelfDefaultEdge;
+import com.tomecode.soa.dependency.analyzer.gui.menu.MenuFactory;
+import com.tomecode.soa.dependency.analyzer.gui.menu.MenuFactory.MenuItems;
+import com.tomecode.soa.dependency.analyzer.gui.panels.UtilsPanel;
 import com.tomecode.soa.dependency.analyzer.gui.tree.node.DependencyNode;
 import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
+import com.tomecode.soa.dependency.analyzer.usages.FindUsageProjectResult;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
 import com.tomecode.soa.oracle10g.esb.EsbOperation;
@@ -51,7 +63,7 @@ import com.tomecode.soa.project.UnknownProject;
  * @author Frastia Tomas
  * 
  */
-public final class WorkspaceVisualPanel extends JPanel {
+public final class WorkspaceVisualPanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = -5786182349758892615L;
 
@@ -71,13 +83,25 @@ public final class WorkspaceVisualPanel extends JPanel {
 
 	private final JGraphFacade facade;
 
+	/**
+	 * default background color
+	 */
 	private final Color defaultColor;
+	/**
+	 * popup menu
+	 */
+	private JPopupMenu popupMenu;
+
+	private Object selectedObject;
+
+	private UtilsPanel utilsPanel;
 
 	/**
 	 * Constructor
 	 */
-	public WorkspaceVisualPanel() {
+	public WorkspaceVisualPanel(UtilsPanel utilsPanel) {
 		super(new BorderLayout());
+		this.utilsPanel = utilsPanel;
 		organicLayout = new JGraphFastOrganicLayout(); // JGraphOrganicLayout();
 		insertedObjects = new ArrayList<Object>();
 		graphModel = new DefaultGraphModel();
@@ -116,6 +140,48 @@ public final class WorkspaceVisualPanel extends JPanel {
 		// Map map = facade.createNestedMap(true, true);
 		graph.getGraphLayoutCache().edit(nested, null, null, null);
 		// organicLayout.run(facade);
+
+		popupMenu = new JPopupMenu();
+		initPopupMenu();
+
+		graph.setMarqueeHandler(new PopupMarqueeHandler(this));
+	}
+
+	/**
+	 * add {@link JMenuItem} to {@link #popupMenu}
+	 */
+	private final void initPopupMenu() {
+		popupMenu.add(MenuFactory.createFindUsageBpel(this));
+		popupMenu.add(MenuFactory.createFindUsageEsb(this));
+		popupMenu.addSeparator();
+		popupMenu.add(MenuFactory.createProjectProperties(this));
+	}
+
+	/**
+	 * show {@link #popupMenu}
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	private final void showPopupMenu(int x, int y) {
+		selectedObject = graph.getFirstCellForLocation(x, y);
+
+		if (selectedObject instanceof DefaultGraphCell) {
+			DefaultGraphCell cell = (DefaultGraphCell) selectedObject;
+			Project project = (Project) cell.getUserObject();
+
+			MenuFactory.enableMenuItem(popupMenu, null, false);
+			
+			if (project.getType() == ProjectType.ORACLE10G_BPEL) {
+				MenuFactory.enableMenuItem(popupMenu, MenuItems.FIND_USAGE_BPEL.getActionCmd(), true);
+				MenuFactory.enableMenuItem(popupMenu, MenuItems.PROJECT_PROPERTIES.getActionCmd(), true);
+			} else if (project.getType() == ProjectType.ORACLE10G_ESB) {
+				MenuFactory.enableMenuItem(popupMenu, MenuItems.FIND_USAGE_ESB.getActionCmd(), true);
+				MenuFactory.enableMenuItem(popupMenu, MenuItems.PROJECT_PROPERTIES.getActionCmd(), true);
+			}
+		}
+
+		popupMenu.show(graph, x, y);
 	}
 
 	/**
@@ -437,13 +503,7 @@ public final class WorkspaceVisualPanel extends JPanel {
 					insertedObjects.add(createEdge(rootCell, esbCell, esbSvc, false));
 				}
 			}
-			// for (Project project :
-			// rootProject.getEsbProjectsDependecies()) {
 
-			// }
-
-			// }
-			// }
 		}
 
 		graph.getGraphLayoutCache().insert(insertedObjects.toArray());
@@ -533,5 +593,71 @@ public final class WorkspaceVisualPanel extends JPanel {
 				out.close();
 			}
 		}
+	}
+
+	@Override
+	public final void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand().equals(MenuItems.PROJECT_PROPERTIES.getActionCmd())) {
+			if (selectedObject != null && selectedObject instanceof DefaultGraphCell) {
+				DefaultGraphCell cell = (DefaultGraphCell) selectedObject;
+				FrmProjectInfo.showMe((Project) cell.getUserObject());
+			}
+		} else if (e.getActionCommand().equals(MenuItems.FIND_USAGE_BPEL.getActionCmd())) {
+			if (selectedObject != null && selectedObject instanceof DefaultGraphCell) {
+				DefaultGraphCell cell = (DefaultGraphCell) selectedObject;
+				Project project = (Project) cell.getUserObject();
+				utilsPanel.showFindUsageBpelProject(FindUsageProjectResult.createUsageForBpelProject(project));
+			}
+		} else if (e.getActionCommand().equals(MenuItems.FIND_USAGE_ESB.getActionCmd())) {
+			if (selectedObject != null && selectedObject instanceof DefaultGraphCell) {
+				DefaultGraphCell cell = (DefaultGraphCell) selectedObject;
+				Project project = (Project) cell.getUserObject();
+				utilsPanel.showFindUsageBpelProject(FindUsageProjectResult.createUsageForEsbProject(project));
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * Hanlder for popup menu
+	 * 
+	 * @author Frastia Tomas
+	 * 
+	 */
+	private static final class PopupMarqueeHandler extends BasicMarqueeHandler {
+
+		/**
+		 * 
+		 */
+		private WorkspaceVisualPanel workspaceVisualPanel;
+
+		/**
+		 * Constructor
+		 * 
+		 * @param workspaceVisualPanel
+		 */
+		private PopupMarqueeHandler(WorkspaceVisualPanel workspaceVisualPanel) {
+			this.workspaceVisualPanel = workspaceVisualPanel;
+		}
+
+		// Override to Gain Control (for PopupMenu and ConnectMode)
+		public final boolean isForceMarqueeEvent(MouseEvent e) {
+			if (e.isShiftDown())
+				return false;
+			// If Right Mouse Button we want to Display the PopupMenu
+			if (SwingUtilities.isRightMouseButton(e)) {
+				return true;
+			}
+			return super.isForceMarqueeEvent(e);
+		}
+
+		public final void mousePressed(final MouseEvent e) {
+			if (SwingUtilities.isRightMouseButton(e)) {
+				workspaceVisualPanel.showPopupMenu(e.getX(), e.getY());
+			} else {
+				super.mousePressed(e);
+			}
+		}
+
 	}
 }

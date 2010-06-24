@@ -13,6 +13,8 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
+import com.tomecode.soa.dependency.analyzer.gui.menu.MenuFactory;
+import com.tomecode.soa.dependency.analyzer.gui.menu.MenuFactory.MenuItems;
 import com.tomecode.soa.dependency.analyzer.gui.panels.UtilsPanel;
 import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.dependency.analyzer.usages.FindUsagePartnerLinkResult;
@@ -50,8 +52,10 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 		this.workspaceUtilsPanel = workspaceUtilsPanel;
 		selectedActivityWithOperationPath = new ArrayList<Activity>();
 		treePathRenderer = new SelectTreePathRenderer();
-		createMenuItem("Find Usage for Variable", "findUsageVariable", IconFactory.SEARCH);
-		createMenuItem("Find Usage for PartnerLink", "findUsagePartnerLink", IconFactory.SEARCH);
+
+		popupMenu.add(MenuFactory.createJMenuItem(MenuItems.FIND_USAGE_VARIABLE, this));
+		popupMenu.add(MenuFactory.createJMenuItem(MenuItems.FIND_USAGE_PARTNERLINK, this));
+
 		setCellRenderer(treePathRenderer);
 
 	}
@@ -67,9 +71,9 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 		TreePath treePath = this.getSelectionPath();
 		if (treePath != null) {
 			if (treePath.getLastPathComponent() instanceof Variable) {
-				enableMenuItem("findUsageVariable", true);
+				enableMenuItem(MenuItems.FIND_USAGE_VARIABLE.getActionCmd(), true);
 			} else if (treePath.getLastPathComponent() instanceof PartnerLink) {
-				enableMenuItem("findUsagePartnerLink", true);
+				enableMenuItem(MenuItems.FIND_USAGE_PARTNERLINK.getActionCmd(), true);
 			}
 			popupMenu.show(this, x, y);
 		}
@@ -173,7 +177,7 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 
 	@Override
 	public final void actionPerformed(ActionEvent e) {
-		if ("findUsageVariable".equals(e.getActionCommand())) {
+		if (MenuItems.FIND_USAGE_VARIABLE.getActionCmd().equals(e.getActionCommand())) {
 			Variable variable = (Variable) getSelectionPath().getLastPathComponent();
 			FindUsageVariableResult result = new FindUsageVariableResult(variable);
 
@@ -181,7 +185,7 @@ public final class ProcessStructureTree extends BasicTree implements ActionListe
 				variable.getParent().getParent().findUsage(result);
 			}
 			workspaceUtilsPanel.showFindUsageVariable(result);
-		} else if ("findUsagePartnerLink".equals(e.getActionCommand())) {
+		} else if (MenuItems.FIND_USAGE_PARTNERLINK.getActionCmd().equals(e.getActionCommand())) {
 			PartnerLink partnerLink = (PartnerLink) getSelectionPath().getLastPathComponent();
 
 			FindUsagePartnerLinkResult result = new FindUsagePartnerLinkResult(partnerLink);

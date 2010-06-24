@@ -104,8 +104,8 @@ public final class WorkspacePanel extends JPanel {
 		this.spUtilsAndRoot.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		this.spUtilsAndRoot.setDividerLocation(500);
 		// this.workspaceChangeListener =workspaceChangeListener;
-		this.visualPanel = new WorkspaceVisualPanel();
 		this.utilsPanel = new UtilsPanel();
+		this.visualPanel = new WorkspaceVisualPanel(utilsPanel);
 		this.workspaceTree = new WorkspaceTree(multiWorkspace, utilsPanel);
 		this.projectOperationTree = new BpelOperationTree(utilsPanel);
 		this.projectEsbServiceTree = new EsbServiceTree(utilsPanel);
