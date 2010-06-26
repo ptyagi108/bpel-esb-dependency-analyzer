@@ -9,7 +9,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ import javax.swing.JPanel;
  */
 public class Dialog extends JDialog implements Serializable {
 
-	private static final long serialVersionUID = 7459550653255913759L;
+	private static final long serialVersionUID = 4166290330188922576L;
 
 	protected final JButton buttonCancel;
 
@@ -87,26 +86,6 @@ public class Dialog extends JDialog implements Serializable {
 
 		setLocation(getCenterLocation());
 
-		
-		// key listener for 'esc' key
-		addKeyListener(new KeyListener() {
-
-			@Override
-			public final void keyTyped(KeyEvent e) {
-				keyEventEsc(e);
-			}
-
-			@Override
-			public final void keyReleased(KeyEvent e) {
-				keyEventEsc(e);
-			}
-
-			@Override
-			public final void keyPressed(KeyEvent e) {
-				keyEventEsc(e);
-			}
-		});
-
 	}
 
 	/**
@@ -114,7 +93,7 @@ public class Dialog extends JDialog implements Serializable {
 	 * 
 	 * @param e
 	 */
-	private final void keyEventEsc(KeyEvent e) {
+	protected final void keyEventEsc(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			hideMe();
 		}

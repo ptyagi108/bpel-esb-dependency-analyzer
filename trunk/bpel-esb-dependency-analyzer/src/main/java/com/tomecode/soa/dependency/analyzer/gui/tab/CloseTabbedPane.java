@@ -45,7 +45,7 @@ public class CloseTabbedPane extends JTabbedPane {
 	/**
 	 * {@link KeyStroke} - CTRL+TABB
 	 */
-	private final static KeyStroke ctrlTabKeyStore = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.CTRL_DOWN_MASK);;
+	private final static KeyStroke ctrlTabKeyStore = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.CTRL_DOWN_MASK, true);
 
 	/**
 	 * {@link KeyStroke} - CTRL+W
@@ -89,7 +89,7 @@ public class CloseTabbedPane extends JTabbedPane {
 	 * 
 	 */
 	private final void keysActions() {
-		// registering ctrl+tab key
+		// registering ctrl+tab
 		setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.singleton(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0)));
 		InputMap im = getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 		im.put(ctrlTabKeyStore, "ctrlTab");
@@ -98,11 +98,6 @@ public class CloseTabbedPane extends JTabbedPane {
 			private static final long serialVersionUID = -4338670465201740592L;
 
 			public final void actionPerformed(ActionEvent e) {
-				//
-				// if (getTabCount() != 0) {
-				// TabSwitchFrom.showMe();
-				// }
-
 				if (getTabCount() != 0) {
 					// ctrl+tab as an action to move to next tab
 					if (getSelectedIndex() + 1 >= getTabCount()) {
