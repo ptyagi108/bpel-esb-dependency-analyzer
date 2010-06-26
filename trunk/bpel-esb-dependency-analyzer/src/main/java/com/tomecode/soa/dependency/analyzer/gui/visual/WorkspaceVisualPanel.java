@@ -95,13 +95,16 @@ public final class WorkspaceVisualPanel extends JPanel implements ActionListener
 
 	private UtilsPanel utilsPanel;
 
+	private BackForwardManager backForwardManager;
+
 	/**
 	 * Constructor
 	 */
 	public WorkspaceVisualPanel(UtilsPanel utilsPanel) {
 		super(new BorderLayout());
+		this.backForwardManager = new BackForwardManager();
 		this.utilsPanel = utilsPanel;
-		organicLayout = new JGraphFastOrganicLayout(); // JGraphOrganicLayout();
+		organicLayout = new JGraphFastOrganicLayout();
 		insertedObjects = new ArrayList<Object>();
 		graphModel = new DefaultGraphModel();
 		graph = new JGraph(graphModel);
@@ -171,18 +174,22 @@ public final class WorkspaceVisualPanel extends JPanel implements ActionListener
 	private final void showPopupMenu(int x, int y) {
 		selectedObject = graph.getFirstCellForLocation(x, y);
 
+		MenuFactory.enableMenuItem(popupMenu, null, false);
+		MenuFactory.enableMenuItem(popupMenu, MenuItems.RELOAD_GRAPH.getActionCmd(), true);
+		MenuFactory.enableMenuItem(popupMenu, MenuItems.ARROW_BACK.getActionCmd(), backForwardManager.isEnableBack());
+		MenuFactory.enableMenuItem(popupMenu, MenuItems.ARROW_FORWARD.getActionCmd(), backForwardManager.isEnableForward());
+
 		if (selectedObject instanceof DefaultGraphCell) {
 			DefaultGraphCell cell = (DefaultGraphCell) selectedObject;
-			Project project = (Project) cell.getUserObject();
-
-			MenuFactory.enableMenuItem(popupMenu, null, false);
-			MenuFactory.enableMenuItem(popupMenu, MenuItems.RELOAD_GRAPH.getActionCmd(), true);
-			if (project.getType() == ProjectType.ORACLE10G_BPEL) {
-				MenuFactory.enableMenuItem(popupMenu, MenuItems.FIND_USAGE_BPEL.getActionCmd(), true);
-				MenuFactory.enableMenuItem(popupMenu, MenuItems.PROJECT_PROPERTIES.getActionCmd(), true);
-			} else if (project.getType() == ProjectType.ORACLE10G_ESB) {
-				MenuFactory.enableMenuItem(popupMenu, MenuItems.FIND_USAGE_ESB.getActionCmd(), true);
-				MenuFactory.enableMenuItem(popupMenu, MenuItems.PROJECT_PROPERTIES.getActionCmd(), true);
+			if (cell.getUserObject() instanceof Project) {
+				Project project = (Project) cell.getUserObject();
+				if (project.getType() == ProjectType.ORACLE10G_BPEL) {
+					MenuFactory.enableMenuItem(popupMenu, MenuItems.FIND_USAGE_BPEL.getActionCmd(), true);
+					MenuFactory.enableMenuItem(popupMenu, MenuItems.PROJECT_PROPERTIES.getActionCmd(), true);
+				} else if (project.getType() == ProjectType.ORACLE10G_ESB) {
+					MenuFactory.enableMenuItem(popupMenu, MenuItems.FIND_USAGE_ESB.getActionCmd(), true);
+					MenuFactory.enableMenuItem(popupMenu, MenuItems.PROJECT_PROPERTIES.getActionCmd(), true);
+				}
 			}
 		}
 
@@ -190,13 +197,20 @@ public final class WorkspaceVisualPanel extends JPanel implements ActionListener
 	}
 
 	/**
-	 * show dependency graph
+	 * display of dependency graph for {@link BpelProject}
+	 * 
 	 * 
 	 * @param project
+	 * @param resetBackForwardManger
+	 *            if true then {@link #backForwardManager} will reseted
 	 */
-	public final void showGraphBpel(BpelProject project) {
-		zoomReset();
+	public final void showGraphBpel(BpelProject project, boolean resetBackForwardManger) {
+		// zoomReset();
 		clearCells();
+
+		if (resetBackForwardManger) {
+			backForwardManager.reset();
+		}
 
 		checkForceBySize(project.getPartnerLinkBindings().size());
 		DefaultGraphCell rootCell = createVertexBpel(project);
@@ -227,6 +241,7 @@ public final class WorkspaceVisualPanel extends JPanel implements ActionListener
 		}
 
 		graph.getGraphLayoutCache().insert(insertedObjects.toArray());
+		backForwardManager.newEnter(insertedObjects);
 		reloadGraph();
 	}
 
@@ -467,25 +482,28 @@ public final class WorkspaceVisualPanel extends JPanel implements ActionListener
 	}
 
 	/**
-	 * show esb dependency graph
+	 * 
+	 * display depenednecy graph for {@link EsbProject}
 	 * 
 	 * @param rootProject
+	 * @param resetBackForwardManger
+	 *            if true then {@link #backForwardManager} will reseted
 	 */
-	public final void showGraphEsb(EsbProject rootProject) {
-		zoomReset();
+	public final void showGraphEsb(EsbProject rootProject, boolean resetBackForwardManger) {
+		// zoomReset();
 		clearCells();
+
+		if (resetBackForwardManger) {
+			backForwardManager.reset();
+		}
 
 		checkForceBySize(rootProject.getEsbProjectsDependecies().size());
 		DefaultGraphCell rootCell = createVertexEsb(rootProject);
 		insertedObjects.add(rootCell);
 
 		for (EsbSvc esbSvc : rootProject.getAllEsbSvc()) {
-
 			List<Project> projects = filterUniqueProjects(esbSvc.getEsbOperations());
-			// for (EsbOperation esbOperation : esbSvc.getEsbOperations()) {
 
-			// for (DependencyNode dependencyNode :
-			// esbOperation.getDependencyNodes()) {
 			for (Project project : projects) {
 				if (project.getType() == ProjectType.ORACLE10G_BPEL) {
 					BpelProject bpelProject = (BpelProject) project;
@@ -507,6 +525,7 @@ public final class WorkspaceVisualPanel extends JPanel implements ActionListener
 		}
 
 		graph.getGraphLayoutCache().insert(insertedObjects.toArray());
+		backForwardManager.newEnter(insertedObjects);
 		reloadGraph();
 	}
 
@@ -516,11 +535,12 @@ public final class WorkspaceVisualPanel extends JPanel implements ActionListener
 	private final void showSelectedProject() {
 		if (graph.getSelectionCell() != null && graph.getSelectionCell() instanceof DefaultGraphCell) {
 			DefaultGraphCell cell = (DefaultGraphCell) graph.getSelectionCell();
+
 			Project project = (Project) cell.getUserObject();
 			if (project.getType() == ProjectType.ORACLE10G_BPEL) {
-				showGraphBpel((BpelProject) project);
+				showGraphBpel((BpelProject) project, false);
 			} else if (project.getType() == ProjectType.ORACLE10G_ESB) {
-				showGraphEsb((EsbProject) project);
+				showGraphEsb((EsbProject) project, false);
 			}
 		}
 	}
@@ -628,10 +648,52 @@ public final class WorkspaceVisualPanel extends JPanel implements ActionListener
 		} else if (e.getActionCommand().equals(MenuItems.RELOAD_GRAPH.getActionCmd())) {
 			reloadGraph();
 		} else if (e.getActionCommand().equals(MenuItems.ARROW_BACK.getActionCmd())) {
-
+			showBackGraph();
 		} else if (e.getActionCommand().equals(MenuItems.ARROW_FORWARD.getActionCmd())) {
-
+			showForwardGraph();
 		}
+	}
+
+	/**
+	 * display the project from 'forward'
+	 */
+	private final void showForwardGraph() {
+		clearCells();
+		insertedObjects.addAll(backForwardManager.forward());
+
+		DefaultGraphCell cell = (DefaultGraphCell) insertedObjects.get(0);
+		Project project = (Project) cell.getUserObject();
+		if (project.getType() == ProjectType.ORACLE10G_BPEL) {
+			BpelProject bpelProject = (BpelProject) project;
+			checkForceBySize(bpelProject.getPartnerLinkBindings().size());
+		} else if (project.getType() == ProjectType.ORACLE10G_ESB) {
+			EsbProject esbProject = (EsbProject) project;
+			checkForceBySize(esbProject.getEsbProjectsDependecies().size());
+		}
+
+		graph.getGraphLayoutCache().insert(insertedObjects.toArray());
+		reloadGraph();
+	}
+
+	/**
+	 * display the project form 'back'
+	 */
+	private final void showBackGraph() {
+		clearCells();
+		insertedObjects.addAll(backForwardManager.back());
+
+		DefaultGraphCell cell = (DefaultGraphCell) insertedObjects.get(0);
+		Project project = (Project) cell.getUserObject();
+		if (project.getType() == ProjectType.ORACLE10G_BPEL) {
+			BpelProject bpelProject = (BpelProject) project;
+			checkForceBySize(bpelProject.getPartnerLinkBindings().size());
+		} else if (project.getType() == ProjectType.ORACLE10G_ESB) {
+			EsbProject esbProject = (EsbProject) project;
+			checkForceBySize(esbProject.getEsbProjectsDependecies().size());
+		}
+
+		graph.getGraphLayoutCache().insert(insertedObjects.toArray());
+		reloadGraph();
 	}
 
 	/**

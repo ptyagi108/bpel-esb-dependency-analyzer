@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JTabbedPane;
 
 import com.tomecode.soa.dependency.analyzer.gui.panels.WorkspacePanel;
+import com.tomecode.soa.dependency.analyzer.gui.tab.CloseTabbedPane;
 import com.tomecode.soa.dependency.analyzer.usages.FindUsage;
 import com.tomecode.soa.dependency.analyzer.usages.FindUsagePartnerLinkResult;
 import com.tomecode.soa.dependency.analyzer.usages.FindUsageProjectResult;
@@ -18,7 +19,7 @@ import com.tomecode.soa.dependency.analyzer.usages.FindUsageVariableResult;
  * @author Tomas Frastia
  * 
  */
-public final class UtilsPanel extends JTabbedPane {
+public final class UtilsPanel extends CloseTabbedPane {
 
 	private static final long serialVersionUID = -8171342255621764543L;
 
@@ -28,6 +29,8 @@ public final class UtilsPanel extends JTabbedPane {
 	 * Constructor
 	 */
 	public UtilsPanel() {
+		super(null);
+
 		addMouseListener(new MouseAdapter() {
 			public final void mouseClicked(MouseEvent e) {
 				if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2) {
@@ -122,7 +125,7 @@ public final class UtilsPanel extends JTabbedPane {
 			addTab(title, panel);
 			setSelectedIndex(getTabCount() - 1);
 		} else {
-			panel = (UsageTreePanel) getComponent(index);
+			panel = (UsageTreePanel) getComponentAt(index);
 			setSelectedIndex(index);
 		}
 

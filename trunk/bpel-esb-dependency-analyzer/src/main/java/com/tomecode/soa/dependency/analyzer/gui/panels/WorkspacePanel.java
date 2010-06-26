@@ -261,7 +261,7 @@ public final class WorkspacePanel extends JPanel {
 					if (bpelProject != null) {
 						projectOperationTree.addBpelProcessOperations(bpelProject.getBpelOperations());
 						processStructureTree.addBpelProcessStrukture(bpelProject.getBpelProcessStrukture());
-						visualPanel.showGraphBpel(bpelProject);
+						visualPanel.showGraphBpel(bpelProject, true);
 					}
 					layoutActivities.show(pActivities, P_ACTIVITIES_BPEL_TREE);
 					layoutRootWorkspace.show(pLayoutRoot, P_ROOT_DETAIL_ABOUT_PROJECT);
@@ -269,7 +269,7 @@ public final class WorkspacePanel extends JPanel {
 				} else if (selectedComp instanceof EsbProject) {
 					EsbProject esbProject = (EsbProject) selectedComp;
 					projectEsbServiceTree.addEsbProject(esbProject);
-					visualPanel.showGraphEsb(esbProject);
+					visualPanel.showGraphEsb(esbProject, true);
 					layoutActivities.show(pActivities, P_ACTIVITIES_ESB_TREE);
 					layoutRootWorkspace.show(pLayoutRoot, P_ROOT_DETAIL_ABOUT_PROJECT);
 					workspaceChangeListener.displayVisualPanel();

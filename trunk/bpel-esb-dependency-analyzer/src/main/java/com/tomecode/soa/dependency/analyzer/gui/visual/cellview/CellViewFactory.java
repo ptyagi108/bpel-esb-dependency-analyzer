@@ -19,7 +19,7 @@ public final class CellViewFactory extends DefaultCellViewFactory {
 
 	@SuppressWarnings("unchecked")
 	public static final void setRoundRectView(Map map) {
-		map.put(VIEW_CLASS_KEY, "com.tomecode.soa.dependency.analyzer.gui.cellview.RoundRectView");
+		map.put(VIEW_CLASS_KEY, "com.tomecode.soa.dependency.analyzer.gui.visual.cellview.RoundRectView");
 	}
 
 	protected VertexView createVertexView(Object v) {

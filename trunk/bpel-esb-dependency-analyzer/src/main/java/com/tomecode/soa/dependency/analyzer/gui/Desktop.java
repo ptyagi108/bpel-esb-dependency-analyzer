@@ -7,6 +7,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.List;
 
 import javax.swing.Icon;
@@ -14,8 +15,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import com.tomecode.soa.dependency.analyzer.gui.panels.TabbedManager;
 import com.tomecode.soa.dependency.analyzer.gui.panels.WorkspaceChangeListener;
+import com.tomecode.soa.dependency.analyzer.gui.tab.CloseTabbedPane;
 import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.dependency.analyzer.settings.RecentFile;
 import com.tomecode.soa.dependency.analyzer.settings.ReloadRecentMenuListener;
@@ -41,7 +42,7 @@ public final class Desktop extends Frame implements ActionListener, ReloadRecent
 
 	private final JMenuBar rootMenuBar;
 
-	private final TabbedManager workspaceTabb;
+	private final CloseTabbedPane workspaceTabb;
 
 	private static Frame me;
 
@@ -57,7 +58,7 @@ public final class Desktop extends Frame implements ActionListener, ReloadRecent
 		rootMenuBar.add(createMenuFile());
 		rootMenuBar.add(createMenuVisual());
 		rootMenuBar.add(createMenuHelp());
-		workspaceTabb = new TabbedManager(this);
+		workspaceTabb = CloseTabbedPane.init(this);
 		addToContainer(rootMenuBar, BorderLayout.NORTH);
 		addToContainer(workspaceTabb, BorderLayout.CENTER);
 
@@ -161,7 +162,16 @@ public final class Desktop extends Frame implements ActionListener, ReloadRecent
 	}
 
 	public static final void main(String[] args) {
+
 		System.setProperty("sun.java2d.d3d", "false");
+
+		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+
+			@Override
+			public void uncaughtException(Thread t, Throwable e) {
+				FrmError.showMe(e.getMessage(), e);
+			}
+		});
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public final void run() {
 				new Desktop().setVisible(true);

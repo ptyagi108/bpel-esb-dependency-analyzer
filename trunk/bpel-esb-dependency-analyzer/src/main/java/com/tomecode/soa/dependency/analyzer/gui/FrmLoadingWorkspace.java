@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
-import com.tomecode.soa.dependency.analyzer.gui.panels.TabbedManager;
+import com.tomecode.soa.dependency.analyzer.gui.tab.CloseTabbedPane;
 import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.dependency.analyzer.settings.SettingsManager;
 import com.tomecode.soa.dependency.analyzer.settings.RecentFile.RecentFileType;
@@ -64,7 +64,7 @@ public final class FrmLoadingWorkspace extends Dialog {
 	 * @param index
 	 * @param tabbedManager
 	 */
-	public final static void openNewMultipleWorkspace(final String name, final File workspaceFolder, final int index, final TabbedManager tabbedManager) {
+	public final static void openNewMultipleWorkspace(final String name, final File workspaceFolder, final int index, final CloseTabbedPane tabbedManager) {
 
 		final FrmLoadingWorkspace frm = new FrmLoadingWorkspace(null);
 		final Runnable runnable = new Runnable() {
@@ -101,7 +101,7 @@ public final class FrmLoadingWorkspace extends Dialog {
 	 * @param index
 	 * @param tabbedManager
 	 */
-	public static final void openNewWorkspace(final File workspaceFolder, final int index, final TabbedManager tabbedManager) {
+	public static final void openNewWorkspace(final File workspaceFolder, final int index, final CloseTabbedPane tabbedManager) {
 
 		final FrmLoadingWorkspace frm = new FrmLoadingWorkspace(null);
 		final Runnable runnable = new Runnable() {

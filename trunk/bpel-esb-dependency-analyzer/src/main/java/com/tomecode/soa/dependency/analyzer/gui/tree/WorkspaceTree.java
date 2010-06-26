@@ -83,13 +83,14 @@ public final class WorkspaceTree extends BasicTree {
 
 	/**
 	 * 
+	 * {@link TreeCellRenderer} for {@link WorkspaceTreeRenderer}
+	 * 
 	 * @author Tomas Frastia
 	 * 
 	 */
 	private final class WorkspaceTreeRenderer implements TreeCellRenderer {
 
 		public final Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-
 			DefaultTreeCellRenderer rnd = (DefaultTreeCellRenderer) new DefaultTreeCellRenderer().getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 
 			if (value instanceof IconNode) {
@@ -113,7 +114,7 @@ public final class WorkspaceTree extends BasicTree {
 		if (e.getActionCommand().equals(MenuItems.FIND_USAGE_BPEL.getActionCmd())) {
 			workspaceUtilsPanel.showFindUsageBpelProject(FindUsageProjectResult.createUsageForBpelProject(project));
 		} else if (e.getActionCommand().equals(MenuItems.FIND_USAGE_ESB.getActionCmd())) {
-			workspaceUtilsPanel.showFindUsageBpelProject(FindUsageProjectResult.createUsageForEsbProject(project));
+			workspaceUtilsPanel.showFindUsageEsbProject(FindUsageProjectResult.createUsageForEsbProject(project));
 		} else if (e.getActionCommand().equals(MenuItems.PROJECT_PROPERTIES.getActionCmd())) {
 			FrmProjectInfo.showMe(project);
 		}

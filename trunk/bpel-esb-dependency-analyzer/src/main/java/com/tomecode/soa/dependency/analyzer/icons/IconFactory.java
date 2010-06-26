@@ -1,5 +1,9 @@
 package com.tomecode.soa.dependency.analyzer.icons;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 /**
@@ -66,8 +70,18 @@ public final class IconFactory {
 	public static final ImageIcon RELOAD_GRAPH = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/reload_graph.png"));
 	public static final ImageIcon ARROW_BACK = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/arrow_back.png"));
 	public static final ImageIcon ARROW_FORWARD = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/arrow_forward.png"));
+	public static final ImageIcon TAB_CLOSE = new ImageIcon(IconFactory.class.getResource("/com/tomecode/soa/icons/tab_close.png"));
+	public static final BufferedImage TAB_CLOSE_IMAGE = getTabCloseImage();
 
 	private IconFactory() {
 	}
 
+	private final static BufferedImage getTabCloseImage() {
+		try {
+			return ImageIO.read(IconFactory.class.getResource("/com/tomecode/soa/icons/tab_close.gif"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

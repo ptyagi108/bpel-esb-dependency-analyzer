@@ -8,6 +8,8 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +87,37 @@ public class Dialog extends JDialog implements Serializable {
 
 		setLocation(getCenterLocation());
 
+		
+		// key listener for 'esc' key
+		addKeyListener(new KeyListener() {
+
+			@Override
+			public final void keyTyped(KeyEvent e) {
+				keyEventEsc(e);
+			}
+
+			@Override
+			public final void keyReleased(KeyEvent e) {
+				keyEventEsc(e);
+			}
+
+			@Override
+			public final void keyPressed(KeyEvent e) {
+				keyEventEsc(e);
+			}
+		});
+
+	}
+
+	/**
+	 * close dialog via esc - key event
+	 * 
+	 * @param e
+	 */
+	private final void keyEventEsc(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			hideMe();
+		}
 	}
 
 	public void hideMe() {

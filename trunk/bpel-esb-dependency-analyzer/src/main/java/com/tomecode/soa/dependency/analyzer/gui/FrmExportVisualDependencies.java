@@ -14,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.tomecode.soa.dependency.analyzer.gui.panels.TabbedManager;
+import com.tomecode.soa.dependency.analyzer.gui.tab.CloseTabbedPane;
 import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
 import com.tomecode.util.gui.Dialog;
 import com.tomecode.util.gui.Frame;
@@ -83,13 +83,13 @@ public final class FrmExportVisualDependencies extends Dialog {
 				File fExport = new File(txtPath.getText().trim());
 				if (fExport.getName().endsWith(".png")) {
 					try {
-						TabbedManager.getInstance().exportToPng(fExport);
+						CloseTabbedPane.getInstance().exportToPng(fExport);
 					} catch (IOException ex) {
 						FrmError.showMe("Failed export file to png formate", ex);
 					}
 				} else {
 					try {
-						TabbedManager.getInstance().exportToJpg(fExport);
+						CloseTabbedPane.getInstance().exportToJpg(fExport);
 					} catch (Exception ex) {
 						FrmError.showMe("Failed export file to png formate", ex);
 					}
