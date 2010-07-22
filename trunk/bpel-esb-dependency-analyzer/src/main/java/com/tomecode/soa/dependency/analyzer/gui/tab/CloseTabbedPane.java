@@ -386,7 +386,7 @@ public class CloseTabbedPane extends JTabbedPane {
 	 * zoom in selected/displayed visual panel
 	 */
 	public final void zoomInSelectedVisualPanel() {
-		WorkspacePanel workspacePanel = (WorkspacePanel) getComponent(getSelectedIndex());
+		WorkspacePanel workspacePanel = (WorkspacePanel) getSelectedComponent();// getComponent(getSelectedIndex()+3);
 		workspacePanel.getVisualPanel().zoomIn();
 	}
 
@@ -394,7 +394,7 @@ public class CloseTabbedPane extends JTabbedPane {
 	 * zoom out selected/displayed visual panel
 	 */
 	public final void zoomOutSelectedVisualPanel() {
-		WorkspacePanel workspacePanel = (WorkspacePanel) getComponent(getSelectedIndex());
+		WorkspacePanel workspacePanel = (WorkspacePanel) getSelectedComponent();// getComponent(getSelectedIndex()+3);
 		workspacePanel.getVisualPanel().zoomOut();
 	}
 
@@ -402,7 +402,7 @@ public class CloseTabbedPane extends JTabbedPane {
 	 * reset zoom
 	 */
 	public final void zoomResetSelectedVisualPanel() {
-		WorkspacePanel workspacePanel = (WorkspacePanel) getComponent(getSelectedIndex());
+		WorkspacePanel workspacePanel = (WorkspacePanel) getSelectedComponent(); //getComponent(getSelectedIndex());
 		workspacePanel.getVisualPanel().zoomReset();
 	}
 
@@ -413,7 +413,7 @@ public class CloseTabbedPane extends JTabbedPane {
 	 * @throws IOException
 	 */
 	public final void exportToPng(File file) throws IOException {
-		WorkspacePanel workspacePanel = (WorkspacePanel) getComponent(getSelectedIndex());
+		WorkspacePanel workspacePanel = (WorkspacePanel) getSelectedComponent();// getComponent(getSelectedIndex());
 		workspacePanel.getVisualPanel().exportToPng(file);
 	}
 
