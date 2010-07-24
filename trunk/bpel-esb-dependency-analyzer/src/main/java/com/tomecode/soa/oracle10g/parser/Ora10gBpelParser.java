@@ -50,7 +50,7 @@ import com.tomecode.soa.wsdl.parser.WsdlParser;
  * @author Tomas Frastia
  * 
  */
-public final class BpelParser extends AbstractParser {
+public final class Ora10gBpelParser extends AbstractParser {
 
 	/**
 	 * list of parsed process
@@ -65,7 +65,7 @@ public final class BpelParser extends AbstractParser {
 	/**
 	 * Constrcutor
 	 */
-	public BpelParser() {
+	public Ora10gBpelParser() {
 		wsdlParser = new WsdlParser();
 	}
 

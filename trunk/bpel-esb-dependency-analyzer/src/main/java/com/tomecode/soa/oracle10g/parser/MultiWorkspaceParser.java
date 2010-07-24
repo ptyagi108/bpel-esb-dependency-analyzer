@@ -30,7 +30,7 @@ public final class MultiWorkspaceParser extends AbstractParser {
 	/**
 	 * bpel parser
 	 */
-	private final BpelParser bpelParser;
+	private final Ora10gBpelParser bpelParser;
 
 	/**
 	 * esb parser
@@ -41,7 +41,7 @@ public final class MultiWorkspaceParser extends AbstractParser {
 	 * Constructor
 	 */
 	public MultiWorkspaceParser() {
-		bpelParser = new BpelParser();
+		bpelParser = new Ora10gBpelParser();
 		esbParser = new EsbParser();
 	}
 
