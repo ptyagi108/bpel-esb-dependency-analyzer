@@ -14,6 +14,7 @@ import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
 import com.tomecode.soa.oracle10g.esb.EsbOperation;
 import com.tomecode.soa.oracle10g.esb.EsbProject;
 import com.tomecode.soa.oracle10g.esb.EsbSvc;
+import com.tomecode.soa.parser.AbstractParser;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.project.ProjectType;
 

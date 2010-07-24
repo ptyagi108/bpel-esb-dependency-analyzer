@@ -40,6 +40,7 @@ import com.tomecode.soa.oracle10g.bpel.activity.Wait;
 import com.tomecode.soa.oracle10g.bpel.activity.While;
 import com.tomecode.soa.oracle10g.bpel.activity.Assign.AssignOperation;
 import com.tomecode.soa.oracle10g.bpel.activity.Assign.OperationType;
+import com.tomecode.soa.parser.AbstractParser;
 import com.tomecode.soa.project.UnknownProject;
 import com.tomecode.soa.wsdl.parser.WsdlParser;
 

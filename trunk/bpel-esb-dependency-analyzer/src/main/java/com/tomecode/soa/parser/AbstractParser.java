@@ -1,4 +1,4 @@
-package com.tomecode.soa.oracle10g.parser;
+package com.tomecode.soa.parser;
 
 import java.io.File;
 
@@ -6,6 +6,8 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+
+import com.tomecode.soa.oracle10g.parser.ServiceParserException;
 
 /**
  * Basic parser
