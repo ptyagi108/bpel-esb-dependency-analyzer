@@ -58,19 +58,19 @@ public final class Ora10gBpelParser extends AbstractParser {
 	private final List<BpelProject> parsedProcess = new ArrayList<BpelProject>();
 
 	/**
-	 * wsdl parser
+	 * WSDL parser
 	 */
 	private final WsdlParser wsdlParser;
 
 	/**
-	 * Constrcutor
+	 * Constructor
 	 */
 	public Ora10gBpelParser() {
 		wsdlParser = new WsdlParser();
 	}
 
 	/**
-	 * parse bpel process from url
+	 * parse BPEL process from URL
 	 * 
 	 * @param data
 	 * @return
@@ -87,7 +87,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 	}
 
 	/**
-	 * parse bpel by bpel project folder
+	 * parse BPEL by BPEL project folder
 	 * 
 	 * @param file
 	 * @return
@@ -112,7 +112,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 
 	/**
 	 * 
-	 * pase bpel.xml
+	 * parse bpel.xml
 	 * 
 	 * @param eBpelXml
 	 *            parsed bpel.xml
@@ -144,7 +144,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 	}
 
 	/**
-	 * chekc if process is parsed
+	 * check, if process is parsed
 	 * 
 	 * @param newBpelProcess
 	 * @return
@@ -159,7 +159,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 	}
 
 	/**
-	 * parse all bpel process to tree strukture
+	 * parse all BPEL process to tree structure
 	 * 
 	 * @param root
 	 * @param strukture
@@ -172,7 +172,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 
 	/**
 	 * 
-	 * parse all actvities in the BPEL process
+	 * parse all activities in the BPEL process
 	 * 
 	 * @param elements
 	 * @param root
@@ -180,27 +180,31 @@ public final class Ora10gBpelParser extends AbstractParser {
 	private final void parseBpelProcessActivities(List<?> elements, Activity root, BpelProcessStrukture strukture) {
 		for (Object e : elements) {
 			Element element = (Element) e;
-			if (element.getName().equals("sequence") || element.getName().equals("switch") || element.getName().equals("flow") || element.getName().equals("faultHandlers") || element.getName().equals("eventHandlers") || element.getName().equals("catchAll")
-					|| element.getName().equals("compensationHandler") || element.getName().equals("pick") || element.getName().equals("variables") || element.getName().equals("partnerLinks")) {
+			if (element.getName().equals("sequence") || element.getName().equals("switch") || element.getName().equals("flow") || element.getName().equals("faultHandlers")
+					|| element.getName().equals("eventHandlers") || element.getName().equals("catchAll") || element.getName().equals("compensationHandler") || element.getName().equals("pick")
+					|| element.getName().equals("variables") || element.getName().equals("partnerLinks")) {
 				Activity activity = new Activity(element.getName(), element.attributeValue("name"));
 				root.addActivity(activity);
 				parseBpelProcessActivities(element.elements(), activity, strukture);
 			} else if (element.getName().equals("variable")) {
-				Variable variable = new Variable(element.attributeValue("name"), element.attributeValue("messageType"), strukture);
+				Variable variable = new Variable(element.attributeValue("name"), element.attributeValue("messageType"));
 				root.addActivity(variable);
 			} else if (element.getName().equals("partnerLink")) {
-				PartnerLink partnerLink = new PartnerLink(element.attributeValue("name"), element.attributeValue("partnerLinkType"), element.attributeValue("myRole"), element.attributeValue("partnerRole"), strukture);
+				PartnerLink partnerLink = new PartnerLink(element.attributeValue("name"), element.attributeValue("partnerLinkType"), element.attributeValue("myRole"), element
+						.attributeValue("partnerRole"), strukture);
 				root.addActivity(partnerLink);
 			} else if (element.getName().equals("receive")) {
 				root.addActivity(new Receive(element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation")));
 			} else if (element.getName().equals("invoke")) {
-				root.addActivity(new Invoke(element.attributeValue("name"), element.attributeValue("inputVariable"), element.attributeValue("outputVariable"), element.attributeValue("partnerLink"), element.attributeValue("operation")));
+				root.addActivity(new Invoke(element.attributeValue("name"), element.attributeValue("inputVariable"), element.attributeValue("outputVariable"), element.attributeValue("partnerLink"),
+						element.attributeValue("operation")));
 			} else if (element.getName().equals("reply")) {
 				root.addActivity(new Reply(element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation")));
 			} else if (element.getName().equals("throw")) {
 				root.addActivity(new Throw(element.attributeValue("name"), element.attributeValue("faultVariable")));
 			} else if (element.getName().equals("onMessage")) {
-				OnMessage onMessageActivity = new OnMessage(element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"), element.attributeValue("headerVariable"));
+				OnMessage onMessageActivity = new OnMessage(element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"), element
+						.attributeValue("headerVariable"));
 				root.addActivity(onMessageActivity);
 				parseBpelProcessActivities(element.elements(), onMessageActivity, strukture);
 			} else if (element.getName().equals("catch")) {
@@ -267,7 +271,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 	}
 
 	/**
-	 * parse assing activity
+	 * parse assign activity
 	 * 
 	 * @param element
 	 * @param root
@@ -296,7 +300,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 	}
 
 	/**
-	 * pase operation in assign
+	 * parse operation in assign
 	 * 
 	 * @param assign
 	 * @param element
@@ -326,7 +330,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 	}
 
 	/**
-	 * parse expresion
+	 * parse expression
 	 * 
 	 * @param expression
 	 * @return
@@ -417,7 +421,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 	}
 
 	/**
-	 * parse bpel activities by type
+	 * parse BPEL activities by type
 	 * 
 	 * @param element
 	 * @return
@@ -427,7 +431,8 @@ public final class Ora10gBpelParser extends AbstractParser {
 		if (element.getName().equals("receive")) {
 			return new Receive(element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"));
 		} else if (element.getName().equals("invoke")) {
-			return new Invoke(element.attributeValue("name"), element.attributeValue("inputVariable"), element.attributeValue("outputVariable"), element.attributeValue("partnerLink"), element.attributeValue("operation"));
+			return new Invoke(element.attributeValue("name"), element.attributeValue("inputVariable"), element.attributeValue("outputVariable"), element.attributeValue("partnerLink"), element
+					.attributeValue("operation"));
 		} else if (element.getName().equals("reply")) {
 			return new Reply(element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"));
 		} else if (element.getName().equals("throw")) {
@@ -548,7 +553,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 	}
 
 	/**
-	 * pase all partnerlinks in the BPEL process
+	 * parse all partnerlinks in the BPEL process
 	 * 
 	 * @param element
 	 * @param bpelOperations
@@ -564,7 +569,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 	}
 
 	/**
-	 * find useage for partner link
+	 * find usage for partner link
 	 * 
 	 * @param partnerLinkName
 	 * @param bpelOperations
@@ -583,8 +588,8 @@ public final class Ora10gBpelParser extends AbstractParser {
 					} else {
 						if (element.attributeValue("partnerLink").equals(partnerLinkName)) {
 							BpelOperations bpelOperations = bpelProject.getBpelOperations();
-							Operation operation = new Operation(element.getName(), element.attributeValue("name"), element.attributeValue("operation"), bpelProject, bpelOperations.getBpelProcess().findPartnerLinkBinding(element.attributeValue("partnerLink")),
-									getOperationPath(element));
+							Operation operation = new Operation(element.getName(), element.attributeValue("name"), element.attributeValue("operation"), bpelProject, bpelOperations.getBpelProcess()
+									.findPartnerLinkBinding(element.attributeValue("partnerLink")), getOperationPath(element));
 
 							if (partnerLinkName.equals("BPELProcess11")) {
 								toString();
@@ -619,7 +624,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 	}
 
 	/**
-	 * parse bpel in by wsdl
+	 * parse BPEL in by WSDL
 	 * 
 	 * @param wsdlLocation
 	 * @return
@@ -642,7 +647,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 
 				// partnerLinkBinding.setDependencyBpelProject(findParsedProcess(partnerLinkBinding.getParent()));
 			} else {
-				// parse file dependencie
+				// parse file dependencies
 				File file = new File(url.getFile());
 				BpelProject parseBpelProcess = findParsedProcess(file);
 				if (parseBpelProcess != null) {
