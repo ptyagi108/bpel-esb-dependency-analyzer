@@ -13,6 +13,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeNode;
 
+import com.tomecode.soa.bpel.activity.Activity;
 import com.tomecode.soa.dependency.analyzer.gui.tree.BpelUnknownOperationTree;
 import com.tomecode.soa.dependency.analyzer.gui.tree.ProcessStructureTree;
 import com.tomecode.soa.dependency.analyzer.gui.utils.panels.UtilsPanel;
@@ -20,7 +21,6 @@ import com.tomecode.soa.oracle10g.bpel.BpelOperations;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.Operation;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
-import com.tomecode.soa.oracle10g.bpel.activity.Activity;
 import com.tomecode.soa.project.UnknownProject;
 import com.tomecode.util.gui.PanelFactory;
 

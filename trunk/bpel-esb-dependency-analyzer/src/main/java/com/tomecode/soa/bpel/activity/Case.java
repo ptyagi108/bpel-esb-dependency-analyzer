@@ -1,17 +1,20 @@
-package com.tomecode.soa.oracle10g.bpel.activity;
+package com.tomecode.soa.bpel.activity;
 
 import com.tomecode.soa.dependency.analyzer.usages.FindUsageVariableResult;
 
 /**
- * wait activity in bpel process
+ * case from switch in bpel process
  * 
  * @author Tomas Frastia
  * 
  */
-public final class Wait extends Activity {
+public final class Case extends Activity {
 
-	private static final long serialVersionUID = 8837403543290074974L;
+	private static final long serialVersionUID = 804854324731704322L;
 
+	/**
+	 * variable in case
+	 */
 	private String variable;
 
 	/**
@@ -20,8 +23,8 @@ public final class Wait extends Activity {
 	 * @param name
 	 * @param variable
 	 */
-	public Wait(String name, String variable) {
-		super(ActivityType.WAIT, name);
+	public Case(String name, String variable) {
+		super(ActivityType.CASE, name);
 		this.variable = variable;
 	}
 
@@ -33,4 +36,5 @@ public final class Wait extends Activity {
 			findUsageVariableResult.addUsage(this);
 		}
 	}
+
 }

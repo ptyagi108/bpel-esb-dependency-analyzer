@@ -4,7 +4,7 @@ import java.util.Enumeration;
 
 import javax.swing.tree.TreeNode;
 
-import com.tomecode.soa.oracle10g.bpel.activity.Activity;
+import com.tomecode.soa.bpel.activity.Activity;
 import com.tomecode.soa.project.Project;
 
 /**

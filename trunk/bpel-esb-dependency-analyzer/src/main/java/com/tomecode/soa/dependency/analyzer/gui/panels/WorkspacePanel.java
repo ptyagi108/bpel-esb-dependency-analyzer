@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
+import com.tomecode.soa.bpel.activity.Activity;
 import com.tomecode.soa.dependency.analyzer.gui.tree.BpelOperationTree;
 import com.tomecode.soa.dependency.analyzer.gui.tree.EsbServiceTree;
 import com.tomecode.soa.dependency.analyzer.gui.tree.ProcessStructureTree;
@@ -28,7 +29,6 @@ import com.tomecode.soa.oracle10g.bpel.BpelOperations;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.Operation;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
-import com.tomecode.soa.oracle10g.bpel.activity.Activity;
 import com.tomecode.soa.oracle10g.esb.EsbProject;
 import com.tomecode.soa.project.UnknownProject;
 import com.tomecode.util.gui.PanelFactory;

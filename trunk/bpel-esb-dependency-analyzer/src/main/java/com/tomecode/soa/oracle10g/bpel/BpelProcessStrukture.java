@@ -1,11 +1,11 @@
 package com.tomecode.soa.oracle10g.bpel;
 
+import com.tomecode.soa.bpel.activity.Activity;
+import com.tomecode.soa.bpel.activity.PartnerLink;
+import com.tomecode.soa.bpel.activity.Variable;
 import com.tomecode.soa.dependency.analyzer.gui.tree.node.BasicNode;
 import com.tomecode.soa.dependency.analyzer.usages.FindUsagePartnerLinkResult;
 import com.tomecode.soa.dependency.analyzer.usages.FindUsageVariableResult;
-import com.tomecode.soa.oracle10g.bpel.activity.Activity;
-import com.tomecode.soa.oracle10g.bpel.activity.PartnerLink;
-import com.tomecode.soa.oracle10g.bpel.activity.Variable;
 
 /**
  * 

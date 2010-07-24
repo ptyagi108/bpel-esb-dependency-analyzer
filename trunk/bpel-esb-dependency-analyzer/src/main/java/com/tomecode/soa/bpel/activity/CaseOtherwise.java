@@ -1,4 +1,4 @@
-package com.tomecode.soa.oracle10g.bpel.activity;
+package com.tomecode.soa.bpel.activity;
 
 /**
  * case from switch in bpel process

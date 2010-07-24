@@ -7,8 +7,8 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 
-import com.tomecode.soa.oracle10g.bpel.activity.Activity;
-import com.tomecode.soa.oracle10g.bpel.activity.PartnerLink;
+import com.tomecode.soa.bpel.activity.Activity;
+import com.tomecode.soa.bpel.activity.PartnerLink;
 
 /**
  * 

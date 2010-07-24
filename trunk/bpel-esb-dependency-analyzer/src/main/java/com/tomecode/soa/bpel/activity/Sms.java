@@ -1,4 +1,4 @@
-package com.tomecode.soa.oracle10g.bpel.activity;
+package com.tomecode.soa.bpel.activity;
 
 /**
  * sms activity in bpel process

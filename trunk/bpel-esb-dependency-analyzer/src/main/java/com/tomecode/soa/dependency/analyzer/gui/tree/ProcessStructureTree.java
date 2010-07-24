@@ -13,6 +13,9 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
+import com.tomecode.soa.bpel.activity.Activity;
+import com.tomecode.soa.bpel.activity.PartnerLink;
+import com.tomecode.soa.bpel.activity.Variable;
 import com.tomecode.soa.dependency.analyzer.gui.menu.MenuFactory;
 import com.tomecode.soa.dependency.analyzer.gui.menu.MenuFactory.MenuItems;
 import com.tomecode.soa.dependency.analyzer.gui.utils.panels.UtilsPanel;
@@ -20,9 +23,6 @@ import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.dependency.analyzer.usages.FindUsagePartnerLinkResult;
 import com.tomecode.soa.dependency.analyzer.usages.FindUsageVariableResult;
 import com.tomecode.soa.oracle10g.bpel.BpelProcessStrukture;
-import com.tomecode.soa.oracle10g.bpel.activity.Activity;
-import com.tomecode.soa.oracle10g.bpel.activity.PartnerLink;
-import com.tomecode.soa.oracle10g.bpel.activity.Variable;
 
 /**
  * 
