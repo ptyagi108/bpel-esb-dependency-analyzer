@@ -23,8 +23,8 @@ import com.tomecode.soa.dependency.analyzer.gui.utils.panels.UtilsPanel;
 import com.tomecode.soa.dependency.analyzer.gui.utils.panels.UtilsPanel.UtilsPanelListener;
 import com.tomecode.soa.dependency.analyzer.gui.visual.WorkspaceVisualPanel;
 import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
-import com.tomecode.soa.oracle10g.MultiWorkspace;
-import com.tomecode.soa.oracle10g.Workspace;
+import com.tomecode.soa.oracle10g.Ora10gMultiWorkspace;
+import com.tomecode.soa.oracle10g.Ora10gWorkspace;
 import com.tomecode.soa.oracle10g.bpel.BpelOperations;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.Operation;
@@ -99,7 +99,7 @@ public final class WorkspacePanel extends JPanel {
 	 * 
 	 * @param multiWorkspace
 	 */
-	public WorkspacePanel(MultiWorkspace multiWorkspace, final WorkspaceChangeListener workspaceChangeListener) {
+	public WorkspacePanel(Ora10gMultiWorkspace multiWorkspace, final WorkspaceChangeListener workspaceChangeListener) {
 		super(new BorderLayout());
 		this.spUtilsAndRoot = PanelFactory.createSplitPanel();
 		this.spUtilsAndRoot.setOrientation(JSplitPane.VERTICAL_SPLIT);
@@ -253,7 +253,7 @@ public final class WorkspacePanel extends JPanel {
 			public final void valueChanged(TreeSelectionEvent e) {
 
 				Object selectedComp = e.getPath().getLastPathComponent();
-				if (selectedComp instanceof Workspace) {
+				if (selectedComp instanceof Ora10gWorkspace) {
 					layoutRootWorkspace.show(pLayoutRoot, P_ROOT_INFO_ABOUT_PROJECT);
 					workspaceChangeListener.hideVisualPanel();
 				} else if (selectedComp instanceof BpelProject) {

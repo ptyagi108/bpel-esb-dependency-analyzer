@@ -23,14 +23,14 @@ import com.tomecode.soa.project.ProjectType;
  * @author Tomas Frastia
  * 
  */
-public final class Workspace extends BasicNode<Project> implements IconNode, Serializable {
+public final class Ora10gWorkspace extends BasicNode<Project> implements IconNode, Serializable {
 
 	private static final long serialVersionUID = -3328038478792839666L;
 
 	/**
 	 * owner
 	 */
-	private MultiWorkspace multiWorkspace;
+	private Ora10gMultiWorkspace multiWorkspace;
 
 	/**
 	 * workspace name
@@ -44,7 +44,7 @@ public final class Workspace extends BasicNode<Project> implements IconNode, Ser
 	/**
 	 * Constructor
 	 */
-	public Workspace() {
+	public Ora10gWorkspace() {
 	}
 
 	/**
@@ -52,7 +52,7 @@ public final class Workspace extends BasicNode<Project> implements IconNode, Ser
 	 * 
 	 * @param file
 	 */
-	public Workspace(File jwsFile) {
+	public Ora10gWorkspace(File jwsFile) {
 		this();
 		this.file = jwsFile;
 		this.name = jwsFile.getName().replace(".jws", "");
@@ -88,11 +88,11 @@ public final class Workspace extends BasicNode<Project> implements IconNode, Ser
 		this.name = name;
 	}
 
-	public final MultiWorkspace getMultiWorkspace() {
+	public final Ora10gMultiWorkspace getMultiWorkspace() {
 		return multiWorkspace;
 	}
 
-	public final void setMultiWorkspace(MultiWorkspace multiWorkspace) {
+	public final void setMultiWorkspace(Ora10gMultiWorkspace multiWorkspace) {
 		this.multiWorkspace = multiWorkspace;
 	}
 

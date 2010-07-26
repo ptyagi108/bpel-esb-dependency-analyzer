@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.dom4j.Element;
 
-import com.tomecode.soa.oracle10g.MultiWorkspace;
-import com.tomecode.soa.oracle10g.Workspace;
+import com.tomecode.soa.oracle10g.Ora10gMultiWorkspace;
+import com.tomecode.soa.oracle10g.Ora10gWorkspace;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
 import com.tomecode.soa.oracle10g.esb.EsbOperation;
@@ -25,7 +25,7 @@ import com.tomecode.soa.project.ProjectType;
  * @author Tomas Frastia
  * 
  */
-public final class MultiWorkspaceParser extends AbstractParser {
+public final class Ora10gMWorkspaceParser extends AbstractParser {
 
 	/**
 	 * bpel parser
@@ -40,28 +40,28 @@ public final class MultiWorkspaceParser extends AbstractParser {
 	/**
 	 * Constructor
 	 */
-	public MultiWorkspaceParser() {
+	public Ora10gMWorkspaceParser() {
 		bpelParser = new Ora10gBpelParser();
 		esbParser = new EsbParser();
 	}
 
 	/**
-	 * parse {@link MultiWorkspace}
+	 * parse {@link Ora10gMultiWorkspace}
 	 * 
 	 * @param workspaceFolder
 	 * @return
 	 * @throws ServiceParserException
 	 */
-	public final MultiWorkspace parse(File workspaceFolder) throws ServiceParserException {
+	public final Ora10gMultiWorkspace parse(File workspaceFolder) throws ServiceParserException {
 		List<File> jwsFiles = new ArrayList<File>();
 		findAllJws(workspaceFolder, jwsFiles);
 
-		MultiWorkspace multiWorkspace = new MultiWorkspace(workspaceFolder);
+		Ora10gMultiWorkspace multiWorkspace = new Ora10gMultiWorkspace(workspaceFolder);
 
 		for (File jwsFile : jwsFiles) {
 
 			// create new workspace
-			Workspace workspace = new Workspace(jwsFile);
+			Ora10gWorkspace workspace = new Ora10gWorkspace(jwsFile);
 			multiWorkspace.addWorkspace(workspace);
 			try {
 				// load list of projects from jws
@@ -93,8 +93,8 @@ public final class MultiWorkspaceParser extends AbstractParser {
 	 * 
 	 * @param multiWorkspace
 	 */
-	private final void analysesBpelProjectDependencies(MultiWorkspace multiWorkspace) {
-		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+	private final void analysesBpelProjectDependencies(Ora10gMultiWorkspace multiWorkspace) {
+		for (Ora10gWorkspace workspace : multiWorkspace.getWorkspaces()) {
 			for (Project project : workspace.getProjects()) {
 				if (project.getType() == ProjectType.ORACLE10G_BPEL) {
 					((BpelProject) project).analysisProjectDependencies();
@@ -109,8 +109,8 @@ public final class MultiWorkspaceParser extends AbstractParser {
 	 * 
 	 * @param multiWorkspace
 	 */
-	private final void analysesDepBetweenBpelEsb(MultiWorkspace multiWorkspace) {
-		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+	private final void analysesDepBetweenBpelEsb(Ora10gMultiWorkspace multiWorkspace) {
+		for (Ora10gWorkspace workspace : multiWorkspace.getWorkspaces()) {
 
 			for (Project project : workspace.getProjects()) {
 				if (project.getType() == ProjectType.ORACLE10G_BPEL) {
@@ -181,7 +181,7 @@ public final class MultiWorkspaceParser extends AbstractParser {
 	 * @param url
 	 * @return
 	 */
-	private final BpelProject findBpelProjectForEsb(MultiWorkspace multiWorkspace, String url) {
+	private final BpelProject findBpelProjectForEsb(Ora10gMultiWorkspace multiWorkspace, String url) {
 		int index = url.indexOf("?wsdl");
 		if (index != -1) {
 			url = url.replace("?", ".");
@@ -198,14 +198,14 @@ public final class MultiWorkspaceParser extends AbstractParser {
 	}
 
 	/**
-	 * find bpel process by name in {@link MultiWorkspace}
+	 * find bpel process by name in {@link Ora10gMultiWorkspace}
 	 * 
 	 * @param multiWorkspace
 	 * @param bpelProcessName
 	 * @return if not found, return <b>null</b>
 	 */
-	private final BpelProject findBpelByName(MultiWorkspace multiWorkspace, String bpelProcessName) {
-		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+	private final BpelProject findBpelByName(Ora10gMultiWorkspace multiWorkspace, String bpelProcessName) {
+		for (Ora10gWorkspace workspace : multiWorkspace.getWorkspaces()) {
 			for (Project project : workspace.getProjects()) {
 				if (project.getType() == ProjectType.ORACLE10G_BPEL) {
 					BpelProject bpelProject = (BpelProject) project;
@@ -226,7 +226,7 @@ public final class MultiWorkspaceParser extends AbstractParser {
 	 * @param isInJws
 	 * @return list of bpel.xml and *.esb witch is parsed
 	 */
-	private final List<File> parseBpelEsbProjects(List<File> listOfProjects, Workspace workspace, boolean isInJws) {
+	private final List<File> parseBpelEsbProjects(List<File> listOfProjects, Ora10gWorkspace workspace, boolean isInJws) {
 		List<File> parsedBpelEsbFiles = new ArrayList<File>();
 		for (File projectFile : listOfProjects) {
 			File bpelFile = findBpelXmlFile(projectFile.getParentFile());
@@ -288,8 +288,8 @@ public final class MultiWorkspaceParser extends AbstractParser {
 	 * 
 	 * @param workspace
 	 */
-	private final void analysesBpelDependencies(MultiWorkspace multiWorkspace) {
-		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+	private final void analysesBpelDependencies(Ora10gMultiWorkspace multiWorkspace) {
+		for (Ora10gWorkspace workspace : multiWorkspace.getWorkspaces()) {
 			for (Project service : workspace.getProjects()) {
 				if (service.getType() == ProjectType.ORACLE10G_BPEL) {
 					BpelProject bpel = (BpelProject) service;
@@ -313,8 +313,8 @@ public final class MultiWorkspaceParser extends AbstractParser {
 	 * 
 	 * @param multiWorkspace
 	 */
-	private final void analysesEsbDependencies(MultiWorkspace multiWorkspace) {
-		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+	private final void analysesEsbDependencies(Ora10gMultiWorkspace multiWorkspace) {
+		for (Ora10gWorkspace workspace : multiWorkspace.getWorkspaces()) {
 			for (Project project : workspace.getProjects()) {
 				if (project.getType() == ProjectType.ORACLE10G_ESB) {
 					EsbProject esbProject = (EsbProject) project;
@@ -331,7 +331,7 @@ public final class MultiWorkspaceParser extends AbstractParser {
 	 * @param multiWorkspace
 	 * @param sourceEsbProject
 	 */
-	private final void analyzeEsbDependencies(MultiWorkspace multiWorkspace, EsbProject sourceEsbProject) {
+	private final void analyzeEsbDependencies(Ora10gMultiWorkspace multiWorkspace, EsbProject sourceEsbProject) {
 		for (EsbSvc esbSvc : sourceEsbProject.getAllEsbSvc()) {
 			URL url = parseWsdlToUrl(esbSvc.getWsdlURL());
 			if (url != null) {
@@ -357,8 +357,8 @@ public final class MultiWorkspaceParser extends AbstractParser {
 	 * @param workspace
 	 * @return
 	 */
-	private final EsbProject findEsbProjectByQname(String qName, URL serviceURL, MultiWorkspace multiWorkspace) {
-		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+	private final EsbProject findEsbProjectByQname(String qName, URL serviceURL, Ora10gMultiWorkspace multiWorkspace) {
+		for (Ora10gWorkspace workspace : multiWorkspace.getWorkspaces()) {
 			for (Project project : workspace.getProjects()) {
 				if (project.getType() == ProjectType.ORACLE10G_ESB) {
 					EsbProject esbProject = (EsbProject) project;

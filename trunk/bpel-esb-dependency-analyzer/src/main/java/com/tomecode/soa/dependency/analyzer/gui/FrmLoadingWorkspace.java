@@ -12,9 +12,9 @@ import com.tomecode.soa.dependency.analyzer.gui.tab.CloseTabbedPane;
 import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.dependency.analyzer.settings.SettingsManager;
 import com.tomecode.soa.dependency.analyzer.settings.RecentFile.RecentFileType;
-import com.tomecode.soa.oracle10g.MultiWorkspace;
-import com.tomecode.soa.oracle10g.Workspace;
-import com.tomecode.soa.oracle10g.parser.MultiWorkspaceParser;
+import com.tomecode.soa.oracle10g.Ora10gMultiWorkspace;
+import com.tomecode.soa.oracle10g.Ora10gWorkspace;
+import com.tomecode.soa.oracle10g.parser.Ora10gMWorkspaceParser;
 import com.tomecode.soa.oracle10g.parser.ServiceParserException;
 import com.tomecode.util.gui.Dialog;
 import com.tomecode.util.gui.Frame;
@@ -57,7 +57,7 @@ public final class FrmLoadingWorkspace extends Dialog {
 	}
 
 	/**
-	 * open new {@link MultiWorkspace}
+	 * open new {@link Ora10gMultiWorkspace}
 	 * 
 	 * @param name
 	 * @param workspaceFolder
@@ -72,7 +72,7 @@ public final class FrmLoadingWorkspace extends Dialog {
 			@Override
 			public final void run() {
 				try {
-					MultiWorkspace multiWorkspace = new MultiWorkspaceParser().parse(workspaceFolder);
+					Ora10gMultiWorkspace multiWorkspace = new Ora10gMWorkspaceParser().parse(workspaceFolder);
 					if (index == -1) {
 						SettingsManager.getInstance().addRecentFile(name, RecentFileType.ORACLE10G_MULTIPLE_WORKSPACE, workspaceFolder);
 					} else {
@@ -95,7 +95,7 @@ public final class FrmLoadingWorkspace extends Dialog {
 	}
 
 	/**
-	 * open new {@link Workspace}
+	 * open new {@link Ora10gWorkspace}
 	 * 
 	 * @param workspaceFolder
 	 * @param index
@@ -110,7 +110,7 @@ public final class FrmLoadingWorkspace extends Dialog {
 			public final void run() {
 				try {
 
-					MultiWorkspace multiWorkspace = new MultiWorkspaceParser().parse(workspaceFolder);
+					Ora10gMultiWorkspace multiWorkspace = new Ora10gMWorkspaceParser().parse(workspaceFolder);
 					String name = multiWorkspace.getWorkspaces().isEmpty() ? "not found workspace" : multiWorkspace.getWorkspaces().get(0).getName();
 					if (index == -1) {
 						SettingsManager.getInstance().addRecentFile(name, RecentFileType.ORACLE10G_MULTIPLE_WORKSPACE, workspaceFolder);

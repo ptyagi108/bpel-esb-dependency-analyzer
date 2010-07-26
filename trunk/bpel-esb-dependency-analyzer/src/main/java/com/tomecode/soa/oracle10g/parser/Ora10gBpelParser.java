@@ -34,7 +34,7 @@ import com.tomecode.soa.bpel.activity.Wait;
 import com.tomecode.soa.bpel.activity.While;
 import com.tomecode.soa.bpel.activity.Assign.AssignOperation;
 import com.tomecode.soa.bpel.activity.Assign.OperationType;
-import com.tomecode.soa.oracle10g.Workspace;
+import com.tomecode.soa.oracle10g.Ora10gWorkspace;
 import com.tomecode.soa.oracle10g.bpel.BpelOperations;
 import com.tomecode.soa.oracle10g.bpel.BpelProcessStrukture;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
@@ -737,7 +737,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 	}
 
 	/**
-	 * compare two {@link BpelProject} by {@link Workspace}
+	 * compare two {@link BpelProject} by {@link Ora10gWorkspace}
 	 * 
 	 * @param target
 	 * @param source

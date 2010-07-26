@@ -16,7 +16,7 @@ import com.tomecode.soa.oracle10g.parser.ServiceParserException;
  * 
  * @author Tomas Frastia
  */
-public final class MultiWorkspace extends BasicNode<Workspace> implements IconNode {
+public final class Ora10gMultiWorkspace extends BasicNode<Ora10gWorkspace> implements IconNode {
 
 	private static final long serialVersionUID = 5467653582353248725L;
 	/**
@@ -29,16 +29,16 @@ public final class MultiWorkspace extends BasicNode<Workspace> implements IconNo
 	 * 
 	 * @param workspaceFolder
 	 */
-	public MultiWorkspace(File workspaceFolder) {
+	public Ora10gMultiWorkspace(File workspaceFolder) {
 		file = workspaceFolder;
 	}
 
 	/**
-	 * add new {@link Workspace} and set parent
+	 * add new {@link Ora10gWorkspace} and set parent
 	 * 
 	 * @param workspace
 	 */
-	public final void addWorkspace(Workspace workspace) {
+	public final void addWorkspace(Ora10gWorkspace workspace) {
 		workspace.setMultiWorkspace(this);
 		childs.add(workspace);
 	}
@@ -47,7 +47,7 @@ public final class MultiWorkspace extends BasicNode<Workspace> implements IconNo
 
 	}
 
-	public final List<Workspace> getWorkspaces() {
+	public final List<Ora10gWorkspace> getWorkspaces() {
 		return childs;
 	}
 
@@ -59,7 +59,7 @@ public final class MultiWorkspace extends BasicNode<Workspace> implements IconNo
 	 * find usage for bpel project
 	 */
 	public final void findUsageBpel(FindUsageProjectResult usage) {
-		for (Workspace workspace : childs) {
+		for (Ora10gWorkspace workspace : childs) {
 			workspace.findUsageBpel(usage);
 		}
 	}
@@ -70,7 +70,7 @@ public final class MultiWorkspace extends BasicNode<Workspace> implements IconNo
 	 * @param usage
 	 */
 	public final void findUsageEsb(FindUsageProjectResult usage) {
-		for (Workspace workspace : childs) {
+		for (Ora10gWorkspace workspace : childs) {
 			workspace.findUsageEsb(usage);
 		}
 	}

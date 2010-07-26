@@ -2,7 +2,7 @@ package com.tomecode.soa.dependency.analyzer.settings;
 
 import java.io.File;
 
-import com.tomecode.soa.oracle10g.Workspace;
+import com.tomecode.soa.oracle10g.Ora10gWorkspace;
 
 /**
  * Recent file
@@ -30,9 +30,9 @@ public final class RecentFile {
 	 * Constructor
 	 * 
 	 * @param name
-	 *            {@link Workspace} name
+	 *            {@link Ora10gWorkspace} name
 	 * @param file
-	 *            {@link Workspace} folder
+	 *            {@link Ora10gWorkspace} folder
 	 */
 	public RecentFile(String name, String type, File file) {
 		this(name, RecentFileType.parseType(type), file);

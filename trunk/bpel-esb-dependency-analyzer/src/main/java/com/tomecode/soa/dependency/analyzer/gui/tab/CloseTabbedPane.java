@@ -30,7 +30,7 @@ import com.tomecode.soa.dependency.analyzer.gui.panels.WorkspaceChangeListener;
 import com.tomecode.soa.dependency.analyzer.gui.panels.WorkspacePanel;
 import com.tomecode.soa.dependency.analyzer.gui.tab.event.DoubleClickListener;
 import com.tomecode.soa.dependency.analyzer.gui.tab.event.TabbedCloseButtonListener;
-import com.tomecode.soa.oracle10g.MultiWorkspace;
+import com.tomecode.soa.oracle10g.Ora10gMultiWorkspace;
 
 /**
  * A JTabbedPane with some added UI functionalities. A close button in every tab
@@ -372,12 +372,12 @@ public class CloseTabbedPane extends JTabbedPane {
 	}
 
 	/**
-	 * add new {@link MultiWorkspace} tab
+	 * add new {@link Ora10gMultiWorkspace} tab
 	 * 
 	 * @param name
 	 * @param multiWorkspace
 	 */
-	public final void addTable(String name, MultiWorkspace multiWorkspace) {
+	public final void addTable(String name, Ora10gMultiWorkspace multiWorkspace) {
 		addTab(name, new WorkspacePanel(multiWorkspace, changeListener));
 		setSelectedIndex(getTabCount() - 1);
 	}

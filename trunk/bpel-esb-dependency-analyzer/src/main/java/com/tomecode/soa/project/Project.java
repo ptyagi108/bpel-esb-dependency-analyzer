@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.swing.tree.TreeNode;
 
 import com.tomecode.soa.dependency.analyzer.gui.tree.node.IconNode;
-import com.tomecode.soa.oracle10g.Workspace;
+import com.tomecode.soa.oracle10g.Ora10gWorkspace;
 
 /**
  * 
@@ -17,7 +17,7 @@ import com.tomecode.soa.oracle10g.Workspace;
 public abstract class Project implements TreeNode, IconNode, Serializable {
 
 	private static final long serialVersionUID = 4360951852708549931L;
-	private Workspace workspace;
+	private Ora10gWorkspace workspace;
 	/**
 	 * if true then project is in *.jws
 	 */
@@ -53,11 +53,11 @@ public abstract class Project implements TreeNode, IconNode, Serializable {
 		this.isInJws = isInJws;
 	}
 
-	public final Workspace getWorkspace() {
+	public final Ora10gWorkspace getWorkspace() {
 		return workspace;
 	}
 
-	public final void setWorkspace(Workspace workspace) {
+	public final void setWorkspace(Ora10gWorkspace workspace) {
 		this.workspace = workspace;
 	}
 

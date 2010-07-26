@@ -17,7 +17,7 @@ import com.tomecode.soa.dependency.analyzer.gui.menu.MenuFactory.MenuItems;
 import com.tomecode.soa.dependency.analyzer.gui.tree.node.IconNode;
 import com.tomecode.soa.dependency.analyzer.gui.utils.panels.UtilsPanel;
 import com.tomecode.soa.dependency.analyzer.usages.FindUsageProjectResult;
-import com.tomecode.soa.oracle10g.MultiWorkspace;
+import com.tomecode.soa.oracle10g.Ora10gMultiWorkspace;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.esb.EsbProject;
 import com.tomecode.soa.project.Project;
@@ -55,7 +55,7 @@ public final class WorkspaceTree extends BasicTree {
 	 * 
 	 * @param multiWorkspace
 	 */
-	public WorkspaceTree(MultiWorkspace multiWorkspace, UtilsPanel workspaceUtilsPanel) {
+	public WorkspaceTree(Ora10gMultiWorkspace multiWorkspace, UtilsPanel workspaceUtilsPanel) {
 		this(workspaceUtilsPanel);
 		treeModel.setRoot(multiWorkspace);
 		expandProjectNodes(new TreePath(multiWorkspace));
