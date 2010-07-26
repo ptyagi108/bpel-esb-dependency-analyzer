@@ -191,7 +191,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 				root.addActivity(variable);
 			} else if (element.getName().equals("partnerLink")) {
 				PartnerLink partnerLink = new PartnerLink(element.attributeValue("name"), element.attributeValue("partnerLinkType"), element.attributeValue("myRole"), element
-						.attributeValue("partnerRole"), strukture);
+						.attributeValue("partnerRole"));
 				root.addActivity(partnerLink);
 			} else if (element.getName().equals("receive")) {
 				root.addActivity(new Receive(element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation")));
@@ -254,7 +254,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 				root.addActivity(wait);
 
 			} else if (element.getName().equals("while")) {
-				While whileActivity = new While(element.attributeValue("name"), getVariableFromExpression(element.attributeValue("condition")));
+				While whileActivity = new While(element.attributeValue("name"), element.attributeValue("condition"), getVariableFromExpression(element.attributeValue("condition")));
 				root.addActivity(whileActivity);
 				parseBpelProcessActivities(element.elements(), whileActivity, strukture);
 			} else if (element.getName().equals("flowN")) {
@@ -306,10 +306,10 @@ public final class Ora10gBpelParser extends AbstractParser {
 	 * @param element
 	 */
 	private final void parseAssignOperation(Assign assign, Element eAssign) {
-		List<?> list = eAssign.elements();
-		for (Object e : list) {
-			Element eOperation = (Element) e;
-			// System.out.println(eOperation.getName());
+			List<?> list = eAssign.elements();
+			for (Object e : list) {
+				Element eOperation = (Element) e;
+				// System.out.println(eOperation.getName());
 			if (eOperation.getName().equals("copy")) {
 				assign.addOperations(parseOperationCopyInAssign(OperationType.COPY, eOperation));
 			} else if (eOperation.getName().equals("append")) {
@@ -490,7 +490,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 		} else if (element.getName().equals("wait")) {
 			return new Wait(element.attributeValue("name"), null);
 		} else if (element.getName().equals("while")) {
-			return new While(element.attributeValue("name"), null);
+			return new While(element.attributeValue("name"), null, null);
 		} else if (element.getName().equals("flowN")) {
 			return new FlowN(element.attributeValue("name"), null, null);
 		}

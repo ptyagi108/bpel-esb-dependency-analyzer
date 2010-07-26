@@ -16,7 +16,7 @@ public enum ActivityType {
 	SCOPE("scope", IconFactory.SCOPE), WAIT("wait", IconFactory.WAIT), WHILE("while", IconFactory.WHILE), SEQUENCE("sequence", IconFactory.SEQUENCE), ASSIGN("assign", IconFactory.ASSIGN), EMPTY("empty", IconFactory.EMPTY), RECEIVE("receive", IconFactory.RECEIVE, true), INVOKE(
 			"invoke", IconFactory.INVOKE, true), REPLY("reply", IconFactory.REPLY, true), SWITCH("switch", IconFactory.SWITCH), CATCH("catch", IconFactory.CATCH, true), CATCHALL("catchAll", IconFactory.CATCHALL), ONALARM("onAlarm", IconFactory.ONALARM), ONMESSAGE("onMessage",
 			IconFactory.ONMESSAGE, true), COMPENSATIONHANDLER("compensationHandler", IconFactory.COMPENSATIONHANDLER), JAVA_EMBEDDING("exec", IconFactory.BPELX_EXEC), PICK("pick", IconFactory.PICK), FLOW("flow", IconFactory.FLOW), FLOWN("flowN", IconFactory.FLOWN), COMPENSATE(
-			"compensate", IconFactory.COMPENSTATE), TERMINATE("terminate", IconFactory.TERMINATE), THROW("throw", IconFactory.THROW, true), PARTNERLINK("partnerLink", IconFactory.PARTNERLINK), VARIABLE("variable", IconFactory.VARIABLE), TRANSFORMATE("transformation",
+			"compensate", IconFactory.COMPENSTATE), TERMINATE("terminate", IconFactory.TERMINATE),THROW("throw", IconFactory.THROW, true), PARTNERLINK("partnerLink", IconFactory.PARTNERLINK), VARIABLE("variable", IconFactory.VARIABLE), TRANSFORMATE("transformation",
 			IconFactory.TRANSFORM, true), EMAIL("email", IconFactory.EMAIL), PAGER("pager", IconFactory.PAGER), FAX("fax", IconFactory.FAX), SMS("sms", IconFactory.SMS), VOICE("voice", IconFactory.VOICE), CASE("case", IconFactory.SWITCH), OTHERWISE("otherwise",
 			IconFactory.SWITCH), HUMANTASK("workflow", IconFactory.HUMANTASK);
 

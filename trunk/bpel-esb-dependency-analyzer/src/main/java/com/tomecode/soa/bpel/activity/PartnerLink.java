@@ -1,9 +1,8 @@
 package com.tomecode.soa.bpel.activity;
 
-import com.tomecode.soa.oracle10g.bpel.BpelProcessStrukture;
 
 /**
- * partner link in bpel process
+ * partner link in BPEL µprocess
  * 
  * @author Tomas Frastia
  * 
@@ -18,8 +17,6 @@ public final class PartnerLink extends Activity {
 
 	private String partnerRole;
 
-	private BpelProcessStrukture strukture;
-
 	/**
 	 * Constructor
 	 * 
@@ -29,16 +26,12 @@ public final class PartnerLink extends Activity {
 	 * @param partnerRole
 	 * @param strukture
 	 */
-	public PartnerLink(String name, String partnerLinkType, String myRole, String partnerRole, BpelProcessStrukture strukture) {
+	public PartnerLink(String name, String partnerLinkType, String myRole, String partnerRole) {
 		super(ActivityType.PARTNERLINK, name);
 		this.partnerLinkType = partnerLinkType;
 		this.myRole = myRole;
 		this.partnerRole = partnerRole;
-		this.strukture = strukture;
-	}
 
-	public final BpelProcessStrukture getStrukture() {
-		return strukture;
 	}
 
 	public final String getPartnerLinkType() {

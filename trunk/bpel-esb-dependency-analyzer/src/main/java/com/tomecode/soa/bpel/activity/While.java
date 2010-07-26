@@ -14,15 +14,32 @@ public final class While extends Activity {
 
 	private String variable;
 
+	private String condition;
+
 	/**
 	 * Constructor
 	 * 
 	 * @param name
 	 * @param variable
 	 */
-	public While(String name, String variable) {
+	public While(String name, String condition, String variable) {
 		super(ActivityType.WHILE, name);
 		this.variable = variable;
+		this.condition = condition;
+	}
+
+	/**
+	 * @return the variable
+	 */
+	public final String getVariable() {
+		return variable;
+	}
+
+	/**
+	 * @return the condition
+	 */
+	public final String getCondition() {
+		return condition;
 	}
 
 	/**
