@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.dom4j.Element;
 
-import com.tomecode.soa.oracle10g.parser.ServiceParserException;
 import com.tomecode.soa.parser.AbstractParser;
+import com.tomecode.soa.parser.ServiceParserException;
 import com.tomecode.soa.wsdl.PortType;
 import com.tomecode.soa.wsdl.Wsdl;
 import com.tomecode.soa.wsdl.WsdlOperation;

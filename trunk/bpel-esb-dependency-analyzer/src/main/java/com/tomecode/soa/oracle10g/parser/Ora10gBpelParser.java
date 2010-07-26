@@ -41,6 +41,7 @@ import com.tomecode.soa.oracle10g.bpel.BpelProject;
 import com.tomecode.soa.oracle10g.bpel.Operation;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
 import com.tomecode.soa.parser.AbstractParser;
+import com.tomecode.soa.parser.ServiceParserException;
 import com.tomecode.soa.project.UnknownProject;
 import com.tomecode.soa.wsdl.parser.WsdlParser;
 

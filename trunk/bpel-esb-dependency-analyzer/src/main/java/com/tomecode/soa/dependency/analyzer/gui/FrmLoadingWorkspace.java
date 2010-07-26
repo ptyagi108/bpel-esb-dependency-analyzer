@@ -15,7 +15,7 @@ import com.tomecode.soa.dependency.analyzer.settings.RecentFile.RecentFileType;
 import com.tomecode.soa.oracle10g.Ora10gMultiWorkspace;
 import com.tomecode.soa.oracle10g.Ora10gWorkspace;
 import com.tomecode.soa.oracle10g.parser.Ora10gMWorkspaceParser;
-import com.tomecode.soa.oracle10g.parser.ServiceParserException;
+import com.tomecode.soa.parser.ServiceParserException;
 import com.tomecode.util.gui.Dialog;
 import com.tomecode.util.gui.Frame;
 import com.tomecode.util.gui.PanelFactory;

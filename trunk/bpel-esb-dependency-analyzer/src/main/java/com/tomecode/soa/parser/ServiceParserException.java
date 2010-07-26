@@ -1,9 +1,8 @@
-package com.tomecode.soa.oracle10g.parser;
+package com.tomecode.soa.parser;
 
 /**
  * 
- * The basic exeception, if something is not right in the parser for BPEL and
- * ESB
+ * The basic exception, if something is not right in the parser for BPEL or ESB
  * 
  * @author Tomas Frastia
  * 

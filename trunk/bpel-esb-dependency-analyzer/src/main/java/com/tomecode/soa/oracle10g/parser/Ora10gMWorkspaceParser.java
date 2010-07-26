@@ -15,6 +15,7 @@ import com.tomecode.soa.oracle10g.esb.EsbOperation;
 import com.tomecode.soa.oracle10g.esb.EsbProject;
 import com.tomecode.soa.oracle10g.esb.EsbSvc;
 import com.tomecode.soa.parser.AbstractParser;
+import com.tomecode.soa.parser.ServiceParserException;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.project.ProjectType;
 
@@ -28,12 +29,12 @@ import com.tomecode.soa.project.ProjectType;
 public final class Ora10gMWorkspaceParser extends AbstractParser {
 
 	/**
-	 * bpel parser
+	 * BPEL parser
 	 */
 	private final Ora10gBpelParser bpelParser;
 
 	/**
-	 * esb parser
+	 * ESB parser
 	 */
 	private final EsbParser esbParser;
 

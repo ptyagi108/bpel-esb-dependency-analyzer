@@ -9,10 +9,10 @@ import com.tomecode.soa.dependency.analyzer.gui.tree.node.BasicNode;
 import com.tomecode.soa.dependency.analyzer.gui.tree.node.IconNode;
 import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.dependency.analyzer.usages.FindUsageProjectResult;
-import com.tomecode.soa.oracle10g.parser.ServiceParserException;
+import com.tomecode.soa.parser.ServiceParserException;
 
 /**
- * Mutiple workspace contains all workspace in project
+ * Multiple workspace contains all workspace in project
  * 
  * @author Tomas Frastia
  */
@@ -25,7 +25,7 @@ public final class Ora10gMultiWorkspace extends BasicNode<Ora10gWorkspace> imple
 	private File file;
 
 	/**
-	 * Constructor - wokspace folder
+	 * Constructor - workspace folder
 	 * 
 	 * @param workspaceFolder
 	 */
@@ -56,7 +56,7 @@ public final class Ora10gMultiWorkspace extends BasicNode<Ora10gWorkspace> imple
 	}
 
 	/**
-	 * find usage for bpel project
+	 * find usage for BPEL project
 	 */
 	public final void findUsageBpel(FindUsageProjectResult usage) {
 		for (Ora10gWorkspace workspace : childs) {
@@ -65,7 +65,7 @@ public final class Ora10gMultiWorkspace extends BasicNode<Ora10gWorkspace> imple
 	}
 
 	/**
-	 * find usage for esb project
+	 * find usage for ESB project
 	 * 
 	 * @param usage
 	 */
