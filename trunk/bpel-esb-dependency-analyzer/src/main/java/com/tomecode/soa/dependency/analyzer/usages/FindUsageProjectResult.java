@@ -115,13 +115,14 @@ public final class FindUsageProjectResult implements FindUsage {
 	 * @return
 	 */
 	public static final FindUsageProjectResult createUsageForBpelProject(BpelOperations bpelOperations) {
-		FindUsageProjectResult usage = new FindUsageProjectResult(bpelOperations.getBpelProcess());
-		if (bpelOperations.getBpelProcess().getWorkspace().getMultiWorkspace() != null) {
-			bpelOperations.getBpelProcess().getWorkspace().getMultiWorkspace().findUsageBpel(usage);
-		} else {
-			bpelOperations.getBpelProcess().getWorkspace().findUsageBpel(usage);
-		}
-		return usage;
+//		FindUsageProjectResult usage = new FindUsageProjectResult(bpelOperations.getBpelProcess());
+//		if (bpelOperations.getBpelProcess().getWorkspace().getMultiWorkspace() != null) {
+//			bpelOperations.getBpelProcess().getWorkspace().getMultiWorkspace().findUsageBpel(usage);
+//		} else {
+//			bpelOperations.getBpelProcess().getWorkspace().findUsageBpel(usage);
+//		}
+//		return usage;
+		return null;
 	}
 
 	/**
@@ -132,13 +133,15 @@ public final class FindUsageProjectResult implements FindUsage {
 	 * @return
 	 */
 	public static final FindUsageProjectResult createUsageForBpelProject(Project project) {
-		FindUsageProjectResult usage = new FindUsageProjectResult(project);
-		if (project.getWorkspace().getMultiWorkspace() != null) {
-			project.getWorkspace().getMultiWorkspace().findUsageBpel(usage);
-		} else {
-			project.getWorkspace().findUsageBpel(usage);
-		}
-		return usage;
+	//	FindUsageProjectResult usage = new FindUsageProjectResult(project);
+	//	if (project.getWorkspace().getMultiWorkspace() != null) {
+	//		project.getWorkspace().getMultiWorkspace().findUsageBpel(usage);
+	//	} else {
+	//		project.getWorkspace().findUsageBpel(usage);
+	//	}
+		//return usage;
+	
+		return null;
 	}
 
 	/**
@@ -150,13 +153,14 @@ public final class FindUsageProjectResult implements FindUsage {
 	 * @return
 	 */
 	public static final FindUsageProjectResult createUsageForEsbProject(EsbServiceNode esbServiceNode) {
-		FindUsageProjectResult usage = new FindUsageProjectResult(esbServiceNode.getProject());
-		if (esbServiceNode.getProject().getWorkspace().getMultiWorkspace() != null) {
-			esbServiceNode.getProject().getWorkspace().getMultiWorkspace().findUsageEsb(usage);
-		} else {
-			esbServiceNode.getProject().getWorkspace().findUsageEsb(usage);
-		}
-		return usage;
+//		FindUsageProjectResult usage = new FindUsageProjectResult(esbServiceNode.getProject());
+//		if (esbServiceNode.getProject().getWorkspace().getMultiWorkspace() != null) {
+//			esbServiceNode.getProject().getWorkspace().getMultiWorkspace().findUsageEsb(usage);
+//		} else {
+//			esbServiceNode.getProject().getWorkspace().findUsageEsb(usage);
+//		}
+//		return usage;
+		return null;
 	}
 
 	/**
@@ -167,12 +171,13 @@ public final class FindUsageProjectResult implements FindUsage {
 	 * @return
 	 */
 	public static final FindUsageProjectResult createUsageForEsbProject(Project project) {
-		FindUsageProjectResult usage = new FindUsageProjectResult(project);
-		if (project.getWorkspace().getMultiWorkspace() != null) {
-			project.getWorkspace().getMultiWorkspace().findUsageEsb(usage);
-		} else {
-			project.getWorkspace().findUsageEsb(usage);
-		}
-		return usage;
+//		FindUsageProjectResult usage = new FindUsageProjectResult(project);
+//		if (project.getWorkspace().getMultiWorkspace() != null) {
+//			project.getWorkspace().getMultiWorkspace().findUsageEsb(usage);
+//		} else {
+//			project.getWorkspace().findUsageEsb(usage);
+//		}
+//		return usage;
+		return null;
 	}
 }

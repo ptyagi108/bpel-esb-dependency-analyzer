@@ -9,7 +9,7 @@ import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.oracle10g.bpel.PartnerLinkBinding;
 
 /**
- * Unkwnown project or service
+ * Unknown project or service
  * 
  * @author Tomas Frastia
  * 
@@ -24,11 +24,11 @@ public final class UnknownProject extends Project {
 	 * Constructor
 	 */
 	public UnknownProject(String name) {
-		super(ProjectType.UNKNOWN);
+		super(name, null, ProjectType.UNKNOWN);
 	}
 
 	public UnknownProject(PartnerLinkBinding partnerLinkBinding) {
-		super(ProjectType.UNKNOWN);
+		super(partnerLinkBinding.getName(), null, ProjectType.UNKNOWN);
 		this.partnerLinkBinding = partnerLinkBinding;
 	}
 

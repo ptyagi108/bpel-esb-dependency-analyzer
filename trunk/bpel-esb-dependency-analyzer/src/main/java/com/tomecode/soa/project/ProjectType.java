@@ -17,6 +17,11 @@ public enum ProjectType {
 	 * ORACLE 10g ESB service project
 	 */
 	ORACLE10G_ESB("Oracle SOA Suit 10g - ESB"),
+
+	/**
+	 * Open ESB - ESB and BPEL project
+	 */
+	OPEN_ESB_BPEL("Open ESB and BPEL"),
 	/**
 	 * unknown project
 	 */
