@@ -64,7 +64,7 @@ public final class FrmProjectInfo extends Dialog {
 
 		} else if (project.getType() == ProjectType.ORACLE10G_ESB) {
 			EsbProject esbProject = (EsbProject) project;
-			pFields.add(PanelFactory.wrapWithTile("Path", newTxt(esbProject.getProjectFolder().toString())));
+			pFields.add(PanelFactory.wrapWithTile("Path", newTxt(esbProject.getFolder().toString())));
 			pFields.add(new JLabel(""));
 		}
 

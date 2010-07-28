@@ -16,7 +16,7 @@ import com.tomecode.soa.wsdl.Wsdl;
 
 /**
  * 
- * This object contais basic info about bpel process
+ * This object contains basic info about BPEL project
  * 
  * @author Tomas Frastia
  * 
@@ -24,6 +24,11 @@ import com.tomecode.soa.wsdl.Wsdl;
 public final class BpelProject extends Project {
 
 	private static final long serialVersionUID = 267257551834214909L;
+
+	/**
+	 * if true then project is in *.jws
+	 */
+	private boolean isInJws;
 
 	private String id;
 
@@ -39,7 +44,7 @@ public final class BpelProject extends Project {
 	private final List<PartnerLinkBinding> partnerLinkBindings;
 
 	/**
-	 * list of depedendecy {@link Project}
+	 * list of dependency {@link Project}
 	 */
 	private final List<Project> dependencyProjects;
 
@@ -53,20 +58,9 @@ public final class BpelProject extends Project {
 	// private final List<EsbSvc> dependenceEsbSvc;
 
 	/**
-	 * bpel process wsdl
+	 * WSDL for BPEL process
 	 */
 	private Wsdl wsdl;
-
-	/**
-	 * Constructor
-	 */
-	public BpelProject() {
-		super(ProjectType.ORACLE10G_BPEL);
-		this.partnerLinkBindings = new ArrayList<PartnerLinkBinding>();
-		this.dependencyProjects = new ArrayList<Project>();
-		this.bpelOperations = new BpelOperations(this);
-		this.bpelProcessStrukture = new BpelProcessStrukture(this);
-	}
 
 	/**
 	 * Constructor
@@ -76,7 +70,11 @@ public final class BpelProject extends Project {
 	 * @param bpelXmlFile
 	 */
 	public BpelProject(String id, String src, File bpelXmlFile) {
-		this();
+		super(id, bpelXmlFile.getParentFile().getParentFile(), ProjectType.ORACLE10G_BPEL);
+		this.partnerLinkBindings = new ArrayList<PartnerLinkBinding>();
+		this.dependencyProjects = new ArrayList<Project>();
+		this.bpelOperations = new BpelOperations(this);
+		this.bpelProcessStrukture = new BpelProcessStrukture(this);
 		this.id = id;
 		this.src = src;
 		this.bpelXmlFile = bpelXmlFile;
@@ -190,7 +188,7 @@ public final class BpelProject extends Project {
 	}
 
 	/**
-	 * analysis of {@link Project} dependnecies
+	 * analysis of {@link Project} dependencies
 	 */
 	public final void analysisProjectDependencies() {
 		dependencyProjects.clear();
@@ -208,6 +206,14 @@ public final class BpelProject extends Project {
 			}
 		}
 
+	}
+
+	public final boolean isInJws() {
+		return isInJws;
+	}
+
+	public final void setInJws(boolean isInJws) {
+		this.isInJws = isInJws;
 	}
 
 }

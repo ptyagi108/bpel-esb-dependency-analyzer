@@ -42,7 +42,7 @@ public final class EsbParser extends AbstractParser {
 	 * @throws ServiceParserException
 	 */
 	public final EsbProject parse(File projectFolder) throws ServiceParserException {
-		EsbProject esbProject = new EsbProject(projectFolder, findProjectName(projectFolder));
+		EsbProject esbProject = new EsbProject(findProjectName(projectFolder), projectFolder);
 
 		List<File> findedFiles = new ArrayList<File>();
 		findEsbsvcFiles(projectFolder, findedFiles, ".esbsys");

@@ -9,6 +9,8 @@ import javax.swing.tree.TreeNode;
 
 /**
  * 
+ * Abstract class for all elements in tree
+ * 
  * @author Tomas Frastia
  * 
  * @param <E>

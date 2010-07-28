@@ -1,13 +1,11 @@
 package com.tomecode.soa.oracle10g;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 
 import com.tomecode.soa.dependency.analyzer.gui.tree.node.BasicNode;
-import com.tomecode.soa.dependency.analyzer.gui.tree.node.IconNode;
 import com.tomecode.soa.dependency.analyzer.icons.IconFactory;
 import com.tomecode.soa.dependency.analyzer.usages.FindUsageProjectResult;
 import com.tomecode.soa.oracle10g.bpel.BpelProject;
@@ -16,6 +14,7 @@ import com.tomecode.soa.oracle10g.esb.EsbProject;
 import com.tomecode.soa.oracle10g.esb.EsbSvc;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.project.ProjectType;
+import com.tomecode.soa.workspace.Workspace;
 
 /**
  * This object contains all {@link Project}
@@ -23,7 +22,7 @@ import com.tomecode.soa.project.ProjectType;
  * @author Tomas Frastia
  * 
  */
-public final class Ora10gWorkspace extends BasicNode<Project> implements IconNode, Serializable {
+public final class Ora10gWorkspace extends BasicNode<Project> implements Workspace {
 
 	private static final long serialVersionUID = -3328038478792839666L;
 
@@ -72,7 +71,7 @@ public final class Ora10gWorkspace extends BasicNode<Project> implements IconNod
 		childs.add(project);
 	}
 
-	public final File getFile() {
+	public final File getFolder() {
 		return file;
 	}
 

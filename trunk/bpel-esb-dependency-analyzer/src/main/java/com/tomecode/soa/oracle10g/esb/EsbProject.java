@@ -26,11 +26,9 @@ public final class EsbProject extends Project {
 	private static final long serialVersionUID = 1517251079778988223L;
 
 	/**
-	 * project name
+	 * if true then project is in *.jws
 	 */
-	private String name;
-
-	private File projectFolder;
+	private boolean isInJws;
 
 	private final List<BasicEsbNode> basicEsbNodes;
 	/**
@@ -40,23 +38,14 @@ public final class EsbProject extends Project {
 
 	/**
 	 * Constructor
-	 */
-	public EsbProject() {
-		super(ProjectType.ORACLE10G_ESB);
-		basicEsbNodes = new ArrayList<BasicEsbNode>();
-		esbProjectsDependecies = new Vector<Project>();
-	}
-
-	/**
-	 * Constructor
 	 * 
 	 * @param projectFolder
 	 * @param name
 	 */
-	public EsbProject(File projectFolder, String name) {
-		this();
-		this.projectFolder = projectFolder;
-		this.name = name;
+	public EsbProject(String name, File projectFolder) {
+		super(name, projectFolder, ProjectType.ORACLE10G_ESB);
+		basicEsbNodes = new ArrayList<BasicEsbNode>();
+		esbProjectsDependecies = new Vector<Project>();
 	}
 
 	public final List<BasicEsbNode> getBasicEsbNodes() {
@@ -65,14 +54,6 @@ public final class EsbProject extends Project {
 
 	public final void addBasicEsbNode(BasicEsbNode basicEsbNode) {
 		basicEsbNodes.add(basicEsbNode);
-	}
-
-	public final String getName() {
-		return name;
-	}
-
-	public final File getProjectFolder() {
-		return projectFolder;
 	}
 
 	@Override
@@ -111,7 +92,7 @@ public final class EsbProject extends Project {
 	}
 
 	public final String toString() {
-		return (projectFolder != null) ? projectFolder.getName() : name;
+		return (folder != null) ? folder.getName() : name;
 	}
 
 	public final List<Project> getEsbProjectsDependecies() {
@@ -119,7 +100,7 @@ public final class EsbProject extends Project {
 	}
 
 	/**
-	 * find {@link EsbProject} by qName and service url
+	 * find {@link EsbProject} by qName and service URL
 	 * 
 	 * @param qName
 	 * @param serviceURL
@@ -224,6 +205,14 @@ public final class EsbProject extends Project {
 	@Override
 	public final ImageIcon getIcon() {
 		return IconFactory.ESB;
+	}
+
+	public final boolean isInJws() {
+		return isInJws;
+	}
+
+	public final void setInJws(boolean isInJws) {
+		this.isInJws = isInJws;
 	}
 
 }

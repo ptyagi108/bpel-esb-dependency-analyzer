@@ -97,8 +97,13 @@ public final class WorkspaceTree extends BasicTree {
 				rnd.setIcon(((IconNode) value).getIcon());
 			}
 
-			if (value instanceof Project) {
-				if (!((Project) value).isInJws()) {
+			if (value instanceof BpelProject) {
+				if (!((BpelProject) value).isInJws()) {
+					rnd.setForeground(Color.BLACK);
+					rnd.setFont(rnd.getFont().deriveFont(Font.BOLD));
+				}
+			} else if (value instanceof EsbProject) {
+				if (!((EsbProject) value).isInJws()) {
 					rnd.setForeground(Color.BLACK);
 					rnd.setFont(rnd.getFont().deriveFont(Font.BOLD));
 				}
