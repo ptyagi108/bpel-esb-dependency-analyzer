@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="com.tomecode.soa.dependency.analyzer.gui.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="RCP Perspective"
+            class="com.tomecode.soa.dependency.analyzer.gui.Perspective"
+            id="com.tomecode.soa.dependency.analyzer.gui.perspective">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+	 <view 
+            name="Workspaces"
+            allowMultiple="true"
+            class="com.tomecode.soa.dependency.analyzer.tree.WorkspacesNavigator"
+            id="view.workspacenavigator">
+    </view>
+ 	<view 
+            name="BPEL process structure tree"
+            allowMultiple="true"
+            class="com.tomecode.soa.dependency.analyzer.tree.BpelProcessStructureNavigator"
+            id="view.bpelprocessstructurenavigator">
+    </view>
+ 	<view 
+            name="Service Dependnecy by Operations"
+            allowMultiple="true"
+            class="com.tomecode.soa.dependency.analyzer.tree.ServiceOperationsDepNavigator"
+            id="view.serviceoperationsdepnavigator">
+    </view>
+ 	<view 
+            name="VisaulGraph"
+            allowMultiple="true"
+            class="com.tomecode.soa.dependency.analyzer.view.VisualGraphView"
+            id="view.visualgraph">
+    </view>
+   </extension>
+
+</plugin>
