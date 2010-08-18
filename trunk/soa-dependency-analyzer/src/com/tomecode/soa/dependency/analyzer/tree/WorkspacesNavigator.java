@@ -1,6 +1,6 @@
 package com.tomecode.soa.dependency.analyzer.tree;
 
-import java.io.File;
+import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
@@ -18,13 +18,10 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
+import com.tomecode.soa.dependency.analyzer.core.ApplicationManager;
 import com.tomecode.soa.dependency.analyzer.tree.node.WorkspaceRootNode;
 import com.tomecode.soa.dependency.analyzer.view.VisualGraphView;
-import com.tomecode.soa.openesb.bpel.parser.OpenEsbMWorkspaceParser;
-import com.tomecode.soa.openesb.workspace.OpenEsbMultiWorkspace;
-import com.tomecode.soa.oracle10g.parser.Ora10gMWorkspaceParser;
-import com.tomecode.soa.oracle10g.workspace.Ora10gMultiWorkspace;
-import com.tomecode.soa.parser.ServiceParserException;
+import com.tomecode.soa.workspace.MultiWorkspace;
 
 /**
  * 
@@ -54,24 +51,14 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 		tree.setLabelProvider(new WorkspacesLabelProvider());
 		tree.setContentProvider(new WorkspacesContentProvider());
 
-		hookContextMenu();
+		// hookContextMenu();
 
-		try {
-			File f = new File("/Users/tomasfrastia/projects/jdev10gWorkspace/10gSoaBpel");
-
-			Ora10gMultiWorkspace multiWorkspace = new Ora10gMWorkspaceParser().parse(f);
+		List<MultiWorkspace> multiWorkspaces = ApplicationManager.getInstance().getMultiWorkspaces();
+		for (MultiWorkspace multiWorkspace : multiWorkspaces) {
 			rootNode.add(multiWorkspace);
-
-			f = new File("/Users/tomasfrastia/projects/soaToolsWorkspace/bpel-samples/open-esb/bpelModules");
-			OpenEsbMultiWorkspace openEsbMultiWorkspace = new OpenEsbMWorkspaceParser().parse(f);
-			rootNode.add(openEsbMultiWorkspace);
-			tree.setInput(rootNode);
-
-		} catch (ServiceParserException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
 		}
 
+		tree.setInput(rootNode);
 		// new ISelectionChangedListener() {
 		//
 		// @Override
@@ -98,7 +85,7 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 			@Override
 			public final void menuAboutToShow(IMenuManager manager) {
 				OpenNewWorkspaceAction action = new OpenNewWorkspaceAction();
-				action.setText("aaaa");
+				action.setText("Add new workspace");
 				manager.add(action);
 
 			}
@@ -147,5 +134,19 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 
 		}
 
+	}
+
+	public void getMWorkspaceNames() {
+
+	}
+
+	public final void newMultiWorkspace(final MultiWorkspace multiWorkspace) {
+		rootNode.add(multiWorkspace);
+		tree.refresh(rootNode);
+	}
+
+	public final void updateMultiWorkspace(MultiWorkspace multiWorkspace) {
+		rootNode.add(multiWorkspace);
+		tree.refresh(rootNode);
 	}
 }

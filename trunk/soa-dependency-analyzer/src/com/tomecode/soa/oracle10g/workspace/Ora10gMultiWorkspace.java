@@ -73,4 +73,9 @@ public class Ora10gMultiWorkspace implements MultiWorkspace {
 	public final List<Ora10gWorkspace> getWorkspaces() {
 		return oracle10gWorkspaces;
 	}
+
+	@Override
+	public final WorkspaceType getType() {
+		return WorkspaceType.ORACLE_1OG;
+	}
 }

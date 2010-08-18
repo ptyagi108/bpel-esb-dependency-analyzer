@@ -70,4 +70,9 @@ public final class OpenEsbMultiWorkspace implements MultiWorkspace {
 	public final String toString() {
 		return name;
 	}
+
+	@Override
+	public final WorkspaceType getType() {
+		return WorkspaceType.OPEN_ESB;
+	}
 }

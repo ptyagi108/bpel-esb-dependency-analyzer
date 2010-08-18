@@ -68,4 +68,9 @@ public final class OpenEsbWorkspace implements Workspace {
 		return name;
 	}
 
+	@Override
+	public final WorkspaceType getType() {
+		return WorkspaceType.OPEN_ESB;
+	}
+
 }

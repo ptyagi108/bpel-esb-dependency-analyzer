@@ -1,12 +1,17 @@
 package com.tomecode.soa.workspace;
 
-import com.tomecode.soa.project.ProjectType;
-
 /**
+ * 
+ * Basic interface for all multi workspaces
+ * 
  * 
  * @author Tomas Frastia
  * 
  */
 public interface MultiWorkspace extends Workspace {
 
+	/**
+	 * mutliti workspace type
+	 */
+	WorkspaceType getType();
 }

@@ -18,23 +18,21 @@ import com.tomecode.soa.dependency.analyzer.gui.actions.OpenWorkspaceAction;
  */
 public final class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
-	
 	private OpenWorkspaceAction openWorkspaceAction;
-	
+
 	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
 		super(configurer);
 	}
 
 	protected void makeActions(IWorkbenchWindow window) {
 		openWorkspaceAction = new OpenWorkspaceAction(window);
-		
+
 	}
 
 	protected void fillMenuBar(IMenuManager menuBar) {
 		MenuManager fileMenu = new MenuManager("&File", IWorkbenchActionConstants.M_FILE);
 		fileMenu.add(openWorkspaceAction);
-		
-		
+
 		menuBar.add(fileMenu);
 	}
 

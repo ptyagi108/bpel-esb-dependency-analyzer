@@ -80,4 +80,9 @@ public final class Ora10gWorkspace implements Workspace {
 		return name;
 	}
 
+	@Override
+	public final WorkspaceType getType() {
+		return WorkspaceType.ORACLE_1OG;
+	}
+
 }
