@@ -10,8 +10,8 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Shell;
 
 import com.tomecode.soa.dependency.analyzer.core.ApplicationManager;
-import com.tomecode.soa.dependency.analyzer.gui.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.gui.displays.OpenNewWorkspaceWizard.WorkspaceConfig;
+import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.parser.ServiceParserException;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace.WorkspaceType;

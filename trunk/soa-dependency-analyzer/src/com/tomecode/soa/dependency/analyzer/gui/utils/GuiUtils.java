@@ -1,4 +1,4 @@
-package com.tomecode.soa.dependency.analyzer.gui;
+package com.tomecode.soa.dependency.analyzer.gui.utils;
 
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
