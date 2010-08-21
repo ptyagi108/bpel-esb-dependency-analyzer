@@ -37,4 +37,8 @@ public enum ProjectType {
 		return title;
 	}
 
+	public final String toString() {
+		return title;
+	}
+
 }

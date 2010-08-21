@@ -124,7 +124,8 @@ public final class Ora10gBpelParser extends AbstractParser {
 	 */
 	private final BpelProject parseBpelXml(Element eBpelXml, File bpelXmlFile) throws ServiceParserException {
 		Element eBPELProcess = eBpelXml.element("BPELProcess");
-		BpelProject bpelProcess = new BpelProject(eBPELProcess.attributeValue("id"), eBPELProcess.attributeValue("src"), bpelXmlFile);
+		File f = bpelXmlFile.getParentFile().getParentFile();
+		BpelProject bpelProcess = new BpelProject(eBPELProcess.attributeValue("id"), eBPELProcess.attributeValue("src"), bpelXmlFile, f);
 
 		if (!isParsedProcess(bpelProcess)) {
 			parsedProcess.add(bpelProcess);
@@ -196,8 +197,8 @@ public final class Ora10gBpelParser extends AbstractParser {
 				Variable variable = new Variable(ActivityType.ORACLE_10G_VARIABLE, element.attributeValue("name"), element.attributeValue("messageType"));
 				root.addActivity(variable);
 			} else if (element.getName().equals("partnerLink")) {
-				PartnerLink partnerLink = new PartnerLink(ActivityType.ORACLE_10G_PARTNERLINK, element.attributeValue("name"), element.attributeValue("partnerLinkType"), element.attributeValue("myRole"),
-						element.attributeValue("partnerRole"));
+				PartnerLink partnerLink = new PartnerLink(ActivityType.ORACLE_10G_PARTNERLINK, element.attributeValue("name"), element.attributeValue("partnerLinkType"), element
+						.attributeValue("myRole"), element.attributeValue("partnerRole"));
 				root.addActivity(partnerLink);
 			} else if (element.getName().equals("receive")) {
 				root.addActivity(new Receive(ActivityType.ORACLE_10G_RECEIVE, element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element
@@ -262,7 +263,8 @@ public final class Ora10gBpelParser extends AbstractParser {
 				root.addActivity(wait);
 
 			} else if (element.getName().equals("while")) {
-				While whileActivity = new While(ActivityType.ORACLE_10G_WHILE, element.attributeValue("name"), element.attributeValue("condition"), getVariableFromExpression(element.attributeValue("condition")));
+				While whileActivity = new While(ActivityType.ORACLE_10G_WHILE, element.attributeValue("name"), element.attributeValue("condition"), getVariableFromExpression(element
+						.attributeValue("condition")));
 				root.addActivity(whileActivity);
 				parseBpelProcessActivities(element.elements(), whileActivity, strukture);
 			} else if (element.getName().equals("flowN")) {
@@ -437,7 +439,8 @@ public final class Ora10gBpelParser extends AbstractParser {
 	private final Activity parseBpelActivity(Element element) {
 
 		if (element.getName().equals("receive")) {
-			return new Receive(ActivityType.ORACLE_10G_RECEIVE, element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"));
+			return new Receive(ActivityType.ORACLE_10G_RECEIVE, element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element
+					.attributeValue("operation"));
 		} else if (element.getName().equals("invoke")) {
 			return new Invoke(ActivityType.ORACLE_1G0_INVOKE, element.attributeValue("name"), element.attributeValue("inputVariable"), element.attributeValue("outputVariable"), element
 					.attributeValue("partnerLink"), element.attributeValue("operation"));

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
@@ -14,6 +16,7 @@ import org.eclipse.zest.core.widgets.GraphConnection;
 import org.eclipse.zest.core.widgets.GraphNode;
 import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.icons.ImageUtils;
 import com.tomecode.soa.openesb.workspace.OpenEsbMultiWorkspace;
@@ -64,6 +67,32 @@ public final class VisualGraphView extends ViewPart {
 		// GraphViewer graphViewer = new GraphViewer(parent, SWT.NONE);
 		// graph = graphViewer.getGraphControl();
 		graph.setLayoutAlgorithm(new SpringLayoutAlgorithm(1), true);
+		graph.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public final void widgetSelected(SelectionEvent event) {
+				List<?> list = ((Graph) event.widget).getSelection();
+				if (!list.isEmpty()) {
+					showPropertiesAboutSelectedNode(list.get(0));
+				}
+			}
+
+		});
+	}
+
+	/**
+	 * show properties in {@link PropertiesView} about select object graph
+	 * 
+	 * @param object
+	 */
+	private final void showPropertiesAboutSelectedNode(Object object) {
+		if (object instanceof GraphConnection) {
+			GraphConnection connection = (GraphConnection) object;
+			GuiUtils.getPropertiesView().showProperties(connection.getData());
+		} else if (object instanceof GraphNode) {
+			GraphNode graphNode = (GraphNode) object;
+			GuiUtils.getPropertiesView().showProperties(graphNode.getData());
+		}
 	}
 
 	@Override

@@ -20,6 +20,7 @@ import org.eclipse.ui.part.ViewPart;
 import com.tomecode.soa.dependency.analyzer.core.ApplicationManager;
 import com.tomecode.soa.dependency.analyzer.gui.utils.PopupMenuUtils;
 import com.tomecode.soa.dependency.analyzer.tree.node.WorkspaceRootNode;
+import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
 import com.tomecode.soa.dependency.analyzer.view.VisualGraphView;
 import com.tomecode.soa.workspace.MultiWorkspace;
 
@@ -59,19 +60,6 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 		}
 
 		tree.setInput(rootNode);
-		// new ISelectionChangedListener() {
-		//
-		// @Override
-		// public final void selectionChanged(SelectionChangedEvent event) {
-		// System.out.println(event);
-		//
-		// IViewDescriptor descriptor =
-		// PlatformUI.getWorkbench().getViewRegistry().find(BpelProcessStructureNavigator.ID);
-		// IViewPart iViewPart =
-		// PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(BpelProcessStructureNavigator.ID);
-		// iViewPart.toString();
-		// }
-		// });
 	}
 
 	/**
@@ -127,6 +115,11 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 				graphView.showGraph(selection.getFirstElement());
 			}
 
+			iViewPart = workbenchPage.findView(PropertiesView.ID);
+			if (iViewPart != null) {
+				PropertiesView propertiesView = (PropertiesView) iViewPart;
+				propertiesView.showProperties(selection.getFirstElement());
+			}
 		}
 
 	}

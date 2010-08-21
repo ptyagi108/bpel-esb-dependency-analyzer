@@ -45,6 +45,12 @@
             class="com.tomecode.soa.dependency.analyzer.view.VisualGraphView"
             id="view.visualgraph">
     </view>
+ 	<view 
+            name="Properties"
+            allowMultiple="true"
+            class="com.tomecode.soa.dependency.analyzer.view.PropertiesView"
+            id="view.properties">
+    </view>
    </extension>
 
 </plugin>

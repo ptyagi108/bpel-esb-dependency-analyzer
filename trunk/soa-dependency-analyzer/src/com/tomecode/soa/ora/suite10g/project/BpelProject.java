@@ -52,7 +52,7 @@ public final class BpelProject implements Project {
 	 * @param src
 	 * @param bpelXmlFile
 	 */
-	public BpelProject(String id, String src, File bpelXmlFile) {
+	public BpelProject(String id, String src, File bpelXmlFile, File file) {
 		this.partnerLinkBindings = new ArrayList<PartnerLinkBinding>();
 		this.dependencyProjects = new ArrayList<Project>();
 		this.bpelOperations = new BpelOperations(this);
@@ -60,6 +60,7 @@ public final class BpelProject implements Project {
 		this.id = id;
 		this.src = src;
 		this.bpelXmlFile = bpelXmlFile;
+		this.file = file;
 	}
 
 	@Override
