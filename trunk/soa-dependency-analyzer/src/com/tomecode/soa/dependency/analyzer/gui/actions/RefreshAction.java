@@ -35,9 +35,9 @@ public final class RefreshAction extends Action {
 		else if (selectedNode instanceof Project) {
 			Project project = (Project) selectedNode;
 			if (project.getType() == ProjectType.ORACLE10G_BPEL) {
-				ApplicationManager.getInstance().refershOrale10g((Ora10gMultiWorkspace) project.getWorkspace().getMultiWorkspace());
+				ApplicationManager.getInstance().refershOrale10g((Ora10gMultiWorkspace) project.getWorkpsace().getMultiWorkspace());
 			} else if (project.getType() == ProjectType.OPEN_ESB_BPEL) {
-				ApplicationManager.getInstance().refreshOpenEsb((OpenEsbMultiWorkspace) project.getWorkspace().getMultiWorkspace());
+				ApplicationManager.getInstance().refreshOpenEsb((OpenEsbMultiWorkspace) project.getWorkpsace().getMultiWorkspace());
 			}
 		}
 

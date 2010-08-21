@@ -103,7 +103,7 @@ public final class UnknownProject implements Project {
 	}
 
 	@Override
-	public Workspace getWorkspace() {
+	public Workspace getWorkpsace() {
 		return workspace;
 	}
 

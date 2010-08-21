@@ -165,7 +165,7 @@ public final class BpelProject implements Project {
 	}
 
 	@Override
-	public final Workspace getWorkspace() {
+	public final Workspace getWorkpsace() {
 		return workspace;
 	}
 

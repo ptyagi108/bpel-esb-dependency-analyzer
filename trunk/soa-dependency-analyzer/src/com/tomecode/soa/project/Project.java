@@ -24,6 +24,6 @@ public interface Project {
 	 */
 	ProjectType getType();
 
-	Workspace getWorkspace();
+	Workspace getWorkpsace();
 
 }

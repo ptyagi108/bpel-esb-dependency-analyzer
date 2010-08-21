@@ -76,7 +76,7 @@ public final class OpenEsbBpelProject implements Project {
 	}
 
 	@Override
-	public final Workspace getWorkspace() {
+	public final Workspace getWorkpsace() {
 		return workspace;
 	}
 }
