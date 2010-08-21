@@ -1,4 +1,4 @@
-package com.tomecode.soa.oracle10g.project;
+package com.tomecode.soa.ora.suite10g.project;
 
 import java.util.ArrayList;
 import java.util.List;

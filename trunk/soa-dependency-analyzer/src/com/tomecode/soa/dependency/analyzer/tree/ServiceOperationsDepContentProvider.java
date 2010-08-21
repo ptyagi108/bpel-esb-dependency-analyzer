@@ -4,8 +4,8 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
-import com.tomecode.soa.oracle10g.project.BpelOperations;
-import com.tomecode.soa.oracle10g.project.Operation;
+import com.tomecode.soa.ora.suite10g.project.BpelOperations;
+import com.tomecode.soa.ora.suite10g.project.Operation;
 
 /**
  * 

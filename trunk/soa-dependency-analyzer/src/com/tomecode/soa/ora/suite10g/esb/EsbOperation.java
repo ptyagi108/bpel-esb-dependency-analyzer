@@ -1,10 +1,10 @@
-	package com.tomecode.soa.oracle10g.esb;
+	package com.tomecode.soa.ora.suite10g.esb;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.tomecode.soa.dependency.analyzer.tree.node.DependencyNode;
-import com.tomecode.soa.oracle10g.project.BpelProject;
+import com.tomecode.soa.ora.suite10g.project.BpelProject;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.util.EsbServiceNode;
 

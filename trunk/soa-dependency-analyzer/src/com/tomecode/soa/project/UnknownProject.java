@@ -2,7 +2,7 @@ package com.tomecode.soa.project;
 
 import java.io.File;
 
-import com.tomecode.soa.oracle10g.project.PartnerLinkBinding;
+import com.tomecode.soa.ora.suite10g.project.PartnerLinkBinding;
 import com.tomecode.soa.workspace.Workspace;
 
 /**

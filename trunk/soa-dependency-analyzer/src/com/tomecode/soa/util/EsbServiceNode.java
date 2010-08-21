@@ -1,7 +1,7 @@
 package com.tomecode.soa.util;
 
 import com.tomecode.soa.dependency.analyzer.tree.node.DependencyNode;
-import com.tomecode.soa.oracle10g.esb.EsbProject;
+import com.tomecode.soa.ora.suite10g.esb.EsbProject;
 import com.tomecode.soa.project.Project;
 
 /**

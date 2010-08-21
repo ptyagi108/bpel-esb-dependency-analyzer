@@ -1,4 +1,4 @@
-package com.tomecode.soa.oracle10g.workspace;
+package com.tomecode.soa.ora.suite10g.workspace;
 
 import java.io.File;
 import java.util.ArrayList;

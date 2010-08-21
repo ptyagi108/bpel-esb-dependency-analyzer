@@ -1,4 +1,4 @@
-package com.tomecode.soa.oracle10g.parser;
+package com.tomecode.soa.ora.suite10g.parser;
 
 import java.io.File;
 import java.net.URL;
@@ -7,13 +7,13 @@ import java.util.List;
 
 import org.dom4j.Element;
 
-import com.tomecode.soa.oracle10g.esb.EsbGrp;
-import com.tomecode.soa.oracle10g.esb.EsbOperation;
-import com.tomecode.soa.oracle10g.esb.EsbProject;
-import com.tomecode.soa.oracle10g.esb.EsbRoutingRule;
-import com.tomecode.soa.oracle10g.esb.EsbSvc;
-import com.tomecode.soa.oracle10g.esb.EsbSys;
-import com.tomecode.soa.oracle10g.project.PartnerLinkBinding;
+import com.tomecode.soa.ora.suite10g.esb.EsbGrp;
+import com.tomecode.soa.ora.suite10g.esb.EsbOperation;
+import com.tomecode.soa.ora.suite10g.esb.EsbProject;
+import com.tomecode.soa.ora.suite10g.esb.EsbRoutingRule;
+import com.tomecode.soa.ora.suite10g.esb.EsbSvc;
+import com.tomecode.soa.ora.suite10g.esb.EsbSys;
+import com.tomecode.soa.ora.suite10g.project.PartnerLinkBinding;
 import com.tomecode.soa.parser.AbstractParser;
 import com.tomecode.soa.parser.ServiceParserException;
 

@@ -6,7 +6,7 @@ import org.eclipse.swt.graphics.Image;
 import com.tomecode.soa.bpel.activity.Activity;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
-import com.tomecode.soa.oracle10g.project.Ora10gBpelProcessStrukture;
+import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProcessStrukture;
 
 /**
  * 

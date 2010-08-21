@@ -7,7 +7,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
 import com.tomecode.soa.openesb.project.OpenEsbBpelProject;
-import com.tomecode.soa.oracle10g.project.BpelProject;
+import com.tomecode.soa.ora.suite10g.project.BpelProject;
 
 /**
  * Show BPEL process structure (tree structure of activities)

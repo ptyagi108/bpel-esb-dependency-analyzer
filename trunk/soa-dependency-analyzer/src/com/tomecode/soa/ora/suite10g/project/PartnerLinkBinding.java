@@ -1,8 +1,8 @@
-package com.tomecode.soa.oracle10g.project;
+package com.tomecode.soa.ora.suite10g.project;
 
 import java.io.Serializable;
 
-import com.tomecode.soa.oracle10g.esb.EsbProject;
+import com.tomecode.soa.ora.suite10g.esb.EsbProject;
 import com.tomecode.soa.project.UnknownProject;
 
 /**

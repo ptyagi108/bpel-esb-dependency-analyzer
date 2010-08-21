@@ -1,10 +1,10 @@
-package com.tomecode.soa.oracle10g.project;
+package com.tomecode.soa.ora.suite10g.project;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tomecode.soa.oracle10g.workspace.Ora10gWorkspace;
+import com.tomecode.soa.ora.suite10g.workspace.Ora10gWorkspace;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.project.ProjectType;
 import com.tomecode.soa.project.UnknownProject;

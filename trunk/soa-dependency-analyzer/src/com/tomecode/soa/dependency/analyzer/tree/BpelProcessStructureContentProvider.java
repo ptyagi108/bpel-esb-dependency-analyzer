@@ -7,7 +7,7 @@ import com.tomecode.soa.bpel.activity.Activity;
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.openesb.project.OpenEsbBpelProject;
-import com.tomecode.soa.oracle10g.project.Ora10gBpelProcessStrukture;
+import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProcessStrukture;
 
 /**
  * Content provider for {@link BpelProcessStructureNavigator}

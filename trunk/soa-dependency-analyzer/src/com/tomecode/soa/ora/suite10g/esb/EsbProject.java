@@ -1,4 +1,4 @@
-package com.tomecode.soa.oracle10g.esb;
+package com.tomecode.soa.ora.suite10g.esb;
 
 import java.io.File;
 import java.net.URL;
@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import com.tomecode.soa.oracle10g.esb.BasicEsbNode.EsbNodeType;
-import com.tomecode.soa.oracle10g.workspace.Ora10gWorkspace;
+import com.tomecode.soa.ora.suite10g.esb.BasicEsbNode.EsbNodeType;
+import com.tomecode.soa.ora.suite10g.workspace.Ora10gWorkspace;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.project.ProjectType;
 import com.tomecode.soa.workspace.Workspace;

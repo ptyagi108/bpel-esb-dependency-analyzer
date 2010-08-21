@@ -4,9 +4,9 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
-import com.tomecode.soa.oracle10g.project.BpelOperations;
-import com.tomecode.soa.oracle10g.project.BpelProject;
-import com.tomecode.soa.oracle10g.project.Operation;
+import com.tomecode.soa.ora.suite10g.project.BpelOperations;
+import com.tomecode.soa.ora.suite10g.project.BpelProject;
+import com.tomecode.soa.ora.suite10g.project.Operation;
 
 /**
  * Label provider for {@link ServiceOperationsDepNavigator}

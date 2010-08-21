@@ -1,4 +1,4 @@
-package com.tomecode.soa.oracle10g.esb;
+package com.tomecode.soa.ora.suite10g.esb;
 
 
 /**

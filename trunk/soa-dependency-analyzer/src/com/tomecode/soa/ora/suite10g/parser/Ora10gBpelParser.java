@@ -1,4 +1,4 @@
-package com.tomecode.soa.oracle10g.parser;
+package com.tomecode.soa.ora.suite10g.parser;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -35,12 +35,12 @@ import com.tomecode.soa.bpel.activity.Wait;
 import com.tomecode.soa.bpel.activity.While;
 import com.tomecode.soa.bpel.activity.Assign.AssignOperation;
 import com.tomecode.soa.bpel.activity.Assign.OperationType;
-import com.tomecode.soa.oracle10g.project.BpelOperations;
-import com.tomecode.soa.oracle10g.project.BpelProject;
-import com.tomecode.soa.oracle10g.project.Operation;
-import com.tomecode.soa.oracle10g.project.Ora10gBpelProcessStrukture;
-import com.tomecode.soa.oracle10g.project.PartnerLinkBinding;
-import com.tomecode.soa.oracle10g.workspace.Ora10gWorkspace;
+import com.tomecode.soa.ora.suite10g.project.BpelOperations;
+import com.tomecode.soa.ora.suite10g.project.BpelProject;
+import com.tomecode.soa.ora.suite10g.project.Operation;
+import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProcessStrukture;
+import com.tomecode.soa.ora.suite10g.project.PartnerLinkBinding;
+import com.tomecode.soa.ora.suite10g.workspace.Ora10gWorkspace;
 import com.tomecode.soa.parser.AbstractParser;
 import com.tomecode.soa.parser.ServiceParserException;
 import com.tomecode.soa.project.UnknownProject;

@@ -6,10 +6,10 @@ import org.eclipse.jface.viewers.Viewer;
 import com.tomecode.soa.dependency.analyzer.tree.node.WorkspaceRootNode;
 import com.tomecode.soa.openesb.workspace.OpenEsbMultiWorkspace;
 import com.tomecode.soa.openesb.workspace.OpenEsbWorkspace;
-import com.tomecode.soa.oracle10g.esb.EsbProject;
-import com.tomecode.soa.oracle10g.project.BpelProject;
-import com.tomecode.soa.oracle10g.workspace.Ora10gMultiWorkspace;
-import com.tomecode.soa.oracle10g.workspace.Ora10gWorkspace;
+import com.tomecode.soa.ora.suite10g.esb.EsbProject;
+import com.tomecode.soa.ora.suite10g.project.BpelProject;
+import com.tomecode.soa.ora.suite10g.workspace.Ora10gMultiWorkspace;
+import com.tomecode.soa.ora.suite10g.workspace.Ora10gWorkspace;
 
 /**
  * 
