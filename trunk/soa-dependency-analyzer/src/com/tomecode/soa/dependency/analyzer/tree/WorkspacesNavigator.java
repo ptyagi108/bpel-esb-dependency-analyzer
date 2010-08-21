@@ -2,7 +2,6 @@ package com.tomecode.soa.dependency.analyzer.tree;
 
 import java.util.List;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -19,6 +18,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import com.tomecode.soa.dependency.analyzer.core.ApplicationManager;
+import com.tomecode.soa.dependency.analyzer.gui.utils.PopupMenuUtils;
 import com.tomecode.soa.dependency.analyzer.tree.node.WorkspaceRootNode;
 import com.tomecode.soa.dependency.analyzer.view.VisualGraphView;
 import com.tomecode.soa.workspace.MultiWorkspace;
@@ -51,7 +51,7 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 		tree.setLabelProvider(new WorkspacesLabelProvider());
 		tree.setContentProvider(new WorkspacesContentProvider());
 
-		// hookContextMenu();
+		hookContextMenu();
 
 		List<MultiWorkspace> multiWorkspaces = ApplicationManager.getInstance().getMultiWorkspaces();
 		for (MultiWorkspace multiWorkspace : multiWorkspaces) {
@@ -84,22 +84,17 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 
 			@Override
 			public final void menuAboutToShow(IMenuManager manager) {
-				OpenNewWorkspaceAction action = new OpenNewWorkspaceAction();
-				action.setText("Add new workspace");
-				manager.add(action);
+				IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
+				if (!selection.isEmpty()) {
+					PopupMenuUtils.fillWorksapceNavigator(selection.getFirstElement(), manager);
 
+				}
 			}
 		});
 
 		Menu menu = menuManager.createContextMenu(tree.getControl());
 		tree.getControl().setMenu(menu);
 		getSite().registerContextMenu(menuManager, tree);
-	}
-
-	public final class OpenNewWorkspaceAction extends Action {
-		public final void run() {
-			tree.setInput(new String("222"));
-		}
 	}
 
 	@Override

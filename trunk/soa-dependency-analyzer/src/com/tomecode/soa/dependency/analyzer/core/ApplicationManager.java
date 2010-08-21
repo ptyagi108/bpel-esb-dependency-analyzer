@@ -116,4 +116,12 @@ public final class ApplicationManager {
 		throw new ServiceParserException("not found multi workspace with name: " + config.getExistMWorkspace(), true);
 	}
 
+	public final void refershOrale10g(Ora10gMultiWorkspace multiWorkspace) {
+
+	}
+
+	public final void refreshOpenEsb(OpenEsbMultiWorkspace selectedNode) {
+
+	}
+
 }
