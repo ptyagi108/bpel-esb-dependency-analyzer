@@ -8,6 +8,7 @@ import com.tomecode.soa.oracle10g.workspace.Ora10gWorkspace;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.project.ProjectType;
 import com.tomecode.soa.project.UnknownProject;
+import com.tomecode.soa.workspace.Workspace;
 import com.tomecode.soa.wsdl.Wsdl;
 
 /**
@@ -154,10 +155,6 @@ public final class BpelProject implements Project {
 		this.workspace = workspace;
 	}
 
-	public final Ora10gWorkspace getWorkspace() {
-		return workspace;
-	}
-
 	public final String toString() {
 		return getId();
 	}
@@ -165,6 +162,11 @@ public final class BpelProject implements Project {
 	@Override
 	public String getName() {
 		return getId();
+	}
+
+	@Override
+	public final Workspace getWorkspace() {
+		return workspace;
 	}
 
 }

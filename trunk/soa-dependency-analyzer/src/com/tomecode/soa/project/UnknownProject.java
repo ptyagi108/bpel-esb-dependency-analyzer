@@ -97,13 +97,14 @@ public final class UnknownProject implements Project {
 		this.workspace = workspace;
 	}
 
-	public final Workspace getWorkspace() {
-		return workspace;
-	}
-
 	@Override
 	public final String getName() {
 		return name;
+	}
+
+	@Override
+	public Workspace getWorkspace() {
+		return workspace;
 	}
 
 }

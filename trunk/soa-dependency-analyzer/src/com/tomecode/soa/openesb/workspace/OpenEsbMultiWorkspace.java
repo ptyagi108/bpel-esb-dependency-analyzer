@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
+import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 
 /**
  * 
@@ -64,6 +65,7 @@ public final class OpenEsbMultiWorkspace implements MultiWorkspace {
 	}
 
 	public final void addWorkspace(OpenEsbWorkspace workspace) {
+		workspace.setMultiWorkspace(this);
 		workspaces.add(workspace);
 	}
 

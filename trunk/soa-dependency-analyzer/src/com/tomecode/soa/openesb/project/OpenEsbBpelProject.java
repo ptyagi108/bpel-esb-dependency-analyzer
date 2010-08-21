@@ -8,6 +8,7 @@ import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.openesb.workspace.OpenEsbWorkspace;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.project.ProjectType;
+import com.tomecode.soa.workspace.Workspace;
 
 /**
  * Open ESB - BPEL project
@@ -70,11 +71,12 @@ public final class OpenEsbBpelProject implements Project {
 		this.workspace = workspace;
 	}
 
-	public final OpenEsbWorkspace getWorkspace() {
-		return workspace;
-	}
-
 	public final String toString() {
 		return getName();
+	}
+
+	@Override
+	public final Workspace getWorkspace() {
+		return workspace;
 	}
 }

@@ -10,6 +10,7 @@ import com.tomecode.soa.oracle10g.esb.BasicEsbNode.EsbNodeType;
 import com.tomecode.soa.oracle10g.workspace.Ora10gWorkspace;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.project.ProjectType;
+import com.tomecode.soa.workspace.Workspace;
 
 /**
  * Contains esbsvc,esbgrp, esb files in project
@@ -196,13 +197,14 @@ public final class EsbProject implements Project {
 		this.workspace = workspace;
 	}
 
-	public final Ora10gWorkspace getWorkspace() {
-		return workspace;
-	}
-
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public final Workspace getWorkspace() {
+		return workspace;
 	}
 
 }

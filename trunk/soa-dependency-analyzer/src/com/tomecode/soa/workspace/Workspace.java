@@ -27,6 +27,8 @@ public interface Workspace {
 	 */
 	WorkspaceType getType();
 
+	MultiWorkspace getMultiWorkspace();
+
 	/**
 	 * Supported workspace type
 	 * 

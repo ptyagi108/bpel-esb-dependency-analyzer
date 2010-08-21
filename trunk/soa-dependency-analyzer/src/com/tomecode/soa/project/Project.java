@@ -2,6 +2,8 @@ package com.tomecode.soa.project;
 
 import java.io.File;
 
+import com.tomecode.soa.workspace.Workspace;
+
 /**
  * 
  * Basic interface for all BPEL/ESB projects
@@ -21,5 +23,7 @@ public interface Project {
 	 * @return
 	 */
 	ProjectType getType();
+
+	Workspace getWorkspace();
 
 }

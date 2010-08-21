@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.tomecode.soa.openesb.project.OpenEsbBpelProject;
 import com.tomecode.soa.project.Project;
+import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
@@ -32,6 +33,8 @@ public final class OpenEsbWorkspace implements Workspace {
 	 * list of Open ESB {@link Project}
 	 */
 	private List<Project> projects;
+
+	private OpenEsbMultiWorkspace multiWorkspace;
 
 	/**
 	 * Constructor
@@ -71,6 +74,15 @@ public final class OpenEsbWorkspace implements Workspace {
 	@Override
 	public final WorkspaceType getType() {
 		return WorkspaceType.OPEN_ESB;
+	}
+
+	public final void setMultiWorkspace(OpenEsbMultiWorkspace multiWorkspace) {
+		this.multiWorkspace = multiWorkspace;
+	}
+
+	@Override
+	public final MultiWorkspace getMultiWorkspace() {
+		return multiWorkspace;
 	}
 
 }

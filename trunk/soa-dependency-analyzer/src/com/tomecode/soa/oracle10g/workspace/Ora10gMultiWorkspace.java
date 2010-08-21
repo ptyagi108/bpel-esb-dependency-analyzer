@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tomecode.soa.workspace.MultiWorkspace;
+import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 
 /**
  * 
@@ -67,6 +68,7 @@ public class Ora10gMultiWorkspace implements MultiWorkspace {
 	}
 
 	public final void addWorkspace(Ora10gWorkspace workspace) {
+		workspace.setMultiWorkspace(this);
 		this.oracle10gWorkspaces.add(workspace);
 	}
 

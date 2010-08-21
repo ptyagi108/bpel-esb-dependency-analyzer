@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tomecode.soa.project.Project;
+import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
@@ -31,7 +32,10 @@ public final class Ora10gWorkspace implements Workspace {
 	 */
 	private final List<Project> projects;
 
+	private Ora10gMultiWorkspace multiWorkspace;
+
 	/**
+	 * 
 	 * Constructor
 	 * 
 	 * @param name
@@ -85,4 +89,12 @@ public final class Ora10gWorkspace implements Workspace {
 		return WorkspaceType.ORACLE_1OG;
 	}
 
+	public final void setMultiWorkspace(Ora10gMultiWorkspace multiWorkspace) {
+		this.multiWorkspace = multiWorkspace;
+	}
+
+	@Override
+	public MultiWorkspace getMultiWorkspace() {
+		return multiWorkspace;
+	}
 }
