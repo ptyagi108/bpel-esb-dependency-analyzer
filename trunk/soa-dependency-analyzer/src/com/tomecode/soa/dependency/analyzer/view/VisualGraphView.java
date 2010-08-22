@@ -1,12 +1,17 @@
 package com.tomecode.soa.dependency.analyzer.view;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Vector;
 
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -14,6 +19,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.zest.core.viewers.GraphViewer;
 import org.eclipse.zest.core.widgets.Graph;
 import org.eclipse.zest.core.widgets.GraphConnection;
 import org.eclipse.zest.core.widgets.GraphNode;
@@ -25,6 +31,8 @@ import com.tomecode.soa.dependency.analyzer.gui.actions.GraphLayoutAction.Layout
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.icons.ImageUtils;
+import com.tomecode.soa.dependency.analyzer.view.visual.ZoomHelper;
+import com.tomecode.soa.dependency.analyzer.view.visual.ZoomHelper.ZoomAction;
 import com.tomecode.soa.openesb.workspace.OpenEsbMultiWorkspace;
 import com.tomecode.soa.openesb.workspace.OpenEsbWorkspace;
 import com.tomecode.soa.ora.suite10g.esb.EsbProject;
@@ -48,8 +56,9 @@ public final class VisualGraphView extends ViewPart {
 
 	public static final String ID = "view.visualgraph";
 
-	// private GraphViewer graphViewer;
 	private Graph graph;
+
+	private GraphViewer graphViewer;
 
 	/**
 	 * contains list of painted {@link GraphNode}
@@ -68,7 +77,10 @@ public final class VisualGraphView extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		parent.setLayout(new FillLayout());
-		graph = new Graph(parent, SWT.NONE);
+
+		graphViewer = new GraphViewer(parent, SWT.NONE);
+		graph = graphViewer.getGraphControl();
+		// graph = new Graph(parent, SWT.NONE);
 		graph.setLayoutAlgorithm(new SpringLayoutAlgorithm(1), true);
 		graph.addSelectionListener(new SelectionAdapter() {
 
@@ -82,13 +94,14 @@ public final class VisualGraphView extends ViewPart {
 
 		});
 
-		initContextMenu();
+		initMenus();
 	}
 
 	/**
 	 * create menu for view and create context menu
 	 */
-	private final void initContextMenu() {
+	private final void initMenus() {
+		// create menu
 		IMenuManager menuManager = getViewSite().getActionBars().getMenuManager();
 		final GraphLayoutAction defaultAction = new GraphLayoutAction(LayoutActionType.SRING_LAYOUT);
 		defaultAction.setChecked(true);
@@ -110,6 +123,8 @@ public final class VisualGraphView extends ViewPart {
 
 		MenuManager popupMenuManager = new MenuManager("#PopupMenu");
 		popupMenuManager.createContextMenu(graph);
+
+		popupMenuManager.add(new Separator());
 		popupMenuManager.add(defaultAction);
 		popupMenuManager.add(actionTreeLyout);
 		popupMenuManager.add(actionVerticalLayout);
@@ -118,9 +133,27 @@ public final class VisualGraphView extends ViewPart {
 		popupMenuManager.add(actionHorizontalLayout);
 		popupMenuManager.add(actionGridLayout);
 		popupMenuManager.add(actionDirectedLayout);
+		popupMenuManager.add(new Separator());
+		ZoomHelper zoomManager = new ZoomHelper(graph);
+		menuManager.add(new Separator());
 
+		Vector<Double> v = new Vector<Double>(zoomManager.getZoomActions().keySet());
+		Collections.sort(v);
+
+		for (Enumeration<Double> e = v.elements(); e.hasMoreElements();) {
+			ZoomAction zoomAction = zoomManager.getZoomActions().get(e.nextElement());
+			menuManager.add(zoomAction);
+			popupMenuManager.add(zoomAction);
+		}
+
+		// create popupmenu
 		graph.setMenu(popupMenuManager.getMenu());
 		graph.setFocus();
+
+		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+		toolBarManager.add(zoomManager.getZoomInAction());
+		toolBarManager.add(zoomManager.getZoomOutAction());
+		toolBarManager.add(zoomManager.getZoomResetAction());
 	}
 
 	/**
@@ -346,4 +379,5 @@ public final class VisualGraphView extends ViewPart {
 			}
 		}
 	}
+
 }

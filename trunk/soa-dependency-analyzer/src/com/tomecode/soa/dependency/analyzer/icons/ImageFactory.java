@@ -20,6 +20,13 @@ public final class ImageFactory {
 	public static final ImageDescriptor open = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/open.png"));
 	public static final Image OPEN = open.createImage();
 
+	public static final ImageDescriptor zoom_in = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/zoom_in.png"));
+	public static final Image ZOOM_IN = zoom_in.createImage();
+	public static final ImageDescriptor zoom_out = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/zoom_out.png"));
+	public static final Image ZOOM_OUT = zoom_out.createImage();
+	public static final ImageDescriptor zoom_reset = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/zoom_reset.png"));
+	public static final Image ZOOM_RESET = zoom_reset.createImage();
+
 	public static final Image ORACLE_10G_ASSIGN = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/oracle10g/icons/assign.png")).createImage();
 	public static final Image ORACLE_10G_SEQUENCE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/oracle10g/icons/sequence.png")).createImage();
 	public static final Image ORACLE_10G_SCOPE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/oracle10g/icons/scope.png")).createImage();
@@ -67,9 +74,6 @@ public final class ImageFactory {
 	public static final Image ORACLE_10G_ABOUT = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/about.png")).createImage();
 	public static final Image ORACLE_10G_UNKNOWN = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/unknown.png")).createImage();
 	public static final Image ORACLE_10G_UNKNOWN_BIG = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/unknown_big.png")).createImage();
-	public static final Image ORACLE_10G_ZOOM_IN = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/zoom_in.png")).createImage();
-	public static final Image ORACLE_10G_ZOOM_OUT = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/zoom_out.png")).createImage();
-	public static final Image ORACLE_10G_ZOOM_RESET = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/zoom_reset.png")).createImage();
 	public static final Image ORACLE_10G_INFO = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/info.png")).createImage();
 	public static final Image ORACLE_10G_EXPORT = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/export.png")).createImage();
 	public static final Image ORACLE_10G_EXPORT_BIG = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/export_big.png")).createImage();
