@@ -3,10 +3,13 @@ package com.tomecode.soa.dependency.analyzer.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -14,8 +17,11 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.zest.core.widgets.Graph;
 import org.eclipse.zest.core.widgets.GraphConnection;
 import org.eclipse.zest.core.widgets.GraphNode;
+import org.eclipse.zest.layouts.algorithms.AbstractLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
 
+import com.tomecode.soa.dependency.analyzer.gui.actions.GraphLayoutAction;
+import com.tomecode.soa.dependency.analyzer.gui.actions.GraphLayoutAction.LayoutActionType;
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.icons.ImageUtils;
@@ -63,9 +69,6 @@ public final class VisualGraphView extends ViewPart {
 	public void createPartControl(Composite parent) {
 		parent.setLayout(new FillLayout());
 		graph = new Graph(parent, SWT.NONE);
-
-		// GraphViewer graphViewer = new GraphViewer(parent, SWT.NONE);
-		// graph = graphViewer.getGraphControl();
 		graph.setLayoutAlgorithm(new SpringLayoutAlgorithm(1), true);
 		graph.addSelectionListener(new SelectionAdapter() {
 
@@ -78,6 +81,46 @@ public final class VisualGraphView extends ViewPart {
 			}
 
 		});
+
+		initContextMenu();
+	}
+
+	/**
+	 * create menu for view and create context menu
+	 */
+	private final void initContextMenu() {
+		IMenuManager menuManager = getViewSite().getActionBars().getMenuManager();
+		final GraphLayoutAction defaultAction = new GraphLayoutAction(LayoutActionType.SRING_LAYOUT);
+		defaultAction.setChecked(true);
+		menuManager.add(defaultAction);
+		final GraphLayoutAction actionTreeLyout = new GraphLayoutAction(LayoutActionType.TREE_LAYOUT);
+		menuManager.add(actionTreeLyout);
+		final GraphLayoutAction actionVerticalLayout = new GraphLayoutAction(LayoutActionType.VERTICAL_LAYOUT);
+		menuManager.add(actionVerticalLayout);
+		final GraphLayoutAction actionRadialLayout = new GraphLayoutAction(LayoutActionType.RADIAL_LAYOUT);
+		menuManager.add(actionRadialLayout);
+		final GraphLayoutAction actionHorizontalTreeLayout = new GraphLayoutAction(LayoutActionType.HORIZONTAL_TREE_LAYOUT);
+		menuManager.add(actionHorizontalTreeLayout);
+		final GraphLayoutAction actionHorizontalLayout = new GraphLayoutAction(LayoutActionType.HORIZONTAL_LAYOUT);
+		menuManager.add(actionHorizontalLayout);
+		final GraphLayoutAction actionGridLayout = new GraphLayoutAction(LayoutActionType.GRID_LAYOUT);
+		menuManager.add(actionGridLayout);
+		final GraphLayoutAction actionDirectedLayout = new GraphLayoutAction(LayoutActionType.DIRECTED_LAYOUT);
+		menuManager.add(actionDirectedLayout);
+
+		MenuManager popupMenuManager = new MenuManager("#PopupMenu");
+		popupMenuManager.createContextMenu(graph);
+		popupMenuManager.add(defaultAction);
+		popupMenuManager.add(actionTreeLyout);
+		popupMenuManager.add(actionVerticalLayout);
+		popupMenuManager.add(actionRadialLayout);
+		popupMenuManager.add(actionHorizontalTreeLayout);
+		popupMenuManager.add(actionHorizontalLayout);
+		popupMenuManager.add(actionGridLayout);
+		popupMenuManager.add(actionDirectedLayout);
+
+		graph.setMenu(popupMenuManager.getMenu());
+		graph.setFocus();
 	}
 
 	/**
@@ -274,18 +317,33 @@ public final class VisualGraphView extends ViewPart {
 		return graphNode;
 	}
 
+	// /**
+	// * create {@link GraphNode}
+	// *
+	// * @param name
+	// * @param image
+	// * @param data
+	// * @param backgroundColor
+	// * @return
+	// */
+	// private final GraphNode createNode(String name, Image image, Object data,
+	// Color backgroundColor) {
+	// GraphNode graphNode = createNode(name, image, data);
+	// graphNode.setBackgroundColor(backgroundColor);
+	// return graphNode;
+	// }
+
 	/**
-	 * create {@link GraphNode}
-	 * 
-	 * @param name
-	 * @param image
-	 * @param data
-	 * @param backgroundColor
-	 * @return
+	 * // * change layout algorithm {@link #graph}
 	 */
-	private final GraphNode createNode(String name, Image image, Object data, Color backgroundColor) {
-		GraphNode graphNode = createNode(name, image, data);
-		graphNode.setBackgroundColor(backgroundColor);
-		return graphNode;
+	public final void changeLayout(AbstractLayoutAlgorithm layoutAlgorithm, LayoutActionType type) {
+		graph.setLayoutAlgorithm(layoutAlgorithm, true);
+		IContributionItem[] items = getViewSite().getActionBars().getMenuManager().getItems();
+		for (IContributionItem item : items) {
+			GraphLayoutAction action = (GraphLayoutAction) ((ActionContributionItem) item).getAction();
+			if (action.getType() != type) {
+				action.setChecked(false);
+			}
+		}
 	}
 }

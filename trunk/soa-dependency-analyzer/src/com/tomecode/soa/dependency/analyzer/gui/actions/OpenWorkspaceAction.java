@@ -23,6 +23,7 @@ public final class OpenWorkspaceAction extends Action {
 	public OpenWorkspaceAction() {
 		setImageDescriptor(ImageFactory.open);
 		setText("Open new workspace");
+
 	}
 
 	public OpenWorkspaceAction(IWorkbenchWindow window) {
