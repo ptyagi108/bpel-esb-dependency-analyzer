@@ -4,6 +4,8 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
+import com.tomecode.soa.dependency.analyzer.tree.BpelProcessStructureNavigator;
+import com.tomecode.soa.dependency.analyzer.tree.ServiceOperationsDepNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.WorkspacesNavigator;
 import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
 
@@ -47,5 +49,23 @@ public final class GuiUtils {
 			return window.getActivePage().findView(id);
 		}
 		return null;
+	}
+
+	/**
+	 * find reference for {@link BpelProcessStructureNavigator}
+	 * 
+	 * @return
+	 */
+	public final static BpelProcessStructureNavigator getBpelProcessStructureNavigator() {
+		return (BpelProcessStructureNavigator) findView(BpelProcessStructureNavigator.ID);
+	}
+
+	/**
+	 * find reference for {@link ServiceOperationsDepNavigator}
+	 * 
+	 * @return
+	 */
+	public final static ServiceOperationsDepNavigator getServiceOperationsDepNavigator() {
+		return (ServiceOperationsDepNavigator) findView(ServiceOperationsDepNavigator.ID);
 	}
 }

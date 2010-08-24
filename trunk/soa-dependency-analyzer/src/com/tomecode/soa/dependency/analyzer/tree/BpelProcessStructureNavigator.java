@@ -5,6 +5,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
 import com.tomecode.soa.openesb.project.OpenEsbBpelProject;
 import com.tomecode.soa.ora.suite10g.project.BpelProject;
@@ -28,6 +29,8 @@ public final class BpelProcessStructureNavigator extends ViewPart {
 	private TreeViewer tree;
 
 	public BpelProcessStructureNavigator() {
+		setTitleImage(ImageFactory.BPEL_PROCESS_STRUCTURE_TREE);
+		setTitleToolTip("BPEL process structure");
 		emptyRootNode = new EmptyNode();
 		contentProvider = new BpelProcessStructureContentProvider();
 		labelProvider = new BpelProcessStructureLabelProvider();

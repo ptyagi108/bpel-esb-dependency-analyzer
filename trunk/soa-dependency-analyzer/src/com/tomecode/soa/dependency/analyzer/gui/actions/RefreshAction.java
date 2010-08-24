@@ -22,7 +22,7 @@ public final class RefreshAction extends Action {
 
 	public RefreshAction() {
 		setText("Refresh...");
-		setImageDescriptor(ImageFactory.reload_graph);
+	//	setImageDescriptor(ImageFactory.r);
 	}
 
 	public final void run() {

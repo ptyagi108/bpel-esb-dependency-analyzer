@@ -24,7 +24,7 @@ public final class Perspective implements IPerspectiveFactory {
 		layout.setEditorAreaVisible(false);
 
 		// Workspace navigator
-		layout.addStandaloneView(WorkspacesNavigator.ID, false, IPageLayout.LEFT, 0.25f, editorArea);
+		layout.addStandaloneView(WorkspacesNavigator.ID, true, IPageLayout.LEFT, 0.25f, editorArea);
 
 		IFolderLayout folder = layout.createFolder("visualizers", IPageLayout.TOP, 0.75f, editorArea);
 		folder.addPlaceholder(VisualGraphView.ID + ":*");

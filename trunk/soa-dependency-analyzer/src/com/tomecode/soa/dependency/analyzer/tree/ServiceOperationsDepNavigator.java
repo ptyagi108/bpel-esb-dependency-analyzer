@@ -5,6 +5,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
 import com.tomecode.soa.ora.suite10g.project.BpelProject;
 
@@ -25,6 +26,8 @@ public final class ServiceOperationsDepNavigator extends ViewPart {
 	private TreeViewer tree;
 
 	public ServiceOperationsDepNavigator() {
+		setTitleImage(ImageFactory.DEPENDNECY_BY_OPERATION_TREE);
+		setTitleToolTip("Dependencies by operations");
 		emptyRootNode = new EmptyNode();
 		labelProvider = new ServiceOperationsDepLabelProvider();
 		contentProvider = new ServiceOperationsDepContentProvider();

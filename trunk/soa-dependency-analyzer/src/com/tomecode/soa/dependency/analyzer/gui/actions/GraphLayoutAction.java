@@ -52,11 +52,10 @@ public final class GraphLayoutAction extends Action {
 		} else if (layoutActionType == LayoutActionType.DIRECTED_LAYOUT) {
 			visualGraphView.changeLayout(new DirectedGraphLayoutAlgorithm(1), layoutActionType);
 		}
-		setChecked(true);
 	}
 
 	/**
-	 * current {@link LayoutActionType} 
+	 * current {@link LayoutActionType}
 	 * 
 	 * @return
 	 */

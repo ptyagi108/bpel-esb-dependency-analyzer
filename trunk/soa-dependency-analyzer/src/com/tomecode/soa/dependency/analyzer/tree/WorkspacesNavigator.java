@@ -19,6 +19,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.tomecode.soa.dependency.analyzer.core.ApplicationManager;
 import com.tomecode.soa.dependency.analyzer.gui.utils.PopupMenuUtils;
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.node.WorkspaceRootNode;
 import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
 import com.tomecode.soa.dependency.analyzer.view.VisualGraphView;
@@ -43,6 +44,8 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 
 	public WorkspacesNavigator() {
 		rootNode = new WorkspaceRootNode();
+		setTitleToolTip("Workspace Navigator");
+		setTitleImage(ImageFactory.WORKSPACE_NAVIGATOR);
 	}
 
 	@Override
@@ -112,7 +115,7 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 			iViewPart = workbenchPage.findView(VisualGraphView.ID);
 			if (iViewPart != null) {
 				VisualGraphView graphView = (VisualGraphView) iViewPart;
-				graphView.showGraph(selection.getFirstElement());
+				graphView.showGraph(selection.getFirstElement(), true);
 			}
 
 			iViewPart = workbenchPage.findView(PropertiesView.ID);

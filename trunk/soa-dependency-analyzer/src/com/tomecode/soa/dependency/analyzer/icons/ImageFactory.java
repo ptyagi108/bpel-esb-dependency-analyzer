@@ -11,11 +11,24 @@ import org.eclipse.swt.graphics.Image;
  */
 public final class ImageFactory {
 
+	public static final ImageDescriptor reload_layout = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/reloadLayout.png"));
+	// public static final Image RELOAD_LAYOUT = reload_layout.createImage();
+
+	public static final Image BPEL_PROCESS_STRUCTURE_TREE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/bpelProcessStructureView.png")).createImage();
+
+	public static final Image DEPENDNECY_BY_OPERATION_TREE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/dependencyByOperationTree.png")).createImage();
+
+	public static final Image GRAPH_VIEW = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/graphView.png")).createImage();
+
+	public static final Image WORKSPACE_NAVIGATOR = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/workspaceNavigator.png")).createImage();
+
+	public static final ImageDescriptor expand_in_new_graph = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/expandInNewGraph.png"));
+	public static final Image EXPAND_IN_NEW_GRAPH = expand_in_new_graph.createImage();
+	public static final ImageDescriptor expand_in_exists_graph = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/expandInExistGraph.png"));
+	public static final Image EXPAND_IN_EXISTS_GRAPH = expand_in_new_graph.createImage();
+
 	public static final Image MULTI_WORKSPACE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/multi_workspace.png")).createImage();
 	public static final Image WORKSPACE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/workspace.png")).createImage();
-
-	public static final ImageDescriptor reload_graph = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/reload_graph.png"));
-	public static final Image RELOAD_GRAPH = reload_graph.createImage();
 
 	public static final ImageDescriptor open = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/open.png"));
 	public static final Image OPEN = open.createImage();
@@ -26,6 +39,11 @@ public final class ImageFactory {
 	public static final Image ZOOM_OUT = zoom_out.createImage();
 	public static final ImageDescriptor zoom_reset = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/zoom_reset.png"));
 	public static final Image ZOOM_RESET = zoom_reset.createImage();
+
+	public static final ImageDescriptor arrow_back = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/arrow_back.png"));
+	public static final Image ARROW_BACK = arrow_back.createImage();
+	public static final ImageDescriptor arrow_forward = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/arrow_forward.png"));
+	public static final Image ARROW_FORWARD = arrow_forward.createImage();
 
 	public static final Image ORACLE_10G_ASSIGN = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/oracle10g/icons/assign.png")).createImage();
 	public static final Image ORACLE_10G_SEQUENCE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/oracle10g/icons/sequence.png")).createImage();
@@ -78,8 +96,6 @@ public final class ImageFactory {
 	public static final Image ORACLE_10G_EXPORT = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/export.png")).createImage();
 	public static final Image ORACLE_10G_EXPORT_BIG = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/export_big.png")).createImage();
 
-	public static final Image ORACLE_10G_ARROW_BACK = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/arrow_back.png")).createImage();
-	public static final Image ORACLE_10G_ARROW_FORWARD = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/arrow_forward.png")).createImage();
 	public static final Image OPEN_ESB_BPEL_SEQUENCE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/openEsb/16/sequence.png")).createImage();
 	public static final Image OPEN_ESB_BPEL_SCOPE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/openEsb/16/scope.png")).createImage();
 	public static final Image OPEN_ESB_BPEL_FLOW = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/openEsb/16/flow.png")).createImage();
