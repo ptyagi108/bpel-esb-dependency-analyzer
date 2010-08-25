@@ -144,6 +144,7 @@ public final class VisualGraphView extends ViewPart {
 		if (selectedObject instanceof GraphNode) {
 			if (!expandedInGraphObjects.contains(selectedObject)) {
 				expandedInGraphObjects.add(selectedObject);
+				GuiUtils.getWorkspacesNavigator().showInTree(((GraphNode) selectedObject).getData());
 				expandSelectedNodeInNewGraph(selectedObject, (GraphNode) selectedObject);
 
 				graphViewer.getGraphControl().applyLayout();

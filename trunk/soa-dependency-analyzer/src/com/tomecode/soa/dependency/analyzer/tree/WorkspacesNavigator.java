@@ -8,6 +8,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -18,12 +19,14 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import com.tomecode.soa.dependency.analyzer.core.ApplicationManager;
+import com.tomecode.soa.dependency.analyzer.gui.actions.LinkWithNavigatorAction;
 import com.tomecode.soa.dependency.analyzer.gui.utils.PopupMenuUtils;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.node.WorkspaceRootNode;
 import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
 import com.tomecode.soa.dependency.analyzer.view.VisualGraphView;
 import com.tomecode.soa.workspace.MultiWorkspace;
+import com.tomecode.soa.workspace.Workspace;
 
 /**
  * 
@@ -40,6 +43,10 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 
 	private final WorkspaceRootNode rootNode;
 
+	/**
+	 * if is true then if click in {@link VisualGraphView} then show in tree
+	 */
+	private LinkWithNavigatorAction linkWithNavigatorAction;
 	private TreeViewer tree;
 
 	public WorkspacesNavigator() {
@@ -63,6 +70,11 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 		}
 
 		tree.setInput(rootNode);
+
+//		linkWithNavigatorAction = new LinkWithNavigatorAction();
+//		IActionBars actionBars = getViewSite().getActionBars();
+//		actionBars.getToolBarManager().add(linkWithNavigatorAction);
+//		actionBars.getMenuManager().add(linkWithNavigatorAction);
 	}
 
 	/**
@@ -90,7 +102,7 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 
 	@Override
 	public final void setFocus() {
-
+		tree.getTree().setFocus();
 	}
 
 	@Override
@@ -139,5 +151,23 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 	public final void updateMultiWorkspace(MultiWorkspace multiWorkspace) {
 		rootNode.add(multiWorkspace);
 		tree.refresh(rootNode);
+	}
+
+	/**
+	 * show selected node in {@link VisualGraphView} if
+	 * {@link #linkWithNavigatorAction} is checked
+	 * 
+	 * @param data
+	 */
+	public final void showInTree(Object data) {
+		if (linkWithNavigatorAction.isChecked()) {
+			if (data instanceof Workspace) {
+				Workspace workspace = (Workspace) data;
+				TreePath treePath = new TreePath(new Object[] { workspace.getMultiWorkspace(), data });
+//				tree.expandToLevel(treePath, 2);
+//				tree.getTree().sc
+				tree.setExpandedState(treePath, true);
+			}
+		}
 	}
 }

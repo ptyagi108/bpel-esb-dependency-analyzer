@@ -3,7 +3,6 @@ package com.tomecode.soa.dependency.analyzer.gui.actions;
 import org.eclipse.jface.action.Action;
 
 import com.tomecode.soa.dependency.analyzer.core.ApplicationManager;
-import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.openesb.workspace.OpenEsbMultiWorkspace;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gMultiWorkspace;
 import com.tomecode.soa.project.Project;
