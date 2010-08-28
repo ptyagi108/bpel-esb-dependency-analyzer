@@ -71,10 +71,10 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 
 		tree.setInput(rootNode);
 
-//		linkWithNavigatorAction = new LinkWithNavigatorAction();
-//		IActionBars actionBars = getViewSite().getActionBars();
-//		actionBars.getToolBarManager().add(linkWithNavigatorAction);
-//		actionBars.getMenuManager().add(linkWithNavigatorAction);
+		// linkWithNavigatorAction = new LinkWithNavigatorAction();
+		// IActionBars actionBars = getViewSite().getActionBars();
+		// actionBars.getToolBarManager().add(linkWithNavigatorAction);
+		// actionBars.getMenuManager().add(linkWithNavigatorAction);
 	}
 
 	/**
@@ -90,7 +90,8 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 				IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
 				if (!selection.isEmpty()) {
 					PopupMenuUtils.fillWorksapceNavigator(selection.getFirstElement(), manager);
-
+				} else {
+					PopupMenuUtils.fillEmptyWorksapceNavigator(manager);
 				}
 			}
 		});
@@ -164,8 +165,8 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 			if (data instanceof Workspace) {
 				Workspace workspace = (Workspace) data;
 				TreePath treePath = new TreePath(new Object[] { workspace.getMultiWorkspace(), data });
-//				tree.expandToLevel(treePath, 2);
-//				tree.getTree().sc
+				// tree.expandToLevel(treePath, 2);
+				// tree.getTree().sc
 				tree.setExpandedState(treePath, true);
 			}
 		}

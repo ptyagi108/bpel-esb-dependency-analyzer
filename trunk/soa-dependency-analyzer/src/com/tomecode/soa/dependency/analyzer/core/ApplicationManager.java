@@ -60,7 +60,7 @@ public final class ApplicationManager {
 			multiWorkspaces.add(multiWorkspace);
 
 			f = new File("/Users/tomasfrastia/projects/soaToolsWorkspace/bpel-samples/open-esb/bpelModules");
-			OpenEsbMultiWorkspace openEsbMultiWorkspace = new OpenEsbMWorkspaceParser().parse(f);
+			OpenEsbMultiWorkspace openEsbMultiWorkspace = new OpenEsbMWorkspaceParser().parse(f,"test-open-esb");
 
 			multiWorkspaces.add(openEsbMultiWorkspace);
 
@@ -84,6 +84,34 @@ public final class ApplicationManager {
 
 	public final Ora10gMWorkspaceParser newOra10gMultiWorkspace() {
 		return new Ora10gMWorkspaceParser();
+	}
+
+	/**
+	 * parse {@link OpenEsbMultiWorkspace}
+	 * 
+	 * @param config
+	 * @return
+	 * @throws ServiceParserException
+	 */
+	public final OpenEsbMultiWorkspace parseEsbMultiWorkspace(WorkspaceConfig config) throws ServiceParserException {
+		if (config.isNewMWorkspace()) {
+			OpenEsbMWorkspaceParser parser = new OpenEsbMWorkspaceParser();
+			OpenEsbMultiWorkspace multiWorkspace = parser.parse(config.getWorkspaceDir(), config.getMWorkspaceNew());
+			this.multiWorkspaces.add(multiWorkspace);
+			return multiWorkspace;
+		}
+
+		for (MultiWorkspace multiWorkspace : multiWorkspaces) {
+			if (multiWorkspace.getType() == config.getWorkspaceType()) {
+				if (multiWorkspace.getName().equalsIgnoreCase(config.getExistMWorkspace())) {
+					// /TODO: merger workspace... analyze dependencies between
+					// exist projects
+					return (OpenEsbMultiWorkspace) multiWorkspace;
+				}
+			}
+		}
+
+		throw new ServiceParserException("not found multi workspace with name: " + config.getExistMWorkspace(), true);
 	}
 
 	/**

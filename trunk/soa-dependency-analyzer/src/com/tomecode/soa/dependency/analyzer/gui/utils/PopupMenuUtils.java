@@ -40,4 +40,13 @@ public final class PopupMenuUtils {
 		manager.add(REFRESH_ACTION);
 		REFRESH_ACTION.setSelectectedNode(selectedNode);
 	}
+
+	/**
+	 * fill popupmenu for {@link WorkspacesNavigator}
+	 * 
+	 * @param manager
+	 */
+	public static final void fillEmptyWorksapceNavigator(IMenuManager manager) {
+		manager.add(OPEN_WORKSPACE_ACTION);
+	}
 }

@@ -33,22 +33,25 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 	}
 
 	/**
-	 * parse workspace folder
+	 * parse {@link OpenEsbMultiWorkspace}
 	 * 
 	 * @param workspaceFolder
+	 * @param mWorkspaceName
+	 *            multi-workspace name
+	 * @return
 	 * @throws ServiceParserException
 	 */
-	public final OpenEsbMultiWorkspace parse(File workspaceFolder) throws ServiceParserException {
+	public final OpenEsbMultiWorkspace parse(File workspaceFolder, String mWorkspaceName) throws ServiceParserException {
 		if (!workspaceFolder.exists()) {
-			throw new ServiceParserException("File not exists", false);
+			throw new ServiceParserException("File not exists: " + workspaceFolder, false);
 		}
 		// TODO: missing workspace name
-		OpenEsbMultiWorkspace multiWorkspace = new OpenEsbMultiWorkspace("empty multi wokrspace", workspaceFolder);
+		OpenEsbMultiWorkspace multiWorkspace = new OpenEsbMultiWorkspace(mWorkspaceName, workspaceFolder);
 
 		List<File> projects = new ArrayList<File>();
 		findAllProjects(workspaceFolder, projects);
 
-		OpenEsbWorkspace workspace = new OpenEsbWorkspace("emptywokrspace", workspaceFolder);
+		OpenEsbWorkspace workspace = new OpenEsbWorkspace(workspaceFolder.getName(), workspaceFolder);
 		multiWorkspace.addWorkspace(workspace);
 
 		// filter only BPEL projects

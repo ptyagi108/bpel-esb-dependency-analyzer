@@ -12,7 +12,6 @@ import org.eclipse.swt.widgets.Shell;
 import com.tomecode.soa.dependency.analyzer.core.ApplicationManager;
 import com.tomecode.soa.dependency.analyzer.gui.displays.OpenNewWorkspaceWizard.WorkspaceConfig;
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
-import com.tomecode.soa.parser.ServiceParserException;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 
@@ -41,26 +40,26 @@ public final class LoadingDialogs {
 					monitor.beginTask("Parse workspace: " + config.getWorkspaceType() + "...", 100);
 					monitor.subTask("Prepare parser...");
 					monitor.worked(15);
-					if (config.getWorkspaceType() == WorkspaceType.ORACLE_1OG) {
-						monitor.subTask("Parsing workspace...");
-						monitor.worked(40);
-						try {
 
-							// parse workspace
-							MultiWorkspace multiWorkspace = ApplicationManager.getInstance().parseOra10gMultiWorkspace(config);
+					monitor.subTask("Parsing workspace...");
+					monitor.worked(40);
 
-							returns.add(multiWorkspace);
-							monitor.subTask("Finish parsing workspace...");
-							monitor.worked(100);
+					try {
 
-						} catch (ServiceParserException e) {
-							// TODO:error
-							e.printStackTrace();
-						} catch (Exception e) {
-							e.printStackTrace();
+						MultiWorkspace multiWorkspace = null;
+
+						if (config.getWorkspaceType() == WorkspaceType.ORACLE_1OG) {
+							multiWorkspace = ApplicationManager.getInstance().parseOra10gMultiWorkspace(config);
+						} else if (config.getWorkspaceType() == WorkspaceType.OPEN_ESB) {
+							multiWorkspace = ApplicationManager.getInstance().parseEsbMultiWorkspace(config);
 						}
+						returns.add(multiWorkspace);
 						monitor.subTask("Finish parsing workspace...");
 						monitor.worked(100);
+
+					} catch (Exception e) {
+						// TODO: fix error
+						e.printStackTrace();
 					}
 
 					monitor.done();
