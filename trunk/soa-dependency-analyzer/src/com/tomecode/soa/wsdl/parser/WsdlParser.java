@@ -18,7 +18,7 @@ import com.tomecode.soa.wsdl.WsdlOperation;
  * @author Tomas Frastia
  * 
  */
-public final class WsdlParser extends AbstractParser {
+public class WsdlParser extends AbstractParser {
 
 	/**
 	 * Constructor
@@ -28,21 +28,17 @@ public final class WsdlParser extends AbstractParser {
 	}
 
 	/**
-	 * parse wsdl file
+	 * parse WSDL file
 	 * 
 	 * @param file
 	 * @return
 	 */
-	public final Wsdl parseWsdl(File file) {
+	public Wsdl parseWsdl(File file) {
 		if (file.exists()) {
 			try {
 				Element element = parseXml(file);
 				Wsdl wsdl = new Wsdl(file, element.attributeValue("name"));
-
-				Element ePortType = element.element("portType");
-				if (ePortType != null) {
-					wsdl.setPortType(parsePortType(ePortType));
-				}
+				parsePortTypes(element.elements("portType"), wsdl);
 				return wsdl;
 			} catch (ServiceParserException e) {
 				e.printStackTrace();
@@ -53,12 +49,28 @@ public final class WsdlParser extends AbstractParser {
 	}
 
 	/**
+	 * parse list of {@link PortType}
+	 * 
+	 * @param elements
+	 * @param wsdl
+	 */
+	protected final void parsePortTypes(List<?> elements, Wsdl wsdl) {
+		if (elements != null) {
+			for (Object o : elements) {
+				Element element = (Element) o;
+				wsdl.addPortType(parsePortType(element));
+			}
+
+		}
+	}
+
+	/**
 	 * parse element: portType in WSDL file
 	 * 
 	 * @param ePortType
 	 * @return
 	 */
-	private final PortType parsePortType(Element ePortType) {
+	protected final PortType parsePortType(Element ePortType) {
 		PortType portType = new PortType(ePortType.attributeValue("name"));
 
 		List<?> eOperations = ePortType.elements("operation");

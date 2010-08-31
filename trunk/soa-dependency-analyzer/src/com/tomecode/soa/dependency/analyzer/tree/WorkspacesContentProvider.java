@@ -4,6 +4,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.tomecode.soa.dependency.analyzer.tree.node.WorkspaceRootNode;
+import com.tomecode.soa.openesb.project.OpenEsbBpelProject;
 import com.tomecode.soa.openesb.workspace.OpenEsbMultiWorkspace;
 import com.tomecode.soa.openesb.workspace.OpenEsbWorkspace;
 import com.tomecode.soa.ora.suite10g.esb.EsbProject;
@@ -39,6 +40,8 @@ final class WorkspacesContentProvider implements ITreeContentProvider {
 			return ((OpenEsbMultiWorkspace) parent).getWorkspaces().toArray();
 		} else if (parent instanceof OpenEsbWorkspace) {
 			return ((OpenEsbWorkspace) parent).getProjects().toArray();
+		} else if (parent instanceof OpenEsbBpelProject) {
+			return ((OpenEsbBpelProject) parent).getProcesses().toArray();
 		}
 
 		return null;
@@ -65,6 +68,8 @@ final class WorkspacesContentProvider implements ITreeContentProvider {
 			return !((OpenEsbMultiWorkspace) element).getWorkspaces().isEmpty();
 		} else if (element instanceof OpenEsbWorkspace) {
 			return !((OpenEsbWorkspace) element).getProjects().isEmpty();
+		} else if (element instanceof OpenEsbBpelProject) {
+			return !((OpenEsbBpelProject) element).getProcesses().isEmpty();
 		}
 		return false;
 	}
@@ -85,6 +90,8 @@ final class WorkspacesContentProvider implements ITreeContentProvider {
 			return ((OpenEsbMultiWorkspace) element).getWorkspaces().toArray();
 		} else if (element instanceof OpenEsbWorkspace) {
 			return ((OpenEsbWorkspace) element).getProjects().toArray();
+		} else if (element instanceof OpenEsbBpelProject) {
+			return ((OpenEsbBpelProject) element).getProcesses().toArray();
 		}
 		return null;
 	}

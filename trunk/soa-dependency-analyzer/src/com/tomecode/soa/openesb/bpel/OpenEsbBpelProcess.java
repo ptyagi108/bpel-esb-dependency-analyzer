@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tomecode.soa.services.BpelProcess;
+
 /**
  * 
  * Open ESB - BPEL project
@@ -12,7 +14,7 @@ import java.util.List;
  * @author Frastia Tomas
  * 
  */
-public final class OpenEsbBpelProcess {
+public final class OpenEsbBpelProcess implements BpelProcess {
 
 	/**
 	 * BPEL process file
@@ -88,6 +90,13 @@ public final class OpenEsbBpelProcess {
 
 	public final void addPartnerLinks(PartnerLink partnerLink) {
 		this.partnerLinks.add(partnerLink);
+	}
+
+	/**
+	 * @return the partnerLinks
+	 */
+	public final List<PartnerLink> getPartnerLinks() {
+		return partnerLinks;
 	}
 
 	/**

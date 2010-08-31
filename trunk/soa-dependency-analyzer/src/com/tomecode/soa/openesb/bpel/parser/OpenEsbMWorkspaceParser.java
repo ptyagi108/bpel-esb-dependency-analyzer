@@ -6,11 +6,14 @@ import java.util.List;
 
 import org.dom4j.Element;
 
+import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
+import com.tomecode.soa.openesb.bpel.PartnerLink;
 import com.tomecode.soa.openesb.project.OpenEsbBpelProject;
 import com.tomecode.soa.openesb.workspace.OpenEsbMultiWorkspace;
 import com.tomecode.soa.openesb.workspace.OpenEsbWorkspace;
 import com.tomecode.soa.parser.AbstractParser;
 import com.tomecode.soa.parser.ServiceParserException;
+import com.tomecode.soa.wsdl.Wsdl;
 
 /**
  * 
@@ -28,8 +31,17 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 	 */
 	private final OpenEsbBpelParser bpelParser;
 
+	/**
+	 * parse for WSDL file
+	 */
+	private final OpenEsbWsdlParser wsdlParser;
+
+	/**
+	 * Constructor
+	 */
 	public OpenEsbMWorkspaceParser() {
 		this.bpelParser = new OpenEsbBpelParser();
+		this.wsdlParser = new OpenEsbWsdlParser();
 	}
 
 	/**
@@ -71,18 +83,115 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 	private final void parseProjectSources(OpenEsbWorkspace workspace, List<OpenEsbBpelProject> esbBpelProjects) {
 		for (OpenEsbBpelProject project : esbBpelProjects) {
 			List<File> bpelFiles = new ArrayList<File>();
-			filterBpelProcess(new File(project.getFile() + File.separator + "src"), bpelFiles);
+
+			File srcFolder = new File(project.getFile() + File.separator + "src");
+			filterBpelProcess(srcFolder, bpelFiles);
 
 			for (File bpelFile : bpelFiles) {
 				try {
 					project.addBpelProcess(bpelParser.parseBpel(bpelFile));
 				} catch (ServiceParserException e) {
+					// TODO:error
 					e.printStackTrace();
 				}
 			}
+
+			List<File> wsdlFiles = new ArrayList<File>();
+			filterWsldFiles(srcFolder, wsdlFiles);
+			for (File wsdlFile : wsdlFiles) {
+				project.addWsdlFile(wsdlParser.parseWsdl(wsdlFile));
+			}
+
 			project.setWorkspace(workspace);
 			workspace.addProject(project);
 		}
+
+		linkingWsdlWithPartnerLinks(esbBpelProjects);
+		analyzeDependencies(esbBpelProjects);
+	}
+
+	/**
+	 * linking partnerlink with WSDL files
+	 * 
+	 * @param projects
+	 */
+	private final void linkingWsdlWithPartnerLinks(List<OpenEsbBpelProject> projects) {
+		for (OpenEsbBpelProject project : projects) {
+			for (OpenEsbBpelProcess bpelProcess : project.getProcesses()) {
+				for (PartnerLink partnerLink : bpelProcess.getPartnerLinks()) {
+					Wsdl wsdl = project.findWsdlByPartnerLinkType(partnerLink.getPartnerLinkType());
+					if (wsdl != null) {
+						partnerLink.setWsdl(wsdl);
+					} else {
+						wsdl = findWsdlInOtherProjects(projects, partnerLink.getPartnerLinkType());
+					}
+
+				}
+			}
+		}
+	}
+
+	/**
+	 * analyze of dependencies
+	 * 
+	 * @param projects
+	 */
+	private final void analyzeDependencies(List<OpenEsbBpelProject> projects) {
+		for (OpenEsbBpelProject project : projects) {
+			for (OpenEsbBpelProcess bpelProcess : project.getProcesses()) {
+				for (PartnerLink partnerLink : bpelProcess.getPartnerLinks()) {
+					// TODO: co ak je null
+					Wsdl wsdl = partnerLink.getWsdl();
+					if (wsdl != null) {
+						List<OpenEsbBpelProcess> dependenciesProcess = findWsldRefInOtherProcess(projects, wsdl);
+						for (OpenEsbBpelProcess depProcess : dependenciesProcess) {
+							if (!bpelProcess.equals(depProcess)) {
+								partnerLink.addDependency(depProcess);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * find reference for all dependencies node
+	 * 
+	 * @param projects
+	 * @param wsdl
+	 * @return
+	 */
+	private final List<OpenEsbBpelProcess> findWsldRefInOtherProcess(List<OpenEsbBpelProject> projects, Wsdl wsdl) {
+		List<OpenEsbBpelProcess> bpelProcesses = new ArrayList<OpenEsbBpelProcess>();
+		for (OpenEsbBpelProject project : projects) {
+			for (OpenEsbBpelProcess process : project.getProcesses()) {
+				for (PartnerLink partnerLink : process.getPartnerLinks()) {
+					if (wsdl.equals(partnerLink.getWsdl())) {
+						bpelProcesses.add(process);
+					}
+				}
+			}
+		}
+
+		return bpelProcesses;
+	}
+
+	/**
+	 * find WSDL in others projects
+	 * 
+	 * @param projects
+	 * @param partnerLinkTypeName
+	 * @return
+	 */
+	private final Wsdl findWsdlInOtherProjects(List<OpenEsbBpelProject> projects, String partnerLinkTypeName) {
+		for (OpenEsbBpelProject project : projects) {
+			Wsdl wsdl = project.findWsdlByPartnerLinkType(partnerLinkTypeName);
+			if (wsdl != null) {
+				return wsdl;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -106,6 +215,25 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 	}
 
 	/**
+	 * find all files with extensions .wsdl
+	 * 
+	 * @param sourceFolder
+	 * @param wsdlFiles
+	 */
+	private final void filterWsldFiles(File sourceFolder, List<File> wsdlFiles) {
+		File[] files = sourceFolder.listFiles();
+		if (files != null) {
+			for (File file : files) {
+				if (file.isFile() && file.getName().endsWith(".wsdl")) {
+					wsdlFiles.add(file);
+				} else if (file.isDirectory()) {
+					filterBpelProcess(file, wsdlFiles);
+				}
+			}
+		}
+	}
+
+	/**
 	 * filter only BPEL projects from list of NETBEANSE projects
 	 * 
 	 * @param projectXmls
@@ -113,19 +241,20 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 	 * @return list of Open ESB - BPEL projects
 	 */
 	private final List<OpenEsbBpelProject> filterBpelProjects(List<File> projectXmls) {
-		List<OpenEsbBpelProject> esbBpelProjects = new ArrayList<OpenEsbBpelProject>();
+		List<OpenEsbBpelProject> projects = new ArrayList<OpenEsbBpelProject>();
 		for (File projectXml : projectXmls) {
 			try {
 				OpenEsbBpelProject project = parseNProjectXml(parseXml(projectXml), projectXml);
 				if (project != null) {
-					esbBpelProjects.add(project);
+					projects.add(project);
 				}
 			} catch (ServiceParserException e) {
+				// TODO: error
 				e.printStackTrace();
 			}
 		}
 
-		return esbBpelProjects;
+		return projects;
 	}
 
 	/**
@@ -146,9 +275,7 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 			if (projectName == null) {
 				projectName = projectXml.getParentFile().getParentFile().getName();
 			}
-			OpenEsbBpelProject project = new OpenEsbBpelProject(projectName, projectXml.getParentFile().getParentFile());
-
-			return project;
+			return new OpenEsbBpelProject(projectName, projectXml.getParentFile().getParentFile());
 		}
 
 		return null;

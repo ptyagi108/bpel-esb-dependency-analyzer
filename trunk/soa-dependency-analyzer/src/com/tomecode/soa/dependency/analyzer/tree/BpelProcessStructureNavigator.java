@@ -7,6 +7,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
+import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.openesb.project.OpenEsbBpelProject;
 import com.tomecode.soa.ora.suite10g.project.BpelProject;
 
@@ -56,6 +57,10 @@ public final class BpelProcessStructureNavigator extends ViewPart {
 		} else if (source instanceof OpenEsbBpelProject) {
 			// TODO: is ok?
 			// OpenEsbBpelProject project = ((OpenEsbBpelProject) source);
+			emptyRootNode.set(source);
+			tree.setInput(emptyRootNode);
+			tree.expandAll();
+		} else if (source instanceof OpenEsbBpelProcess) {
 			emptyRootNode.set(source);
 			tree.setInput(emptyRootNode);
 			tree.expandAll();

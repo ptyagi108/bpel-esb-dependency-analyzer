@@ -9,6 +9,7 @@ import com.tomecode.soa.openesb.workspace.OpenEsbWorkspace;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.project.ProjectType;
 import com.tomecode.soa.workspace.Workspace;
+import com.tomecode.soa.wsdl.Wsdl;
 
 /**
  * Open ESB - BPEL project
@@ -29,6 +30,11 @@ public final class OpenEsbBpelProject implements Project {
 	 */
 	private final List<OpenEsbBpelProcess> bpelProcesses;
 
+	/**
+	 * list of WSDL files in BPEL process
+	 */
+	private final List<Wsdl> wsdlFiles;
+
 	private OpenEsbWorkspace workspace;
 
 	/**
@@ -43,6 +49,7 @@ public final class OpenEsbBpelProject implements Project {
 		this.name = name;
 		this.file = file;
 		this.bpelProcesses = new ArrayList<OpenEsbBpelProcess>();
+		this.wsdlFiles = new ArrayList<Wsdl>();
 	}
 
 	public final void addBpelProcess(OpenEsbBpelProcess bpelProcess) {
@@ -79,4 +86,25 @@ public final class OpenEsbBpelProject implements Project {
 	public final Workspace getWorkpsace() {
 		return workspace;
 	}
+
+	public final void addWsdlFile(Wsdl wsdl) {
+		this.wsdlFiles.add(wsdl);
+	}
+
+	/**
+	 * @return the wsdlFiles
+	 */
+	public final List<Wsdl> getWsdlFiles() {
+		return wsdlFiles;
+	}
+
+	public final Wsdl findWsdlByPartnerLinkType(String partnerLinkType) {
+		for (Wsdl wsdl : wsdlFiles) {
+			if (wsdl.containsPartnerLinkType(partnerLinkType)) {
+				return wsdl;
+			}
+		}
+		return null;
+	}
+
 }
