@@ -114,6 +114,7 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 				setPageComplete(true);
 			} else if (bOracleSB10g.getSelection()) {
 				config.setWorkspaceType(WorkspaceType.ORACLE_SERVICE_BUS_10G);
+				setPageComplete(true);
 			} else {
 				config.setWorkspaceType(null);
 				setPageComplete(false);

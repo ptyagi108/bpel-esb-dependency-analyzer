@@ -52,6 +52,8 @@ public final class LoadingDialogs {
 							multiWorkspace = ApplicationManager.getInstance().parseOra10gMultiWorkspace(config);
 						} else if (config.getWorkspaceType() == WorkspaceType.OPEN_ESB) {
 							multiWorkspace = ApplicationManager.getInstance().parseEsbMultiWorkspace(config);
+						} else if (config.getWorkspaceType() == WorkspaceType.ORACLE_SERVICE_BUS_10G) {
+							multiWorkspace = ApplicationManager.getInstance().parseOraSB10gMultiWorkspace(config);
 						}
 						returns.add(multiWorkspace);
 						monitor.subTask("Finish parsing workspace...");

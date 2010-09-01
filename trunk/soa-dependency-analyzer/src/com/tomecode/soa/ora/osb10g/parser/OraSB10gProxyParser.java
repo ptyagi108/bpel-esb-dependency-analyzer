@@ -135,9 +135,11 @@ public final class OraSB10gProxyParser extends AbstractParser {
 				if (pipelineResponseInFlow.getName().endsWith(pipelineResponse.getName())) {
 					pipelineResponseInFlow.merge(pipelineResponse.getActivities());
 				}
-			} else {
-				replacePipelineResponse(pipelineResponse, osbActivity.getActivities());
 			}
+//			else {
+//				toString();
+//	//			replacePipelineResponse(pipelineResponse, osbActivity.getActivities());
+//			}
 		}
 	}
 
@@ -153,9 +155,11 @@ public final class OraSB10gProxyParser extends AbstractParser {
 				if (pipelineRequestInFlow.getName().equals(pipelineRequest.getName())) {
 					pipelineRequestInFlow.merge(pipelineRequest.getActivities());
 				}
-			} else {
-				replacePipelineRequest(pipelineRequest, osbActivity.getActivities());
-			}
+			} 
+			
+//			else {
+//				replacePipelineRequest(pipelineRequest, osbActivity.getActivities());
+//			}
 		}
 	}
 
@@ -481,7 +485,9 @@ public final class OraSB10gProxyParser extends AbstractParser {
 				Element eSelector = eBinding.element("selector");
 				if (eSelector != null) {
 					Element eMapping = eSelector.element("mapping");
-					binding.setWsdlOperation(eMapping.attributeValue("operation"));
+					if (eMapping != null) {
+						binding.setWsdlOperation(eMapping.attributeValue("operation"));
+					}
 				}
 			}
 		}

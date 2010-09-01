@@ -22,6 +22,8 @@ public enum ProjectType {
 	 * Open ESB - ESB and BPEL project
 	 */
 	OPEN_ESB_BPEL("Open ESB and BPEL"),
+
+	ORACLE_SERVICE_BUS_1OG("Oracle Service Bus 10g"),
 	/**
 	 * unknown project
 	 */

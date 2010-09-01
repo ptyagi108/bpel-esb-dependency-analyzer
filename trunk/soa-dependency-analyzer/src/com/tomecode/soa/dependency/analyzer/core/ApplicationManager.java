@@ -7,6 +7,8 @@ import java.util.List;
 import com.tomecode.soa.dependency.analyzer.gui.displays.OpenNewWorkspaceWizard.WorkspaceConfig;
 import com.tomecode.soa.openesb.bpel.parser.OpenEsbMWorkspaceParser;
 import com.tomecode.soa.openesb.workspace.OpenEsbMultiWorkspace;
+import com.tomecode.soa.ora.osb10g.parser.OraSB10gMWorkspaceParser;
+import com.tomecode.soa.ora.osb10g.workspace.OraSB10gMultiWorkspace;
 import com.tomecode.soa.ora.suite10g.parser.Ora10gMWorkspaceParser;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gMultiWorkspace;
 import com.tomecode.soa.parser.ServiceParserException;
@@ -23,6 +25,8 @@ import com.tomecode.soa.workspace.Workspace.WorkspaceType;
  */
 public final class ApplicationManager {
 
+	private OraSB10gMWorkspaceParser oraSB10gMWorkspaceParser;
+
 	private static ApplicationManager me;
 
 	/**
@@ -32,6 +36,7 @@ public final class ApplicationManager {
 
 	private ApplicationManager() {
 		multiWorkspaces = new ArrayList<MultiWorkspace>();
+		oraSB10gMWorkspaceParser = new OraSB10gMWorkspaceParser();
 	}
 
 	public final List<MultiWorkspace> getMultiWorkspaces() {
@@ -60,10 +65,14 @@ public final class ApplicationManager {
 			multiWorkspaces.add(multiWorkspace);
 
 			f = new File("/Users/tomasfrastia/projects/soaToolsWorkspace/bpel-samples/open-esb/bpelModules");
-			OpenEsbMultiWorkspace openEsbMultiWorkspace = new OpenEsbMWorkspaceParser().parse(f,"test-open-esb");
+			OpenEsbMultiWorkspace openEsbMultiWorkspace = new OpenEsbMWorkspaceParser().parse(f, "test-open-esb");
 
 			multiWorkspaces.add(openEsbMultiWorkspace);
 
+			f = new File("/Users/tomasfrastia/Downloads/The_Definitive_Guide_to_SOA_Oracle_reg_Service_Bus_Second_Edition-4472");
+			OraSB10gMultiWorkspace oraSB10gMultiWorkspace = new OraSB10gMWorkspaceParser().parse("test-osb-10g", f);
+
+			multiWorkspaces.add(oraSB10gMultiWorkspace);
 		} catch (ServiceParserException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
@@ -142,6 +151,27 @@ public final class ApplicationManager {
 		}
 
 		throw new ServiceParserException("not found multi workspace with name: " + config.getExistMWorkspace(), true);
+	}
+
+	public final MultiWorkspace parseOraSB10gMultiWorkspace(WorkspaceConfig config) throws ServiceParserException {
+		if (config.isNewMWorkspace()) {
+			OraSB10gMultiWorkspace multiWorkspace = oraSB10gMWorkspaceParser.parse(config.getMWorkspaceNew(), config.getWorkspaceDir());
+			this.multiWorkspaces.add(multiWorkspace);
+			return multiWorkspace;
+		}
+
+		for (MultiWorkspace multiWorkspace : multiWorkspaces) {
+			if (multiWorkspace.getType() == config.getWorkspaceType()) {
+				if (multiWorkspace.getName().equalsIgnoreCase(config.getExistMWorkspace())) {
+					// /TODO: merger workspace... analyze dependencies between
+					// exist projects
+					return (OraSB10gMultiWorkspace) multiWorkspace;
+				}
+			}
+		}
+
+		throw new ServiceParserException("not found multi workspace with name: " + config.getExistMWorkspace(), true);
+
 	}
 
 	public final void refershOrale10g(Ora10gMultiWorkspace multiWorkspace) {
