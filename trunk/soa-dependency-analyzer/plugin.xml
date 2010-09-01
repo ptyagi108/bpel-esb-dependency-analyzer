@@ -51,6 +51,12 @@
             class="com.tomecode.soa.dependency.analyzer.view.PropertiesView"
             id="view.properties">
     </view>
+     	<view 
+            name="Project Files"
+            allowMultiple="true"
+            class="com.tomecode.soa.dependency.analyzer.tree.ProjectStructureNavigator"
+            id="view.projectStructureNavigator">
+    </view>
    </extension>
 
 </plugin>

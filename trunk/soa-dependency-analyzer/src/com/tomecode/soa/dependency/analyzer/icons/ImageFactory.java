@@ -11,6 +11,9 @@ import org.eclipse.swt.graphics.Image;
  */
 public final class ImageFactory {
 
+	public static final Image FILE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/file.png")).createImage();
+	public static final Image FOLDER = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/folder.png")).createImage();
+
 	public static final ImageDescriptor link_with_navigator_on = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/link_with_navigator_on.png"));
 	public static final ImageDescriptor link_with_navigator_off = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/link_with_navigator_off.png"));
 	public static final ImageDescriptor reload_layout = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/reloadLayout.png"));

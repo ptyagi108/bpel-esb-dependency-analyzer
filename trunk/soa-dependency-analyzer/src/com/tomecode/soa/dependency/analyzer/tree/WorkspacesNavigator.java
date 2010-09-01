@@ -87,6 +87,7 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 
 			@Override
 			public final void menuAboutToShow(IMenuManager manager) {
+
 				IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
 				if (!selection.isEmpty()) {
 					PopupMenuUtils.fillWorksapceNavigator(selection.getFirstElement(), manager);
@@ -135,6 +136,11 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 			if (iViewPart != null) {
 				PropertiesView propertiesView = (PropertiesView) iViewPart;
 				propertiesView.showProperties(selection.getFirstElement());
+			}
+			iViewPart = workbenchPage.findView(ProjectStructureNavigator.ID);
+			if (iViewPart != null) {
+				ProjectStructureNavigator projectStructureNavigator = (ProjectStructureNavigator) iViewPart;
+				projectStructureNavigator.showProjectFiles(selection.getFirstElement());
 			}
 		}
 
