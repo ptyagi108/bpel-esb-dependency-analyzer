@@ -5,6 +5,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import com.tomecode.soa.dependency.analyzer.tree.BpelProcessStructureNavigator;
+import com.tomecode.soa.dependency.analyzer.tree.ProjectStructureNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceOperationsDepNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.WorkspacesNavigator;
 import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
@@ -67,5 +68,14 @@ public final class GuiUtils {
 	 */
 	public final static ServiceOperationsDepNavigator getServiceOperationsDepNavigator() {
 		return (ServiceOperationsDepNavigator) findView(ServiceOperationsDepNavigator.ID);
+	}
+
+	/**
+	 * find reference for {@link ProjectStructureNavigator}
+	 * 
+	 * @return
+	 */
+	public static final ProjectStructureNavigator getProjectStructureNavigator() {
+		return (ProjectStructureNavigator) findView(ProjectStructureNavigator.ID);
 	}
 }

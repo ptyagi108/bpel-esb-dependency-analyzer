@@ -120,7 +120,8 @@ public final class VisualGraphView extends ViewPart {
 				List<?> list = ((Graph) event.widget).getSelection();
 				if (!list.isEmpty()) {
 					showPropertiesAboutSelectedNode(list.get(0));
-
+				} else {
+					GuiUtils.getProjectStructureNavigator().showProjectFiles(null);
 				}
 			}
 		});
@@ -278,11 +279,13 @@ public final class VisualGraphView extends ViewPart {
 		if (object instanceof GraphConnection) {
 			GraphConnection connection = (GraphConnection) object;
 			GuiUtils.getPropertiesView().showProperties(connection.getData());
+			GuiUtils.getProjectStructureNavigator().showProjectFiles(connection.getData());
 		} else if (object instanceof GraphNode) {
 			GraphNode graphNode = (GraphNode) object;
 			GuiUtils.getPropertiesView().showProperties(graphNode.getData());
 			GuiUtils.getBpelProcessStructureNavigator().showProcess(graphNode.getData());
 			GuiUtils.getServiceOperationsDepNavigator().showOperationDepenendecies(graphNode.getData());
+			GuiUtils.getProjectStructureNavigator().showProjectFiles(graphNode.getData());
 		}
 	}
 
