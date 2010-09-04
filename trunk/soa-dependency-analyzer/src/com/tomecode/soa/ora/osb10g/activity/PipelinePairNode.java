@@ -11,4 +11,8 @@ public final class PipelinePairNode extends OsbActivity {
 	public PipelinePairNode(String name) {
 		super(name);
 	}
+
+	public final String toString() {
+		return name == null ? "PipelinePairNode" : "PipelinePairNode - " + name;
+	}
 }

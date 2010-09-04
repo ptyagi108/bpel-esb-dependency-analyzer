@@ -19,4 +19,7 @@ public final class BranchTable extends OsbActivity {
 		return variable;
 	}
 
+	public final String toString() {
+		return "branch-table";
+	}
 }

@@ -8,4 +8,7 @@ package com.tomecode.soa.ora.osb10g.activity;
  */
 public final class Router extends OsbActivity {
 
+	public final String toString() {
+		return "router";
+	}
 }

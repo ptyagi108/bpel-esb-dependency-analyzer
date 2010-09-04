@@ -15,12 +15,7 @@ import com.tomecode.soa.parser.AbstractParser;
  */
 public final class OraSB10gMWorkspaceParser extends AbstractParser {
 
-	public static final void main(String[] arg) {
-		OraSB10gMWorkspaceParser parser = new OraSB10gMWorkspaceParser();
-		OraSB10gMultiWorkspace multiWorkspace = parser.parse("ahoj", new File("/Users/tomasfrastia/Downloads/The_Definitive_Guide_to_SOA_Oracle_reg_Service_Bus_Second_Edition-4472/"));
-		// "/Users/tomasfrastia/Downloads/The_Definitive_Guide_to_SOA_Oracle_reg_Service_Bus_Second_Edition-4472/Security_SB")
-		multiWorkspace.toString();
-	}
+
 
 	private final OraSB10gProjectParser projectParser;
 

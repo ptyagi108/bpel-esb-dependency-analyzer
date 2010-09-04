@@ -18,4 +18,7 @@ public final class Log extends OsbActivity {
 		return logLevel;
 	}
 
+	public final String toString() {
+		return "log";
+	}
 }

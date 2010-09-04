@@ -109,6 +109,7 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 
 	@Override
 	public final void selectionChanged(SelectionChangedEvent event) {
+
 		IWorkbenchPage workbenchPage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		IViewPart iViewPart = workbenchPage.findView(BpelProcessStructureNavigator.ID);
 
@@ -141,6 +142,12 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 			if (iViewPart != null) {
 				ProjectStructureNavigator projectStructureNavigator = (ProjectStructureNavigator) iViewPart;
 				projectStructureNavigator.showProjectFiles(selection.getFirstElement());
+			}
+
+			iViewPart = workbenchPage.findView(ServiceBusStructureNavigator.ID);
+			if (iViewPart != null) {
+				ServiceBusStructureNavigator navigator = (ServiceBusStructureNavigator) iViewPart;
+				navigator.showStructure(selection.getFirstElement());
 			}
 		}
 

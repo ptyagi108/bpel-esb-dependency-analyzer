@@ -57,6 +57,12 @@
             class="com.tomecode.soa.dependency.analyzer.tree.ProjectStructureNavigator"
             id="view.projectStructureNavigator">
     </view>
+     	<view 
+            name="Service Bus Proxy Structure"
+            allowMultiple="true"
+            class="com.tomecode.soa.dependency.analyzer.tree.ServiceBusStructureNavigator"
+            id="view.servicebusstructurenavigator">
+    </view>
    </extension>
 
 </plugin>

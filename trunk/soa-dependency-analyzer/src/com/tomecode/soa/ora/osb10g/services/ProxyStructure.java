@@ -13,6 +13,7 @@ public final class ProxyStructure extends OsbActivity {
 
 	public ProxyStructure(Proxy proxy) {
 		this.proxy = proxy;
+		name = proxy.getName();
 	}
 
 	public final Proxy getProxy() {

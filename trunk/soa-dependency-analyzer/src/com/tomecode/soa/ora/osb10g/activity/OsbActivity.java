@@ -30,7 +30,7 @@ public abstract class OsbActivity {
 		activities.add(osbActivity);
 	}
 
-	private final void setParent(OsbActivity osbActivity) {
+	protected final void setParent(OsbActivity osbActivity) {
 		this.parent = osbActivity;
 	}
 
@@ -46,4 +46,7 @@ public abstract class OsbActivity {
 		return name;
 	}
 
+	public String toString() {
+		return name;
+	}
 }

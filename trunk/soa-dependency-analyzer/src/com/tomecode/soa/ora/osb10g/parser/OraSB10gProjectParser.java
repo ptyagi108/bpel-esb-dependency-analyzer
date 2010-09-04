@@ -18,10 +18,19 @@ import com.tomecode.soa.parser.ServiceParserException;
  */
 public final class OraSB10gProjectParser {
 
+	/**
+	 * proxy service parser
+	 */
 	private final OraSB10gProxyParser proxyParser;
+
+	/**
+	 * business service parser
+	 */
+	private final OraSB10gBusinessServiceParser businessServiceParser;
 
 	public OraSB10gProjectParser() {
 		proxyParser = new OraSB10gProxyParser();
+		businessServiceParser = new OraSB10gBusinessServiceParser();
 	}
 
 	/**
@@ -38,9 +47,9 @@ public final class OraSB10gProjectParser {
 		if (files != null) {
 			for (File file : files) {
 				if (file.isDirectory() && !file.getName().equals(".settings")) {
-					OraSB10gFolder folder = new OraSB10gFolder(file, file.getName(), file.getPath());
+					OraSB10gFolder folder = new OraSB10gFolder(project, file, file.getName(), file.getPath());
 					project.getOraSB10gFolders().addFolder(folder);
-					parseFolders(folder, file);
+					parseFolders(project, folder, file);
 				} else if (file.isFile()) {
 					Service service = parseService(file);
 					if (service != null) {
@@ -67,6 +76,19 @@ public final class OraSB10gProjectParser {
 				e.printStackTrace();
 				// TODO : error
 			}
+
+			// && (file.getName().endsWith(".proxy") ||
+			// file.getName().endsWith(".biz") ||
+			// file.getName().endsWith(".xq"))
+		} else if (file.getName().endsWith(".biz")) {
+			try {
+				return businessServiceParser.parseBusinessService(file);
+			} catch (ServiceParserException e) {
+				e.printStackTrace();
+				// TODO: error
+			}
+		} else if (file.getName().endsWith(".xq")) {
+
 		} else if (!file.getName().equals(".project")) {
 			return new UnknownFile(file);
 		}
@@ -79,14 +101,14 @@ public final class OraSB10gProjectParser {
 	 * @param root
 	 * @param parentFile
 	 */
-	private final void parseFolders(OraSB10gFolder root, File parentFile) {
+	private final void parseFolders(OraSB10gProject project, OraSB10gFolder root, File parentFile) {
 		File[] files = parentFile.listFiles();
 		if (files != null) {
 			for (File file : files) {
 				if (file.isDirectory() && !file.getName().equals(".settings")) {
-					OraSB10gFolder folder = new OraSB10gFolder(file, root.getPath() + "\\" + file.getName(), file.getName());
+					OraSB10gFolder folder = new OraSB10gFolder(project, file, root.getPath() + "\\" + file.getName(), file.getName());
 					root.addFolder(folder);
-					parseFolders(folder, file);
+					parseFolders(project, folder, file);
 				} else {
 					Service service = parseService(file);
 					if (service != null) {

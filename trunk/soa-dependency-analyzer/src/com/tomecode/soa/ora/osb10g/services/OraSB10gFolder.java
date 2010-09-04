@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
+
 /**
  * 
  * @author Tomas Frastia
@@ -23,7 +25,10 @@ public class OraSB10gFolder {
 
 	private OraSB10gFolder parent;
 
-	public OraSB10gFolder(File fileSystemPath, String path, String name) {
+	private OraSB10gProject project;
+
+	public OraSB10gFolder(OraSB10gProject project, File fileSystemPath, String path, String name) {
+		this.project = project;
 		this.services = new ArrayList<Service>();
 		this.folders = new ArrayList<OraSB10gFolder>();
 		this.fileSystemPath = fileSystemPath;
@@ -50,6 +55,7 @@ public class OraSB10gFolder {
 
 	public final void addService(Service service) {
 		this.services.add(service);
+		project.addService(service);
 	}
 
 	/**

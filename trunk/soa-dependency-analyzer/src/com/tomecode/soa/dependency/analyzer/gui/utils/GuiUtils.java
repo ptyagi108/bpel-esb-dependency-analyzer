@@ -6,6 +6,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.tomecode.soa.dependency.analyzer.tree.BpelProcessStructureNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ProjectStructureNavigator;
+import com.tomecode.soa.dependency.analyzer.tree.ServiceBusStructureNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceOperationsDepNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.WorkspacesNavigator;
 import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
@@ -59,6 +60,15 @@ public final class GuiUtils {
 	 */
 	public final static BpelProcessStructureNavigator getBpelProcessStructureNavigator() {
 		return (BpelProcessStructureNavigator) findView(BpelProcessStructureNavigator.ID);
+	}
+
+	/**
+	 * find reference for {@link ServiceBusStructureNavigator}
+	 * 
+	 * @return
+	 */
+	public static final ServiceBusStructureNavigator getServiceBusStructureNavigator() {
+		return (ServiceBusStructureNavigator) findView(ServiceBusStructureNavigator.ID);
 	}
 
 	/**

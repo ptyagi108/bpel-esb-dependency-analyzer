@@ -8,4 +8,6 @@ package com.tomecode.soa.ora.osb10g.services;
  */
 public interface Service {
 
+	String getName();
+
 }

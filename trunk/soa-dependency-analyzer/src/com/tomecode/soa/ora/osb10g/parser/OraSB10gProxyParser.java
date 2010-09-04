@@ -10,6 +10,7 @@ import com.tomecode.soa.ora.osb10g.activity.Alert;
 import com.tomecode.soa.ora.osb10g.activity.Assign;
 import com.tomecode.soa.ora.osb10g.activity.Branch;
 import com.tomecode.soa.ora.osb10g.activity.BranchNodeCondition;
+import com.tomecode.soa.ora.osb10g.activity.BranchNodeOperation;
 import com.tomecode.soa.ora.osb10g.activity.DefaultBranch;
 import com.tomecode.soa.ora.osb10g.activity.Delete;
 import com.tomecode.soa.ora.osb10g.activity.DynamicRoute;
@@ -33,7 +34,10 @@ import com.tomecode.soa.ora.osb10g.activity.Reply;
 import com.tomecode.soa.ora.osb10g.activity.Report;
 import com.tomecode.soa.ora.osb10g.activity.Route;
 import com.tomecode.soa.ora.osb10g.activity.RouteNode;
+import com.tomecode.soa.ora.osb10g.activity.RouteOutboundTransform;
+import com.tomecode.soa.ora.osb10g.activity.RouteResponseTransform;
 import com.tomecode.soa.ora.osb10g.activity.Router;
+import com.tomecode.soa.ora.osb10g.activity.RoutingOptions;
 import com.tomecode.soa.ora.osb10g.activity.RoutingTableCase;
 import com.tomecode.soa.ora.osb10g.activity.RoutingTableDefaultCase;
 import com.tomecode.soa.ora.osb10g.activity.Skip;
@@ -60,6 +64,13 @@ import com.tomecode.soa.parser.ServiceParserException;
  */
 public final class OraSB10gProxyParser extends AbstractParser {
 
+	/**
+	 * parse proxy service
+	 * 
+	 * @param file
+	 * @return
+	 * @throws ServiceParserException
+	 */
 	public final Proxy parseProxy(File file) throws ServiceParserException {
 		Element eXml = parseXml(file);
 		Element eCoreEntry = eXml.element("coreEntry");
@@ -78,18 +89,19 @@ public final class OraSB10gProxyParser extends AbstractParser {
 	 * @param proxy
 	 */
 	private final void parseCoreEntrty(Element eCoreEntry, Proxy proxy) {
-		if ("false".equals(eCoreEntry.attributeValue("isProxy"))) {
-			// TODO: THROW IS NOT PROXY
-		}
-
 		proxy.setIsEnabled(Boolean.parseBoolean(eCoreEntry.attributeValue("isEnabled")));
 		proxy.setIsAutoPublish(Boolean.parseBoolean(eCoreEntry.attributeValue("isAutoPublish")));
 		proxy.setDescription(eCoreEntry.elementText("description"));
 
 		parseBinding(eCoreEntry.element("binding"), proxy);
-		proxy.toString();
 	}
 
+	/**
+	 * parse flow
+	 * 
+	 * @param eRouter
+	 * @param proxy
+	 */
 	private final void parseFlow(Element eRouter, Proxy proxy) {
 		ProxyStructure proxyStructure = new ProxyStructure(proxy);
 		proxy.setProxyStructure(proxyStructure);
@@ -97,12 +109,17 @@ public final class OraSB10gProxyParser extends AbstractParser {
 		proxyStructure.addActivity(router);
 		// parseActivities(eRouter.elements(), router);
 
-		Element eFlow = eRouter.element("flow");
-		if (eFlow != null) {
-			parseFlowStructure(eFlow.elements(), router);
-			List<OsbActivity> pipelines = parseElements(eRouter.elements("pipeline"));
-			linkingPipeLines(pipelines, router);
+		try {
+			Element eFlow = eRouter.element("flow");
+			if (eFlow != null) {
+				parseFlowStructure(eFlow.elements(), router);
+				List<OsbActivity> pipelines = parsePipelines(eRouter.elements("pipeline"));
+				linkingPipeLines(pipelines, router);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
 	}
 
 	/**
@@ -129,17 +146,9 @@ public final class OraSB10gProxyParser extends AbstractParser {
 	 * @param root
 	 */
 	private final void replacePipelineResponse(PipelineResponse pipelineResponse, List<OsbActivity> activities) {
-		for (OsbActivity osbActivity : activities) {
-			if (osbActivity instanceof PipelineResponse && osbActivity.getActivities().isEmpty()) {
-				PipelineResponse pipelineResponseInFlow = (PipelineResponse) osbActivity;
-				if (pipelineResponseInFlow.getName().endsWith(pipelineResponse.getName())) {
-					pipelineResponseInFlow.merge(pipelineResponse.getActivities());
-				}
-			}
-//			else {
-//				toString();
-//	//			replacePipelineResponse(pipelineResponse, osbActivity.getActivities());
-//			}
+		PipelineResponse response = findPipelineResponse(pipelineResponse.getName(), activities);
+		if (response != null) {
+			response.merge(pipelineResponse.getActivities());
 		}
 	}
 
@@ -149,18 +158,42 @@ public final class OraSB10gProxyParser extends AbstractParser {
 	 * @param root
 	 */
 	private final void replacePipelineRequest(PipelineRequest pipelineRequest, List<OsbActivity> activities) {
+		PipelineRequest request = findPipelineRequest(pipelineRequest.getName(), activities);
+		if (request != null) {
+			request.merge(pipelineRequest.getActivities());
+		}
+	}
+
+	private final PipelineResponse findPipelineResponse(String name, List<OsbActivity> activities) {
+		try {
+			for (OsbActivity osbActivity : activities) {
+				if (osbActivity instanceof PipelineResponse && osbActivity.getActivities().isEmpty()) {
+					return (PipelineResponse) osbActivity;
+				}
+
+				else {
+					// return findPipelineResponse(name,
+					// osbActivity.getActivities());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	private final PipelineRequest findPipelineRequest(String name, List<OsbActivity> activities) {
 		for (OsbActivity osbActivity : activities) {
 			if (osbActivity instanceof PipelineRequest && osbActivity.getActivities().isEmpty()) {
-				PipelineRequest pipelineRequestInFlow = (PipelineRequest) osbActivity;
-				if (pipelineRequestInFlow.getName().equals(pipelineRequest.getName())) {
-					pipelineRequestInFlow.merge(pipelineRequest.getActivities());
-				}
-			} 
-			
-//			else {
-//				replacePipelineRequest(pipelineRequest, osbActivity.getActivities());
-//			}
+				return (PipelineRequest) osbActivity;
+			}
+
+			else {
+				return findPipelineRequest(name, osbActivity.getActivities());
+			}
 		}
+		return null;
 	}
 
 	/**
@@ -175,7 +208,13 @@ public final class OraSB10gProxyParser extends AbstractParser {
 		}
 	}
 
-	private final List<OsbActivity> parseElements(List<?> ePipelines) {
+	/**
+	 * parse request or response pipelines
+	 * 
+	 * @param ePipelines
+	 * @return
+	 */
+	private final List<OsbActivity> parsePipelines(List<?> ePipelines) {
 		List<OsbActivity> osbActivities = new ArrayList<OsbActivity>();
 		if (ePipelines != null) {
 			for (Object o : ePipelines) {
@@ -272,7 +311,7 @@ public final class OraSB10gProxyParser extends AbstractParser {
 				parseOutboundTransform(e, dynamicRoute);
 			} else if ("route".equals(e.getName())) {
 				Route route = new Route();
-				root.addActivity(root);
+				root.addActivity(route);
 				parseOutboundTransform(e, route);
 			} else if ("routingTable".equals(e.getName())) {
 				parseRoutingTable(e.getParent(), root);
@@ -281,6 +320,9 @@ public final class OraSB10gProxyParser extends AbstractParser {
 				root.addActivity(transportHeaders);
 			} else if ("wsCallout".equals(e.getName())) {
 				parseWsCallout(e, root);
+			} else if ("routing-options".equals(e.getName())) {
+				RoutingOptions routingOptions = new RoutingOptions();
+				root.addActivity(routingOptions);
 			}
 		}
 	}
@@ -300,11 +342,11 @@ public final class OraSB10gProxyParser extends AbstractParser {
 			Element element = (Element) o;
 			if ("requestTransform".equals(element.getName())) {
 				WsCalloutRequestTransform requestTransform = new WsCalloutRequestTransform();
-				root.addActivity(requestTransform);
+				wsCallout.addActivity(requestTransform);
 				parseActivities(element.elements(), requestTransform);
 			} else if ("responseTransform".equals(element.getName())) {
 				WsCalloutResponseTransform responseTransform = new WsCalloutResponseTransform();
-				root.addActivity(responseTransform);
+				wsCallout.addActivity(responseTransform);
 				parseActivities(element.elements(), responseTransform);
 			}
 		}
@@ -328,8 +370,6 @@ public final class OraSB10gProxyParser extends AbstractParser {
 				parseRouteNode(e, root);
 			}
 		}
-
-		root.toString();
 	}
 
 	/**
@@ -343,7 +383,8 @@ public final class OraSB10gProxyParser extends AbstractParser {
 		root.addActivity(routeNode);
 		Element eActions = eRouteNode.element("actions");
 		if (eActions != null) {
-			parseRoutingTable(eActions, root);
+			parseRoutingTable(eActions, routeNode);
+			parseRoute(eActions.element("route"), routeNode);
 		}
 	}
 
@@ -396,7 +437,16 @@ public final class OraSB10gProxyParser extends AbstractParser {
 	private final void parseOutboundTransform(Element element, OsbActivity root) {
 		Element eOutboundTransform = element.element("outboundTransform");
 		if (eOutboundTransform != null) {
-			parseActivities(eOutboundTransform.elements(), root);
+			RouteOutboundTransform outboundTransform = new RouteOutboundTransform();
+			root.addActivity(outboundTransform);
+			parseActivities(eOutboundTransform.elements(), outboundTransform);
+		}
+
+		Element eResponseTransform = element.element("responseTransform");
+		if (eResponseTransform != null) {
+			RouteResponseTransform responseTransform = new RouteResponseTransform();
+			root.addActivity(responseTransform);
+			parseActivities(eResponseTransform.elements(), responseTransform);
 		}
 	}
 
@@ -428,6 +478,26 @@ public final class OraSB10gProxyParser extends AbstractParser {
 				}
 			}
 
+		} else if ("operation".equals(eBranchNode.attributeValue("type"))) {
+			BranchNodeOperation branchNodeOperation = new BranchNodeOperation(eBranchNode.attributeValue("name"));
+			root.addActivity(branchNodeOperation);
+			Element eBranchTable = eBranchNode.element("branch-table");
+			if (eBranchTable != null) {
+				List<?> eBranchs = eBranchTable.elements();
+				for (Object o : eBranchs) {
+					Element eBranch = (Element) o;
+					if ("branch".equals(eBranch.getName())) {
+						Branch branch = new Branch(eBranch.attributeValue("name"));
+						branchNodeOperation.addActivity(branch);
+						parseFlowContent(eBranch.element("flow"), branch);
+					} else if ("default-branch".equals(eBranch.getName())) {
+						DefaultBranch defaultBranch = new DefaultBranch();
+						branchNodeOperation.addActivity(defaultBranch);
+						parseFlowContent(eBranch.element("flow"), defaultBranch);
+					}
+
+				}
+			}
 		}
 	}
 

@@ -12,4 +12,8 @@ public final class Stage extends OsbActivity {
 		super(name);
 	}
 
+	public final String toString() {
+		return name == null ? "stage" : "stage - " + name;
+	}
+
 }

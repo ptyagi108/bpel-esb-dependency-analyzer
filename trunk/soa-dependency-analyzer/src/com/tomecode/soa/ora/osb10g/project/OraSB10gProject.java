@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tomecode.soa.ora.osb10g.services.OraSB10gFolders;
+import com.tomecode.soa.ora.osb10g.services.Proxy;
 import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gWorkspace;
 import com.tomecode.soa.project.Project;
@@ -29,7 +30,7 @@ public final class OraSB10gProject implements Project {
 	public OraSB10gProject(File file) {
 		this.file = file;
 		this.services = new ArrayList<Service>();
-		this.oraSB10gFolders = new OraSB10gFolders(file, null, null);
+		this.oraSB10gFolders = new OraSB10gFolders(this, file, null, null);
 	}
 
 	public final void addService(Service service) {
@@ -72,5 +73,15 @@ public final class OraSB10gProject implements Project {
 	@Override
 	public final Workspace getWorkpsace() {
 		return workspace;
+	}
+
+	public final List<Proxy> getProxyServices() {
+		List<Proxy> list = new ArrayList<Proxy>();
+		for (Service service : services) {
+			if (service instanceof Proxy) {
+				list.add((Proxy) service);
+			}
+		}
+		return list;
 	}
 }

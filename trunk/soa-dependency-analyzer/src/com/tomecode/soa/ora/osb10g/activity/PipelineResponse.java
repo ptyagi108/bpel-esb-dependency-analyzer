@@ -15,6 +15,13 @@ public final class PipelineResponse extends OsbActivity {
 	}
 
 	public void merge(List<OsbActivity> activities) {
-		this.activities.addAll(activities);
+		for (OsbActivity copyActivity : activities) {
+			copyActivity.setParent(this);
+			this.activities.add(copyActivity);
+		}
+	}
+	
+	public final String toString() {
+		return name == null ? "Pipeline Response" : "Pipeline Response - " + name;
 	}
 }

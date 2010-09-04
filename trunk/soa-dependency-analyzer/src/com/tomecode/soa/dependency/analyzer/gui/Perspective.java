@@ -6,6 +6,7 @@ import org.eclipse.ui.IPerspectiveFactory;
 
 import com.tomecode.soa.dependency.analyzer.tree.BpelProcessStructureNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ProjectStructureNavigator;
+import com.tomecode.soa.dependency.analyzer.tree.ServiceBusStructureNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceOperationsDepNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.WorkspacesNavigator;
 import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
@@ -38,5 +39,6 @@ public final class Perspective implements IPerspectiveFactory {
 		IFolderLayout secondFolder = layout.createFolder("properties", IPageLayout.RIGHT | IPageLayout.BOTTOM, 0.50f, editorArea);
 		secondFolder.addView(PropertiesView.ID);
 		secondFolder.addView(BpelProcessStructureNavigator.ID);
+		secondFolder.addView(ServiceBusStructureNavigator.ID);
 	}
 }

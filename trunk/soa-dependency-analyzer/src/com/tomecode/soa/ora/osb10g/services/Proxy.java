@@ -10,6 +10,7 @@ import java.io.File;
  */
 public final class Proxy implements Service {
 
+	private final String name;
 	private final File file;
 
 	private boolean isEnabled;
@@ -24,6 +25,12 @@ public final class Proxy implements Service {
 
 	public Proxy(File file) {
 		this.file = file;
+		int index = file.getName().indexOf(".proxy");
+		if (index != -1) {
+			name = file.getName().substring(0, index);
+		} else {
+			name = file.getName();
+		}
 	}
 
 	public final File getFile() {
@@ -68,6 +75,15 @@ public final class Proxy implements Service {
 
 	public final void setProxyStructure(ProxyStructure proxyStructure) {
 		this.proxyStructure = proxyStructure;
+	}
+
+	@Override
+	public final String getName() {
+		return name;
+	}
+
+	public final String toString() {
+		return name;
 	}
 
 }

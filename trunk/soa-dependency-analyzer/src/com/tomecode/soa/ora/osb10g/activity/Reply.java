@@ -8,4 +8,7 @@ package com.tomecode.soa.ora.osb10g.activity;
  */
 public final class Reply extends OsbActivity {
 
+	public final String toString() {
+		return "reply";
+	}
 }

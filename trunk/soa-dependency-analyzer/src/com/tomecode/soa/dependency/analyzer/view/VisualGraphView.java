@@ -44,6 +44,8 @@ import com.tomecode.soa.openesb.project.OpenEsbBpelProject;
 import com.tomecode.soa.openesb.workspace.OpenEsbMultiWorkspace;
 import com.tomecode.soa.openesb.workspace.OpenEsbWorkspace;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
+import com.tomecode.soa.ora.osb10g.services.Service;
+import com.tomecode.soa.ora.osb10g.services.UnknownFile;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gMultiWorkspace;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gWorkspace;
 import com.tomecode.soa.ora.suite10g.esb.EsbProject;
@@ -280,10 +282,12 @@ public final class VisualGraphView extends ViewPart {
 			GraphConnection connection = (GraphConnection) object;
 			GuiUtils.getPropertiesView().showProperties(connection.getData());
 			GuiUtils.getProjectStructureNavigator().showProjectFiles(connection.getData());
+			GuiUtils.getServiceBusStructureNavigator().showStructure(connection.getData());
 		} else if (object instanceof GraphNode) {
 			GraphNode graphNode = (GraphNode) object;
 			GuiUtils.getPropertiesView().showProperties(graphNode.getData());
 			GuiUtils.getBpelProcessStructureNavigator().showProcess(graphNode.getData());
+			GuiUtils.getServiceBusStructureNavigator().showStructure(graphNode.getData());
 			GuiUtils.getServiceOperationsDepNavigator().showOperationDepenendecies(graphNode.getData());
 			GuiUtils.getProjectStructureNavigator().showProjectFiles(graphNode.getData());
 		}
@@ -301,6 +305,7 @@ public final class VisualGraphView extends ViewPart {
 	 */
 
 	public final void showGraph(Object source, boolean addToBrowser) {
+
 		boolean backup = isExpandInGraph;
 		isExpandInGraph = false;
 		expandedInGraphObjects.clear();
@@ -326,6 +331,7 @@ public final class VisualGraphView extends ViewPart {
 		graphViewer.getGraphControl().applyLayout();
 
 		isExpandInGraph = backup;
+
 	}
 
 	private final void createProcessAndProcessGraph(BpelProcess process, GraphNode existsSource) {
@@ -405,10 +411,16 @@ public final class VisualGraphView extends ViewPart {
 	}
 
 	private final void applyDependencies(OraSB10gProject project, GraphNode existsSource) {
-		GraphNode source = existsSource == null ? createNode(project.getName(), ImageFactory.ORACLE_10G_BPEL_PROCESS, project) : existsSource;
-		if (existsSource != null) {
-			createConnection(source, existsSource, null, false);
+		GraphNode source = existsSource == null ? createNode(project.getName(), null, project) : existsSource;
+		for (Service service : project.getServices()) {
+
+			if (!(service instanceof UnknownFile)) {
+				GraphNode destination = createNode(service.getName(), null, service);
+				createConnection(source, destination, null, false);
+			}
+
 		}
+
 	}
 
 	/**

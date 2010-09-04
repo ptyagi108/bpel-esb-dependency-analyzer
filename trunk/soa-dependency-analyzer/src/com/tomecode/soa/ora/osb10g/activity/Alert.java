@@ -18,4 +18,8 @@ public final class Alert extends OsbActivity {
 		return severity;
 	}
 
+	public final String toString() {
+		return "alert";
+	}
+
 }

@@ -1,6 +1,5 @@
 package com.tomecode.soa.dependency.analyzer.tree.node;
 
-
 /**
  * simple empty node
  * 
@@ -11,8 +10,11 @@ public final class EmptyNode {
 
 	private final Object[] objects;
 
+	private final Object[] emptyResult;
+
 	public EmptyNode() {
 		objects = new Object[1];
+		emptyResult = new Object[] {};
 	}
 
 	public EmptyNode(Object object) {
@@ -25,10 +27,10 @@ public final class EmptyNode {
 	}
 
 	public final boolean hasChildren() {
-		return objects.length != 0;
+		return objects.length != 0 && objects[0] != null;
 	}
 
 	public final Object[] getChildren() {
-		return objects;
+		return objects[0] == null ? emptyResult : objects;
 	}
 }

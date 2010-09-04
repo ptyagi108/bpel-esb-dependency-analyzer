@@ -12,4 +12,7 @@ public final class RouteNode extends OsbActivity {
 		super(name);
 	}
 
+	public final String toString() {
+		return name == null ? "Route Node" : "Route Node - " + name;
+	}
 }

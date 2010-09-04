@@ -25,4 +25,7 @@ public final class Error extends OsbActivity {
 		return message;
 	}
 
+	public final String toString() {
+		return "Error";
+	}
 }
