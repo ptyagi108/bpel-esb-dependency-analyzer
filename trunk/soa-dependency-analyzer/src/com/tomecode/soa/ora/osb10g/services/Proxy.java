@@ -2,6 +2,10 @@ package com.tomecode.soa.ora.osb10g.services;
 
 import java.io.File;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+
 /**
  * Proxy file
  * 
@@ -84,6 +88,10 @@ public final class Proxy implements Service {
 
 	public final String toString() {
 		return name;
+	}
+
+	public final Image getImage() {
+		return ImageFactory.OSB_10G_SERVICE;
 	}
 
 }

@@ -1,5 +1,9 @@
 package com.tomecode.soa.ora.osb10g.activity;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+
 /**
  * element: Error
  * 
@@ -26,6 +30,11 @@ public final class Error extends OsbActivity {
 	}
 
 	public final String toString() {
-		return "Error";
+		return "Raise Error";
+	}
+
+	@Override
+	public final Image getImage() {
+		return ImageFactory.OSB_10G_RAISE_ERROR;
 	}
 }

@@ -38,6 +38,7 @@ import com.tomecode.soa.ora.osb10g.activity.RouteOutboundTransform;
 import com.tomecode.soa.ora.osb10g.activity.RouteResponseTransform;
 import com.tomecode.soa.ora.osb10g.activity.Router;
 import com.tomecode.soa.ora.osb10g.activity.RoutingOptions;
+import com.tomecode.soa.ora.osb10g.activity.RoutingTable;
 import com.tomecode.soa.ora.osb10g.activity.RoutingTableCase;
 import com.tomecode.soa.ora.osb10g.activity.RoutingTableDefaultCase;
 import com.tomecode.soa.ora.osb10g.activity.Skip;
@@ -397,17 +398,21 @@ public final class OraSB10gProxyParser extends AbstractParser {
 	private final void parseRoutingTable(Element e, OsbActivity root) {
 		Element eRoutingTable = e.element("routingTable");
 		if (eRoutingTable != null) {
+
+			RoutingTable routingTable = new RoutingTable();
+			root.addActivity(routingTable);
+
 			List<?> elements = eRoutingTable.elements();
 			if (elements != null) {
 				for (Object o : elements) {
 					Element element = (Element) o;
 					if ("case".equals(element.getName())) {
 						RoutingTableCase routingTableCase = new RoutingTableCase();
-						root.addActivity(routingTableCase);
+						routingTable.addActivity(routingTableCase);
 						parseRoute(element.element("route"), routingTableCase);
 					} else if ("defaultCase".equals(element.getName())) {
 						RoutingTableDefaultCase routingTableDefaultCase = new RoutingTableDefaultCase();
-						root.addActivity(routingTableDefaultCase);
+						routingTable.addActivity(routingTableDefaultCase);
 						parseRoute(element.element("route"), routingTableDefaultCase);
 					}
 				}

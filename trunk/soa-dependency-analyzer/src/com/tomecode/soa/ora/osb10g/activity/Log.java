@@ -1,5 +1,9 @@
 package com.tomecode.soa.ora.osb10g.activity;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+
 /**
  * element: log
  * 
@@ -19,6 +23,11 @@ public final class Log extends OsbActivity {
 	}
 
 	public final String toString() {
-		return "log";
+		return "Log";
+	}
+
+	@Override
+	public final Image getImage() {
+		return ImageFactory.OSB_10G_LOG;
 	}
 }

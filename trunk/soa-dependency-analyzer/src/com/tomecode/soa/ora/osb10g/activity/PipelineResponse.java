@@ -2,6 +2,10 @@ package com.tomecode.soa.ora.osb10g.activity;
 
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+
 /**
  * element: pipeline type="response"
  * 
@@ -20,8 +24,13 @@ public final class PipelineResponse extends OsbActivity {
 			this.activities.add(copyActivity);
 		}
 	}
-	
+
 	public final String toString() {
 		return name == null ? "Pipeline Response" : "Pipeline Response - " + name;
+	}
+
+	@Override
+	public final Image getImage() {
+		return ImageFactory.OSB_10G_PIPELINE_RESPONSE;
 	}
 }

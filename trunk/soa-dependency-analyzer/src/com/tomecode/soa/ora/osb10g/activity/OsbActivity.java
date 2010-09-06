@@ -3,6 +3,8 @@ package com.tomecode.soa.ora.osb10g.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
 /**
  * Basic activity
  * 
@@ -45,6 +47,8 @@ public abstract class OsbActivity {
 	public final String getName() {
 		return name;
 	}
+
+	public abstract Image getImage();
 
 	public String toString() {
 		return name;

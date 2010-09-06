@@ -134,11 +134,44 @@ public final class ImageFactory {
 	public static final Image OPEN_ESB_BPEL_ONMESSAGE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/openEsb/16/on_message_hanlder.png")).createImage();
 	public static final Image OPEN_ESB_BPEL_COMPENSATIO_HANLDER = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/openEsb/16/compensation_hanlder.png"))
 			.createImage();
-
 	public static final Image OPEN_ESB_BPEL_ELSEIF = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/openEsb/16/else_if.png")).createImage();
 	public static final Image OPEN_ESB_BPEL_ELSE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/openEsb/16/else.png")).createImage();
-
 	public static final Image OPEN_ESB_BPEL_PROCESS = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/openEsb/16/process.png")).createImage();
+
+	public static final Image OSB_10G_STAGE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/stage.gif")).createImage();
+	public static final Image OSB_10G_BRANCH = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/branch.gif")).createImage();
+	public static final Image OSB_10G_SERVICE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/service.gif")).createImage();
+	public static final Image OSB_10G_PIPELINE_PARI_NODE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/pipelinePair.gif")).createImage();
+	public static final Image OSB_10G_PIPELINE_REQUEST = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/pipelinePairRequest.gif")).createImage();
+	public static final Image OSB_10G_PIPELINE_RESPONSE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/pipelinePairResponse.gif")).createImage();
+	public static final Image OSB_10G_ROUTER = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/router.gif")).createImage();
+	public static final Image OSB_10G_ASSIGN = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/assign.gif")).createImage();
+	public static final Image OSB_10G_DELETE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/delete.gif")).createImage();
+	public static final Image OSB_10G_INSERT = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/insert.gif")).createImage();
+	public static final Image OSB_10G_JAVA_CALLOUT = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/javaCallout.gif")).createImage();
+	public static final Image OSB_10G_MFL = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/mfl.gif")).createImage();
+	public static final Image OSB_10G_RENAME = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/rename.gif")).createImage();
+	public static final Image OSB_10G_REPLACE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/replace.gif")).createImage();
+	public static final Image OSB_10G_VALIDATE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/validate.gif")).createImage();
+	public static final Image OSB_10G_SKIP = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/skip.gif")).createImage();
+	public static final Image OSB_10G_REPLY = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/reply.gif")).createImage();
+	public static final Image OSB_10G_ELSEIF = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/ifthen.gif")).createImage();
+	public static Image OSB_10G_IFTHENELSE = OSB_10G_ELSEIF;
+	public static final Image OSB_10G_TRANSPORTHEADERS = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/transportHeaders.gif")).createImage();
+	public static final Image OSB_10G_WSCALLOUT = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/WSCallout.gif")).createImage();
+	public static final Image OSB_10G_ROUTING_OPTIONS = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/routingOptions.gif")).createImage();
+	public static final Image OSB_10G_FOREACH = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/foreach.gif")).createImage();
+	public static final Image OSB_10G_DYNAMIC_ROUTING = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/dynamicPublish.gif")).createImage();
+	public static final Image OSB_10G_ROUTE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/route.gif")).createImage();
+	public static final Image OSB_10G_ROUTING_TABLE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/routingTable.gif")).createImage();
+	public static final Image OSB_10G_CASE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/case.gif")).createImage();
+	public static final Image OSB_10G_DEFAULT = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/default.gif")).createImage();
+	public static final Image OSB_10G_ALERT = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/alert.gif")).createImage();;
+	public static final Image OSB_10G_LOG = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/log.gif")).createImage();;
+	public static final Image OSB_10G_REPORT = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/report.gif")).createImage();
+	public static final Image OSB_10G_RAISE_ERROR = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/raiseError.gif")).createImage();
+	public static final Image OSB_10G_BRANCH_NODE_CONDITION = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/branchCondition.gif")).createImage();
+	public static final Image OSB_10G_BRANCH_OPERATION = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/branchOperational.gif")).createImage();
 
 	private ImageFactory() {
 	}

@@ -1,5 +1,8 @@
 package com.tomecode.soa.ora.osb10g.services;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
 
 /**
@@ -18,6 +21,11 @@ public final class ProxyStructure extends OsbActivity {
 
 	public final Proxy getProxy() {
 		return proxy;
+	}
+
+	@Override
+	public final Image getImage() {
+		return ImageFactory.OSB_10G_SERVICE;
 	}
 
 }

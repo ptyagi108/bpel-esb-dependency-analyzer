@@ -1,5 +1,9 @@
 package com.tomecode.soa.ora.osb10g.activity;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+
 /**
  * element: transport-headers
  * 
@@ -9,6 +13,11 @@ package com.tomecode.soa.ora.osb10g.activity;
 public final class TransportHeaders extends OsbActivity {
 
 	public final String toString() {
-		return "TransportHeaders";
+		return "Transport Headers";
+	}
+
+	@Override
+	public final Image getImage() {
+		return ImageFactory.OSB_10G_TRANSPORTHEADERS;
 	}
 }

@@ -1,5 +1,7 @@
 package com.tomecode.soa.ora.osb10g.activity;
 
+import org.eclipse.swt.graphics.Image;
+
 /**
  * element: branch-table
  * 
@@ -21,5 +23,10 @@ public final class BranchTable extends OsbActivity {
 
 	public final String toString() {
 		return "branch-table";
+	}
+
+	@Override
+	public final Image getImage() {
+		return null;
 	}
 }
