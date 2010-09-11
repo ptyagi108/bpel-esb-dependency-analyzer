@@ -42,6 +42,10 @@ public final class Ora10gBpelProcessStrukture extends Activity {
 		return bpelProject.toString();
 	}
 
+	public final BpelProject getProject() {
+		return bpelProject;
+	}
+
 	// public final FindUsagePartnerLinkResult findUsage(PartnerLink
 	// partnerLink) {
 	// FindUsagePartnerLinkResult findUsagePartnerLinkResult = new

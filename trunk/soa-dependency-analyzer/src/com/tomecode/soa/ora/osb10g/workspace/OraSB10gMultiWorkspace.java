@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tomecode.soa.workspace.MultiWorkspace;
+import com.tomecode.soa.workspace.Workspace;
 import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 
 /**
@@ -26,7 +27,7 @@ public final class OraSB10gMultiWorkspace implements MultiWorkspace {
 		this.file = file;
 	}
 
-	public final List<OraSB10gWorkspace> getWorkspaces() {
+	public List<OraSB10gWorkspace> getWorkspaces() {
 		return workspaces;
 	}
 
@@ -52,6 +53,15 @@ public final class OraSB10gMultiWorkspace implements MultiWorkspace {
 
 	public final String toString() {
 		return name;
+	}
+
+	public final OraSB10gWorkspace removeWorkspace(Workspace workspace) {
+		for (int i = 0; i <= workspaces.size() - 1; i++) {
+			if (workspaces.get(i).equals(workspace)) {
+				return workspaces.remove(i);
+			}
+		}
+		return null;
 	}
 
 }

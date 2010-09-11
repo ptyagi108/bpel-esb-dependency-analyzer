@@ -10,6 +10,7 @@ import com.tomecode.soa.dependency.analyzer.tree.ServiceBusStructureNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceOperationsDepNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.WorkspacesNavigator;
 import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
+import com.tomecode.soa.dependency.analyzer.view.VisualGraphView;
 
 /**
  * 
@@ -72,10 +73,14 @@ public final class GuiUtils {
 	}
 
 	/**
-	 * find reference for {@link ServiceOperationsDepNavigator}
+	 * find reference for {@link VisualGraphView}
 	 * 
 	 * @return
 	 */
+	public static final VisualGraphView getVisualGraphView() {
+		return (VisualGraphView) findView(VisualGraphView.ID);
+	}
+
 	public final static ServiceOperationsDepNavigator getServiceOperationsDepNavigator() {
 		return (ServiceOperationsDepNavigator) findView(ServiceOperationsDepNavigator.ID);
 	}

@@ -26,6 +26,11 @@ public final class PropertiesView extends ViewPart {
 
 	public static final String ID = "view.properties";
 
+	/**
+	 * data from which will be shown properties
+	 */
+	private Object dataForProperties;
+
 	private Composite contentPanel;
 	private StackLayout layout;
 
@@ -52,16 +57,16 @@ public final class PropertiesView extends ViewPart {
 	private Text txtProjectMultiWorkspaceName;
 	private Text txtProjectMultiWorkspacePath;
 
-//	private Composite ora10gProcessPage;
-//	private Text ora10gProcessName;
-//	private Text ora10gProcessType;
-//	private Text ora10gProcessWsdl;
-//	private Text ora10gProjectName;
-//	private Text ora10gProjectPath;
-//	private Text ora10gProcessWorkspaceName;
-//	private Text ora10gProcessWorkspacePath;
-//	private Text ora10gProcessMultiWorkspaceName;
-//	private Text ora10gProcessMultiWorkspacePath;
+	// private Composite ora10gProcessPage;
+	// private Text ora10gProcessName;
+	// private Text ora10gProcessType;
+	// private Text ora10gProcessWsdl;
+	// private Text ora10gProjectName;
+	// private Text ora10gProjectPath;
+	// private Text ora10gProcessWorkspaceName;
+	// private Text ora10gProcessWorkspacePath;
+	// private Text ora10gProcessMultiWorkspaceName;
+	// private Text ora10gProcessMultiWorkspacePath;
 
 	public PropertiesView() {
 
@@ -78,51 +83,53 @@ public final class PropertiesView extends ViewPart {
 		initMultiWorkspacePage(contentPanel);
 		initWorkspacePage(contentPanel);
 		initProjectPage(contentPanel);
-		//initOra10gProcessPage(contentPanel);
+		// initOra10gProcessPage(contentPanel);
 		layout.topControl = emptyPage;
 
 		contentPanel.layout();
 	}
 
-//	/**
-//	 * create Oracle 10g process page
-//	 * 
-//	 * @param parent
-//	 */
-//	private final void initOra10gProcessPage(Composite parent) {
-//		ora10gProcessPage = new Composite(parent, SWT.NONE);
-//		ora10gProcessPage.setLayout(new FillLayout());
-//
-//		ScrolledComposite sc = new ScrolledComposite(ora10gProcessPage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
-//
-//		Composite composite = new Composite(sc, SWT.NONE);
-//		composite.setLayout(new GridLayout(2, false));
-//		composite.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_VERTICAL | GridData.GRAB_HORIZONTAL));
-//
-//		createLabel(composite, "Process Type: ");
-//		ora10gProcessType = createText(composite);
-//		createLabel(composite, "Process Name: ");
-//		ora10gProcessName = createText(composite);
-//		createLabel(composite, "WSDL: ");
-//		ora10gProcessWsdl = createText(composite);
-//		createLabel(composite, "Project Name: ");
-//		ora10gProjectName = createText(composite);
-//		createLabel(composite, "Project Path: ");
-//		ora10gProjectPath = createText(composite);
-//		createLabel(composite, "Workspace Name: ");
-//		ora10gProcessWorkspaceName = createText(composite);
-//		createLabel(composite, "Workspace Path: ");
-//		ora10gProcessWorkspacePath = createText(composite);
-//		createLabel(composite, "Multi Workspace Name: ");
-//		ora10gProcessMultiWorkspaceName = createText(composite);
-//		createLabel(composite, "Multi Workspace Path: ");
-//		ora10gProcessMultiWorkspacePath = createText(composite);
-//		composite.pack();
-//		sc.setMinSize(composite.getSize());
-//		sc.setExpandHorizontal(true);
-//		sc.setExpandVertical(true);
-//		sc.setContent(composite);
-//	}
+	// /**
+	// * create Oracle 10g process page
+	// *
+	// * @param parent
+	// */
+	// private final void initOra10gProcessPage(Composite parent) {
+	// ora10gProcessPage = new Composite(parent, SWT.NONE);
+	// ora10gProcessPage.setLayout(new FillLayout());
+	//
+	// ScrolledComposite sc = new ScrolledComposite(ora10gProcessPage,
+	// SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
+	//
+	// Composite composite = new Composite(sc, SWT.NONE);
+	// composite.setLayout(new GridLayout(2, false));
+	// composite.setLayoutData(new GridData(GridData.FILL_BOTH |
+	// GridData.GRAB_VERTICAL | GridData.GRAB_HORIZONTAL));
+	//
+	// createLabel(composite, "Process Type: ");
+	// ora10gProcessType = createText(composite);
+	// createLabel(composite, "Process Name: ");
+	// ora10gProcessName = createText(composite);
+	// createLabel(composite, "WSDL: ");
+	// ora10gProcessWsdl = createText(composite);
+	// createLabel(composite, "Project Name: ");
+	// ora10gProjectName = createText(composite);
+	// createLabel(composite, "Project Path: ");
+	// ora10gProjectPath = createText(composite);
+	// createLabel(composite, "Workspace Name: ");
+	// ora10gProcessWorkspaceName = createText(composite);
+	// createLabel(composite, "Workspace Path: ");
+	// ora10gProcessWorkspacePath = createText(composite);
+	// createLabel(composite, "Multi Workspace Name: ");
+	// ora10gProcessMultiWorkspaceName = createText(composite);
+	// createLabel(composite, "Multi Workspace Path: ");
+	// ora10gProcessMultiWorkspacePath = createText(composite);
+	// composite.pack();
+	// sc.setMinSize(composite.getSize());
+	// sc.setExpandHorizontal(true);
+	// sc.setExpandVertical(true);
+	// sc.setContent(composite);
+	// }
 
 	/**
 	 * create {@link Composite} for {@link Project}
@@ -239,32 +246,39 @@ public final class PropertiesView extends ViewPart {
 	private final Text createText(Composite parent) {
 		Text text = new Text(parent, SWT.BORDER | SWT.READ_ONLY);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		text.setText("dddd");
+		text.setText("");
 		return text;
 	}
 
 	@Override
-	public void setFocus() {
+	public final void setFocus() {
 
 	}
 
+	/**
+	 * show properties from object
+	 * 
+	 * @param data
+	 */
 	public final void showProperties(Object data) {
-		if (data instanceof MultiWorkspace) {
-			MultiWorkspace multiWorkspace = (MultiWorkspace) data;
+		dataForProperties = data;
+
+		if (dataForProperties instanceof MultiWorkspace) {
+			MultiWorkspace multiWorkspace = (MultiWorkspace) dataForProperties;
 			txtMultiWorkspaceType.setText(multiWorkspace.getType().toString());
 			txtMultiWorkspaceName.setText(multiWorkspace.getName());
 			txtMultiWorkspacePath.setText(multiWorkspace.getFile().toString());
 			showContent(multiWokrspacePage);
-		} else if (data instanceof Workspace) {
-			Workspace workspace = (Workspace) data;
+		} else if (dataForProperties instanceof Workspace) {
+			Workspace workspace = (Workspace) dataForProperties;
 			txtWorkspaceParentType.setText(workspace.getMultiWorkspace().getType().toString());
 			txtWorkspaceParent.setText(workspace.getMultiWorkspace().getName());
 			txtWorkspaceParentPath.setText(workspace.getMultiWorkspace().getFile().toString());
 			txtWorkspaceName.setText(workspace.getName());
 			txtWorkspacePath.setText(workspace.getFile().toString());
 			showContent(workspacePage);
-		} else if (data instanceof Project) {
-			Project project = (Project) data;
+		} else if (dataForProperties instanceof Project) {
+			Project project = (Project) dataForProperties;
 			txtProjectName.setText(project.getName());
 			txtProjectType.setText(project.getType().toString());
 			txtProjectPath.setText(project.getFile().toString());
@@ -273,12 +287,12 @@ public final class PropertiesView extends ViewPart {
 			txtProjectMultiWorkspacePath.setText(project.getWorkpsace().getMultiWorkspace().getFile().toString());
 			txtProjectMultiWorkspaceName.setText(project.getWorkpsace().getMultiWorkspace().getName());
 			showContent(projectPage);
-//		} else if (data instanceof BpelProject) {
-//			BpelProject bpelProject = (BpelProject) data;
-//			ora10gProcessName.setText(bpelProject.toString());
-//			ora10gProcessType.setText(bpelProject.getType().toString());
-//			ora10gProcessWsdl.setText(bpelProject.getWsdl().getFile().toString());
-//			showContent(ora10gProcessPage);
+			// } else if (data instanceof BpelProject) {
+			// BpelProject bpelProject = (BpelProject) data;
+			// ora10gProcessName.setText(bpelProject.toString());
+			// ora10gProcessType.setText(bpelProject.getType().toString());
+			// ora10gProcessWsdl.setText(bpelProject.getWsdl().getFile().toString());
+			// showContent(ora10gProcessPage);
 		} else {
 			showContent(emptyPage);
 		}
@@ -289,4 +303,42 @@ public final class PropertiesView extends ViewPart {
 		contentPanel.layout();
 	}
 
+	public final void removeMultiWorkspace(MultiWorkspace multiWorkspace) {
+		Object multiWorkspaceInTree = findMultiWorkspaceInTree();
+		if (multiWorkspace.equals(multiWorkspaceInTree)) {
+			showContent(emptyPage);
+		}
+	}
+
+	private final Object findMultiWorkspaceInTree() {
+		if (dataForProperties == null) {
+			return null;
+		} else if (dataForProperties instanceof MultiWorkspace) {
+			return dataForProperties;
+		} else if (dataForProperties instanceof Workspace) {
+			return ((Workspace) dataForProperties).getMultiWorkspace();
+		} else if (dataForProperties instanceof Project) {
+			return ((Project) dataForProperties).getWorkpsace().getMultiWorkspace();
+		}
+		return null;
+	}
+
+	private final Workspace findWorkspaceInTree() {
+		if (dataForProperties == null) {
+			return null;
+		} else if (dataForProperties instanceof Workspace) {
+			return ((Workspace) dataForProperties);
+		} else if (dataForProperties instanceof Project) {
+			return ((Project) dataForProperties).getWorkpsace();
+		}
+
+		return null;
+	}
+
+	public final void removeWorkspace(Workspace workspace) {
+		Workspace workspaceInTree = findWorkspaceInTree();
+		if (workspace.equals(workspaceInTree)) {
+			showContent(emptyPage);
+		}
+	}
 }

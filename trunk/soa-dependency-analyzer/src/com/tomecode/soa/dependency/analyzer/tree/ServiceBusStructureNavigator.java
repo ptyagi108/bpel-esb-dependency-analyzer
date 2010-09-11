@@ -12,6 +12,8 @@ import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.services.Proxy;
 import com.tomecode.soa.ora.osb10g.services.ProxyStructure;
+import com.tomecode.soa.workspace.MultiWorkspace;
+import com.tomecode.soa.workspace.Workspace;
 
 /**
  * 
@@ -28,12 +30,12 @@ public final class ServiceBusStructureNavigator extends ViewPart {
 
 	private final LabelProviderImpl labelProvider;
 
-	private final EmptyNode emptyRootNode;
+	private final EmptyNode rootNode;
 
 	private TreeViewer tree;
 
 	public ServiceBusStructureNavigator() {
-		emptyRootNode = new EmptyNode();
+		rootNode = new EmptyNode();
 		contentProvider = new ServiceBusStructureContentProvider();
 		labelProvider = new LabelProviderImpl();
 		setTitleToolTip("Service Bus - (Proxy or SplitJoin) Structure");
@@ -53,23 +55,25 @@ public final class ServiceBusStructureNavigator extends ViewPart {
 
 	public final void showStructure(Object source) {
 		if (source == null) {
-			emptyRootNode.set(null);
-			tree.setInput(emptyRootNode);
+			clearTree();
 		} else {
 			if (source instanceof Proxy) {
-				emptyRootNode.set(((Proxy) source).getProxyStructure());
-				tree.setInput(emptyRootNode);
+				rootNode.set(((Proxy) source).getProxyStructure());
+				tree.setInput(rootNode);
 				tree.expandAll();
 			} else if (source instanceof OraSB10gProject) {
-				emptyRootNode.set((OraSB10gProject) source);
-				tree.setInput(emptyRootNode);
+				rootNode.set((OraSB10gProject) source);
+				tree.setInput(rootNode);
 				tree.expandAll();
 			} else {
-				emptyRootNode.set(null);
-				tree.setInput(emptyRootNode);
+				clearTree();
 			}
 		}
+	}
 
+	private final void clearTree() {
+		rootNode.set(null);
+		tree.setInput(rootNode);
 	}
 
 	/**
@@ -90,6 +94,44 @@ public final class ServiceBusStructureNavigator extends ViewPart {
 				return ((Proxy) element).getImage();
 			}
 			return null;
+		}
+	}
+
+	public final void removeMultiWorkspace(MultiWorkspace multiWorkspace) {
+		MultiWorkspace multiWorkspaceInTree = findMutliWorkspaceInTree();
+		if (multiWorkspace.equals(multiWorkspaceInTree)) {
+			clearTree();
+		}
+	}
+
+	private final MultiWorkspace findMutliWorkspaceInTree() {
+		if (rootNode.hasChildren()) {
+			Object objectInTree = rootNode.getChildren()[0];
+			if (objectInTree instanceof ProxyStructure) {
+				return ((ProxyStructure) objectInTree).getProxy().getProject().getWorkpsace().getMultiWorkspace();
+			} else if (objectInTree instanceof OraSB10gProject) {
+				return ((OraSB10gProject) objectInTree).getWorkpsace().getMultiWorkspace();
+			}
+		}
+		return null;
+	}
+
+	private final Workspace findWorkspaceInTree() {
+		if (rootNode.hasChildren()) {
+			Object objectInTree = rootNode.getChildren()[0];
+			if (objectInTree instanceof ProxyStructure) {
+				return ((ProxyStructure) objectInTree).getProxy().getProject().getWorkpsace();
+			} else if (objectInTree instanceof OraSB10gProject) {
+				return ((OraSB10gProject) objectInTree).getWorkpsace();
+			}
+		}
+		return null;
+	}
+
+	public final void removeWorkspace(Workspace workspace) {
+		Workspace workspaceInTree = findWorkspaceInTree();
+		if (workspace.equals(workspaceInTree)) {
+			clearTree();
 		}
 	}
 }

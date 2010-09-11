@@ -53,11 +53,11 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 	 * @return
 	 * @throws ServiceParserException
 	 */
-	public final Ora10gMultiWorkspace parse(File workspaceFolder) throws ServiceParserException {
+	public final Ora10gMultiWorkspace parse(String name, File workspaceFolder) throws ServiceParserException {
 		List<File> jwsFiles = new ArrayList<File>();
 		findAllJws(workspaceFolder, jwsFiles);
 
-		Ora10gMultiWorkspace multiWorkspace = new Ora10gMultiWorkspace("empty", workspaceFolder);
+		Ora10gMultiWorkspace multiWorkspace = new Ora10gMultiWorkspace(name, workspaceFolder);
 
 		for (File jwsFile : jwsFiles) {
 
@@ -81,12 +81,42 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 
 		}
 
+		analyseDependnecies(multiWorkspace);
+		return multiWorkspace;
+	}
+
+	public final Ora10gWorkspace parseWorkspace(File workspaceFolder) throws ServiceParserException {
+		List<File> jwsFiles = new ArrayList<File>();
+		findAllJws(workspaceFolder, jwsFiles);
+
+		// create new workspace
+		Ora10gWorkspace workspace = new Ora10gWorkspace(getNameWithouExtension(workspaceFolder.getName()), workspaceFolder);
+
+		for (File jwsFile : jwsFiles) {
+			try {
+				// load list of projects from jws
+				List<File> jwsProjectFiles = parseListOfProjectsFromJWS(parseXml(jwsFile), jwsFile.getParentFile());
+
+				// parse all projects from jws and return list this process
+				List<File> listOfParsedBpelEsb = parseBpelEsbProjects(jwsProjectFiles, workspace, true);
+
+				// parse all projects from file system wiche not are in jws
+				List<File> fsProjects = new ArrayList<File>();
+				findBpelEsbProjectFromFS(listOfParsedBpelEsb, fsProjects, jwsFile.getParentFile());
+				parseBpelEsbProjects(fsProjects, workspace, false);
+			} catch (ServiceParserException e) {
+				// TODO: fix
+				e.printStackTrace();
+			}
+		}
+		return workspace;
+	}
+
+	public final void analyseDependnecies(Ora10gMultiWorkspace multiWorkspace) {
 		analysesBpelDependencies(multiWorkspace);
 		analysesEsbDependencies(multiWorkspace);
 		analysesDepBetweenBpelEsb(multiWorkspace);
-
 		analysesBpelProjectDependencies(multiWorkspace);
-		return multiWorkspace;
 	}
 
 	/**

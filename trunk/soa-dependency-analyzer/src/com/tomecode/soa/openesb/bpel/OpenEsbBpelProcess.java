@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tomecode.soa.openesb.project.OpenEsbBpelProject;
 import com.tomecode.soa.services.BpelProcess;
 
 /**
@@ -31,6 +32,8 @@ public final class OpenEsbBpelProcess implements BpelProcess {
 	private final List<PartnerLink> partnerLinks;
 
 	private OpenEsbBpelProcessStructure processStructure;
+
+	private OpenEsbBpelProject project;
 
 	/**
 	 * Constructor
@@ -120,6 +123,21 @@ public final class OpenEsbBpelProcess implements BpelProcess {
 	 */
 	public final boolean hasProcessStructureChildren() {
 		return processStructure != null && !processStructure.getActivities().isEmpty();
+	}
+
+	/**
+	 * @return the project
+	 */
+	public final OpenEsbBpelProject getProject() {
+		return project;
+	}
+
+	/**
+	 * @param project
+	 *            the project to set
+	 */
+	public final void setProject(OpenEsbBpelProject project) {
+		this.project = project;
 	}
 
 	public final String toString() {

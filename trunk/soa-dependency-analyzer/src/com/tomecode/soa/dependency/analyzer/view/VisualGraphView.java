@@ -286,7 +286,7 @@ public final class VisualGraphView extends ViewPart {
 		} else if (object instanceof GraphNode) {
 			GraphNode graphNode = (GraphNode) object;
 			GuiUtils.getPropertiesView().showProperties(graphNode.getData());
-			GuiUtils.getBpelProcessStructureNavigator().showProcess(graphNode.getData());
+			GuiUtils.getBpelProcessStructureNavigator().showProcessStructure(graphNode.getData());
 			GuiUtils.getServiceBusStructureNavigator().showStructure(graphNode.getData());
 			GuiUtils.getServiceOperationsDepNavigator().showOperationDepenendecies(graphNode.getData());
 			GuiUtils.getProjectStructureNavigator().showProjectFiles(graphNode.getData());
@@ -327,11 +327,21 @@ public final class VisualGraphView extends ViewPart {
 			BpelProcess bpelProcess = (BpelProcess) source;
 			createProcessAndProcessGraph(bpelProcess, null);
 		}
+		graphViewer.getGraphControl().applyLayout();
+		isExpandInGraph = backup;
+	}
 
+	/**
+	 * remove all objects from graph
+	 */
+	public final void clearContentFromGraph() {
+		boolean backup = isExpandInGraph;
+		isExpandInGraph = false;
+		expandedInGraphObjects.clear();
+		clearGraph();
 		graphViewer.getGraphControl().applyLayout();
 
 		isExpandInGraph = backup;
-
 	}
 
 	private final void createProcessAndProcessGraph(BpelProcess process, GraphNode existsSource) {

@@ -15,8 +15,9 @@ import com.tomecode.soa.parser.AbstractParser;
  */
 public final class OraSB10gMWorkspaceParser extends AbstractParser {
 
-
-
+	/**
+	 * parse for Oracle Service Bus 10g projects
+	 */
 	private final OraSB10gProjectParser projectParser;
 
 	public OraSB10gMWorkspaceParser() {

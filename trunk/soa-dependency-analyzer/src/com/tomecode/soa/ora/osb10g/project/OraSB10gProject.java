@@ -34,6 +34,7 @@ public final class OraSB10gProject implements Project {
 	}
 
 	public final void addService(Service service) {
+		service.setProject(this);
 		this.services.add(service);
 	}
 

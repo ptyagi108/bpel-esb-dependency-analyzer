@@ -11,6 +11,11 @@ import org.eclipse.swt.graphics.Image;
  */
 public final class ImageFactory {
 
+	public static final ImageDescriptor refresh = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/refresh.png"));
+
+	public static final ImageDescriptor trash = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/trash.png"));
+	public static final Image TRASH = trash.createImage();
+
 	public static final Image FILE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/file.png")).createImage();
 	public static final Image FOLDER = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/folder.png")).createImage();
 

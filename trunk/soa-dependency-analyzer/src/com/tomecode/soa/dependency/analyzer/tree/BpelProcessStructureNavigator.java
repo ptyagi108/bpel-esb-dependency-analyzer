@@ -10,6 +10,9 @@ import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.openesb.project.OpenEsbBpelProject;
 import com.tomecode.soa.ora.suite10g.project.BpelProject;
+import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProcessStrukture;
+import com.tomecode.soa.workspace.MultiWorkspace;
+import com.tomecode.soa.workspace.Workspace;
 
 /**
  * Show BPEL process structure (tree structure of activities)
@@ -25,14 +28,14 @@ public final class BpelProcessStructureNavigator extends ViewPart {
 
 	private final BpelProcessStructureLabelProvider labelProvider;
 
-	private final EmptyNode emptyRootNode;
+	private final EmptyNode rootNode;
 
 	private TreeViewer tree;
 
 	public BpelProcessStructureNavigator() {
 		setTitleImage(ImageFactory.BPEL_PROCESS_STRUCTURE_TREE);
 		setTitleToolTip("BPEL process structure");
-		emptyRootNode = new EmptyNode();
+		rootNode = new EmptyNode();
 		contentProvider = new BpelProcessStructureContentProvider();
 		labelProvider = new BpelProcessStructureLabelProvider();
 	}
@@ -49,24 +52,89 @@ public final class BpelProcessStructureNavigator extends ViewPart {
 
 	}
 
-	public final void showProcess(Object source) {
+	/**
+	 * show process structure
+	 * 
+	 * @param source
+	 */
+	public final void showProcessStructure(Object source) {
 		if (source instanceof BpelProject) {
-			emptyRootNode.set(((BpelProject) source).getBpelProcessStrukture());
-			tree.setInput(emptyRootNode);
+			rootNode.set(((BpelProject) source).getBpelProcessStrukture());
+			tree.setInput(rootNode);
 			tree.expandAll();
 		} else if (source instanceof OpenEsbBpelProject) {
-			// TODO: is ok?
-			// OpenEsbBpelProject project = ((OpenEsbBpelProject) source);
-			emptyRootNode.set(source);
-			tree.setInput(emptyRootNode);
+			rootNode.set(source);
+			tree.setInput(rootNode);
 			tree.expandAll();
 		} else if (source instanceof OpenEsbBpelProcess) {
-			emptyRootNode.set(source);
-			tree.setInput(emptyRootNode);
+			rootNode.set(source);
+			tree.setInput(rootNode);
 			tree.expandAll();
 		} else {
-			tree.setInput(null);
+			clearTree();
 		}
 	}
 
+	/**
+	 * if user remove {@link MultiWorkspace} from {@link WorkspacesNavigator}
+	 * then check whether, has a reference
+	 * 
+	 * @param multiWorkspace
+	 */
+	public final void removeMultiWorkspace(MultiWorkspace multiWorkspace) {
+		MultiWorkspace multiWorkspaceInTree = findMultiWorkspaceForStructure();
+		if (multiWorkspace.equals(multiWorkspaceInTree)) {
+			clearTree();
+		}
+	}
+
+	/**
+	 * if user remove {@link Workspace} from {@link WorkspacesNavigator} then
+	 * check whether, has a reference
+	 * 
+	 * @param workspace
+	 */
+	public final void removeWorkspace(Workspace workspace) {
+		Workspace workspaceInTree = findWorkspaceForStructure();
+		if (workspaceInTree != null) {
+			if (workspace.equals(workspaceInTree)) {
+				clearTree();
+			}
+		}
+	}
+
+	private final void clearTree() {
+		rootNode.set(null);
+		tree.setInput(null);
+	}
+
+	private final Workspace findWorkspaceForStructure() {
+		if (rootNode.hasChildren()) {
+			Object objectInTree = rootNode.getChildren()[0];
+			if (objectInTree instanceof Ora10gBpelProcessStrukture) {
+				return ((Ora10gBpelProcessStrukture) objectInTree).getProject().getWorkpsace();
+			} else if (objectInTree instanceof OpenEsbBpelProject) {
+				return ((OpenEsbBpelProject) objectInTree).getWorkpsace();
+			} else if (objectInTree instanceof OpenEsbBpelProcess) {
+				return ((OpenEsbBpelProcess) objectInTree).getProject().getWorkpsace();
+			}
+		}
+
+		return null;
+	}
+
+	private final MultiWorkspace findMultiWorkspaceForStructure() {
+		if (rootNode.hasChildren()) {
+			Object objectInTree = rootNode.getChildren()[0];
+			if (objectInTree instanceof Ora10gBpelProcessStrukture) {
+				return ((Ora10gBpelProcessStrukture) objectInTree).getProject().getWorkpsace().getMultiWorkspace();
+			} else if (objectInTree instanceof OpenEsbBpelProject) {
+				return ((OpenEsbBpelProject) objectInTree).getWorkpsace().getMultiWorkspace();
+			} else if (objectInTree instanceof OpenEsbBpelProcess) {
+				return ((OpenEsbBpelProcess) objectInTree).getProject().getWorkpsace().getMultiWorkspace();
+			}
+		}
+
+		return null;
+	}
 }

@@ -2,6 +2,8 @@ package com.tomecode.soa.ora.osb10g.services;
 
 import java.io.File;
 
+import com.tomecode.soa.project.Project;
+
 /**
  * Business service
  * 
@@ -9,6 +11,8 @@ import java.io.File;
  * 
  */
 public final class BusinessService implements Service {
+
+	private Project project;
 
 	private String name;
 
@@ -31,6 +35,16 @@ public final class BusinessService implements Service {
 	@Override
 	public final String getName() {
 		return name;
+	}
+
+	@Override
+	public final Project getProject() {
+		return project;
+	}
+
+	@Override
+	public final void setProject(Project project) {
+		this.project = project;
 	}
 
 }

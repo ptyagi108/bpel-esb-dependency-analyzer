@@ -77,4 +77,13 @@ public final class OpenEsbMultiWorkspace implements MultiWorkspace {
 	public final WorkspaceType getType() {
 		return WorkspaceType.OPEN_ESB;
 	}
+
+	public final OpenEsbWorkspace removeWorkspace(Workspace workspace) {
+		for (int i = 0; i <= workspaces.size() - 1; i++) {
+			if (workspaces.get(i).equals(workspace)) {
+				return workspaces.remove(i);
+			}
+		}
+		return null;
+	}
 }

@@ -118,7 +118,7 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 
 			if (iViewPart != null) {
 				BpelProcessStructureNavigator navigator = (BpelProcessStructureNavigator) iViewPart;
-				navigator.showProcess(selection.getFirstElement());
+				navigator.showProcessStructure(selection.getFirstElement());
 			}
 
 			iViewPart = workbenchPage.findView(ServiceOperationsDepNavigator.ID);
@@ -157,14 +157,23 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 
 	}
 
-	public final void newMultiWorkspace(final MultiWorkspace multiWorkspace) {
+	/**
+	 * add new {@link MultiWorkspace} to tree
+	 * 
+	 * @param multiWorkspace
+	 */
+	public final void newMultiWorkspace(MultiWorkspace multiWorkspace) {
 		rootNode.add(multiWorkspace);
 		tree.refresh(rootNode);
 	}
 
-	public final void updateMultiWorkspace(MultiWorkspace multiWorkspace) {
-		rootNode.add(multiWorkspace);
-		tree.refresh(rootNode);
+	/**
+	 * refresh multi workspace nodes
+	 * 
+	 * @param multiWorkspace
+	 */
+	public final void updateMultiWorkspace(MultiWorkspace oldMultiWorkspace, MultiWorkspace newMultiWorkspace) {
+		rootNode.refreshMultiWorkspaceNode(oldMultiWorkspace, newMultiWorkspace);
 	}
 
 	/**
@@ -184,4 +193,37 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 			}
 		}
 	}
+
+	/**
+	 * remove selected {@link MultiWorkspace}
+	 * 
+	 * @return
+	 */
+	public final MultiWorkspace removeMultiWorkspace() {
+		IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
+		if (!selection.isEmpty()) {
+			rootNode.remove(selection.getFirstElement());
+			tree.refresh();
+			return ApplicationManager.getInstance().removeMultiWorkspace(selection.getFirstElement());
+		}
+		return null;
+	}
+
+	/**
+	 * remove selected {@link Workspace}
+	 * 
+	 * @return
+	 */
+	public final Workspace removeSelectedWorkspace() {
+		IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
+		if (!selection.isEmpty()) {
+			return (Workspace) selection.getFirstElement();
+		}
+		return null;
+	}
+
+	public final void refreshTree() {
+		tree.refresh();
+	}
+
 }

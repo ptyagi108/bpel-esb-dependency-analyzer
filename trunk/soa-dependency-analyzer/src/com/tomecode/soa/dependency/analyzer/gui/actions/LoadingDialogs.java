@@ -82,10 +82,10 @@ public final class LoadingDialogs {
 		// result
 		if (!returns.isEmpty()) {
 			MultiWorkspace multiWorkspace = (MultiWorkspace) returns.get(0);
-			if (config.isNewMWorkspace()) {
+			if (config.isNewMultiWorkspace()) {
 				GuiUtils.getWorkspacesNavigator().newMultiWorkspace(multiWorkspace);
 			} else {
-				GuiUtils.getWorkspacesNavigator().updateMultiWorkspace(multiWorkspace);
+				GuiUtils.getWorkspacesNavigator().updateMultiWorkspace(multiWorkspace, null);
 			}
 		}
 

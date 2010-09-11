@@ -5,6 +5,8 @@ import org.eclipse.jface.action.Separator;
 
 import com.tomecode.soa.dependency.analyzer.gui.actions.OpenWorkspaceAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.RefreshAction;
+import com.tomecode.soa.dependency.analyzer.gui.actions.RemoveMultiWorkspaceAction;
+import com.tomecode.soa.dependency.analyzer.gui.actions.RemoveWorkspaceAction;
 import com.tomecode.soa.dependency.analyzer.tree.WorkspacesNavigator;
 
 /**
@@ -22,6 +24,10 @@ public final class PopupMenuUtils {
 
 	private static final RefreshAction REFRESH_ACTION = new RefreshAction();
 
+	private static final RemoveMultiWorkspaceAction REMOVE_MULTI_WORKSPACE_ACTION = new RemoveMultiWorkspaceAction();
+
+	private static final RemoveWorkspaceAction REMOVE_WORKSPACE_ACTION = new RemoveWorkspaceAction();
+
 	private PopupMenuUtils() {
 
 	}
@@ -36,6 +42,11 @@ public final class PopupMenuUtils {
 	 */
 	public static final void fillWorksapceNavigator(Object selectedNode, IMenuManager manager) {
 		manager.add(OPEN_WORKSPACE_ACTION);
+		manager.add(SEPARATOR);
+		REMOVE_MULTI_WORKSPACE_ACTION.setEnableFor(selectedNode);
+		manager.add(REMOVE_MULTI_WORKSPACE_ACTION);
+		REMOVE_WORKSPACE_ACTION.setEnableFor(selectedNode);
+		manager.add(REMOVE_WORKSPACE_ACTION);
 		manager.add(SEPARATOR);
 		manager.add(REFRESH_ACTION);
 		REFRESH_ACTION.setSelectectedNode(selectedNode);

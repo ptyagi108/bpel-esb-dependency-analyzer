@@ -7,6 +7,8 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.util.FileRootNode;
+import com.tomecode.soa.workspace.MultiWorkspace;
+import com.tomecode.soa.workspace.Workspace;
 
 /**
  * 
@@ -27,11 +29,11 @@ public final class ProjectStructureNavigator extends ViewPart {
 
 	private ProjectStructureLabelProvider labelProvider;
 
-	private FileRootNode fileRootNode;
+	private FileRootNode rootNode;
 
 	public ProjectStructureNavigator() {
 		super();
-		fileRootNode = new FileRootNode();
+		rootNode = new FileRootNode();
 		contentProvider = new ProjectStructureContentProvider();
 		labelProvider = new ProjectStructureLabelProvider();
 		setTitleToolTip("Project files");
@@ -53,14 +55,52 @@ public final class ProjectStructureNavigator extends ViewPart {
 		if (firstElement instanceof Project) {
 			Project project = (Project) firstElement;
 			labelProvider.setRoot(project.getFile());
-			fileRootNode.setFile(project.getFile());
-			tree.setInput(fileRootNode);
+			rootNode.setProject(project);
+			tree.setInput(rootNode);
 			tree.expandAll();
 		} else {
-			fileRootNode.setFile(null);
-			labelProvider.setRoot(null);
-			tree.setInput(null);
+			clearTree();
 		}
 	}
 
+	/**
+	 * clear content of tree
+	 */
+	private final void clearTree() {
+		rootNode.setProject(null);
+		labelProvider.setRoot(null);
+		tree.setInput(null);
+	}
+
+	/**
+	 * 
+	 * @param multiWorkspace
+	 */
+	public final void removeMultiWorkspace(MultiWorkspace multiWorkspace) {
+		MultiWorkspace multiWorkspaceInTree = findMultiWorkspaceForStructure();
+		if (multiWorkspace.equals(multiWorkspaceInTree)) {
+			clearTree();
+		}
+	}
+
+	private final MultiWorkspace findMultiWorkspaceForStructure() {
+		if (rootNode.hasFiles()) {
+			return rootNode.getProject().getWorkpsace().getMultiWorkspace();
+		}
+		return null;
+	}
+
+	public final void removeWorkspace(Workspace workspace) {
+		Workspace workspaceInTree = findWorkspaceForStructure();
+		if (workspace.equals(workspaceInTree)) {
+			clearTree();
+		}
+	}
+
+	private final Workspace findWorkspaceForStructure() {
+		if (rootNode.hasFiles()) {
+			return rootNode.getProject().getWorkpsace();
+		}
+		return null;
+	}
 }

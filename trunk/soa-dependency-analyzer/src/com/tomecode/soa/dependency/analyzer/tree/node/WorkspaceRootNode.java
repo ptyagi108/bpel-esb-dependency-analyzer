@@ -3,6 +3,8 @@ package com.tomecode.soa.dependency.analyzer.tree.node;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tomecode.soa.workspace.MultiWorkspace;
+
 /**
  * 
  * @author Tomas Frastia
@@ -27,4 +29,56 @@ public final class WorkspaceRootNode {
 	public final Object[] getChildren() {
 		return objects.toArray();
 	}
+
+	/**
+	 * refresh node - which contain {@link MultiWorkspace}
+	 * 
+	 * @param oldMultiWorkspace
+	 * @param newMultiWorkspace
+	 */
+	public final void refreshMultiWorkspaceNode(MultiWorkspace oldMultiWorkspace, MultiWorkspace newMultiWorkspace) {
+		if (newMultiWorkspace == null) {
+			if (!replaceExistsNode(oldMultiWorkspace)) {
+				objects.add(oldMultiWorkspace);
+			}
+
+		} else {
+			for (int i = 0; i <= objects.size() - 1; i++) {
+				if (objects.get(i).equals(oldMultiWorkspace)) {
+					objects.set(i, newMultiWorkspace);
+				}
+			}
+		}
+	}
+
+	/**
+	 * replace exists node
+	 * 
+	 * @param multiWorkspace
+	 * @return
+	 */
+	private final boolean replaceExistsNode(MultiWorkspace multiWorkspace) {
+		for (int i = 0; i <= objects.size() - 1; i++) {
+			if (objects.get(i).equals(multiWorkspace)) {
+				objects.set(i, multiWorkspace);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * remove selected {@link MultiWorkspace}
+	 * 
+	 * @param selectedMultiWorkspace
+	 */
+	public final void remove(Object selectedMultiWorkspace) {
+		for (int i = 0; i <= objects.size() - 1; i++) {
+			if (objects.get(i).equals(selectedMultiWorkspace)) {
+				objects.remove(i);
+				break;
+			}
+		}
+	}
+
 }

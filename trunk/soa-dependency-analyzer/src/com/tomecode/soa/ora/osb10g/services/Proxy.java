@@ -5,6 +5,7 @@ import java.io.File;
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.project.Project;
 
 /**
  * Proxy file
@@ -26,6 +27,8 @@ public final class Proxy implements Service {
 	private Binding binding;
 
 	private ProxyStructure proxyStructure;
+
+	private Project project;
 
 	public Proxy(File file) {
 		this.file = file;
@@ -92,6 +95,16 @@ public final class Proxy implements Service {
 
 	public final Image getImage() {
 		return ImageFactory.OSB_10G_SERVICE;
+	}
+
+	@Override
+	public final Project getProject() {
+		return project;
+	}
+
+	@Override
+	public final void setProject(Project project) {
+		this.project = project;
 	}
 
 }

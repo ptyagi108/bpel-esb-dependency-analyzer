@@ -52,8 +52,15 @@ public final class OpenEsbBpelProject implements Project {
 		this.wsdlFiles = new ArrayList<Wsdl>();
 	}
 
+	/**
+	 * add {@link OpenEsbBpelProcess} to list of process
+	 * 
+	 * @param bpelProcess
+	 */
 	public final void addBpelProcess(OpenEsbBpelProcess bpelProcess) {
+		bpelProcess.setProject(this);
 		this.bpelProcesses.add(bpelProcess);
+
 	}
 
 	public final List<OpenEsbBpelProcess> getProcesses() {

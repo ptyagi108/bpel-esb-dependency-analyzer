@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tomecode.soa.workspace.MultiWorkspace;
+import com.tomecode.soa.workspace.Workspace;
 import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 
 /**
@@ -29,7 +30,7 @@ public class Ora10gMultiWorkspace implements MultiWorkspace {
 	/**
 	 * list of {@link Ora10gWorkspace}
 	 */
-	private List<Ora10gWorkspace> oracle10gWorkspaces;
+	private List<Ora10gWorkspace> workspaces;
 
 	/**
 	 * Constructor
@@ -40,7 +41,7 @@ public class Ora10gMultiWorkspace implements MultiWorkspace {
 	 *            workspace folder( user enter)
 	 */
 	public Ora10gMultiWorkspace(String name, File file) {
-		this.oracle10gWorkspaces = new ArrayList<Ora10gWorkspace>();
+		this.workspaces = new ArrayList<Ora10gWorkspace>();
 		this.name = name;
 		this.file = file;
 	}
@@ -60,24 +61,33 @@ public class Ora10gMultiWorkspace implements MultiWorkspace {
 	}
 
 	public final boolean hasChildren() {
-		return !this.oracle10gWorkspaces.isEmpty();
+		return !this.workspaces.isEmpty();
 	}
 
 	public final Object[] getChildren() {
-		return oracle10gWorkspaces.toArray();
+		return workspaces.toArray();
 	}
 
 	public final void addWorkspace(Ora10gWorkspace workspace) {
 		workspace.setMultiWorkspace(this);
-		this.oracle10gWorkspaces.add(workspace);
+		this.workspaces.add(workspace);
 	}
 
 	public final List<Ora10gWorkspace> getWorkspaces() {
-		return oracle10gWorkspaces;
+		return workspaces;
 	}
 
 	@Override
 	public final WorkspaceType getType() {
 		return WorkspaceType.ORACLE_1OG;
+	}
+
+	public final Ora10gWorkspace removeWorkspace(Workspace workspace) {
+		for (int i = 0; i <= workspaces.size() - 1; i++) {
+			if (workspaces.get(i).equals(workspace)) {
+				return workspaces.remove(i);
+			}
+		}
+		return null;
 	}
 }

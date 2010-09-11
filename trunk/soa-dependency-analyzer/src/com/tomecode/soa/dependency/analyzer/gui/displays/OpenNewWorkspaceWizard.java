@@ -225,7 +225,8 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 			} else {
 				setPageComplete(true);
 
-				config.setExistMWorkspaceName(comboMWorkspaces.getItem(comboMWorkspaces.getSelectionIndex()));
+				config.setMultiWorkspace(comboMWorkspaces.getItem(comboMWorkspaces.getSelectionIndex()));
+				config.setIsNewMultiWorkspace(false);
 			}
 		}
 
@@ -233,7 +234,8 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 			String str = txtMWorkspaceName.getText().trim();
 			if (str.length() != 0) {
 				setPageComplete(!contains(mwNames, str));
-				config.setMWorkspaceNew(str);
+				config.setMultiWorkspace(str);
+				config.setIsNewMultiWorkspace(true);
 			} else {
 				setPageComplete(false);
 			}
@@ -364,11 +366,7 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 		public final void fillData() {
 			labelWoskapceTypeName.setText(config.getWorkspaceType().toString());
 
-			if (config.isNewMWorkspace()) {
-				labelMWoskapceName.setText(config.getMWorkspaceNew());
-			} else {
-				labelMWoskapceName.setText(config.getExistMWorkspace());
-			}
+			labelMWoskapceName.setText(config.getMultiWorkspaceName());
 
 			if (config.getWorkspaceDir() != null) {
 				labelWorkspaceDirName.setText(config.getWorkspaceDir().toString());
@@ -424,17 +422,15 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 
 		private final List<File> workspacePaths;
 
-		private String newMWorkspaceName;
+		private String multiWorkspaceName;
 
-		private String existMWorkspace;
-
-		private boolean isNewMWorkspace;
+		private boolean isNewMultWorkspace;
 
 		private File workspaceDir;
 
 		public WorkspaceConfig() {
 			workspacePaths = new ArrayList<File>();
-			isNewMWorkspace = true;
+			isNewMultWorkspace = true;
 
 		}
 
@@ -446,26 +442,20 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 			this.workspaceDir = workspaceDir;
 		}
 
-		public final void setExistMWorkspaceName(String existMWorkspace) {
-			this.existMWorkspace = existMWorkspace;
-			this.isNewMWorkspace = false;
+		public final void setIsNewMultiWorkspace(boolean state) {
+			this.isNewMultWorkspace = state;
 		}
 
-		public final void setMWorkspaceNew(String newMWorkspaceName) {
-			this.newMWorkspaceName = newMWorkspaceName;
-			this.isNewMWorkspace = true;
+		public final boolean isNewMultiWorkspace() {
+			return isNewMultWorkspace;
 		}
 
-		public final String getExistMWorkspace() {
-			return existMWorkspace;
+		public final String getMultiWorkspaceName() {
+			return multiWorkspaceName;
 		}
 
-		public final boolean isNewMWorkspace() {
-			return isNewMWorkspace;
-		}
-
-		public final String getMWorkspaceNew() {
-			return newMWorkspaceName;
+		public final void setMultiWorkspace(String path) {
+			this.multiWorkspaceName = path;
 		}
 
 		/**

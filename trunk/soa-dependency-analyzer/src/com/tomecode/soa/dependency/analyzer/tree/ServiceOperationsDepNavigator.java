@@ -8,6 +8,8 @@ import org.eclipse.ui.part.ViewPart;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
 import com.tomecode.soa.ora.suite10g.project.BpelProject;
+import com.tomecode.soa.workspace.MultiWorkspace;
+import com.tomecode.soa.workspace.Workspace;
 
 /**
  * 
@@ -22,13 +24,13 @@ public final class ServiceOperationsDepNavigator extends ViewPart {
 
 	private ServiceOperationsDepContentProvider contentProvider;
 
-	public final EmptyNode emptyRootNode;
+	public final EmptyNode rootNode;
 	private TreeViewer tree;
 
 	public ServiceOperationsDepNavigator() {
 		setTitleImage(ImageFactory.DEPENDNECY_BY_OPERATION_TREE);
 		setTitleToolTip("Dependencies by operations");
-		emptyRootNode = new EmptyNode();
+		rootNode = new EmptyNode();
 		labelProvider = new ServiceOperationsDepLabelProvider();
 		contentProvider = new ServiceOperationsDepContentProvider();
 	}
@@ -48,11 +50,50 @@ public final class ServiceOperationsDepNavigator extends ViewPart {
 	public final void showOperationDepenendecies(Object source) {
 		if (source instanceof BpelProject) {
 			BpelProject bpelProject = (BpelProject) source;
-			emptyRootNode.set(bpelProject.getBpelOperations());
-			tree.setInput(emptyRootNode);
+			rootNode.set(bpelProject.getBpelOperations());
+			tree.setInput(rootNode);
 			tree.expandAll();
 		} else {
-			tree.setInput(null);
+			clearTree();
+		}
+	}
+
+	private final void clearTree() {
+		rootNode.set(null);
+		tree.setInput(null);
+	}
+
+	public final void removeMultiWorkspace(MultiWorkspace multiWorkspace) {
+		MultiWorkspace multiWorkspaceInTree = findMultiWorkspaceInTree();
+		if (multiWorkspace.equals(multiWorkspaceInTree)) {
+			clearTree();
+		}
+	}
+
+	private final MultiWorkspace findMultiWorkspaceInTree() {
+		if (rootNode.hasChildren()) {
+			Object objectInTree = rootNode.getChildren()[0];
+			if (objectInTree instanceof BpelProject) {
+				return ((BpelProject) objectInTree).getWorkpsace().getMultiWorkspace();
+			}
+		}
+		return null;
+	}
+
+	private final Workspace findWorkspaceInTree() {
+		if (rootNode.hasChildren()) {
+			Object objectInTree = rootNode.getChildren()[0];
+			if (objectInTree instanceof BpelProject) {
+				return ((BpelProject) objectInTree).getWorkpsace();
+			}
+		}
+		return null;
+	}
+
+	public final void removeWorkspace(Workspace workspace) {
+		Workspace workspaceInTree = findWorkspaceInTree();
+		if (workspace.equals(workspaceInTree)) {
+			clearTree();
 		}
 	}
 
