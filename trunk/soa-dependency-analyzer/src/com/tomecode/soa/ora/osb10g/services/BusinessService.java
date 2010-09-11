@@ -5,6 +5,7 @@ import java.io.File;
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig;
 import com.tomecode.soa.project.Project;
 
 /**
@@ -20,6 +21,8 @@ public final class BusinessService implements Service {
 	private String name;
 
 	private File file;
+
+	private EndpointConfig endpointConfig;
 
 	public BusinessService(File file) {
 		this.file = file;
@@ -53,6 +56,17 @@ public final class BusinessService implements Service {
 	@Override
 	public final Image getImage() {
 		return ImageFactory.OSB_10G_SERVICE;
+	}
+
+	/**
+	 * @return the endpointConfig
+	 */
+	public final EndpointConfig getEndpointConfig() {
+		return endpointConfig;
+	}
+
+	public final void setEndpointConfig(EndpointConfig endpointConfig) {
+		this.endpointConfig = endpointConfig;
 	}
 
 }

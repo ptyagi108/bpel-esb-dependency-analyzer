@@ -5,6 +5,7 @@ import java.io.File;
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig;
 import com.tomecode.soa.project.Project;
 
 /**
@@ -15,21 +16,47 @@ import com.tomecode.soa.project.Project;
  */
 public final class Proxy implements Service {
 
+	/**
+	 * proxy service name
+	 */
 	private final String name;
+	/**
+	 * proxy service file
+	 */
 	private final File file;
 
 	private boolean isEnabled;
 
 	private boolean isAutoPublish;
 
+	/**
+	 * description
+	 */
 	private String description;
 
 	private Binding binding;
 
+	/**
+	 * structure - contains all activities from this proxy service
+	 */
 	private ProxyStructure proxyStructure;
 
+	/**
+	 * parent project
+	 */
 	private Project project;
 
+	/**
+	 * endpoint config
+	 */
+	private EndpointConfig endpointConfig;
+
+	/**
+	 * Constructor
+	 * 
+	 * @param file
+	 *            proxy service file
+	 */
 	public Proxy(File file) {
 		this.file = file;
 		int index = file.getName().indexOf(".proxy");
@@ -105,6 +132,21 @@ public final class Proxy implements Service {
 	@Override
 	public final void setProject(Project project) {
 		this.project = project;
+	}
+
+	/**
+	 * @return the endpointConfig
+	 */
+	public final EndpointConfig getEndpointConfig() {
+		return endpointConfig;
+	}
+
+	/**
+	 * @param endpointConfig
+	 *            the endpointConfig to set
+	 */
+	public final void setEndpointConfig(EndpointConfig endpointConfig) {
+		this.endpointConfig = endpointConfig;
 	}
 
 }
