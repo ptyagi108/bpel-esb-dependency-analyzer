@@ -91,7 +91,7 @@ public enum ActivityType {
 		return name;
 	}
 
-	public final Image getImageIcon() {
+	public final Image getImage() {
 		return imageIcon;
 	}
 

@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.suite10g.esb.BasicEsbNode.EsbNodeType;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gWorkspace;
 import com.tomecode.soa.project.Project;
@@ -205,6 +208,11 @@ public final class EsbProject implements Project {
 	@Override
 	public final Workspace getWorkpsace() {
 		return workspace;
+	}
+
+	@Override
+	public Image getImage() {
+		return ImageFactory.ORACLE_10G_ESB;
 	}
 
 }

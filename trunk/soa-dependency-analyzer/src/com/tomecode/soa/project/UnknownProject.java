@@ -2,6 +2,9 @@ package com.tomecode.soa.project;
 
 import java.io.File;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.suite10g.project.PartnerLinkBinding;
 import com.tomecode.soa.workspace.Workspace;
 
@@ -105,6 +108,11 @@ public final class UnknownProject implements Project {
 	@Override
 	public Workspace getWorkpsace() {
 		return workspace;
+	}
+
+	@Override
+	public Image getImage() {
+		return ImageFactory.UNKNOWN;
 	}
 
 }

@@ -22,9 +22,9 @@ final class ServiceOperationsDepLabelProvider extends LabelProvider {
 			return ImageFactory.ORACLE_10G_BPEL_PROCESS;
 		} else if (element instanceof Operation) {
 			Operation operation = (Operation) element;
-			return operation.getActivtyType().getImageIcon();
+			return operation.getActivtyType().getImage();
 		} else if (element instanceof BpelProject) {
-			return ImageFactory.ORACLE_10G_BPEL_PROCESS;
+			return ((BpelProject) element).getImage();
 		}
 		return null;
 	}

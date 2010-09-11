@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gWorkspace;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.project.ProjectType;
@@ -168,6 +171,11 @@ public final class BpelProject implements Project {
 	@Override
 	public final Workspace getWorkpsace() {
 		return workspace;
+	}
+
+	@Override
+	public final Image getImage() {
+		return ImageFactory.ORACLE_10G_BPEL_PROCESS;
 	}
 
 }

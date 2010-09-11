@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.services.OraSB10gFolders;
 import com.tomecode.soa.ora.osb10g.services.Proxy;
 import com.tomecode.soa.ora.osb10g.services.Service;
@@ -84,5 +87,9 @@ public final class OraSB10gProject implements Project {
 			}
 		}
 		return list;
+	}
+
+	public final Image getImage() {
+		return ImageFactory.OSB_10G_PROJECT;
 	}
 }

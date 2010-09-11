@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.openesb.project.OpenEsbBpelProject;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.workspace.MultiWorkspace;
@@ -83,6 +86,10 @@ public final class OpenEsbWorkspace implements Workspace {
 	@Override
 	public final MultiWorkspace getMultiWorkspace() {
 		return multiWorkspace;
+	}
+
+	public final Image getImage() {
+		return ImageFactory.WORKSPACE;
 	}
 
 }

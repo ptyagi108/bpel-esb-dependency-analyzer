@@ -2,6 +2,8 @@ package com.tomecode.soa.project;
 
 import java.io.File;
 
+import org.eclipse.swt.graphics.Image;
+
 import com.tomecode.soa.workspace.Workspace;
 
 /**
@@ -25,5 +27,7 @@ public interface Project {
 	ProjectType getType();
 
 	Workspace getWorkpsace();
+
+	Image getImage();
 
 }

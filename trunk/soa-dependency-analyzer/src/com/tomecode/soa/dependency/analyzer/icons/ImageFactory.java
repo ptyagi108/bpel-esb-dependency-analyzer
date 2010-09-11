@@ -100,8 +100,6 @@ public final class ImageFactory {
 	public static final Image ORACLE_10G_BDA_SMALL = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/bpel_dependency_analyzer_small.png")).createImage();
 	public static final Image ORACLE_10G_BDA = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/bpel_dependency_analyzer.png")).createImage();
 	public static final Image ORACLE_10G_ABOUT = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/about.png")).createImage();
-	public static final Image ORACLE_10G_UNKNOWN = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/unknown.png")).createImage();
-	public static final Image ORACLE_10G_UNKNOWN_BIG = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/unknown_big.png")).createImage();
 	public static final Image ORACLE_10G_INFO = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/info.png")).createImage();
 	public static final Image ORACLE_10G_EXPORT = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/export.png")).createImage();
 	public static final Image ORACLE_10G_EXPORT_BIG = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/export_big.png")).createImage();
@@ -110,6 +108,7 @@ public final class ImageFactory {
 	public static final Image OPEN_ESB_BPEL_SCOPE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/openEsb/16/scope.png")).createImage();
 	public static final Image OPEN_ESB_BPEL_FLOW = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/openEsb/16/flow.png")).createImage();
 
+	public static final Image OPEN_ESB_BPEL_BPEL_MODULE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/openEsb/16/bpelModule.png")).createImage();
 	public static final Image OPEN_ESB_BPEL_PICK = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/openEsb/16/pick.png")).createImage();
 	public static final Image OPEN_ESB_BPEL_PARTNERLINK = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/openEsb/16/partner.png")).createImage();
 	public static final Image OPEN_ESB_BPEL_RECEIVEK = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/openEsb/16/receive.png")).createImage();
@@ -177,6 +176,10 @@ public final class ImageFactory {
 	public static final Image OSB_10G_RAISE_ERROR = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/raiseError.gif")).createImage();
 	public static final Image OSB_10G_BRANCH_NODE_CONDITION = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/branchCondition.gif")).createImage();
 	public static final Image OSB_10G_BRANCH_OPERATION = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/branchOperational.gif")).createImage();
+	public static final Image OSB_10G_PROJECT = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/project.gif")).createImage();
+
+	public static final Image UNKNOWN = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/unknown.png")).createImage();
+	public static final Image UNKNOWN_BIG = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/unknown_big.png")).createImage();
 
 	private ImageFactory() {
 	}

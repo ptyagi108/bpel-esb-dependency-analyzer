@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.openesb.workspace.OpenEsbWorkspace;
 import com.tomecode.soa.project.Project;
@@ -112,6 +115,11 @@ public final class OpenEsbBpelProject implements Project {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public Image getImage() {
+		return ImageFactory.OPEN_ESB_BPEL_BPEL_MODULE;
 	}
 
 }

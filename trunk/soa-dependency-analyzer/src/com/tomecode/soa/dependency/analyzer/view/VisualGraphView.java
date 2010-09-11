@@ -35,7 +35,6 @@ import com.tomecode.soa.dependency.analyzer.gui.actions.GraphExpanderAction.Expa
 import com.tomecode.soa.dependency.analyzer.gui.actions.GraphLayoutAction.LayoutActionType;
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
-import com.tomecode.soa.dependency.analyzer.icons.ImageUtils;
 import com.tomecode.soa.dependency.analyzer.view.visual.ZoomHelper;
 import com.tomecode.soa.dependency.analyzer.view.visual.ZoomHelper.ZoomAction;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
@@ -359,7 +358,7 @@ public final class VisualGraphView extends ViewPart {
 	 * @param existsSource
 	 */
 	private final void applyDependnecies(OpenEsbBpelProcess bpelProcess, GraphNode existsSource) {
-		GraphNode source = existsSource == null ? createNode(bpelProcess.getName(), ImageFactory.OPEN_ESB_BPEL_PROCESS, bpelProcess) : existsSource;
+		GraphNode source = existsSource == null ? createNode(bpelProcess.getName(), bpelProcess.getImage(), bpelProcess) : existsSource;
 		for (PartnerLink partnerLink : bpelProcess.getPartnerLinks()) {
 			for (OpenEsbBpelProcess depBpelProcess : partnerLink.getDependenciesProcesses()) {
 
@@ -376,7 +375,7 @@ public final class VisualGraphView extends ViewPart {
 					}
 
 				} else {
-					GraphNode destination = createNode(depBpelProcess.getName(), ImageFactory.OPEN_ESB_BPEL_PROCESS, depBpelProcess);
+					GraphNode destination = createNode(depBpelProcess.getName(), depBpelProcess.getImage(), depBpelProcess);
 					createConnection(source, destination, partnerLink, true);
 				}
 			}
@@ -421,11 +420,11 @@ public final class VisualGraphView extends ViewPart {
 	}
 
 	private final void applyDependencies(OraSB10gProject project, GraphNode existsSource) {
-		GraphNode source = existsSource == null ? createNode(project.getName(), null, project) : existsSource;
+		GraphNode source = existsSource == null ? createNode(project.getName(), project.getImage(), project) : existsSource;
 		for (Service service : project.getServices()) {
 
 			if (!(service instanceof UnknownFile)) {
-				GraphNode destination = createNode(service.getName(), null, service);
+				GraphNode destination = createNode(service.getName(), service.getImage(), service);
 				createConnection(source, destination, null, false);
 			}
 
@@ -441,9 +440,9 @@ public final class VisualGraphView extends ViewPart {
 	 * @param existsSource
 	 */
 	private final void applyDependenciesOpenEsbBpel(OpenEsbBpelProject bpelProject, List<OpenEsbBpelProcess> processes, GraphNode existsSource) {
-		GraphNode source = existsSource == null ? createNode(bpelProject.getName(), ImageFactory.OPEN_ESB_BPEL_PROCESS, bpelProject) : existsSource;
+		GraphNode source = existsSource == null ? createNode(bpelProject.getName(), bpelProject.getImage(), bpelProject) : existsSource;
 		for (OpenEsbBpelProcess openEsbBpelProcess : processes) {
-			GraphNode destination = createNode(openEsbBpelProcess.getName(), ImageFactory.OPEN_ESB_BPEL_PROCESS, openEsbBpelProcess);
+			GraphNode destination = createNode(openEsbBpelProcess.getName(), openEsbBpelProcess.getImage(), openEsbBpelProcess);
 			createConnection(source, destination, openEsbBpelProcess, false);
 		}
 	}
@@ -460,7 +459,7 @@ public final class VisualGraphView extends ViewPart {
 	 */
 	private final void applyDependencies(BpelProject bpelProject, List<PartnerLinkBinding> partnerLinkBindings, GraphNode existsSource) {
 		int curveDepth = 30;
-		GraphNode source = existsSource == null ? createNode(bpelProject.getName(), ImageFactory.ORACLE_10G_BPEL_PROCESS, bpelProject) : existsSource;
+		GraphNode source = existsSource == null ? createNode(bpelProject.getName(), bpelProject.getImage(), bpelProject) : existsSource;
 		for (PartnerLinkBinding partnerLinkBinding : partnerLinkBindings) {
 			// BPEL dependency
 			if (partnerLinkBinding.getDependencyBpelProject() != null) {
@@ -477,7 +476,7 @@ public final class VisualGraphView extends ViewPart {
 						createConnection(source, existsDestination, partnerLinkBinding, true);
 					} else {
 						// new object in graph
-						GraphNode destination = createNode(project.getName(), ImageUtils.getProjectImage(project), project);
+						GraphNode destination = createNode(project.getName(), project.getImage(), project);
 						createConnection(source, destination, partnerLinkBinding, true);
 					}
 				}
@@ -492,7 +491,7 @@ public final class VisualGraphView extends ViewPart {
 					createConnection(source, existsDestination, partnerLinkBinding, true);
 				} else {
 					// new object in graph
-					GraphNode destination = createNode(esbProject.getName(), ImageFactory.ORACLE_10G_ESB, esbProject);
+					GraphNode destination = createNode(esbProject.getName(), esbProject.getImage(), esbProject);
 					createConnection(source, destination, partnerLinkBinding, true);
 				}
 			}
@@ -506,7 +505,7 @@ public final class VisualGraphView extends ViewPart {
 					createConnection(source, destination, partnerLinkBinding, true);
 				} else {
 					// new object in graph
-					GraphNode destination = createNode(project.getName(), ImageFactory.ORACLE_10G_UNKNOWN, project);
+					GraphNode destination = createNode(project.getName(), project.getImage(), project);
 					createConnection(source, destination, partnerLinkBinding, true);
 				}
 			}
@@ -542,30 +541,30 @@ public final class VisualGraphView extends ViewPart {
 	private final void createWorkspaceAndProjectsGraph(Workspace workspace, GraphNode existSource) {
 		if (workspace.getType() == WorkspaceType.ORACLE_1OG) {
 			Ora10gWorkspace ora10gWorkspace = (Ora10gWorkspace) workspace;
-			GraphNode source = existSource == null ? createNode(workspace.getName(), ImageFactory.WORKSPACE, ora10gWorkspace) : existSource;
+			GraphNode source = existSource == null ? createNode(ora10gWorkspace.getName(), ora10gWorkspace.getImage(), ora10gWorkspace) : existSource;
 			for (Project project : ora10gWorkspace.getProjects()) {
-				GraphNode destination = createNode(project.getName(), ImageUtils.getProjectImage(project), project);
+				GraphNode destination = createNode(project.getName(), project.getImage(), project);
 				createConnection(source, destination, project, false);
 			}
 
 		} else if (workspace.getType() == WorkspaceType.OPEN_ESB) {
 			OpenEsbWorkspace openEsbWorkspace = (OpenEsbWorkspace) workspace;
-			GraphNode source = existSource == null ? createNode(workspace.getName(), ImageFactory.WORKSPACE, openEsbWorkspace) : existSource;
+			GraphNode source = existSource == null ? createNode(openEsbWorkspace.getName(), openEsbWorkspace.getImage(), openEsbWorkspace) : existSource;
 			for (Project project : openEsbWorkspace.getProjects()) {
 
 				GraphNode existsProjectGraphNode = findDataInNodes(project);
 				if (existsProjectGraphNode != null && existsConnection(source, existsProjectGraphNode)) {
 
 				} else {
-					GraphNode destination = createNode(project.getName(), ImageUtils.getProjectImage(project), project);
+					GraphNode destination = createNode(project.getName(), project.getImage(), project);
 					createConnection(source, destination, project, false);
 				}
 			}
 		} else if (workspace.getType() == WorkspaceType.ORACLE_SERVICE_BUS_10G) {
 			OraSB10gWorkspace oraSB10gWorkspace = (OraSB10gWorkspace) workspace;
-			GraphNode source = existSource == null ? createNode(workspace.getName(), ImageFactory.WORKSPACE, oraSB10gWorkspace) : existSource;
+			GraphNode source = existSource == null ? createNode(oraSB10gWorkspace.getName(), oraSB10gWorkspace.getImage(), oraSB10gWorkspace) : existSource;
 			for (OraSB10gProject project : oraSB10gWorkspace.getProjects()) {
-				GraphNode destination = createNode(project.getName(), ImageUtils.getProjectImage(project), project);
+				GraphNode destination = createNode(project.getName(), project.getImage(), project);
 				createConnection(source, destination, project, false);
 			}
 		}
@@ -612,24 +611,24 @@ public final class VisualGraphView extends ViewPart {
 	 * @param multiWorkspace
 	 */
 	private final void createMultiWorkspaceAndWorkspaceGraph(MultiWorkspace multiWorkspace) {
-		GraphNode multiWorkspaceNode = createNode(multiWorkspace.getName(), ImageUtils.getMultiWorkspaceImage(multiWorkspace), multiWorkspace);
+		GraphNode multiWorkspaceNode = createNode(multiWorkspace.getName(), ImageFactory.MULTI_WORKSPACE, multiWorkspace);
 
 		if (multiWorkspace.getType() == WorkspaceType.ORACLE_1OG) {
 			Ora10gMultiWorkspace ora10gMultiWorkspace = (Ora10gMultiWorkspace) multiWorkspace;
 			for (Ora10gWorkspace workspace : ora10gMultiWorkspace.getWorkspaces()) {
-				GraphNode workspaceNode = createNode(workspace.getName(), ImageFactory.WORKSPACE, workspace);
+				GraphNode workspaceNode = createNode(workspace.getName(), workspace.getImage(), workspace);
 				createConnection(multiWorkspaceNode, workspaceNode, workspace, false);
 			}
 		} else if (multiWorkspace.getType() == WorkspaceType.OPEN_ESB) {
 			OpenEsbMultiWorkspace esbMultiWorkspace = (OpenEsbMultiWorkspace) multiWorkspace;
 			for (OpenEsbWorkspace workspace : esbMultiWorkspace.getWorkspaces()) {
-				GraphNode workspaceNode = createNode(workspace.getName(), ImageFactory.WORKSPACE, workspace);
+				GraphNode workspaceNode = createNode(workspace.getName(), workspace.getImage(), workspace);
 				createConnection(multiWorkspaceNode, workspaceNode, workspace, false);
 			}
 		} else if (multiWorkspace.getType() == WorkspaceType.ORACLE_SERVICE_BUS_10G) {
 			OraSB10gMultiWorkspace oraSB10gMultiWorkspace = (OraSB10gMultiWorkspace) multiWorkspace;
 			for (OraSB10gWorkspace workspace : oraSB10gMultiWorkspace.getWorkspaces()) {
-				GraphNode workspaceNode = createNode(workspace.getName(), ImageFactory.WORKSPACE, workspace);
+				GraphNode workspaceNode = createNode(workspace.getName(), workspace.getImage(), workspace);
 				createConnection(multiWorkspaceNode, workspaceNode, workspace, false);
 			}
 		}

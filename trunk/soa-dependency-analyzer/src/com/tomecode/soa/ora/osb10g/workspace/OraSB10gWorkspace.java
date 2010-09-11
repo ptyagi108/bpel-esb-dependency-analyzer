@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
@@ -63,5 +66,9 @@ public final class OraSB10gWorkspace implements Workspace {
 
 	public final String toString() {
 		return name;
+	}
+
+	public final Image getImage() {
+		return ImageFactory.WORKSPACE;
 	}
 }

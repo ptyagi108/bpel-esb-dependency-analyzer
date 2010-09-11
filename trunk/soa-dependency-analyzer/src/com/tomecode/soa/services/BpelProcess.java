@@ -1,5 +1,7 @@
 package com.tomecode.soa.services;
 
+import org.eclipse.swt.graphics.Image;
+
 /**
  * 
  * BPEL process
@@ -8,5 +10,7 @@ package com.tomecode.soa.services;
  * 
  */
 public interface BpelProcess {
+
+	Image getImage();
 
 }

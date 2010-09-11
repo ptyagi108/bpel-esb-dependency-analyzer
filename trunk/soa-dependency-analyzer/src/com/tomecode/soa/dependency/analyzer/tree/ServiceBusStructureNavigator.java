@@ -7,6 +7,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
 import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
@@ -92,6 +93,8 @@ public final class ServiceBusStructureNavigator extends ViewPart {
 				return ((ProxyStructure) element).getImage();
 			} else if (element instanceof Proxy) {
 				return ((Proxy) element).getImage();
+			} else if (element instanceof OraSB10gProject) {
+				return ImageFactory.OSB_10G_PROJECT;
 			}
 			return null;
 		}

@@ -1,5 +1,7 @@
 package com.tomecode.soa.ora.osb10g.services;
 
+import org.eclipse.swt.graphics.Image;
+
 import com.tomecode.soa.project.Project;
 
 /**
@@ -15,4 +17,6 @@ public interface Service {
 	Project getProject();
 
 	void setProject(Project project);
+
+	Image getImage();
 }

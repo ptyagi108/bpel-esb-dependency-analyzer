@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.openesb.project.OpenEsbBpelProject;
 import com.tomecode.soa.services.BpelProcess;
 
@@ -144,4 +147,7 @@ public final class OpenEsbBpelProcess implements BpelProcess {
 		return name;
 	}
 
+	public final Image getImage() {
+		return ImageFactory.OPEN_ESB_BPEL_PROCESS;
+	}
 }
