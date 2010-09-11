@@ -501,8 +501,12 @@ public final class VisualGraphView extends ViewPart {
 
 				if (existsSource != null) {
 					// create connection to exists object in graph
-					GraphNode destination = findDataInNodes(project.getName());
-					createConnection(source, destination, partnerLinkBinding, true);
+					GraphNode destination = findDataInNodes(project);
+					if (destination == null) {
+						destination = createNode(project.getName(), project.getImage(), project);
+						createConnection(source, destination, partnerLinkBinding, true);
+					}
+
 				} else {
 					// new object in graph
 					GraphNode destination = createNode(project.getName(), project.getImage(), project);
