@@ -419,12 +419,19 @@ public final class VisualGraphView extends ViewPart {
 		}
 	}
 
+	/**
+	 * create dependency graph for {@link OraSB10gProject}
+	 * 
+	 * @param project
+	 * @param existsSource
+	 */
 	private final void applyDependencies(OraSB10gProject project, GraphNode existsSource) {
 		GraphNode source = existsSource == null ? createNode(project.getName(), project.getImage(), project) : existsSource;
 		for (Service service : project.getServices()) {
 
-			if (!(service instanceof UnknownFile)) {
-				GraphNode destination = createNode(service.getName(), service.getImage(), service);
+			GraphNode destination = findDataInNodes(service);
+			if (destination == null && !(service instanceof UnknownFile)) {
+				destination = createNode(service.getName(), service.getImage(), service);
 				createConnection(source, destination, null, false);
 			}
 
