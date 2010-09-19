@@ -5,7 +5,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
+import com.tomecode.soa.ora.osb10g.services.Service;
+import com.tomecode.soa.ora.osb10g.services.SplitJoin;
+import com.tomecode.soa.ora.suite10g.project.BpelProject;
 import com.tomecode.soa.project.Project;
+import com.tomecode.soa.services.BpelProcess;
 import com.tomecode.soa.util.FileRootNode;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
@@ -51,16 +55,27 @@ public final class ProjectStructureNavigator extends ViewPart {
 
 	}
 
-	public final void showProjectFiles(Object firstElement) {
-		if (firstElement instanceof Project) {
-			Project project = (Project) firstElement;
-			labelProvider.setRoot(project.getFile());
-			rootNode.setProject(project);
-			tree.setInput(rootNode);
-			tree.expandAll();
+	public final void showProjectFiles(Object source) {
+		if (source instanceof Project) {
+			setProject((Project) source);
+		} else if (source instanceof Service) {
+			setProject(((Service) source).getProject());
+		} else if (source instanceof SplitJoin) {
+			setProject(((SplitJoin) source).getProject());
+		} else if (source instanceof BpelProcess) {
+			setProject(((BpelProcess) source).getProject());
+		} else if (source instanceof BpelProject) {
+			setProject(((BpelProject) source));
 		} else {
 			clearTree();
 		}
+	}
+
+	private final void setProject(Project project) {
+		labelProvider.setRoot(project.getFile());
+		rootNode.setProject(project);
+		tree.setInput(rootNode);
+		tree.expandAll();
 	}
 
 	/**

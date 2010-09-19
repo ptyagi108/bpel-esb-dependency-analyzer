@@ -13,7 +13,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 public final class Route extends OsbActivity {
 
 	public final String toString() {
-		return "route";
+		return "Routing";
 	}
 
 	@Override

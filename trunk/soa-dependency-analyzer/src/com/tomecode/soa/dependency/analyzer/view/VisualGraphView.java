@@ -45,6 +45,7 @@ import com.tomecode.soa.openesb.workspace.OpenEsbWorkspace;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.osb10g.services.UnknownFile;
+import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gMultiWorkspace;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gWorkspace;
 import com.tomecode.soa.ora.suite10g.esb.EsbProject;
@@ -122,7 +123,7 @@ public final class VisualGraphView extends ViewPart {
 				if (!list.isEmpty()) {
 					showPropertiesAboutSelectedNode(list.get(0));
 				} else {
-					GuiUtils.getProjectStructureNavigator().showProjectFiles(null);
+					GuiUtils.getServiceBusStructureNavigator().showStructure(null);
 				}
 			}
 		});
@@ -170,21 +171,24 @@ public final class VisualGraphView extends ViewPart {
 	 */
 	private final void expandSelectedNodeInNewGraph(Object selectedObject, GraphNode existsSource) {
 		if (selectedObject instanceof GraphNode) {
-			GraphNode selctedGraphNode = (GraphNode) selectedObject;
-			if (selctedGraphNode.getData() instanceof Workspace) {
-				Workspace workspace = (Workspace) selctedGraphNode.getData();
+			GraphNode selectedGraphNode = (GraphNode) selectedObject;
+			if (selectedGraphNode.getData() instanceof Workspace) {
+				Workspace workspace = (Workspace) selectedGraphNode.getData();
 				clearGraph();
 				createWorkspaceAndProjectsGraph(workspace, existsSource);
-			} else if (selctedGraphNode.getData() instanceof Project) {
-				Project project = (Project) selctedGraphNode.getData();
+			} else if (selectedGraphNode.getData() instanceof Project) {
+				Project project = (Project) selectedGraphNode.getData();
 				clearGraph();
 				createProjectAndProjectGraph(project, existsSource);
-			} else if (selctedGraphNode.getData() instanceof BpelProcess) {
-				BpelProcess bpelProcess = (BpelProcess) selctedGraphNode.getData();
+			} else if (selectedGraphNode.getData() instanceof BpelProcess) {
+				BpelProcess bpelProcess = (BpelProcess) selectedGraphNode.getData();
 				clearGraph();
 				createProcessAndProcessGraph(bpelProcess, existsSource);
+			} else if (selectedGraphNode.getData() instanceof Service) {
+				Service service = (Service) selectedGraphNode.getData();
+				clearGraph();
+				createProxyAndService(service, existsSource);
 			}
-
 		}
 	}
 
@@ -280,14 +284,17 @@ public final class VisualGraphView extends ViewPart {
 		if (object instanceof GraphConnection) {
 			GraphConnection connection = (GraphConnection) object;
 			GuiUtils.getPropertiesView().showProperties(connection.getData());
-			GuiUtils.getProjectStructureNavigator().showProjectFiles(connection.getData());
+			if (connection.getData() != null) {
+				GuiUtils.getProjectStructureNavigator().showProjectFiles(connection.getData());
+			}
+
 			GuiUtils.getServiceBusStructureNavigator().showStructure(connection.getData());
 		} else if (object instanceof GraphNode) {
 			GraphNode graphNode = (GraphNode) object;
 			GuiUtils.getPropertiesView().showProperties(graphNode.getData());
 			GuiUtils.getBpelProcessStructureNavigator().showProcessStructure(graphNode.getData());
 			GuiUtils.getServiceBusStructureNavigator().showStructure(graphNode.getData());
-			GuiUtils.getServiceOperationsDepNavigator().showOperationDepenendecies(graphNode.getData());
+			GuiUtils.getServiceOperationsDepNavigator().show(graphNode.getData());
 			GuiUtils.getProjectStructureNavigator().showProjectFiles(graphNode.getData());
 		}
 	}
@@ -341,6 +348,54 @@ public final class VisualGraphView extends ViewPart {
 		graphViewer.getGraphControl().applyLayout();
 
 		isExpandInGraph = backup;
+	}
+
+	/**
+	 * create dependencies between PROXY and target services dependencies
+	 * 
+	 * @param proxy
+	 * @param existsSource
+	 */
+	private final void createProxyAndService(Service service, GraphNode existsSource) {
+		GraphNode source = existsSource != null ? existsSource : createNode(service.getName(), service.getImage(), service);
+		for (ServiceDependency serviceDependency : service.getServiceDependencies().getDependnecies()) {
+
+			if (serviceDependency.getServices().isEmpty()) {
+				if (findUnknownConnection(source, serviceDependency.getRefPath()) == null) {
+					GraphNode unknowNode = createNode(serviceDependency.getRefPath(), ImageFactory.UNKNOWN, serviceDependency);
+					createConnection(source, unknowNode, serviceDependency, false);
+				}
+			} else {
+				GraphNode destination = findDataInNodes(serviceDependency.getServices().get(0));
+				if (destination == null) {
+					Service target = serviceDependency.getServices().get(0);
+					destination = createNode(target.getName(), target.getImage(), target);
+					createConnection(source, destination, serviceDependency, false);
+				} else {
+					if (findConnection(source, destination) == null) {
+						createConnection(source, destination, serviceDependency, false);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * find connection
+	 * 
+	 * @param source
+	 * @param refPath
+	 * @return
+	 */
+	private final GraphConnection findUnknownConnection(GraphNode source, String refPath) {
+		for (GraphConnection connection : graphConnections) {
+			if (connection.getSource().getData().equals(source.getData())) {
+				if (connection.getDestination().getData() != null && connection.getDestination().getData().toString().equals(refPath)) {
+					return connection;
+				}
+			}
+		}
+		return null;
 	}
 
 	private final void createProcessAndProcessGraph(BpelProcess process, GraphNode existsSource) {
@@ -530,6 +585,9 @@ public final class VisualGraphView extends ViewPart {
 	 * @return
 	 */
 	private final GraphNode findDataInNodes(Object data) {
+		if (data == null) {
+			return null;
+		}
 		for (GraphNode graphNode : graphNodes) {
 			if (graphNode.getData() != null) {
 				if (graphNode.getData().equals(data)) {

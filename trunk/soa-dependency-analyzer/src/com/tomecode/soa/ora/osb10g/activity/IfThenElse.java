@@ -21,6 +21,10 @@ public final class IfThenElse extends OsbActivity {
 		return false;
 	}
 
+	public final String toString() {
+		return "If Then";
+	}
+
 	@Override
 	public final Image getImage() {
 		return ImageFactory.OSB_10G_IFTHENELSE;

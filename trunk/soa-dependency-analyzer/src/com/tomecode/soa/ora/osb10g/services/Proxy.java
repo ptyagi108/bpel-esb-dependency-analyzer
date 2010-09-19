@@ -6,24 +6,15 @@ import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig;
-import com.tomecode.soa.project.Project;
+import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.ServiceDependencyType;
 
 /**
- * Proxy file
+ * PROXY service file
  * 
  * @author Tomas Frastia
  * 
  */
-public final class Proxy implements Service {
-
-	/**
-	 * proxy service name
-	 */
-	private final String name;
-	/**
-	 * proxy service file
-	 */
-	private final File file;
+public final class Proxy extends Service {
 
 	private boolean isEnabled;
 
@@ -39,12 +30,7 @@ public final class Proxy implements Service {
 	/**
 	 * structure - contains all activities from this proxy service
 	 */
-	private ProxyStructure proxyStructure;
-
-	/**
-	 * parent project
-	 */
-	private Project project;
+	private ProxyStructure structure;
 
 	/**
 	 * endpoint config
@@ -55,20 +41,20 @@ public final class Proxy implements Service {
 	 * Constructor
 	 * 
 	 * @param file
-	 *            proxy service file
+	 *            PROXY service file
 	 */
 	public Proxy(File file) {
+		super(file, ServiceDependencyType.PROXY_SERVICE);
 		this.file = file;
+
 		int index = file.getName().indexOf(".proxy");
 		if (index != -1) {
 			name = file.getName().substring(0, index);
 		} else {
 			name = file.getName();
 		}
-	}
 
-	public final File getFile() {
-		return file;
+		structure = new ProxyStructure(this);
 	}
 
 	public final boolean isEnabled() {
@@ -103,35 +89,12 @@ public final class Proxy implements Service {
 		this.binding = binding;
 	}
 
-	public final ProxyStructure getProxyStructure() {
-		return proxyStructure;
-	}
-
-	public final void setProxyStructure(ProxyStructure proxyStructure) {
-		this.proxyStructure = proxyStructure;
-	}
-
-	@Override
-	public final String getName() {
-		return name;
-	}
-
-	public final String toString() {
-		return name;
+	public final ProxyStructure getStructure() {
+		return structure;
 	}
 
 	public final Image getImage() {
-		return ImageFactory.OSB_10G_SERVICE;
-	}
-
-	@Override
-	public final Project getProject() {
-		return project;
-	}
-
-	@Override
-	public final void setProject(Project project) {
-		this.project = project;
+		return ImageFactory.OSB_10G_PROXY_SERVICE;
 	}
 
 	/**

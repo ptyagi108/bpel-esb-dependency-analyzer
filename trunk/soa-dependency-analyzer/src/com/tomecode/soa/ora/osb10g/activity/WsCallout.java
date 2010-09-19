@@ -13,7 +13,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 public final class WsCallout extends OsbActivity {
 
 	public final String toString() {
-		return "WsCallout";
+		return "Service Callout";
 	}
 
 	@Override

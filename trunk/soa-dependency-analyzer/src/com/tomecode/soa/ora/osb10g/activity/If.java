@@ -2,6 +2,8 @@ package com.tomecode.soa.ora.osb10g.activity;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+
 /**
  * parent element: ifThenElse - first child element: case
  * 
@@ -16,6 +18,6 @@ public final class If extends OsbActivity {
 
 	@Override
 	public final Image getImage() {
-		return null;
+		return ImageFactory.OSB_10G_ELSEIF;
 	}
 }

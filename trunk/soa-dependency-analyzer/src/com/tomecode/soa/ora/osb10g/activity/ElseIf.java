@@ -12,7 +12,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  */
 public final class ElseIf extends OsbActivity {
 
-	public final String toString(){
+	public final String toString() {
 		return "Else If";
 	}
 

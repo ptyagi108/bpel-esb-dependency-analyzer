@@ -4,6 +4,8 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
+import com.tomecode.soa.ora.osb10g.services.Service;
+import com.tomecode.soa.ora.osb10g.services.dependnecies.OsbActivityDependency;
 import com.tomecode.soa.ora.suite10g.project.BpelOperations;
 import com.tomecode.soa.ora.suite10g.project.Operation;
 
@@ -24,10 +26,14 @@ final class ServiceOperationsDepContentProvider implements ITreeContentProvider 
 			return ((Operation) parent).getChildren();
 		} else if (parent instanceof BpelOperations) {
 			return ((BpelOperations) parent).getOperations().toArray();
+		} else if (parent instanceof Service) {
+			return ((Service) parent).getActivityDependency().getActivityDependencies().toArray();
+		} else if (parent instanceof OsbActivityDependency) {
+			return ((OsbActivityDependency) parent).getServices().toArray();
 		}
 		return null;
 	}
-
+		
 	@Override
 	public final Object getParent(Object paramObject) {
 		return null;
@@ -41,6 +47,10 @@ final class ServiceOperationsDepContentProvider implements ITreeContentProvider 
 			return ((Operation) element).hasChildren();
 		} else if (element instanceof BpelOperations) {
 			return !((BpelOperations) element).getOperations().isEmpty();
+		} else if (element instanceof Service) {
+			return !((Service) element).getActivityDependency().getActivityDependencies().isEmpty();
+		} else if (element instanceof OsbActivityDependency) {
+			return !((OsbActivityDependency) element).getServices().isEmpty();
 		}
 		return false;
 	}
@@ -53,6 +63,10 @@ final class ServiceOperationsDepContentProvider implements ITreeContentProvider 
 			return ((Operation) element).getChildren();
 		} else if (element instanceof BpelOperations) {
 			return ((BpelOperations) element).getOperations().toArray();
+		} else if (element instanceof Service) {
+			return ((Service) element).getActivityDependency().getActivityDependencies().toArray();
+		} else if (element instanceof OsbActivityDependency) {
+			return ((OsbActivityDependency) element).getServices().toArray();
 		}
 		return null;
 	}

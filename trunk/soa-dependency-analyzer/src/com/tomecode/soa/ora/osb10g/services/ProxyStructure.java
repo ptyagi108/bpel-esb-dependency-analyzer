@@ -14,6 +14,11 @@ import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
 public final class ProxyStructure extends OsbActivity {
 	private final Proxy proxy;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param proxy
+	 */
 	public ProxyStructure(Proxy proxy) {
 		this.proxy = proxy;
 		name = proxy.getName();
@@ -25,7 +30,7 @@ public final class ProxyStructure extends OsbActivity {
 
 	@Override
 	public final Image getImage() {
-		return ImageFactory.OSB_10G_SERVICE;
+		return ImageFactory.OSB_10G_PROXY_SERVICE;
 	}
 
 }

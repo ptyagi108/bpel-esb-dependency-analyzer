@@ -13,7 +13,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 public final class RoutingTable extends OsbActivity {
 
 	public final String toString() {
-		return "Publish Table";
+		return "Routing Table";
 	}
 
 	@Override

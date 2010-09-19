@@ -7,6 +7,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
+import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.suite10g.project.BpelProject;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
@@ -47,15 +48,21 @@ public final class ServiceOperationsDepNavigator extends ViewPart {
 
 	}
 
-	public final void showOperationDepenendecies(Object source) {
+	public final void show(Object source) {
 		if (source instanceof BpelProject) {
 			BpelProject bpelProject = (BpelProject) source;
-			rootNode.set(bpelProject.getBpelOperations());
-			tree.setInput(rootNode);
-			tree.expandAll();
+			setDataToTree(bpelProject.getBpelOperations());
+		} else if (source instanceof Service) {
+			setDataToTree((Service) source);
 		} else {
 			clearTree();
 		}
+	}
+
+	private final void setDataToTree(Object data) {
+		rootNode.set(data);
+		tree.setInput(rootNode);
+		tree.expandAll();
 	}
 
 	private final void clearTree() {

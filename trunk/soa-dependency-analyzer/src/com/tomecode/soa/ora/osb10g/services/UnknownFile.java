@@ -5,46 +5,23 @@ import java.io.File;
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
-import com.tomecode.soa.project.Project;
+import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.ServiceDependencyType;
 
 /**
  * 
  * @author Tomas Frastia
  * 
  */
-public final class UnknownFile implements Service {
+public final class UnknownFile extends Service {
 
-	private File fileSystemPath;
-
-	private Project project;
-
-	public UnknownFile(File fileSystemPath) {
-		this.fileSystemPath = fileSystemPath;
-	}
-
-	/**
-	 * @return the fileSystemPath
-	 */
-	public final File getFileSystemPath() {
-		return fileSystemPath;
-	}
-
-	public final String getName() {
-		return fileSystemPath.getName();
-	}
-
-	@Override
-	public final Project getProject() {
-		return project;
-	}
-
-	@Override
-	public final void setProject(Project project) {
-		this.project = project;
+	public UnknownFile(File file) {
+		super(file, ServiceDependencyType.UNKNOWN);
+		this.name = file.getName();
 	}
 
 	@Override
 	public final Image getImage() {
 		return ImageFactory.UNKNOWN;
 	}
+
 }

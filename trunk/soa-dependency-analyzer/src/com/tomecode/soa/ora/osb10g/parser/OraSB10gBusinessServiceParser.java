@@ -23,13 +23,17 @@ import com.tomecode.soa.parser.ServiceParserException;
  */
 public final class OraSB10gBusinessServiceParser extends AbstractParser {
 
+	/**
+	 * Parse OSB Business Service file
+	 * 
+	 * @param file
+	 * @return
+	 * @throws ServiceParserException
+	 */
 	public final BusinessService parseBusinessService(File file) throws ServiceParserException {
 		Element eXml = parseXml(file);
-
-		Element eXmlFragment = eXml.element("xml-fragment");
-		if (eXmlFragment != null) {
+		if ("xml-fragment".equals(eXml.getName())) {
 			BusinessService businessService = new BusinessService(file);
-
 			businessService.setEndpointConfig(parseEndpointConfig(eXml));
 			return businessService;
 		}

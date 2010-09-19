@@ -27,6 +27,17 @@ public class OraSB10gFolder {
 
 	private OraSB10gProject project;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param project
+	 * @param fileSystemPath
+	 *            real path in file system
+	 * @param path
+	 *            path in OSB
+	 * @param name
+	 *            folder name
+	 */
 	public OraSB10gFolder(OraSB10gProject project, File fileSystemPath, String path, String name) {
 		this.project = project;
 		this.services = new ArrayList<Service>();

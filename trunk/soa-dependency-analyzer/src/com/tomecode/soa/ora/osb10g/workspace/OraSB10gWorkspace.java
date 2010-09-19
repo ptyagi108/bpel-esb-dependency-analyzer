@@ -12,19 +12,37 @@ import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
+ * OSB 10g workspace
  * 
  * @author Tomas Frastia
  * 
  */
 public final class OraSB10gWorkspace implements Workspace {
 
+	/**
+	 * workspace name
+	 */
 	private String name;
+	/**
+	 * workspace file
+	 */
 	private File file;
 
 	private MultiWorkspace parent;
 
+	/**
+	 * list of {@link OraSB10gProject}
+	 */
 	private final List<OraSB10gProject> projects;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 *            workspace name
+	 * @param file
+	 *            workspace file
+	 */
 	public OraSB10gWorkspace(String name, File file) {
 		this.projects = new ArrayList<OraSB10gProject>();
 		this.name = name;

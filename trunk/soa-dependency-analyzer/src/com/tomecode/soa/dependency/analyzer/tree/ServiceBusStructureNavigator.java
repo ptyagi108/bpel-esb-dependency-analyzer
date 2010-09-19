@@ -13,6 +13,8 @@ import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.services.Proxy;
 import com.tomecode.soa.ora.osb10g.services.ProxyStructure;
+import com.tomecode.soa.ora.osb10g.services.SplitJoin;
+import com.tomecode.soa.ora.osb10g.services.SplitJoinStructure;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
@@ -44,7 +46,7 @@ public final class ServiceBusStructureNavigator extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		tree = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		tree = new TreeViewer(parent, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		tree.setContentProvider(contentProvider);
 		tree.setLabelProvider(labelProvider);
 	}
@@ -59,11 +61,15 @@ public final class ServiceBusStructureNavigator extends ViewPart {
 			clearTree();
 		} else {
 			if (source instanceof Proxy) {
-				rootNode.set(((Proxy) source).getProxyStructure());
+				rootNode.set(((Proxy) source).getStructure());
 				tree.setInput(rootNode);
 				tree.expandAll();
 			} else if (source instanceof OraSB10gProject) {
 				rootNode.set((OraSB10gProject) source);
+				tree.setInput(rootNode);
+				tree.expandAll();
+			} else if (source instanceof SplitJoin) {
+				rootNode.set(((SplitJoin) source).getStructure());
 				tree.setInput(rootNode);
 				tree.expandAll();
 			} else {
@@ -75,29 +81,6 @@ public final class ServiceBusStructureNavigator extends ViewPart {
 	private final void clearTree() {
 		rootNode.set(null);
 		tree.setInput(rootNode);
-	}
-
-	/**
-	 * 
-	 * Label provider for {@link ServiceBusStructureNavigator}
-	 * 
-	 * @author Tomas Frastia
-	 * 
-	 */
-	private static final class LabelProviderImpl extends LabelProvider {
-
-		public final Image getImage(Object element) {
-			if (element instanceof OsbActivity) {
-				return ((OsbActivity) element).getImage();
-			} else if (element instanceof ProxyStructure) {
-				return ((ProxyStructure) element).getImage();
-			} else if (element instanceof Proxy) {
-				return ((Proxy) element).getImage();
-			} else if (element instanceof OraSB10gProject) {
-				return ImageFactory.OSB_10G_PROJECT;
-			}
-			return null;
-		}
 	}
 
 	public final void removeMultiWorkspace(MultiWorkspace multiWorkspace) {
@@ -135,6 +118,33 @@ public final class ServiceBusStructureNavigator extends ViewPart {
 		Workspace workspaceInTree = findWorkspaceInTree();
 		if (workspace.equals(workspaceInTree)) {
 			clearTree();
+		}
+	}
+
+	/**
+	 * 
+	 * Label provider for {@link ServiceBusStructureNavigator}
+	 * 
+	 * @author Tomas Frastia
+	 * 
+	 */
+	private static final class LabelProviderImpl extends LabelProvider {
+
+		public final Image getImage(Object element) {
+			if (element instanceof OsbActivity) {
+				return ((OsbActivity) element).getImage();
+			} else if (element instanceof ProxyStructure) {
+				return ((ProxyStructure) element).getImage();
+			} else if (element instanceof Proxy) {
+				return ((Proxy) element).getImage();
+			} else if (element instanceof OraSB10gProject) {
+				return ImageFactory.OSB_10G_PROJECT;
+			} else if (element instanceof SplitJoinStructure) {
+				return ((SplitJoinStructure) element).getImage();
+			} else if (element instanceof SplitJoin) {
+				return ((SplitJoin) element).getImage();
+			}
+			return null;
 		}
 	}
 }

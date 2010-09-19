@@ -124,7 +124,7 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 			iViewPart = workbenchPage.findView(ServiceOperationsDepNavigator.ID);
 			if (iViewPart != null) {
 				ServiceOperationsDepNavigator navigator = (ServiceOperationsDepNavigator) iViewPart;
-				navigator.showOperationDepenendecies(selection.getFirstElement());
+				navigator.show(selection.getFirstElement());
 			}
 
 			iViewPart = workbenchPage.findView(VisualGraphView.ID);

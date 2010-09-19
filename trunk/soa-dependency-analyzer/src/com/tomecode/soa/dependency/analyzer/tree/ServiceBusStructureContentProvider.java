@@ -8,6 +8,8 @@ import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.services.Proxy;
 import com.tomecode.soa.ora.osb10g.services.ProxyStructure;
+import com.tomecode.soa.ora.osb10g.services.SplitJoin;
+import com.tomecode.soa.ora.osb10g.services.SplitJoinStructure;
 
 /**
  * Content provider for {@link ServiceBusStructureNavigator}
@@ -23,12 +25,16 @@ final class ServiceBusStructureContentProvider implements ITreeContentProvider {
 			return ((EmptyNode) parent).getChildren();
 		} else if (parent instanceof ProxyStructure) {
 			return ((ProxyStructure) parent).getActivities().toArray();
+		} else if (parent instanceof SplitJoinStructure) {
+			return ((SplitJoinStructure) parent).getActivities().toArray();
+		} else if (parent instanceof OraSB10gProject) {
+			return ((OraSB10gProject) parent).getServicesWithFlow().toArray();
+		} else if (parent instanceof Proxy) {
+			return ((Proxy) parent).getStructure().getActivities().toArray();
+		} else if (parent instanceof SplitJoin) {
+			return ((SplitJoin) parent).getStructure().getActivities().toArray();
 		} else if (parent instanceof OsbActivity) {
 			return ((OsbActivity) parent).getActivities().toArray();
-		} else if (parent instanceof OraSB10gProject) {
-			return ((OraSB10gProject) parent).getProxyServices().toArray();
-		} else if (parent instanceof Proxy) {
-			return ((Proxy) parent).getProxyStructure().getActivities().toArray();
 		}
 		return null;
 	}
@@ -44,12 +50,16 @@ final class ServiceBusStructureContentProvider implements ITreeContentProvider {
 			return ((EmptyNode) element).hasChildren();
 		} else if (element instanceof ProxyStructure) {
 			return !((ProxyStructure) element).getActivities().isEmpty();
+		} else if (element instanceof SplitJoinStructure) {
+			return !((SplitJoinStructure) element).getActivities().isEmpty();
+		} else if (element instanceof OraSB10gProject) {
+			return !((OraSB10gProject) element).getServicesWithFlow().isEmpty();
+		} else if (element instanceof Proxy) {
+			return !((Proxy) element).getStructure().getActivities().isEmpty();
+		} else if (element instanceof SplitJoin) {
+			return !((SplitJoin) element).getStructure().getActivities().isEmpty();
 		} else if (element instanceof OsbActivity) {
 			return !((OsbActivity) element).getActivities().isEmpty();
-		} else if (element instanceof OraSB10gProject) {
-			return !((OraSB10gProject) element).getProxyServices().isEmpty();
-		} else if (element instanceof Proxy) {
-			return !((Proxy) element).getProxyStructure().getActivities().isEmpty();
 		}
 		return false;
 	}
@@ -60,12 +70,16 @@ final class ServiceBusStructureContentProvider implements ITreeContentProvider {
 			return ((EmptyNode) element).getChildren();
 		} else if (element instanceof ProxyStructure) {
 			return ((ProxyStructure) element).getActivities().toArray();
+		} else if (element instanceof SplitJoinStructure) {
+			return ((SplitJoinStructure) element).getActivities().toArray();
+		} else if (element instanceof OraSB10gProject) {
+			return ((OraSB10gProject) element).getServicesWithFlow().toArray();
+		} else if (element instanceof Proxy) {
+			return ((Proxy) element).getStructure().getActivities().toArray();
+		} else if (element instanceof SplitJoin) {
+			return ((SplitJoin) element).getStructure().getActivities().toArray();
 		} else if (element instanceof OsbActivity) {
 			return ((OsbActivity) element).getActivities().toArray();
-		} else if (element instanceof OraSB10gProject) {
-			return ((OraSB10gProject) element).getProxyServices().toArray();
-		} else if (element instanceof Proxy) {
-			return ((Proxy) element).getProxyStructure().getActivities().toArray();
 		}
 		return null;
 	}

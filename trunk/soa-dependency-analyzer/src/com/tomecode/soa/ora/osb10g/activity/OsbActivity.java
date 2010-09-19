@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.ora.osb10g.activity.splitjoin.ErrorHandlers;
+
 /**
  * Basic activity
  * 
@@ -13,9 +15,19 @@ import org.eclipse.swt.graphics.Image;
  */
 public abstract class OsbActivity {
 
+	/**
+	 * list of activities
+	 */
 	protected final List<OsbActivity> activities;
 
+	/**
+	 * activity name
+	 */
 	protected String name;
+
+	/**
+	 * parent activity
+	 */
 	protected OsbActivity parent;
 
 	public OsbActivity() {
@@ -52,5 +64,14 @@ public abstract class OsbActivity {
 
 	public String toString() {
 		return name;
+	}
+
+	public final OsbActivity getErroHandlers() {
+		for (OsbActivity activity : activities) {
+			if (activity instanceof ErrorHandlers) {
+				return activity;
+			}
+		}
+		return null;
 	}
 }

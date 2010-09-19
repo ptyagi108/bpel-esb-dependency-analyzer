@@ -17,7 +17,7 @@ public final class Stage extends OsbActivity {
 	}
 
 	public final Image getImage() {
-		return ImageFactory.OSB_10G_SERVICE;
+		return ImageFactory.OSB_10G_PROXY_SERVICE;
 	}
 
 	public final String toString() {

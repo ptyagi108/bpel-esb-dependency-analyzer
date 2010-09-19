@@ -5,12 +5,11 @@ import java.io.File;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.services.OraSB10gFolder;
 import com.tomecode.soa.ora.osb10g.services.Service;
-import com.tomecode.soa.ora.osb10g.services.UnknownFile;
 import com.tomecode.soa.parser.ServiceParserException;
 
 /**
  * 
- * Parser of Oracle Service Bus 10g
+ * Project parser for Oracle Service Bus 10g
  * 
  * 
  * @author Tomas Frastia
@@ -19,10 +18,11 @@ import com.tomecode.soa.parser.ServiceParserException;
 public final class OraSB10gProjectParser {
 
 	/**
-	 * proxy service parser
+	 * PROXY service parser
 	 */
 	private final OraSB10gProxyParser proxyParser;
 
+	private final OraSB10gSplitJoinParser splitJoinParser;
 	/**
 	 * business service parser
 	 */
@@ -30,6 +30,7 @@ public final class OraSB10gProjectParser {
 
 	public OraSB10gProjectParser() {
 		proxyParser = new OraSB10gProxyParser();
+		splitJoinParser = new OraSB10gSplitJoinParser();
 		businessServiceParser = new OraSB10gBusinessServiceParser();
 	}
 
@@ -53,6 +54,7 @@ public final class OraSB10gProjectParser {
 				} else if (file.isFile()) {
 					Service service = parseService(file);
 					if (service != null) {
+						service.setFolder(null);
 						project.getOraSB10gFolders().addService(service);
 					}
 				}
@@ -69,7 +71,8 @@ public final class OraSB10gProjectParser {
 	 * @return
 	 */
 	private final Service parseService(File file) {
-		if (file.getName().endsWith(".proxy")) {
+		String name = file.getName().toLowerCase();
+		if (name.endsWith(".proxy") || name.endsWith(".proxyservice")) {
 			try {
 				return proxyParser.parseProxy(file);
 			} catch (ServiceParserException e) {
@@ -77,20 +80,23 @@ public final class OraSB10gProjectParser {
 				// TODO : error
 			}
 
-			// && (file.getName().endsWith(".proxy") ||
-			// file.getName().endsWith(".biz") ||
-			// file.getName().endsWith(".xq"))
-		} else if (file.getName().endsWith(".biz")) {
+		} else if (name.endsWith(".flow")) {
+			try {
+				return splitJoinParser.parseSplitJoin(file);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else if (name.endsWith(".biz")) {
 			try {
 				return businessServiceParser.parseBusinessService(file);
 			} catch (ServiceParserException e) {
 				e.printStackTrace();
 				// TODO: error
 			}
-		} else if (file.getName().endsWith(".xq")) {
+		} else if (name.endsWith(".xq") || name.endsWith(".xquery")) {
 
-		} else if (!file.getName().equals(".project")) {
-			return new UnknownFile(file);
+		} else if (!name.equals(".project")) {
+			// return new UnknownFile(file);
 		}
 		return null;
 	}
@@ -106,12 +112,13 @@ public final class OraSB10gProjectParser {
 		if (files != null) {
 			for (File file : files) {
 				if (file.isDirectory() && !file.getName().equals(".settings")) {
-					OraSB10gFolder folder = new OraSB10gFolder(project, file, root.getPath() + "\\" + file.getName(), file.getName());
+					OraSB10gFolder folder = new OraSB10gFolder(project, file, root.getPath() + "/" + file.getName(), file.getName());
 					root.addFolder(folder);
 					parseFolders(project, folder, file);
 				} else {
 					Service service = parseService(file);
 					if (service != null) {
+						service.setFolder(root);
 						root.addService(service);
 					}
 				}

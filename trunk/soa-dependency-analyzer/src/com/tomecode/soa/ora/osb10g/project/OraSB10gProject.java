@@ -10,6 +10,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.services.OraSB10gFolders;
 import com.tomecode.soa.ora.osb10g.services.Proxy;
 import com.tomecode.soa.ora.osb10g.services.Service;
+import com.tomecode.soa.ora.osb10g.services.SplitJoin;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gWorkspace;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.project.ProjectType;
@@ -30,19 +31,38 @@ public final class OraSB10gProject implements Project {
 
 	private final List<Service> services;
 
+	private final List<Service> servicesWithFlow;
+
 	public OraSB10gProject(File file) {
 		this.file = file;
 		this.services = new ArrayList<Service>();
+		this.servicesWithFlow = new ArrayList<Service>();
 		this.oraSB10gFolders = new OraSB10gFolders(this, file, null, null);
 	}
 
 	public final void addService(Service service) {
 		service.setProject(this);
+		if (service instanceof Proxy || service instanceof SplitJoin) {
+			this.servicesWithFlow.add(service);
+		}
 		this.services.add(service);
 	}
 
+	/**
+	 * 
+	 * @return all services in project
+	 */
 	public final List<Service> getServices() {
 		return services;
+	}
+
+	/**
+	 * 
+	 * 
+	 * @return list of {@link Proxy} or {@link SplitJoin}
+	 */
+	public final List<Service> getServicesWithFlow() {
+		return servicesWithFlow;
 	}
 
 	/**
@@ -77,16 +97,6 @@ public final class OraSB10gProject implements Project {
 	@Override
 	public final Workspace getWorkpsace() {
 		return workspace;
-	}
-
-	public final List<Proxy> getProxyServices() {
-		List<Proxy> list = new ArrayList<Proxy>();
-		for (Service service : services) {
-			if (service instanceof Proxy) {
-				list.add((Proxy) service);
-			}
-		}
-		return list;
 	}
 
 	public final Image getImage() {

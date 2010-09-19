@@ -6,7 +6,7 @@ import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig;
-import com.tomecode.soa.project.Project;
+import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.ServiceDependencyType;
 
 /**
  * Business service
@@ -14,18 +14,12 @@ import com.tomecode.soa.project.Project;
  * @author Tomas Frastia
  * 
  */
-public final class BusinessService implements Service {
-
-	private Project project;
-
-	private String name;
-
-	private File file;
+public final class BusinessService extends Service {
 
 	private EndpointConfig endpointConfig;
 
 	public BusinessService(File file) {
-		this.file = file;
+		super(file, ServiceDependencyType.BUSINESS_SERVICE);
 		int index = file.getName().indexOf(".biz");
 		if (index != -1) {
 			name = file.getName().substring(0, index);
@@ -34,28 +28,9 @@ public final class BusinessService implements Service {
 		}
 	}
 
-	public final File getFile() {
-		return file;
-	}
-
-	@Override
-	public final String getName() {
-		return name;
-	}
-
-	@Override
-	public final Project getProject() {
-		return project;
-	}
-
-	@Override
-	public final void setProject(Project project) {
-		this.project = project;
-	}
-
 	@Override
 	public final Image getImage() {
-		return ImageFactory.OSB_10G_SERVICE;
+		return ImageFactory.OSB_10G_BUSINESS_SERVICE;
 	}
 
 	/**

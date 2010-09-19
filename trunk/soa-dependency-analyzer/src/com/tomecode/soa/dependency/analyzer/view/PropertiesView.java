@@ -7,10 +7,13 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 
+import com.tomecode.soa.ora.osb10g.services.Service;
+import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
@@ -57,16 +60,24 @@ public final class PropertiesView extends ViewPart {
 	private Text txtProjectMultiWorkspaceName;
 	private Text txtProjectMultiWorkspacePath;
 
-	// private Composite ora10gProcessPage;
-	// private Text ora10gProcessName;
-	// private Text ora10gProcessType;
-	// private Text ora10gProcessWsdl;
-	// private Text ora10gProjectName;
-	// private Text ora10gProjectPath;
-	// private Text ora10gProcessWorkspaceName;
-	// private Text ora10gProcessWorkspacePath;
-	// private Text ora10gProcessMultiWorkspaceName;
-	// private Text ora10gProcessMultiWorkspacePath;
+	private Composite servicePage;
+	private Text txtServiceName;
+	private Text txtServiceType;
+	private Text txtServiceFolder;
+	private Text txtServicePath;
+	private Text txtServiceProjectName;
+	private Text txtServiceProjectType;
+	private Text txtServiceProjectPath;
+	private Text txtServiceProjectWorkspace;
+	private Text txtServiceProjectWorkspacePath;
+	private Text txtServiceProjectMultiWorkspaceName;
+	private Text txtServiceProjectMultiWorkspacePath;
+
+	private Composite serviceDepPage;
+	private Text txtServiceDepProjectName;
+	private Text txtServiceDepName;
+	private Text txtServiceDepOsbActivity;
+	private Text txtServiceDepOsbType;
 
 	public PropertiesView() {
 
@@ -83,53 +94,93 @@ public final class PropertiesView extends ViewPart {
 		initMultiWorkspacePage(contentPanel);
 		initWorkspacePage(contentPanel);
 		initProjectPage(contentPanel);
-		// initOra10gProcessPage(contentPanel);
+		initServicePage(contentPanel); // initOra10gProcessPage(contentPanel);
+		initServiceDepPage(contentPanel);
 		layout.topControl = emptyPage;
 
 		contentPanel.layout();
 	}
 
-	// /**
-	// * create Oracle 10g process page
-	// *
-	// * @param parent
-	// */
-	// private final void initOra10gProcessPage(Composite parent) {
-	// ora10gProcessPage = new Composite(parent, SWT.NONE);
-	// ora10gProcessPage.setLayout(new FillLayout());
-	//
-	// ScrolledComposite sc = new ScrolledComposite(ora10gProcessPage,
-	// SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
-	//
-	// Composite composite = new Composite(sc, SWT.NONE);
-	// composite.setLayout(new GridLayout(2, false));
-	// composite.setLayoutData(new GridData(GridData.FILL_BOTH |
-	// GridData.GRAB_VERTICAL | GridData.GRAB_HORIZONTAL));
-	//
-	// createLabel(composite, "Process Type: ");
-	// ora10gProcessType = createText(composite);
-	// createLabel(composite, "Process Name: ");
-	// ora10gProcessName = createText(composite);
-	// createLabel(composite, "WSDL: ");
-	// ora10gProcessWsdl = createText(composite);
-	// createLabel(composite, "Project Name: ");
-	// ora10gProjectName = createText(composite);
-	// createLabel(composite, "Project Path: ");
-	// ora10gProjectPath = createText(composite);
-	// createLabel(composite, "Workspace Name: ");
-	// ora10gProcessWorkspaceName = createText(composite);
-	// createLabel(composite, "Workspace Path: ");
-	// ora10gProcessWorkspacePath = createText(composite);
-	// createLabel(composite, "Multi Workspace Name: ");
-	// ora10gProcessMultiWorkspaceName = createText(composite);
-	// createLabel(composite, "Multi Workspace Path: ");
-	// ora10gProcessMultiWorkspacePath = createText(composite);
-	// composite.pack();
-	// sc.setMinSize(composite.getSize());
-	// sc.setExpandHorizontal(true);
-	// sc.setExpandVertical(true);
-	// sc.setContent(composite);
-	// }
+	/**
+	 * create panel for {@link Service}
+	 * 
+	 * @param parent
+	 */
+	private final void initServicePage(Composite parent) {
+		servicePage = new Composite(parent, SWT.NONE);
+		servicePage.setLayout(new FillLayout());
+
+		ScrolledComposite sc = new ScrolledComposite(servicePage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
+		Composite composite = createComposite(sc);
+
+		Group groupService = createGroup(composite, "Service...");
+		createLabel(groupService, "Type: ");
+		txtServiceType = createText(groupService);
+		createLabel(groupService, "Name: ");
+		txtServiceName = createText(groupService);
+		createLabel(groupService, "Folder: ");
+		txtServiceFolder = createText(groupService);
+		createLabel(groupService, "Path: ");
+		txtServicePath = createText(groupService);
+
+		Group groupProject = createGroup(composite, "Project...");
+		createLabel(groupProject, "Type: ");
+		txtServiceProjectType = createText(groupProject);
+		createLabel(groupProject, "Name: ");
+		txtServiceProjectName = createText(groupProject);
+		createLabel(groupProject, "Path:");
+		txtServiceProjectPath = createText(groupProject);
+
+		Group groupWorkspace = createGroup(composite, "Workspace...");
+		createLabel(groupWorkspace, "Name: ");
+		txtServiceProjectWorkspace = createText(groupWorkspace);
+		createLabel(groupWorkspace, "Path: ");
+		txtServiceProjectWorkspacePath = createText(groupWorkspace);
+
+		Group groupMultiWorkspace = createGroup(composite, "Multi Workspace...");
+		createLabel(groupMultiWorkspace, "Name: ");
+		txtServiceProjectMultiWorkspaceName = createText(groupMultiWorkspace);
+		createLabel(groupMultiWorkspace, "Path: ");
+		txtServiceProjectMultiWorkspacePath = createText(groupMultiWorkspace);
+
+		composite.pack();
+		sc.setMinSize(composite.getSize());
+		sc.setExpandHorizontal(true);
+		sc.setExpandVertical(true);
+		sc.setContent(composite);
+
+	}
+
+	private final void initServiceDepPage(Composite parent) {
+		serviceDepPage = new Composite(parent, SWT.NONE);
+		serviceDepPage.setLayout(new FillLayout());
+
+		ScrolledComposite sc = new ScrolledComposite(serviceDepPage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
+		Composite composite = createComposite(sc);
+
+		Group groupService = createGroup(composite, "Unknown Service...");
+		createLabel(groupService, "Name: ");
+		txtServiceDepName = createText(groupService);
+		createLabel(groupService, "Type: ");
+		txtServiceDepOsbType = createText(groupService);
+		createLabel(groupService, "In Activity: ");
+		txtServiceDepOsbActivity = createText(groupService);
+		createLabel(groupService, "Project: ");
+		txtServiceDepProjectName = createText(groupService);
+
+		composite.pack();
+		sc.setMinSize(composite.getSize());
+		sc.setExpandHorizontal(true);
+		sc.setExpandVertical(true);
+		sc.setContent(composite);
+	}
+
+	private final Composite createComposite(ScrolledComposite sc) {
+		Composite composite = new Composite(sc, SWT.NONE);
+		composite.setLayout(new GridLayout(1, false));
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_VERTICAL | GridData.GRAB_HORIZONTAL));
+		return composite;
+	}
 
 	/**
 	 * create {@link Composite} for {@link Project}
@@ -141,29 +192,27 @@ public final class PropertiesView extends ViewPart {
 		projectPage.setLayout(new FillLayout());
 
 		ScrolledComposite sc = new ScrolledComposite(projectPage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
+		Composite composite = createComposite(sc);
 
-		Composite composite = new Composite(sc, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
-		composite.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_VERTICAL | GridData.GRAB_HORIZONTAL));
+		Group groupProject = createGroup(composite, "Project...");
+		createLabel(groupProject, "Type: ");
+		txtProjectType = createText(groupProject);
+		createLabel(groupProject, "Name: ");
+		txtProjectName = createText(groupProject);
+		createLabel(groupProject, "Path:");
+		txtProjectPath = createText(groupProject);
 
-		createLabel(composite, "Project Type: ");
-		txtProjectType = createText(composite);
+		Group groupWorkspace = createGroup(composite, "Workspace...");
+		createLabel(groupWorkspace, "Name: ");
+		txtProjectWorkspace = createText(groupWorkspace);
+		createLabel(groupWorkspace, "Path: ");
+		txtProjectWorkspacePath = createText(groupWorkspace);
 
-		createLabel(composite, "Project Name: ");
-		txtProjectName = createText(composite);
-
-		createLabel(composite, "Project Path:");
-		txtProjectPath = createText(composite);
-
-		createLabel(composite, "Workspace Name: ");
-		txtProjectWorkspace = createText(composite);
-		createLabel(composite, "Workspace Path: ");
-		txtProjectWorkspacePath = createText(composite);
-
-		createLabel(composite, "MultiWorkspace Name: ");
-		txtProjectMultiWorkspaceName = createText(composite);
-		createLabel(composite, "MultiWokspace Path: ");
-		txtProjectMultiWorkspacePath = createText(composite);
+		Group groupMultiWorkspace = createGroup(composite, "Multi Workspace...");
+		createLabel(groupMultiWorkspace, "Name: ");
+		txtProjectMultiWorkspaceName = createText(groupMultiWorkspace);
+		createLabel(groupMultiWorkspace, "Path: ");
+		txtProjectMultiWorkspacePath = createText(groupMultiWorkspace);
 
 		composite.pack();
 		sc.setMinSize(composite.getSize());
@@ -171,6 +220,14 @@ public final class PropertiesView extends ViewPart {
 		sc.setExpandVertical(true);
 		sc.setContent(composite);
 
+	}
+
+	private final Group createGroup(Composite composite, String title) {
+		Group group = new Group(composite, SWT.SHADOW_IN);
+		group.setText(title);
+		group.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_VERTICAL | GridData.GRAB_HORIZONTAL));
+		group.setLayout(new GridLayout(2, false));
+		return group;
 	}
 
 	/**
@@ -183,22 +240,21 @@ public final class PropertiesView extends ViewPart {
 		workspacePage.setLayout(new FillLayout());
 
 		ScrolledComposite sc = new ScrolledComposite(workspacePage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
-		Composite composite = new Composite(sc, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
-		composite.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_VERTICAL | GridData.GRAB_HORIZONTAL));
+		Composite composite = createComposite(sc);
 
-		createLabel(composite, "Workspace Type: ");
-		txtWorkspaceParentType = createText(composite);
-		createLabel(composite, "Workspace Name: ");
-		txtWorkspaceName = createText(composite);
-		createLabel(composite, "Workspace Path: ");
-		txtWorkspacePath = createText(composite);
+		Group groupWorkspace = createGroup(composite, "Workspace...");
+		createLabel(groupWorkspace, "Type: ");
+		txtWorkspaceParentType = createText(groupWorkspace);
+		createLabel(groupWorkspace, "Name: ");
+		txtWorkspaceName = createText(groupWorkspace);
+		createLabel(groupWorkspace, "Path: ");
+		txtWorkspacePath = createText(groupWorkspace);
 
-		createLabel(composite, "Multi Workspace Name: ");
-		txtWorkspaceParent = createText(composite);
-
-		createLabel(composite, "Mutli Workspace Path: ");
-		txtWorkspaceParentPath = createText(composite);
+		Group groupMultiWorkspace = createGroup(composite, "Multi Workspace...");
+		createLabel(groupMultiWorkspace, "Name: ");
+		txtWorkspaceParent = createText(groupMultiWorkspace);
+		createLabel(groupMultiWorkspace, "Path: ");
+		txtWorkspaceParentPath = createText(groupMultiWorkspace);
 
 		composite.pack();
 		sc.setMinSize(composite.getSize());
@@ -213,21 +269,19 @@ public final class PropertiesView extends ViewPart {
 	 * @param parent
 	 */
 	private final void initMultiWorkspacePage(Composite parent) {
-
 		multiWokrspacePage = new Composite(parent, SWT.NONE);
 		multiWokrspacePage.setLayout(new FillLayout());
 
 		ScrolledComposite sc = new ScrolledComposite(multiWokrspacePage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
-		Composite composite = new Composite(sc, SWT.NONE);
+		Composite composite = createComposite(sc);
 
-		composite.setLayout(new GridLayout(2, false));
-		composite.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_VERTICAL | GridData.GRAB_HORIZONTAL));
-		createLabel(composite, "Type: ");
-		txtMultiWorkspaceType = createText(composite);
-		createLabel(composite, "Name: ");
-		txtMultiWorkspaceName = createText(composite);
-		createLabel(composite, "Path: ");
-		txtMultiWorkspacePath = createText(composite);
+		Group groupMultiWorkspace = createGroup(composite, "Multi Workspace...");
+		createLabel(groupMultiWorkspace, "Type: ");
+		txtMultiWorkspaceType = createText(groupMultiWorkspace);
+		createLabel(groupMultiWorkspace, "Name: ");
+		txtMultiWorkspaceName = createText(groupMultiWorkspace);
+		createLabel(groupMultiWorkspace, "Path: ");
+		txtMultiWorkspacePath = createText(groupMultiWorkspace);
 		composite.pack();
 
 		sc.setMinSize(composite.getSize());
@@ -287,12 +341,31 @@ public final class PropertiesView extends ViewPart {
 			txtProjectMultiWorkspacePath.setText(project.getWorkpsace().getMultiWorkspace().getFile().toString());
 			txtProjectMultiWorkspaceName.setText(project.getWorkpsace().getMultiWorkspace().getName());
 			showContent(projectPage);
-			// } else if (data instanceof BpelProject) {
-			// BpelProject bpelProject = (BpelProject) data;
-			// ora10gProcessName.setText(bpelProject.toString());
-			// ora10gProcessType.setText(bpelProject.getType().toString());
-			// ora10gProcessWsdl.setText(bpelProject.getWsdl().getFile().toString());
-			// showContent(ora10gProcessPage);
+		} else if (dataForProperties instanceof Service) {
+			Service service = (Service) dataForProperties;
+
+			txtServiceName.setText(service.getName());
+			txtServiceFolder.setText(service.getFolder() == null ? "" : service.getFolder().toString());
+			txtServicePath.setText(service.getFile().toString());
+			txtServiceType.setText(service.getType().toString());
+			Project project = (Project) service.getProject();
+			txtServiceProjectName.setText(project.getName());
+			txtServiceProjectType.setText(project.getType().toString());
+			txtServiceProjectPath.setText(project.getFile().toString());
+			txtServiceProjectWorkspace.setText(project.getWorkpsace().getName());
+			txtServiceProjectWorkspacePath.setText(project.getWorkpsace().getFile().toString());
+			txtServiceProjectMultiWorkspacePath.setText(project.getWorkpsace().getMultiWorkspace().getFile().toString());
+			txtServiceProjectMultiWorkspaceName.setText(project.getWorkpsace().getMultiWorkspace().getName());
+			showContent(servicePage);
+		} else if (dataForProperties instanceof ServiceDependency) {
+			ServiceDependency dependency = (ServiceDependency) dataForProperties;
+			txtServiceDepName.setText(dependency.getRefPath());
+			txtServiceDepOsbType.setText(dependency.getType().toString());
+			String name = dependency.getServiceName();
+			txtServiceDepOsbActivity.setText(name == null ? "" : name);
+			txtServiceDepOsbActivity.setText(dependency.getActivity().toString());
+			txtServiceDepProjectName.setText(dependency.getProjectName());
+			showContent(serviceDepPage);
 		} else {
 			showContent(emptyPage);
 		}

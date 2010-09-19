@@ -4,6 +4,8 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.ora.osb10g.services.Service;
+import com.tomecode.soa.ora.osb10g.services.dependnecies.OsbActivityDependency;
 import com.tomecode.soa.ora.suite10g.project.BpelOperations;
 import com.tomecode.soa.ora.suite10g.project.BpelProject;
 import com.tomecode.soa.ora.suite10g.project.Operation;
@@ -25,6 +27,10 @@ final class ServiceOperationsDepLabelProvider extends LabelProvider {
 			return operation.getActivtyType().getImage();
 		} else if (element instanceof BpelProject) {
 			return ((BpelProject) element).getImage();
+		} else if (element instanceof Service) {
+			return ((Service) element).getImage();
+		} else if (element instanceof OsbActivityDependency) {
+			return ((OsbActivityDependency) element).getImage();
 		}
 		return null;
 	}

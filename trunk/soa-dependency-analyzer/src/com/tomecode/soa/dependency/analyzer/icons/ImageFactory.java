@@ -144,7 +144,8 @@ public final class ImageFactory {
 
 	public static final Image OSB_10G_STAGE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/stage.gif")).createImage();
 	public static final Image OSB_10G_BRANCH = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/branch.gif")).createImage();
-	public static final Image OSB_10G_SERVICE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/service.gif")).createImage();
+	public static final Image OSB_10G_PROXY_SERVICE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/proxyService.gif")).createImage();
+	public static final Image OSB_10G_BUSINESS_SERVICE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/businessService.gif")).createImage();
 	public static final Image OSB_10G_PIPELINE_PARI_NODE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/pipelinePair.gif")).createImage();
 	public static final Image OSB_10G_PIPELINE_REQUEST = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/pipelinePairRequest.gif")).createImage();
 	public static final Image OSB_10G_PIPELINE_RESPONSE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/pipelinePairResponse.gif")).createImage();
@@ -159,8 +160,8 @@ public final class ImageFactory {
 	public static final Image OSB_10G_VALIDATE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/validate.gif")).createImage();
 	public static final Image OSB_10G_SKIP = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/skip.gif")).createImage();
 	public static final Image OSB_10G_REPLY = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/reply.gif")).createImage();
-	public static final Image OSB_10G_ELSEIF = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/ifthen.gif")).createImage();
-	public static Image OSB_10G_IFTHENELSE = OSB_10G_ELSEIF;
+	public static final Image OSB_10G_ELSEIF = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/if.gif")).createImage();
+	public static Image OSB_10G_IFTHENELSE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/ifthen.gif")).createImage();
 	public static final Image OSB_10G_TRANSPORTHEADERS = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/transportHeaders.gif")).createImage();
 	public static final Image OSB_10G_WSCALLOUT = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/WSCallout.gif")).createImage();
 	public static final Image OSB_10G_ROUTING_OPTIONS = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/routingOptions.gif")).createImage();
@@ -177,6 +178,40 @@ public final class ImageFactory {
 	public static final Image OSB_10G_BRANCH_NODE_CONDITION = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/branchCondition.gif")).createImage();
 	public static final Image OSB_10G_BRANCH_OPERATION = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/branchOperational.gif")).createImage();
 	public static final Image OSB_10G_PROJECT = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/project.gif")).createImage();
+
+	public static final Image OSB_10G_SPLITJOIN_ASSIGN = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/assign.gif")).createImage();
+	public static final Image OSB_10G_SPLITJOIN_ASSIGN_ACTION = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/assignAction.gif"))
+			.createImage();
+	public static final Image OSB_10G_SPLITJOIN_COPY = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/copy.gif")).createImage();
+	public static final Image OSB_10G_SPLITJOIN_DELETE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/delete.gif")).createImage();
+	public static final Image OSB_10G_SPLITJOIN_ELSE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/else.gif")).createImage();
+	public static final Image OSB_10G_SPLITJOIN_IF = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/if.gif")).createImage();
+	public static final Image OSB_10G_SPLITJOIN_FLOW = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/flow.gif")).createImage();
+	public static final Image OSB_10G_SPLITJOIN_FOR_EACH = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/foreach.gif")).createImage();
+	public static final Image OSB_10G_SPLITJOIN_INSERT = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/insert.gif")).createImage();
+	public static final Image OSB_10G_SPLITJOIN_INVOKE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/invoke.gif")).createImage();
+	public static final Image OSB_10G_SPLITJOIN_JAVA_CALLOUT = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/javaCallout.gif"))
+			.createImage();
+	public static final Image OSB_10G_SPLITJOIN_LOG = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/log.gif")).createImage();
+	public static final Image OSB_10G_SPLITJOIN_RECEIVE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/receive.gif")).createImage();
+	public static final Image OSB_10G_SPLITJOIN_VARIABLES = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/variables.gif")).createImage();
+	public static final Image OSB_10G_SPLITJOIN_SCOPE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/scope.gif")).createImage();
+	public static final Image OSB_10G_SPLITJOIN_WHILE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/while.png")).createImage();
+	public static final Image OSB_10G_SPLITJOIN = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/splitJoin.gif")).createImage();
+	public static final Image OSB_10G_SPLITJOIN_REPLACE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/replace.gif")).createImage();
+	public static final Image OSB_10G_SPLITJOIN_VARIABLE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/variable.gif")).createImage();
+	public static final Image OSB_10G_SPLITJOIN_RAISE_ERROR = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/raiseError.gif")).createImage();
+	public static final Image OSB_10G_SPLITJOIN_EXTERNAL_SERVICE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/externalService.gif"))
+			.createImage();
+	public static final Image OSB_10G_SPLITJOIN_REPLY = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/reply.gif")).createImage();
+	public static final Image OSB_10G_SPLITJOIN_LEFT_ARROW = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/leftArrow.gif")).createImage();
+	public static final Image OSB_10G_SPLITJOIN_VARIABLE_PRIVATE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/privateVariable.gif"))
+			.createImage();
+
+	public static final Image OSB_10G_SPLITJOIN_LOGIC_FLYOUT = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/logicFlyout.gif"))
+			.createImage();
+	public static final Image OSB_10G_SPLITJOIN_CATCH = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/catch.gif")).createImage();
+	public static final Image OSB_10G_SPLITJOIN_CATCHALL = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/osb10g/16/splitjoin/catchAll.gif")).createImage();
 
 	public static final Image UNKNOWN = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/unknown.png")).createImage();
 	public static final Image UNKNOWN_BIG = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/unknown_big.png")).createImage();
