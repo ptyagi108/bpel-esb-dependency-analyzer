@@ -110,45 +110,51 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 	@Override
 	public final void selectionChanged(SelectionChangedEvent event) {
 
-		IWorkbenchPage workbenchPage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		IViewPart iViewPart = workbenchPage.findView(BpelProcessStructureNavigator.ID);
+		try {
 
-		IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
-		if (!selection.isEmpty()) {
+			IWorkbenchPage workbenchPage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			IViewPart iViewPart = workbenchPage.findView(BpelProcessStructureNavigator.ID);
 
-			if (iViewPart != null) {
-				BpelProcessStructureNavigator navigator = (BpelProcessStructureNavigator) iViewPart;
-				navigator.showProcessStructure(selection.getFirstElement());
+			IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
+			if (!selection.isEmpty()) {
+
+				if (iViewPart != null) {
+					BpelProcessStructureNavigator navigator = (BpelProcessStructureNavigator) iViewPart;
+					navigator.showProcessStructure(selection.getFirstElement());
+				}
+
+				iViewPart = workbenchPage.findView(ServiceOperationsDepNavigator.ID);
+				if (iViewPart != null) {
+					ServiceOperationsDepNavigator navigator = (ServiceOperationsDepNavigator) iViewPart;
+					navigator.show(selection.getFirstElement());
+				}
+
+				iViewPart = workbenchPage.findView(VisualGraphView.ID);
+				if (iViewPart != null) {
+					VisualGraphView graphView = (VisualGraphView) iViewPart;
+					graphView.showGraph(selection.getFirstElement(), true);
+				}
+
+				iViewPart = workbenchPage.findView(PropertiesView.ID);
+				if (iViewPart != null) {
+					PropertiesView propertiesView = (PropertiesView) iViewPart;
+					propertiesView.show(selection.getFirstElement());
+				}
+				iViewPart = workbenchPage.findView(ProjectStructureNavigator.ID);
+				if (iViewPart != null) {
+					ProjectStructureNavigator projectStructureNavigator = (ProjectStructureNavigator) iViewPart;
+					projectStructureNavigator.showProjectFiles(selection.getFirstElement());
+				}
+
+				iViewPart = workbenchPage.findView(ServiceBusStructureNavigator.ID);
+				if (iViewPart != null) {
+					ServiceBusStructureNavigator navigator = (ServiceBusStructureNavigator) iViewPart;
+					navigator.showStructure(selection.getFirstElement());
+				}
 			}
 
-			iViewPart = workbenchPage.findView(ServiceOperationsDepNavigator.ID);
-			if (iViewPart != null) {
-				ServiceOperationsDepNavigator navigator = (ServiceOperationsDepNavigator) iViewPart;
-				navigator.show(selection.getFirstElement());
-			}
-
-			iViewPart = workbenchPage.findView(VisualGraphView.ID);
-			if (iViewPart != null) {
-				VisualGraphView graphView = (VisualGraphView) iViewPart;
-				graphView.showGraph(selection.getFirstElement(), true);
-			}
-
-			iViewPart = workbenchPage.findView(PropertiesView.ID);
-			if (iViewPart != null) {
-				PropertiesView propertiesView = (PropertiesView) iViewPart;
-				propertiesView.showProperties(selection.getFirstElement());
-			}
-			iViewPart = workbenchPage.findView(ProjectStructureNavigator.ID);
-			if (iViewPart != null) {
-				ProjectStructureNavigator projectStructureNavigator = (ProjectStructureNavigator) iViewPart;
-				projectStructureNavigator.showProjectFiles(selection.getFirstElement());
-			}
-
-			iViewPart = workbenchPage.findView(ServiceBusStructureNavigator.ID);
-			if (iViewPart != null) {
-				ServiceBusStructureNavigator navigator = (ServiceBusStructureNavigator) iViewPart;
-				navigator.showStructure(selection.getFirstElement());
-			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 	}

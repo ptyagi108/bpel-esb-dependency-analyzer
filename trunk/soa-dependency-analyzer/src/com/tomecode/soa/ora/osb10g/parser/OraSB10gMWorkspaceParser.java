@@ -70,10 +70,6 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 			for (OraSB10gProject project : workspace.getProjects()) {
 				for (Service service : project.getServices()) {
 
-					if (service.getName().equals("SplitJoin")) {
-						toString();
-					}
-
 					ServiceDependencies serviceDependencies = service.getServiceDependencies();
 					for (ServiceDependency serviceDependency : serviceDependencies.getDependnecies()) {
 						// name of dependency project

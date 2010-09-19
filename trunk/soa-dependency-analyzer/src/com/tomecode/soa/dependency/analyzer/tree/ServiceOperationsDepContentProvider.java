@@ -4,6 +4,8 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
+import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
+import com.tomecode.soa.openesb.bpel.dependencies.BpelActivityDependency;
 import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.OsbActivityDependency;
 import com.tomecode.soa.ora.suite10g.project.BpelOperations;
@@ -18,6 +20,15 @@ import com.tomecode.soa.ora.suite10g.project.Operation;
  */
 final class ServiceOperationsDepContentProvider implements ITreeContentProvider {
 
+	private boolean showWithActivities;
+
+	/**
+	 * Constructor
+	 */
+	ServiceOperationsDepContentProvider() {
+		this.showWithActivities = true;
+	}
+
 	@Override
 	public final Object[] getChildren(Object parent) {
 		if (parent instanceof EmptyNode) {
@@ -30,10 +41,14 @@ final class ServiceOperationsDepContentProvider implements ITreeContentProvider 
 			return ((Service) parent).getActivityDependency().getActivityDependencies().toArray();
 		} else if (parent instanceof OsbActivityDependency) {
 			return ((OsbActivityDependency) parent).getServices().toArray();
+		} else if (parent instanceof OpenEsbBpelProcess) {
+			return ((OpenEsbBpelProcess) parent).getActivityDependencies().toArray();
+		} else if (parent instanceof BpelActivityDependency) {
+			return ((BpelActivityDependency) parent).getBpelProcesses().toArray();
 		}
 		return null;
 	}
-		
+
 	@Override
 	public final Object getParent(Object paramObject) {
 		return null;
@@ -51,6 +66,10 @@ final class ServiceOperationsDepContentProvider implements ITreeContentProvider 
 			return !((Service) element).getActivityDependency().getActivityDependencies().isEmpty();
 		} else if (element instanceof OsbActivityDependency) {
 			return !((OsbActivityDependency) element).getServices().isEmpty();
+		} else if (element instanceof OpenEsbBpelProcess) {
+			return !((OpenEsbBpelProcess) element).getActivityDependencies().isEmpty();
+		} else if (element instanceof BpelActivityDependency) {
+			return !((BpelActivityDependency) element).getBpelProcesses().isEmpty();
 		}
 		return false;
 	}
@@ -67,8 +86,20 @@ final class ServiceOperationsDepContentProvider implements ITreeContentProvider 
 			return ((Service) element).getActivityDependency().getActivityDependencies().toArray();
 		} else if (element instanceof OsbActivityDependency) {
 			return ((OsbActivityDependency) element).getServices().toArray();
+		} else if (element instanceof OpenEsbBpelProcess) {
+			return ((OpenEsbBpelProcess) element).getActivityDependencies().toArray();
+		} else if (element instanceof BpelActivityDependency) {
+			return ((BpelActivityDependency) element).getBpelProcesses().toArray();
 		}
 		return null;
+	}
+
+	/**
+	 * @param showWithActivities
+	 *            the showWithActivities to set
+	 */
+	public final void setShowWithActivities(boolean showWithActivities) {
+		this.showWithActivities = showWithActivities;
 	}
 
 	@Override

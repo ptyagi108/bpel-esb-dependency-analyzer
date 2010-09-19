@@ -6,8 +6,13 @@ import java.util.List;
 
 import org.dom4j.Element;
 
+import com.tomecode.soa.bpel.activity.Invoke;
+import com.tomecode.soa.bpel.activity.Receive;
+import com.tomecode.soa.bpel.activity.Reply;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.openesb.bpel.PartnerLink;
+import com.tomecode.soa.openesb.bpel.activity.OnMessage;
+import com.tomecode.soa.openesb.bpel.dependencies.BpelActivityDependency;
 import com.tomecode.soa.openesb.project.OpenEsbBpelProject;
 import com.tomecode.soa.openesb.workspace.OpenEsbMultiWorkspace;
 import com.tomecode.soa.openesb.workspace.OpenEsbWorkspace;
@@ -108,6 +113,31 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 
 		linkingWsdlWithPartnerLinks(esbBpelProjects);
 		analyzeDependencies(esbBpelProjects);
+		linkingProcessDependencies(esbBpelProjects);
+	}
+
+	private final void linkingProcessDependencies(List<OpenEsbBpelProject> projects) {
+		for (OpenEsbBpelProject project : projects) {
+			for (OpenEsbBpelProcess process : project.getProcesses()) {
+				for (BpelActivityDependency dependency : process.getActivityDependencies()) {
+					PartnerLink partnerLink = null;
+					if (dependency.getActivity() instanceof Receive) {
+						Receive receive = (Receive) dependency.getActivity();
+						partnerLink = process.findPartnerLink(receive.getPartnerLink());
+					} else if (dependency.getActivity() instanceof Invoke) {
+						Invoke invoke = (Invoke) dependency.getActivity();
+						partnerLink = process.findPartnerLink(invoke.getPartnerLink());
+					} else if (dependency.getActivity() instanceof Reply) {
+						Reply reply = (Reply) dependency.getActivity();
+						partnerLink = process.findPartnerLink(reply.getPartnerLink());
+					} else if (dependency.getActivity() instanceof OnMessage) {
+						OnMessage onMessage = (OnMessage) dependency.getActivity();
+						partnerLink = process.findPartnerLink(onMessage.getPartnerLink());
+					}
+					dependency.addDependencyProcess(partnerLink.getDependenciesProcesses().get(0));
+				}
+			}
+		}
 	}
 
 	/**
@@ -145,9 +175,10 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 					if (wsdl != null) {
 						List<OpenEsbBpelProcess> dependenciesProcess = findWsldRefInOtherProcess(projects, wsdl);
 						for (OpenEsbBpelProcess depProcess : dependenciesProcess) {
-							if (!bpelProcess.equals(depProcess)) {
+							//if (!bpelProcess.equals(depProcess)) {
 								partnerLink.addDependency(depProcess);
-							}
+
+							//}
 						}
 					}
 				}

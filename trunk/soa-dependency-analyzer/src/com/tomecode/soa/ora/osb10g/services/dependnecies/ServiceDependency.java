@@ -132,7 +132,7 @@ public final class ServiceDependency {
 	 * 
 	 */
 	public enum ServiceDependencyType {
-		PROXY_SERVICE("ProxyRef", "Proxy Service"), BUSINESS_SERVICE("BusinessServiceRef", "Business Service"), WSDL("", "WSDL"), UNKNOWN("", ""), SPLITJOIN("", "SplitJoin flow");
+		PROXY_SERVICE("ProxyRef", "Proxy Service"), BUSINESS_SERVICE("BusinessServiceRef", "Business Service"), WSDL("", "WSDL"), UNKNOWN("", "Unknown"), SPLITJOIN("", "SplitJoin flow");
 
 		private final String element;
 

@@ -54,9 +54,6 @@ public final class ServiceDependencies {
 	public final UnknownService findUnknownService(Project depProject, String serviceName) {
 		for (ServiceDependency serviceDependency : dependnecies) {
 			for (Service service : serviceDependency.getServices()) {
-				if (service.toString().equals("SplitJoin_WS")) {
-					toString();
-				}
 				if (service.getType() == ServiceDependencyType.UNKNOWN) {
 					UnknownService unknownService = (UnknownService) service;
 					if (unknownService.getProject().equals(depProject) && unknownService.getName().equals(serviceName)) {

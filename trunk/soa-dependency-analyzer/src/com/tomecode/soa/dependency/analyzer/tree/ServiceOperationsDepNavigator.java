@@ -7,12 +7,15 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
+import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.suite10g.project.BpelProject;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
+ * 
+ * Show the activities or services by dependencies
  * 
  * @author Tomas Frastia
  * 
@@ -38,7 +41,7 @@ public final class ServiceOperationsDepNavigator extends ViewPart {
 
 	@Override
 	public final void createPartControl(Composite parent) {
-		tree = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		tree = new TreeViewer(parent, SWT.SIMPLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		tree.setContentProvider(contentProvider);
 		tree.setLabelProvider(labelProvider);
 	}
@@ -54,6 +57,8 @@ public final class ServiceOperationsDepNavigator extends ViewPart {
 			setDataToTree(bpelProject.getBpelOperations());
 		} else if (source instanceof Service) {
 			setDataToTree((Service) source);
+		} else if (source instanceof OpenEsbBpelProcess) {
+			setDataToTree((OpenEsbBpelProcess) source);
 		} else {
 			clearTree();
 		}
@@ -62,7 +67,7 @@ public final class ServiceOperationsDepNavigator extends ViewPart {
 	private final void setDataToTree(Object data) {
 		rootNode.set(data);
 		tree.setInput(rootNode);
-		tree.expandAll();
+		tree.expandToLevel(3);
 	}
 
 	private final void clearTree() {
@@ -102,6 +107,16 @@ public final class ServiceOperationsDepNavigator extends ViewPart {
 		if (workspace.equals(workspaceInTree)) {
 			clearTree();
 		}
+	}
+
+	public final void showWithActivities() {
+		contentProvider.setShowWithActivities(true);
+		tree.refresh();
+	}
+
+	public final void showWithoutActivities() {
+		contentProvider.setShowWithActivities(false);
+		tree.refresh();
 	}
 
 }

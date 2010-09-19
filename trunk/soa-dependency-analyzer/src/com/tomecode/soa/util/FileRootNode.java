@@ -26,7 +26,7 @@ public final class FileRootNode {
 	}
 
 	public final boolean hasFiles() {
-		return files[0] != null;
+		return files[0] == null;
 	}
 
 	/**

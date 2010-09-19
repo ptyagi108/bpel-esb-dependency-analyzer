@@ -283,7 +283,7 @@ public final class VisualGraphView extends ViewPart {
 	private final void showPropertiesAboutSelectedNode(Object object) {
 		if (object instanceof GraphConnection) {
 			GraphConnection connection = (GraphConnection) object;
-			GuiUtils.getPropertiesView().showProperties(connection.getData());
+			GuiUtils.getPropertiesView().show(connection.getData());
 			if (connection.getData() != null) {
 				GuiUtils.getProjectStructureNavigator().showProjectFiles(connection.getData());
 			}
@@ -291,7 +291,7 @@ public final class VisualGraphView extends ViewPart {
 			GuiUtils.getServiceBusStructureNavigator().showStructure(connection.getData());
 		} else if (object instanceof GraphNode) {
 			GraphNode graphNode = (GraphNode) object;
-			GuiUtils.getPropertiesView().showProperties(graphNode.getData());
+			GuiUtils.getPropertiesView().show(graphNode.getData());
 			GuiUtils.getBpelProcessStructureNavigator().showProcessStructure(graphNode.getData());
 			GuiUtils.getServiceBusStructureNavigator().showStructure(graphNode.getData());
 			GuiUtils.getServiceOperationsDepNavigator().show(graphNode.getData());
@@ -413,6 +413,7 @@ public final class VisualGraphView extends ViewPart {
 	 * @param existsSource
 	 */
 	private final void applyDependnecies(OpenEsbBpelProcess bpelProcess, GraphNode existsSource) {
+
 		GraphNode source = existsSource == null ? createNode(bpelProcess.getName(), bpelProcess.getImage(), bpelProcess) : existsSource;
 		for (PartnerLink partnerLink : bpelProcess.getPartnerLinks()) {
 			for (OpenEsbBpelProcess depBpelProcess : partnerLink.getDependenciesProcesses()) {
@@ -426,7 +427,12 @@ public final class VisualGraphView extends ViewPart {
 						GraphConnection connection = createConnection(source, existsNode, partnerLink, true);
 						connection.setCurveDepth(10);
 					} else {
-						createConnection(source, existsNode, partnerLink, true);
+						if (source.equals(existsNode)) {
+							GraphConnection connection = createConnection(source, existsNode, partnerLink, true);
+							connection.setCurveDepth(30);
+						} else {
+							createConnection(source, existsNode, partnerLink, true);
+						}
 					}
 
 				} else {

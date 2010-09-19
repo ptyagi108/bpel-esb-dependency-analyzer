@@ -46,6 +46,13 @@ import com.tomecode.soa.parser.ServiceParserException;
  */
 public final class OpenEsbBpelParser extends AbstractParser {
 
+	/**
+	 * parse of bpel process
+	 * 
+	 * @param bpelFile
+	 * @return
+	 * @throws ServiceParserException
+	 */
 	public final OpenEsbBpelProcess parseBpel(File bpelFile) throws ServiceParserException {
 		return parseBpelXml(parseXml(bpelFile), bpelFile);
 	}
@@ -111,12 +118,18 @@ public final class OpenEsbBpelParser extends AbstractParser {
 						.attributeValue("name"), element.attributeValue("partnerLinkType"), element.attributeValue("myRole"), element.attributeValue("partnerRole"));
 				root.addActivity(partnerLink);
 			} else if (element.getName().equals("receive")) {
-				root.addActivity(new Receive(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("name"), element.attributeValue("variable"), element
-						.attributeValue("partnerLink"), element.attributeValue("operation")));
+				String partnerLink = element.attributeValue("partnerLink");
+				Receive receive = new Receive(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("name"), element.attributeValue("variable"), partnerLink, element
+						.attributeValue("operation"));
+				root.addActivity(receive);
+
+				strukture.getProcess().addActivityDependency(receive, partnerLink);
 			} else if (element.getName().equals("invoke")) {
+				String partnerLink = element.attributeValue("partnerLink");
 				Invoke invoke = new Invoke(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("name"), element.attributeValue("inputVariable"), element
-						.attributeValue("outputVariable"), element.attributeValue("partnerLink"), element.attributeValue("operation"));
+						.attributeValue("outputVariable"), partnerLink, element.attributeValue("operation"));
 				root.addActivity(invoke);
+				strukture.getProcess().addActivityDependency(invoke, partnerLink);
 				parseProcessActivities(element.elements(), invoke, strukture);
 			} else if (element.getName().equals("reply")) {
 				root.addActivity(new Reply(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("name"), element.attributeValue("variable"), element
@@ -130,9 +143,11 @@ public final class OpenEsbBpelParser extends AbstractParser {
 			} else if (element.getName().equals("throw")) {
 				root.addActivity(new Throw(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("name"), element.attributeValue("faultVariable")));
 			} else if (element.getName().equals("onEvent")) {
-				OnEvent onEvent = new OnEvent(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("partnerLink"), element.attributeValue("operation"), element
-						.attributeValue("portType"), element.attributeValue("variable"), element.attributeValue("messageType"));
+				String partnerLink = element.attributeValue("partnerLink");
+				OnEvent onEvent = new OnEvent(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), partnerLink, element.attributeValue("operation"), element.attributeValue("portType"),
+						element.attributeValue("variable"), element.attributeValue("messageType"));
 				root.addActivity(onEvent);
+				strukture.getProcess().addActivityDependency(onEvent, partnerLink);
 				parseProcessActivities(element.elements(), onEvent, strukture);
 			} else if (element.getName().equals("onAlarm")) {
 				OnAlarm onAlarm = parseActivityOnAlarm(element);
@@ -154,9 +169,11 @@ public final class OpenEsbBpelParser extends AbstractParser {
 				While whilee = parseActivityWhile(element);
 				parseProcessActivities(element.elements(), whilee, strukture);
 			} else if (element.getName().equals("onMessage")) {
-				OnMessage onMessageActivity = new OnMessage(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("variable"), element.attributeValue("partnerLink"),
-						element.attributeValue("operation"), element.attributeValue("portType"), element.attributeValue("messageExchange"));
+				String partnerLink = element.attributeValue("partnerLink");
+				OnMessage onMessageActivity = new OnMessage(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("variable"), partnerLink, element
+						.attributeValue("operation"), element.attributeValue("portType"), element.attributeValue("messageExchange"));
 				root.addActivity(onMessageActivity);
+				strukture.getProcess().addActivityDependency(onMessageActivity, partnerLink);
 				parseProcessActivities(element.elements(), onMessageActivity, strukture);
 			} else if (element.getName().equals("forEach")) {
 				parseActivityForEach(element, root, strukture);

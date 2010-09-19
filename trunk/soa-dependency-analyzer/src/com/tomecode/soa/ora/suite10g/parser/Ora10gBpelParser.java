@@ -601,10 +601,6 @@ public final class Ora10gBpelParser extends AbstractParser {
 							BpelOperations bpelOperations = bpelProject.getBpelOperations();
 							Operation operation = new Operation(element.getName(), element.attributeValue("name"), element.attributeValue("operation"), bpelProject, bpelOperations.getBpelProcess()
 									.findPartnerLinkBinding(element.attributeValue("partnerLink")), getOperationPath(element));
-
-							if (partnerLinkName.equals("BPELProcess11")) {
-								toString();
-							}
 							bpelOperations.addOperation(operation);
 						}
 					}

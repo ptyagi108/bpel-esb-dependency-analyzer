@@ -15,6 +15,7 @@ import org.eclipse.ui.part.ViewPart;
 import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency;
 import com.tomecode.soa.project.Project;
+import com.tomecode.soa.services.BpelProcess;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
@@ -79,6 +80,18 @@ public final class PropertiesView extends ViewPart {
 	private Text txtServiceDepOsbActivity;
 	private Text txtServiceDepOsbType;
 
+	private Composite processPage;
+	private Text txtProcessName;
+	private Text txtProcessType;
+	private Text txtProcessPath;
+	private Text txtProcessProjectName;
+	private Text txtProcessProjectType;
+	private Text txtProcessProjectPath;
+	private Text txtProcessProjectWorkspace;
+	private Text txtProcessProjectWorkspacePath;
+	private Text txtProcessProjectMultiWorkspaceName;
+	private Text txtProcessProjectMultiWorkspacePath;
+
 	public PropertiesView() {
 
 	}
@@ -96,9 +109,58 @@ public final class PropertiesView extends ViewPart {
 		initProjectPage(contentPanel);
 		initServicePage(contentPanel); // initOra10gProcessPage(contentPanel);
 		initServiceDepPage(contentPanel);
+		initProcessPage(contentPanel);
 		layout.topControl = emptyPage;
 
 		contentPanel.layout();
+	}
+
+	/**
+	 * create panel for {@link BpelProcess}
+	 * 
+	 * @param parent
+	 */
+	private final void initProcessPage(Composite parent) {
+		processPage = new Composite(parent, SWT.NONE);
+		processPage.setLayout(new FillLayout());
+
+		ScrolledComposite sc = new ScrolledComposite(processPage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
+		Composite composite = createComposite(sc);
+
+		Group groupProcess = createGroup(composite, "Bpel Process...");
+		createLabel(groupProcess, "Type: ");
+		txtProcessType = createText(groupProcess);
+		createLabel(groupProcess, "Name: ");
+		txtProcessName = createText(groupProcess);
+		createLabel(groupProcess, "Path: ");
+		txtProcessPath = createText(groupProcess);
+
+		Group groupProject = createGroup(composite, "Project...");
+		createLabel(groupProject, "Type: ");
+		txtProcessProjectType = createText(groupProject);
+		createLabel(groupProject, "Name: ");
+		txtProcessProjectName = createText(groupProject);
+		createLabel(groupProject, "Path:");
+		txtProcessProjectPath = createText(groupProject);
+
+		Group groupWorkspace = createGroup(composite, "Workspace...");
+		createLabel(groupWorkspace, "Name: ");
+		txtProcessProjectWorkspace = createText(groupWorkspace);
+		createLabel(groupWorkspace, "Path: ");
+		txtProcessProjectWorkspacePath = createText(groupWorkspace);
+
+		Group groupMultiWorkspace = createGroup(composite, "Multi Workspace...");
+		createLabel(groupMultiWorkspace, "Name: ");
+		txtProcessProjectMultiWorkspaceName = createText(groupMultiWorkspace);
+		createLabel(groupMultiWorkspace, "Path: ");
+		txtProcessProjectMultiWorkspacePath = createText(groupMultiWorkspace);
+
+		composite.pack();
+		sc.setMinSize(composite.getSize());
+		sc.setExpandHorizontal(true);
+		sc.setExpandVertical(true);
+		sc.setContent(composite);
+
 	}
 
 	/**
@@ -314,7 +376,7 @@ public final class PropertiesView extends ViewPart {
 	 * 
 	 * @param data
 	 */
-	public final void showProperties(Object data) {
+	public final void show(Object data) {
 		dataForProperties = data;
 
 		if (dataForProperties instanceof MultiWorkspace) {
@@ -335,18 +397,26 @@ public final class PropertiesView extends ViewPart {
 			Project project = (Project) dataForProperties;
 			txtProjectName.setText(project.getName());
 			txtProjectType.setText(project.getType().toString());
-			txtProjectPath.setText(project.getFile().toString());
-			txtProjectWorkspace.setText(project.getWorkpsace().getName());
-			txtProjectWorkspacePath.setText(project.getWorkpsace().getFile().toString());
-			txtProjectMultiWorkspacePath.setText(project.getWorkpsace().getMultiWorkspace().getFile().toString());
-			txtProjectMultiWorkspaceName.setText(project.getWorkpsace().getMultiWorkspace().getName());
+			txtProjectPath.setText(project.getFile() == null ? "" : project.getFile().toString());
+
+			if (project.getWorkpsace() == null) {
+				txtProjectWorkspace.setText("");
+				txtProjectWorkspacePath.setText("");
+				txtProjectMultiWorkspacePath.setText("");
+				txtProjectMultiWorkspaceName.setText("");
+			} else {
+				txtProjectWorkspace.setText(project.getWorkpsace().getName());
+				txtProjectWorkspacePath.setText(project.getWorkpsace().getFile().toString());
+				txtProjectMultiWorkspacePath.setText(project.getWorkpsace().getMultiWorkspace().getFile().toString());
+				txtProjectMultiWorkspaceName.setText(project.getWorkpsace().getMultiWorkspace().getName());
+			}
 			showContent(projectPage);
 		} else if (dataForProperties instanceof Service) {
 			Service service = (Service) dataForProperties;
 
 			txtServiceName.setText(service.getName());
 			txtServiceFolder.setText(service.getFolder() == null ? "" : service.getFolder().toString());
-			txtServicePath.setText(service.getFile().toString());
+			txtServicePath.setText(service.getFile() == null ? "" : service.getFile().toString());
 			txtServiceType.setText(service.getType().toString());
 			Project project = (Project) service.getProject();
 			txtServiceProjectName.setText(project.getName());
@@ -366,6 +436,20 @@ public final class PropertiesView extends ViewPart {
 			txtServiceDepOsbActivity.setText(dependency.getActivity().toString());
 			txtServiceDepProjectName.setText(dependency.getProjectName());
 			showContent(serviceDepPage);
+		} else if (dataForProperties instanceof BpelProcess) {
+			BpelProcess bpelProcess = (BpelProcess) dataForProperties;
+			txtProcessName.setText(bpelProcess.getName());
+			txtProcessPath.setText(bpelProcess.getFile() == null ? "" : bpelProcess.getFile().toString());
+			txtProcessType.setText(bpelProcess.getProject().getType().toString());
+			Project project = (Project) bpelProcess.getProject();
+			txtProcessProjectName.setText(project.getName());
+			txtProcessProjectType.setText(project.getType().toString());
+			txtProcessProjectPath.setText(project.getFile().toString());
+			txtProcessProjectWorkspace.setText(project.getWorkpsace().getName());
+			txtProcessProjectWorkspacePath.setText(project.getWorkpsace().getFile().toString());
+			txtProcessProjectMultiWorkspacePath.setText(project.getWorkpsace().getMultiWorkspace().getFile().toString());
+			txtProcessProjectMultiWorkspaceName.setText(project.getWorkpsace().getMultiWorkspace().getName());
+			showContent(processPage);
 		} else {
 			showContent(emptyPage);
 		}

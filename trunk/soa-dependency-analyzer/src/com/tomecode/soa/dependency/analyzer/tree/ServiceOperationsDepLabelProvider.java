@@ -4,11 +4,14 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
+import com.tomecode.soa.openesb.bpel.dependencies.BpelActivityDependency;
 import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.OsbActivityDependency;
 import com.tomecode.soa.ora.suite10g.project.BpelOperations;
 import com.tomecode.soa.ora.suite10g.project.BpelProject;
 import com.tomecode.soa.ora.suite10g.project.Operation;
+import com.tomecode.soa.project.UnknownProject;
 
 /**
  * Label provider for {@link ServiceOperationsDepNavigator}
@@ -31,6 +34,12 @@ final class ServiceOperationsDepLabelProvider extends LabelProvider {
 			return ((Service) element).getImage();
 		} else if (element instanceof OsbActivityDependency) {
 			return ((OsbActivityDependency) element).getImage();
+		} else if (element instanceof OpenEsbBpelProcess) {
+			return ((OpenEsbBpelProcess) element).getImage();
+		} else if (element instanceof BpelActivityDependency) {
+			return ((BpelActivityDependency) element).getImage();
+		} else if (element instanceof UnknownProject) {
+			return ((UnknownProject) element).getImage();
 		}
 		return null;
 	}

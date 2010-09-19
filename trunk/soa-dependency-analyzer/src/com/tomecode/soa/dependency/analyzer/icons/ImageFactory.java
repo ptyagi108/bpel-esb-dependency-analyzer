@@ -11,6 +11,9 @@ import org.eclipse.swt.graphics.Image;
  */
 public final class ImageFactory {
 
+//	public static final ImageDescriptor treeDependenciesWithOperations = ImageDescriptor.createFromURL(ImageFactory.class
+//			.getResource("/icons/com/tomecode/soa/icons/treeDependenciesWithOperation.png"));
+
 	public static final ImageDescriptor refresh = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/refresh.png"));
 
 	public static final ImageDescriptor trash = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/trash.png"));

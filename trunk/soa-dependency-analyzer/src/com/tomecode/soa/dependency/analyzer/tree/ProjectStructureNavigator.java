@@ -9,6 +9,7 @@ import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.osb10g.services.SplitJoin;
 import com.tomecode.soa.ora.suite10g.project.BpelProject;
 import com.tomecode.soa.project.Project;
+import com.tomecode.soa.project.UnknownProject;
 import com.tomecode.soa.services.BpelProcess;
 import com.tomecode.soa.util.FileRootNode;
 import com.tomecode.soa.workspace.MultiWorkspace;
@@ -56,7 +57,9 @@ public final class ProjectStructureNavigator extends ViewPart {
 	}
 
 	public final void showProjectFiles(Object source) {
-		if (source instanceof Project) {
+		if (source instanceof UnknownProject) {
+			clearTree();
+		} else if (source instanceof Project) {
 			setProject((Project) source);
 		} else if (source instanceof Service) {
 			setProject(((Service) source).getProject());

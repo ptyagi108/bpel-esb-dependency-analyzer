@@ -6,7 +6,9 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.bpel.activity.Activity;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.openesb.bpel.dependencies.BpelActivityDependency;
 import com.tomecode.soa.openesb.project.OpenEsbBpelProject;
 import com.tomecode.soa.services.BpelProcess;
 
@@ -23,7 +25,7 @@ public final class OpenEsbBpelProcess implements BpelProcess {
 	/**
 	 * BPEL process file
 	 */
-	private File bpenProcessFile;
+	private File file;
 
 	/**
 	 * BPEL process name
@@ -38,6 +40,10 @@ public final class OpenEsbBpelProcess implements BpelProcess {
 
 	private OpenEsbBpelProject project;
 
+	// private final ProcessDependencies processDependencies;
+
+	private final List<BpelActivityDependency> activityDependencies;
+
 	/**
 	 * Constructor
 	 * 
@@ -47,17 +53,12 @@ public final class OpenEsbBpelProcess implements BpelProcess {
 	 *            BPEL process name
 	 */
 	public OpenEsbBpelProcess(File bpelProcessFile, String name) {
-		this.bpenProcessFile = bpelProcessFile;
+		this.file = bpelProcessFile;
 		this.name = name;
 		this.imports = new ArrayList<Import>();
 		this.partnerLinks = new ArrayList<PartnerLink>();
-	}
-
-	/**
-	 * @return the bpenProcessFile
-	 */
-	public final File getBpenProcessFile() {
-		return bpenProcessFile;
+		// this.processDependencies = new ProcessDependencies(this);
+		this.activityDependencies = new ArrayList<BpelActivityDependency>();
 	}
 
 	/**
@@ -65,7 +66,7 @@ public final class OpenEsbBpelProcess implements BpelProcess {
 	 *            the bpenProcessFile to set
 	 */
 	public final void setBpenProcessFile(File bpenProcessFile) {
-		this.bpenProcessFile = bpenProcessFile;
+		this.file = bpenProcessFile;
 	}
 
 	/**
@@ -147,7 +148,39 @@ public final class OpenEsbBpelProcess implements BpelProcess {
 		return name;
 	}
 
+	// /**
+	// * @return the processDependencies
+	// */
+	// public final ProcessDependencies getProcessDependencies() {
+	// return processDependencies;
+	// }
+
+	/**
+	 * @return the bpelActivityDependency
+	 */
+	public final List<BpelActivityDependency> getActivityDependencies() {
+		return activityDependencies;
+	}
+
 	public final Image getImage() {
 		return ImageFactory.OPEN_ESB_BPEL_PROCESS;
+	}
+
+	public final void addActivityDependency(Activity activity, String partnerLink) {
+		this.activityDependencies.add(new BpelActivityDependency(activity, partnerLink));
+	}
+
+	public final PartnerLink findPartnerLink(String partnerLink) {
+		for (PartnerLink link : partnerLinks) {
+			if (link.getName().equals(partnerLink)) {
+				return link;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public final File getFile() {
+		return file;
 	}
 }
