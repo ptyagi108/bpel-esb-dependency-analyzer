@@ -618,8 +618,11 @@ public final class VisualGraphView extends ViewPart {
 			Ora10gWorkspace ora10gWorkspace = (Ora10gWorkspace) workspace;
 			GraphNode source = existSource == null ? createNode(ora10gWorkspace.getName(), ora10gWorkspace.getImage(), ora10gWorkspace) : existSource;
 			for (Project project : ora10gWorkspace.getProjects()) {
-				GraphNode destination = createNode(project.getName(), project.getImage(), project);
-				createConnection(source, destination, project, false);
+				GraphNode existsProjectGraphNode = findDataInNodes(project);
+				if (existsProjectGraphNode == null) {
+					GraphNode destination = createNode(project.getName(), project.getImage(), project);
+					createConnection(source, destination, project, false);
+				}
 			}
 
 		} else if (workspace.getType() == WorkspaceType.OPEN_ESB) {
@@ -628,38 +631,49 @@ public final class VisualGraphView extends ViewPart {
 			for (Project project : openEsbWorkspace.getProjects()) {
 
 				GraphNode existsProjectGraphNode = findDataInNodes(project);
-				if (existsProjectGraphNode != null && existsConnection(source, existsProjectGraphNode)) {
-
-				} else {
+				if (existsProjectGraphNode == null) {
 					GraphNode destination = createNode(project.getName(), project.getImage(), project);
 					createConnection(source, destination, project, false);
 				}
+				// if (existsProjectGraphNode != null &&
+				// existsConnection(source, existsProjectGraphNode)) {
+				//
+				// } else {
+				// GraphNode destination = createNode(project.getName(),
+				// project.getImage(), project);
+				// createConnection(source, destination, project, false);
+				// }
 			}
 		} else if (workspace.getType() == WorkspaceType.ORACLE_SERVICE_BUS_10G) {
 			OraSB10gWorkspace oraSB10gWorkspace = (OraSB10gWorkspace) workspace;
 			GraphNode source = existSource == null ? createNode(oraSB10gWorkspace.getName(), oraSB10gWorkspace.getImage(), oraSB10gWorkspace) : existSource;
 			for (OraSB10gProject project : oraSB10gWorkspace.getProjects()) {
-				GraphNode destination = createNode(project.getName(), project.getImage(), project);
-				createConnection(source, destination, project, false);
+				GraphNode existsProjectGraphNode = findDataInNodes(project);
+				if (existsProjectGraphNode == null) {
+					GraphNode destination = createNode(project.getName(), project.getImage(), project);
+					createConnection(source, destination, project, false);
+				}
 			}
 		}
 	}
 
-	/**
-	 * check,
-	 * 
-	 * @param source
-	 * @param existsProjectGraphNode
-	 * @return
-	 */
-	private final boolean existsConnection(GraphNode source, GraphNode existsProjectGraphNode) {
-		for (GraphConnection connection : graphConnections) {
-			if (source.equals(connection.getSource()) && existsProjectGraphNode.equals(connection.getDestination())) {
-				return true;
-			}
-		}
-		return false;
-	}
+	// /**
+	// * check,
+	// *
+	// * @param source
+	// * @param existsProjectGraphNode
+	// * @return
+	// */
+	// private final boolean existsConnection(GraphNode source, GraphNode
+	// existsProjectGraphNode) {
+	// for (GraphConnection connection : graphConnections) {
+	// if (source.equals(connection.getSource()) &&
+	// existsProjectGraphNode.equals(connection.getDestination())) {
+	// return true;
+	// }
+	// }
+	// return false;
+	// }
 
 	/**
 	 * remove all {@link GraphConnection} and {@link GraphNode} from
