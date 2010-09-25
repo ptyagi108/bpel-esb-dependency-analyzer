@@ -9,6 +9,8 @@ import java.util.List;
  * service system for Oracle 10g
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class EsbSys implements BasicEsbNode {

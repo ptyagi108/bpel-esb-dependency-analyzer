@@ -19,6 +19,8 @@ import com.tomecode.soa.workspace.Workspace;
  * Contains esbsvc,esbgrp, esb files in project
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class EsbProject implements Project {

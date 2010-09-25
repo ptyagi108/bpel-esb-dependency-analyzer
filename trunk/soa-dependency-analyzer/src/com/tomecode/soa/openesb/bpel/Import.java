@@ -5,8 +5,9 @@ package com.tomecode.soa.openesb.bpel;
  * Import element in BPEL XML in Open ESB BPEL process
  * 
  * 
- * @author Frastia Tomas
- * 
+ * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
 public final class Import {
 
@@ -19,8 +20,6 @@ public final class Import {
 
 		this.wsdl = wsdl;
 	}
-
-
 
 	/**
 	 * @return the WSDL

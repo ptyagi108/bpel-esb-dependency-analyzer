@@ -50,6 +50,8 @@ import com.tomecode.soa.wsdl.parser.WsdlParser;
  * Parser for Oracle 10g BPEL process
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class Ora10gBpelParser extends AbstractParser {

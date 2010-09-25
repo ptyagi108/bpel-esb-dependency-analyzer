@@ -13,6 +13,8 @@ import com.tomecode.soa.workspace.Workspace;
  * {@link LabelProvider} for {@link WorkspacesNavigator}
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 final class WorkspacesLabelProvider extends LabelProvider {

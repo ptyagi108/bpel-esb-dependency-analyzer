@@ -8,6 +8,8 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  * Link with navigator
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class LinkWithNavigatorAction extends Action {
@@ -24,10 +26,10 @@ public final class LinkWithNavigatorAction extends Action {
 	public final void run() {
 		if (checked) {
 			checked = false;
-	//		setImageDescriptor(ImageFactory.link_with_navigator_off);
+			// setImageDescriptor(ImageFactory.link_with_navigator_off);
 		} else {
 			checked = true;
-		//	setImageDescriptor(ImageFactory.link_with_navigator_on);
+			// setImageDescriptor(ImageFactory.link_with_navigator_on);
 		}
 		setChecked(checked);
 	}

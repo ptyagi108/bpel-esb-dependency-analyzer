@@ -15,6 +15,8 @@ import com.tomecode.soa.ora.osb10g.services.SplitJoinStructure;
  * Content provider for {@link ServiceBusStructureNavigator}
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 final class ServiceBusStructureContentProvider implements ITreeContentProvider {

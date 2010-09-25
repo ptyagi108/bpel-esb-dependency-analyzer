@@ -12,6 +12,8 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  * Open form for "Open new workspace"
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class OpenWorkspaceAction extends Action {

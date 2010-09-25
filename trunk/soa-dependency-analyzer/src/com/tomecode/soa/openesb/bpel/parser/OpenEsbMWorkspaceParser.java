@@ -25,7 +25,8 @@ import com.tomecode.soa.wsdl.Wsdl;
  * This parser parse all workspace and projects
  * 
  * @author Tomas Frastia
- * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
 public final class OpenEsbMWorkspaceParser extends AbstractParser {
 
@@ -175,10 +176,10 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 					if (wsdl != null) {
 						List<OpenEsbBpelProcess> dependenciesProcess = findWsldRefInOtherProcess(projects, wsdl);
 						for (OpenEsbBpelProcess depProcess : dependenciesProcess) {
-							//if (!bpelProcess.equals(depProcess)) {
-								partnerLink.addDependency(depProcess);
+							// if (!bpelProcess.equals(depProcess)) {
+							partnerLink.addDependency(depProcess);
 
-							//}
+							// }
 						}
 					}
 				}

@@ -70,26 +70,28 @@ import com.tomecode.soa.parser.ServiceParserException;
  * Oracle SB 10g PROXY service parser
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class OraSB10gProxyParser extends AbstractParser {
 
-	public static final void main(String[] arg) {
-		String ms = "<ctx:route> <ctx:service isProxy='true'>{concat\"var/flow/AVT\",$MSGTYPE)}</ctx:service> </ctx:route>";
-		parseXqueryRouting(ms);
-	}
-
-	private static final String parseXqueryRouting(String xQuery) {
-		if (xQuery == null || xQuery.trim().length() == 0) {
-			return null;
-		}
-		int index = xQuery.indexOf(":service");
-		if (index != -1) {
-
-		}
-
-		return null;
-	}
+//	public static final void main(String[] arg) {
+//		String ms = "<ctx:route> <ctx:service isProxy='true'>{concat\"var/flow/AVT\",$MSGTYPE)}</ctx:service> </ctx:route>";
+//		parseXqueryRouting(ms);
+//	}
+//
+//	private static final String parseXqueryRouting(String xQuery) {
+//		if (xQuery == null || xQuery.trim().length() == 0) {
+//			return null;
+//		}
+//		int index = xQuery.indexOf(":service");
+//		if (index != -1) {
+//
+//		}
+//
+//		return null;
+//	}
 
 	/**
 	 * parse OSB 10g PROXY service

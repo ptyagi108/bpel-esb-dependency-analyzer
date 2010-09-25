@@ -17,6 +17,8 @@ import com.tomecode.soa.project.UnknownProject;
  * Label provider for {@link ServiceOperationsDepNavigator}
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 final class ServiceOperationsDepLabelProvider extends LabelProvider {

@@ -13,7 +13,8 @@ import com.tomecode.soa.parser.ServiceParserException;
  * 
  * 
  * @author Tomas Frastia
- * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
 public final class OraSB10gProjectParser {
 

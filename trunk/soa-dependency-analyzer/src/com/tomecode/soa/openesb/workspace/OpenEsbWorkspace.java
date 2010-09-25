@@ -16,7 +16,8 @@ import com.tomecode.soa.workspace.Workspace;
  * this object contains all projects(BPEL, ESB) in workspace
  * 
  * @author Tomas Frastia
- * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
 public final class OpenEsbWorkspace implements Workspace {
 

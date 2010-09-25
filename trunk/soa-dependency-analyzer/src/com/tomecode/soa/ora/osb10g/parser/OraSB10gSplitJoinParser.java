@@ -49,6 +49,8 @@ import com.tomecode.soa.parser.ServiceParserException;
  * Oracle SB 10g - SplitJoin parser
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class OraSB10gSplitJoinParser extends AbstractParser {

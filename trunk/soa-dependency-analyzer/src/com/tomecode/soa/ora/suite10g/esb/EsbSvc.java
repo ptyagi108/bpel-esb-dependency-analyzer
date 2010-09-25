@@ -8,7 +8,9 @@ import java.util.List;
 /**
  * Oracle 10g ESB SVC service
  * 
- * @author Frastia Tomas
+ * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class EsbSvc implements BasicEsbNode {

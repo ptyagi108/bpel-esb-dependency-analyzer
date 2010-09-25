@@ -14,7 +14,8 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  * Better zoom contribution for graph:)
  * 
  * @author Tomas Frastia
- * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
 public final class ZoomHelper {
 

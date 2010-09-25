@@ -19,6 +19,8 @@ import com.tomecode.soa.workspace.Workspace.WorkspaceType;
  * Contains helper methods which shows {@link ProgressMonitorDialog}
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class LoadingDialogs {

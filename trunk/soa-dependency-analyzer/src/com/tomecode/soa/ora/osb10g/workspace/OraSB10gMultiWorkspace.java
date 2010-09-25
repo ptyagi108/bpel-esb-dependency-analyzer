@@ -10,17 +10,38 @@ import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 
 /**
  * 
+ * Oracle Service Bus 10g MULTI workspace
+ * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class OraSB10gMultiWorkspace implements MultiWorkspace {
 
+	/**
+	 * workspace name
+	 */
 	private String name;
 
+	/**
+	 * workspace folder
+	 */
 	private File file;
 
+	/**
+	 * list of {@link Workspace}
+	 */
 	private final List<OraSB10gWorkspace> workspaces;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 *            workspace name
+	 * @param file
+	 *            workspace folder
+	 */
 	public OraSB10gMultiWorkspace(String name, File file) {
 		this.workspaces = new ArrayList<OraSB10gWorkspace>();
 		this.name = name;

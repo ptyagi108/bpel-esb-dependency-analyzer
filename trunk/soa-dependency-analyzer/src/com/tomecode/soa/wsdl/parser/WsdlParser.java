@@ -16,6 +16,8 @@ import com.tomecode.soa.wsdl.WsdlOperation;
  * parser for {@link Wsdl}
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public class WsdlParser extends AbstractParser {

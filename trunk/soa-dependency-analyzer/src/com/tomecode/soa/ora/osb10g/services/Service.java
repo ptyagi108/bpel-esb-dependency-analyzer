@@ -13,6 +13,8 @@ import com.tomecode.soa.project.Project;
  * Service - basic interface for all services in OSB 10g project
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public abstract class Service {

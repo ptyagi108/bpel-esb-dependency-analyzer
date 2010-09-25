@@ -18,6 +18,8 @@ import com.tomecode.soa.wsdl.Wsdl;
  * Oracle 10g BPEL process
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class BpelProject implements Project {

@@ -9,7 +9,8 @@ import com.tomecode.soa.project.Project;
  * {@link EsbProject} which does not show project dependencies
  * 
  * @author Tomas Frastia
- * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
 public final class EsbServiceNode implements DependencyNode {
 

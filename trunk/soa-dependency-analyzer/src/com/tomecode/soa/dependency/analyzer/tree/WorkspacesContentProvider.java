@@ -19,6 +19,8 @@ import com.tomecode.soa.ora.suite10g.workspace.Ora10gWorkspace;
  * {@link ITreeContentProvider} for {@link WorkspacesNavigator}
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 final class WorkspacesContentProvider implements ITreeContentProvider {

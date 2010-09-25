@@ -15,7 +15,8 @@ import com.tomecode.soa.wsdl.parser.WsdlParser;
  * parse of WSDL file - in Open ESB projects
  * 
  * @author Tomas Frastia
- * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
 public final class OpenEsbWsdlParser extends WsdlParser {
 

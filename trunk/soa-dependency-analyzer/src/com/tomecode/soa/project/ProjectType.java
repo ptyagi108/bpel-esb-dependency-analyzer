@@ -4,7 +4,9 @@ package com.tomecode.soa.project;
  * Project type is type of BPEL or ESB
  * 
  * 
- * @author Frastia Tomas
+ * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public enum ProjectType {

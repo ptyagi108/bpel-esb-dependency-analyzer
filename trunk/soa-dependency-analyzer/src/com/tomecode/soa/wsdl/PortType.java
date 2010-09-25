@@ -8,6 +8,8 @@ import java.util.List;
  * portType in wsdl file
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class PortType implements Serializable {

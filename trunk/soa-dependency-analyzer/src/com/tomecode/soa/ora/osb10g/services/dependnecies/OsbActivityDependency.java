@@ -9,18 +9,31 @@ import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
 import com.tomecode.soa.ora.osb10g.services.Service;
 
 /**
+ * Contains all dependencies for activity
+ * 
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class OsbActivityDependency {
 
 	private Service parentService;
 
+	/**
+	 * 
+	 */
 	private OsbActivity activity;
 
+	/**
+	 * list of services
+	 */
 	private List<Service> services;
 
+	/**
+	 * list of dependencies
+	 */
 	private final List<OsbActivityDependency> activityDependencies;
 
 	private OsbActivityDependency() {

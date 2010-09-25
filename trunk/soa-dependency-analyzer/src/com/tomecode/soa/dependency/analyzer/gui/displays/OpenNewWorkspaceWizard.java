@@ -31,6 +31,8 @@ import com.tomecode.soa.workspace.Workspace.WorkspaceType;
  * Wizard for open new workspace
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class OpenNewWorkspaceWizard extends Wizard {

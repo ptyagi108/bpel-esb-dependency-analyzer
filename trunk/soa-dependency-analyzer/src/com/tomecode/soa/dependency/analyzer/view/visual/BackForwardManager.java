@@ -8,8 +8,9 @@ import java.util.List;
  * 
  * 
  * 
- * @author Frastia Tomas
- * 
+ * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
 public final class BackForwardManager {
 

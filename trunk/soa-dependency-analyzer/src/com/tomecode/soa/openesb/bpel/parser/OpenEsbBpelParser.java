@@ -41,8 +41,9 @@ import com.tomecode.soa.parser.ServiceParserException;
  * Open ESB - BPEL process parser
  * 
  * 
- * @author Frastia Tomas
- * 
+ * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
 public final class OpenEsbBpelParser extends AbstractParser {
 

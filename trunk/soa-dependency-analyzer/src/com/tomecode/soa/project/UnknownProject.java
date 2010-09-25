@@ -12,6 +12,8 @@ import com.tomecode.soa.workspace.Workspace;
  * Unknown project or service
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class UnknownProject implements Project {

@@ -6,8 +6,9 @@ import com.tomecode.soa.bpel.activity.Activity;
  * 
  * Process structure which contain all activities in Open ESB - BPEL process
  * 
- * @author Frastia Tomas
- * 
+ * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
 public final class OpenEsbBpelProcessStructure extends Activity {
 

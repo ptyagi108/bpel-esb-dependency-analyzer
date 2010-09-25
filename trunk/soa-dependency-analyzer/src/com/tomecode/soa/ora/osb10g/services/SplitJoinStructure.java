@@ -12,7 +12,8 @@ import com.tomecode.soa.ora.osb10g.activity.splitjoin.LogicFlyout;
  * 
  * 
  * @author Tomas Frastia
- * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
 public final class SplitJoinStructure extends OsbActivity {
 

@@ -7,7 +7,8 @@ import java.io.File;
  * Basic interface for all workspaces
  * 
  * @author Tomas Frastia
- * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
 public interface Workspace {
 

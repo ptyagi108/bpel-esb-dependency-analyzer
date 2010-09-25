@@ -1,4 +1,4 @@
-	package com.tomecode.soa.ora.suite10g.esb;
+package com.tomecode.soa.ora.suite10g.esb;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,9 @@ import com.tomecode.soa.util.EsbServiceNode;
  * 
  * ESB operation
  * 
- * @author Frastia Tomas
+ * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class EsbOperation implements BasicEsbNode {
@@ -103,9 +105,9 @@ public final class EsbOperation implements BasicEsbNode {
 		return false;
 	}
 
-//	public ImageIcon getIcon() {
-//		return IconFactory.OPERATION;
-//	}
+	// public ImageIcon getIcon() {
+	// return IconFactory.OPERATION;
+	// }
 
 	public final EsbSvc getEsbSvc() {
 		return esbSvc;

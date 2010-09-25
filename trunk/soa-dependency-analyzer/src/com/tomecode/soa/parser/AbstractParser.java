@@ -8,9 +8,11 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 /**
- * Basic parser
+ * Basic parser, for all parsers
  * 
- * @author Frastia Tomas
+ * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public abstract class AbstractParser {
@@ -37,6 +39,7 @@ public abstract class AbstractParser {
 
 	/**
 	 * return file name whitout file extension
+	 * 
 	 * @param name
 	 * @return
 	 */

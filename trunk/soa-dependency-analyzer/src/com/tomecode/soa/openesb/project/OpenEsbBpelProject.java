@@ -18,7 +18,8 @@ import com.tomecode.soa.wsdl.Wsdl;
  * Open ESB - BPEL project
  * 
  * @author Tomas Frastia
- * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
 public final class OpenEsbBpelProject implements Project {
 

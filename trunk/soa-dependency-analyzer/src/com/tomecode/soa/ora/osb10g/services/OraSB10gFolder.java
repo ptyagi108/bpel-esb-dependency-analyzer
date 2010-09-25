@@ -8,7 +8,11 @@ import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 
 /**
  * 
+ * Folder in OSB 10g
+ * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public class OraSB10gFolder {

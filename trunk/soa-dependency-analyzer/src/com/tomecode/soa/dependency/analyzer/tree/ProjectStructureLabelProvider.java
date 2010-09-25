@@ -11,6 +11,8 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  * Label provider for {@link ProjectStructureNavigator}
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class ProjectStructureLabelProvider extends LabelProvider {

@@ -20,6 +20,8 @@ import com.tomecode.soa.workspace.Workspace;
  * Oracle Service Bus 10g project
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class OraSB10gProject implements Project {

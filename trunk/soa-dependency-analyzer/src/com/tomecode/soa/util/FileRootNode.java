@@ -9,7 +9,8 @@ import com.tomecode.soa.project.Project;
  * Helper node for {@link ProjectStructureNavigator}
  * 
  * @author Tomas Frastia
- * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
 public final class FileRootNode {
 

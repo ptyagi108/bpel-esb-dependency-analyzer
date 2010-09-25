@@ -11,6 +11,8 @@ import com.tomecode.soa.project.Project;
  * list of activities (invoke, receive, ...) which contains operations
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class BpelOperations implements DependencyNode {

@@ -14,6 +14,8 @@ import com.tomecode.soa.workspace.Workspace.WorkspaceType;
  * Multiple workspace contains all workspaces and projects
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class OpenEsbMultiWorkspace implements MultiWorkspace {

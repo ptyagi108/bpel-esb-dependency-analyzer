@@ -9,7 +9,8 @@ import com.tomecode.soa.project.UnknownProject;
  * Contains data for partnerlink
  * 
  * @author Tomas Frastia
- * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
 public final class PartnerLinkBinding implements Serializable {
 
@@ -108,7 +109,7 @@ public final class PartnerLinkBinding implements Serializable {
 
 	public final Object[] getChildren() {
 		if (dependencyBpelProject[0] != null) {
-			return dependencyBpelProject;//.getBpelOperations().getOperations().toArray();
+			return dependencyBpelProject;// .getBpelOperations().getOperations().toArray();
 		} else if (dependencyEsbProject[0] != null) {
 			return dependencyEsbProject;
 		} else if (unknownProject[0] != null) {

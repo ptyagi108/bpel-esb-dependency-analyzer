@@ -9,6 +9,8 @@ import java.util.List;
  * http://docs.oasis-open.org/wsbpel/2.0/plnktype
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class PartnerLinkType {

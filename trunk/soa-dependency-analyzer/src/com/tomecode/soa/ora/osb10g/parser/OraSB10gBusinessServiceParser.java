@@ -19,6 +19,8 @@ import com.tomecode.soa.parser.ServiceParserException;
  * Oracle Service Bus 10gr3 - Business Service
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class OraSB10gBusinessServiceParser extends AbstractParser {

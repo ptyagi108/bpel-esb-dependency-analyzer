@@ -13,6 +13,8 @@ import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProcessStrukture;
  * Content provider for {@link BpelProcessStructureNavigator}
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 final class BpelProcessStructureContentProvider implements ITreeContentProvider {

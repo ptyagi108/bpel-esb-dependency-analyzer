@@ -17,6 +17,8 @@ import com.tomecode.soa.dependency.analyzer.view.VisualGraphView;
  * and some trees :)
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class Perspective implements IPerspectiveFactory {

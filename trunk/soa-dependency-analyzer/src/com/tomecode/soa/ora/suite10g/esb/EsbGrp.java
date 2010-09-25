@@ -9,6 +9,8 @@ import java.util.List;
  * Oracle 10g - service group
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class EsbGrp implements BasicEsbNode {
@@ -153,8 +155,8 @@ public final class EsbGrp implements BasicEsbNode {
 		}
 	}
 
-//	public ImageIcon getIcon() {
-//		return IconFactory.SERVICE_GROUPE;
-//	}
+	// public ImageIcon getIcon() {
+	// return IconFactory.SERVICE_GROUPE;
+	// }
 
 }
