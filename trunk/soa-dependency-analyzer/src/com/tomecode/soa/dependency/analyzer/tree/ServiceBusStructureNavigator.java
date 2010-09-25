@@ -7,6 +7,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.HideView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
 import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
@@ -23,9 +25,11 @@ import com.tomecode.soa.workspace.Workspace;
  * Show structure of selected service bus
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class ServiceBusStructureNavigator extends ViewPart {
+public final class ServiceBusStructureNavigator extends ViewPart implements HideView {
 
 	public static final String ID = "view.servicebusstructurenavigator";
 
@@ -42,6 +46,7 @@ public final class ServiceBusStructureNavigator extends ViewPart {
 		contentProvider = new ServiceBusStructureContentProvider();
 		labelProvider = new LabelProviderImpl();
 		setTitleToolTip("Service Bus - (Proxy or SplitJoin) Structure");
+		setTitleImage(ImageFactory.ESB_PROCESS_STRUCTURE_TREE);
 	}
 
 	@Override
@@ -56,7 +61,17 @@ public final class ServiceBusStructureNavigator extends ViewPart {
 
 	}
 
-	public final void showStructure(Object source) {
+	public void dispose() {
+		WindowChangeListener.getInstance().hideFromView(ID);
+		super.dispose();
+	}
+
+	/**
+	 * show service bus structure
+	 * 
+	 * @param source
+	 */
+	public final void show(Object source) {
 		if (source == null) {
 			clearTree();
 		} else {
@@ -146,5 +161,10 @@ public final class ServiceBusStructureNavigator extends ViewPart {
 			}
 			return null;
 		}
+	}
+
+	@Override
+	public final void hideMe() {
+		getSite().getPage().hideView(this);
 	}
 }

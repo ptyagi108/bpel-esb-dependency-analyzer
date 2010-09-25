@@ -11,9 +11,11 @@ import com.tomecode.soa.dependency.analyzer.tree.WorkspacesNavigator;
 
 /**
  * 
- * Helper class for fill popup menus
+ * helper class for making better menu
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class PopupMenuUtils {

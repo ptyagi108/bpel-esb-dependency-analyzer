@@ -10,6 +10,8 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  * Refresh current graph layout
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer
  * 
  */
 public final class RefreshGraphLayout extends Action {

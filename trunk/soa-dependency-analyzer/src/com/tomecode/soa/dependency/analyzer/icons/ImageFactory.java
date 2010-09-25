@@ -8,11 +8,17 @@ import org.eclipse.swt.graphics.Image;
  * Contains all icons in project
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
 public final class ImageFactory {
 
-//	public static final ImageDescriptor treeDependenciesWithOperations = ImageDescriptor.createFromURL(ImageFactory.class
-//			.getResource("/icons/com/tomecode/soa/icons/treeDependenciesWithOperation.png"));
+	// public static final ImageDescriptor treeDependenciesWithOperations =
+	// ImageDescriptor.createFromURL(ImageFactory.class
+	// .getResource("/icons/com/tomecode/soa/icons/treeDependenciesWithOperation.png"));
+
+	public static final ImageDescriptor properties = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/properties.png"));
+	public static final Image PROPERTIES = properties.createImage();
 
 	public static final ImageDescriptor refresh = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/refresh.png"));
 
@@ -27,13 +33,18 @@ public final class ImageFactory {
 	public static final ImageDescriptor reload_layout = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/reloadLayout.png"));
 	// public static final Image RELOAD_LAYOUT = reload_layout.createImage();
 
-	public static final Image BPEL_PROCESS_STRUCTURE_TREE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/bpelProcessStructureView.png")).createImage();
+	public static final ImageDescriptor service_structure_tree = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/bpelProcessStructureView.png"));
+	public static final Image BPEL_PROCESS_STRUCTURE_TREE = service_structure_tree.createImage();
+	public static final Image ESB_PROCESS_STRUCTURE_TREE = service_structure_tree.createImage();
 
-	public static final Image DEPENDNECY_BY_OPERATION_TREE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/dependencyByOperationTree.png")).createImage();
+	public static final ImageDescriptor dependency_by_operation_tree = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/dependencyByOperationTree.png"));
+	public static final Image DEPENDNECY_BY_OPERATION_TREE = dependency_by_operation_tree.createImage();
 
-	public static final Image GRAPH_VIEW = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/graphView.png")).createImage();
+	public static final ImageDescriptor graph_view = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/graphView.png"));
+	public static final Image GRAPH_VIEW = graph_view.createImage();
 
-	public static final Image WORKSPACE_NAVIGATOR = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/workspaceNavigator.png")).createImage();
+	public static final ImageDescriptor workspace_navigator = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/workspaceNavigator.png"));
+	public static final Image WORKSPACE_NAVIGATOR = workspace_navigator.createImage();
 
 	public static final ImageDescriptor expand_in_new_graph = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/expandInNewGraph.png"));
 	public static final Image EXPAND_IN_NEW_GRAPH = expand_in_new_graph.createImage();

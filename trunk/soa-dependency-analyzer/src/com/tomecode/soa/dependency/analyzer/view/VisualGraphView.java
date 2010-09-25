@@ -20,6 +20,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.internal.ViewSite;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.zest.core.viewers.GraphViewer;
 import org.eclipse.zest.core.widgets.Graph;
@@ -35,6 +36,10 @@ import com.tomecode.soa.dependency.analyzer.gui.actions.GraphExpanderAction.Expa
 import com.tomecode.soa.dependency.analyzer.gui.actions.GraphLayoutAction.LayoutActionType;
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.dependency.analyzer.tree.BpelProcessStructureNavigator;
+import com.tomecode.soa.dependency.analyzer.tree.ProjectStructureNavigator;
+import com.tomecode.soa.dependency.analyzer.tree.ServiceBusStructureNavigator;
+import com.tomecode.soa.dependency.analyzer.tree.ServiceOperationsDepNavigator;
 import com.tomecode.soa.dependency.analyzer.view.visual.ZoomHelper;
 import com.tomecode.soa.dependency.analyzer.view.visual.ZoomHelper.ZoomAction;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
@@ -66,6 +71,8 @@ import com.tomecode.soa.workspace.Workspace.WorkspaceType;
  * View for Workspace
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer
  * 
  */
 public final class VisualGraphView extends ViewPart {
@@ -123,7 +130,7 @@ public final class VisualGraphView extends ViewPart {
 				if (!list.isEmpty()) {
 					showPropertiesAboutSelectedNode(list.get(0));
 				} else {
-					GuiUtils.getServiceBusStructureNavigator().showStructure(null);
+					GuiUtils.getServiceBusStructureNavigator().show(null);
 				}
 			}
 		});
@@ -285,23 +292,54 @@ public final class VisualGraphView extends ViewPart {
 			GraphConnection connection = (GraphConnection) object;
 			GuiUtils.getPropertiesView().show(connection.getData());
 			if (connection.getData() != null) {
-				GuiUtils.getProjectStructureNavigator().showProjectFiles(connection.getData());
+				ProjectStructureNavigator projectStructureNavigator = GuiUtils.getProjectStructureNavigator();
+				if (projectStructureNavigator != null) {
+					projectStructureNavigator.showProjectFiles(connection.getData());
+				}
 			}
 
-			GuiUtils.getServiceBusStructureNavigator().showStructure(connection.getData());
+			GuiUtils.getServiceBusStructureNavigator().show(connection.getData());
 		} else if (object instanceof GraphNode) {
 			GraphNode graphNode = (GraphNode) object;
-			GuiUtils.getPropertiesView().show(graphNode.getData());
-			GuiUtils.getBpelProcessStructureNavigator().showProcessStructure(graphNode.getData());
-			GuiUtils.getServiceBusStructureNavigator().showStructure(graphNode.getData());
-			GuiUtils.getServiceOperationsDepNavigator().show(graphNode.getData());
-			GuiUtils.getProjectStructureNavigator().showProjectFiles(graphNode.getData());
+
+			PropertiesView propertiesView = GuiUtils.getPropertiesView();
+			if (propertiesView != null) {
+				propertiesView.show(graphNode.getData());
+			}
+			BpelProcessStructureNavigator bpelProcessStructureNavigator = GuiUtils.getBpelProcessStructureNavigator();
+			if (bpelProcessStructureNavigator != null) {
+				bpelProcessStructureNavigator.showProcessStructure(graphNode.getData());
+			}
+			ServiceBusStructureNavigator serviceBusStructureNavigator = GuiUtils.getServiceBusStructureNavigator();
+			if (serviceBusStructureNavigator != null) {
+				serviceBusStructureNavigator.show(graphNode.getData());
+			}
+			ServiceOperationsDepNavigator serviceOperationsDepNavigator = GuiUtils.getServiceOperationsDepNavigator();
+			if (serviceOperationsDepNavigator != null) {
+				serviceOperationsDepNavigator.show(graphNode.getData());
+			}
+			ProjectStructureNavigator projectStructureNavigator = GuiUtils.getProjectStructureNavigator();
+			if (projectStructureNavigator != null) {
+				projectStructureNavigator.showProjectFiles(graphNode.getData());
+			}
 		}
 	}
 
+	@SuppressWarnings("restriction")
 	@Override
 	public final void setFocus() {
+		ViewSite site = (ViewSite) getSite();
+		if (site.getSecondaryId() == null) {
+			GuiUtils.setActivateViewId(0);
+		} else {
+			int i = Integer.parseInt(site.getSecondaryId());
+			GuiUtils.setActivateViewId(i);
+		}
+	}
 
+	public final void dispose() {
+		GuiUtils.dropInstanceVisualGraph();
+		super.dispose();
 	}
 
 	/**
@@ -334,6 +372,7 @@ public final class VisualGraphView extends ViewPart {
 			createProcessAndProcessGraph(bpelProcess, null);
 		}
 		graphViewer.getGraphControl().applyLayout();
+
 		isExpandInGraph = backup;
 	}
 

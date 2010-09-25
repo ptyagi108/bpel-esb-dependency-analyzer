@@ -5,6 +5,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.HideView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
@@ -18,9 +20,11 @@ import com.tomecode.soa.workspace.Workspace;
  * Show BPEL process structure (tree structure of activities)
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class BpelProcessStructureNavigator extends ViewPart {
+public final class BpelProcessStructureNavigator extends ViewPart implements HideView {
 
 	public static final String ID = "view.bpelprocessstructurenavigator";
 
@@ -42,7 +46,7 @@ public final class BpelProcessStructureNavigator extends ViewPart {
 
 	@Override
 	public final void createPartControl(Composite parent) {
-		tree = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		tree = new TreeViewer(parent, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		tree.setLabelProvider(labelProvider);
 		tree.setContentProvider(contentProvider);
 	}
@@ -50,6 +54,11 @@ public final class BpelProcessStructureNavigator extends ViewPart {
 	@Override
 	public final void setFocus() {
 
+	}
+
+	public void dispose() {
+		WindowChangeListener.getInstance().hideFromView(ID);
+		super.dispose();
 	}
 
 	/**
@@ -136,5 +145,10 @@ public final class BpelProcessStructureNavigator extends ViewPart {
 		}
 
 		return null;
+	}
+
+	@Override
+	public final void hideMe() {
+		getSite().getPage().hideView(this);
 	}
 }

@@ -1,7 +1,10 @@
 package com.tomecode.soa.dependency.analyzer.gui.utils;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
 import com.tomecode.soa.dependency.analyzer.tree.BpelProcessStructureNavigator;
@@ -18,9 +21,32 @@ import com.tomecode.soa.dependency.analyzer.view.VisualGraphView;
  * 
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class GuiUtils {
+
+	private static int visualGraphActivateInstance = 0;
+	private static int visualGraphInstanceNum = 0;
+
+	public final static String newInstanceVisualGraph() {
+		visualGraphInstanceNum++;
+		visualGraphActivateInstance = visualGraphInstanceNum;
+		return String.valueOf(visualGraphInstanceNum);
+	}
+
+	public final static void dropInstanceVisualGraph() {
+		visualGraphInstanceNum--;
+	}
+
+	public final static int getActivateViewId() {
+		return visualGraphActivateInstance;
+	}
+
+	public final static void setActivateViewId(int i) {
+		visualGraphActivateInstance = i;
+	}
 
 	/**
 	 * find reference for {@link WorkspacesNavigator} in application
@@ -78,7 +104,12 @@ public final class GuiUtils {
 	 * @return
 	 */
 	public static final VisualGraphView getVisualGraphView() {
-		return (VisualGraphView) findView(VisualGraphView.ID);
+		IViewReference iViewReference = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findViewReference(VisualGraphView.ID, String.valueOf(visualGraphActivateInstance));
+		if (iViewReference == null) {
+			return (VisualGraphView) findView(VisualGraphView.ID);
+		}
+		return (VisualGraphView) iViewReference.getView(true);
+
 	}
 
 	public final static ServiceOperationsDepNavigator getServiceOperationsDepNavigator() {
@@ -92,5 +123,34 @@ public final class GuiUtils {
 	 */
 	public static final ProjectStructureNavigator getProjectStructureNavigator() {
 		return (ProjectStructureNavigator) findView(ProjectStructureNavigator.ID);
+	}
+
+	/**
+	 * hide view
+	 * 
+	 * @param viewId
+	 */
+	public final static void hideView(String viewId) {
+		HideView hideView = (HideView) findView(viewId);
+		if (hideView != null) {
+			hideView.hideMe();
+		}
+	}
+
+	/**
+	 * show view
+	 * 
+	 * @param viewId
+	 */
+	public final static void showView(String viewId) {
+		IViewPart viewPart = findView(viewId);
+		if (viewPart == null) {
+			try {
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(viewId);
+			} catch (PartInitException e) {
+				MessageDialog.openError(null, "Error", "Opps...Error opening view:" + e.getMessage());
+			}
+		}
+
 	}
 }

@@ -10,7 +10,13 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import com.tomecode.soa.dependency.analyzer.core.ApplicationManager;
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.dependency.analyzer.tree.BpelProcessStructureNavigator;
+import com.tomecode.soa.dependency.analyzer.tree.ProjectStructureNavigator;
+import com.tomecode.soa.dependency.analyzer.tree.ServiceBusStructureNavigator;
+import com.tomecode.soa.dependency.analyzer.tree.ServiceOperationsDepNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.WorkspacesNavigator;
+import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
+import com.tomecode.soa.dependency.analyzer.view.VisualGraphView;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
@@ -19,7 +25,8 @@ import com.tomecode.soa.workspace.Workspace;
  * Remove selected workspace in {@link WorkspacesNavigator}
  * 
  * @author Tomas Frastia
- * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer
  */
 public final class RemoveWorkspaceAction extends Action {
 
@@ -31,19 +38,34 @@ public final class RemoveWorkspaceAction extends Action {
 	}
 
 	public final void run() {
-
 		final WorkspacesNavigator workspacesNavigator = GuiUtils.getWorkspacesNavigator();
-
 		final Workspace removeWorkspace = workspacesNavigator.removeSelectedWorkspace();
 
 		if (removeWorkspace != null) {
-			GuiUtils.getProjectStructureNavigator().removeWorkspace(removeWorkspace);
-			GuiUtils.getBpelProcessStructureNavigator().removeWorkspace(removeWorkspace);
-			GuiUtils.getPropertiesView().removeWorkspace(removeWorkspace);
-			GuiUtils.getServiceBusStructureNavigator().removeWorkspace(removeWorkspace);
-			GuiUtils.getServiceOperationsDepNavigator().removeWorkspace(removeWorkspace);
-
-			GuiUtils.getVisualGraphView().clearContentFromGraph();
+			ProjectStructureNavigator projectStructureNavigator = GuiUtils.getProjectStructureNavigator();
+			if (projectStructureNavigator != null) {
+				projectStructureNavigator.removeWorkspace(removeWorkspace);
+			}
+			BpelProcessStructureNavigator bpelProcessStructureNavigator = GuiUtils.getBpelProcessStructureNavigator();
+			if (bpelProcessStructureNavigator != null) {
+				bpelProcessStructureNavigator.removeWorkspace(removeWorkspace);
+			}
+			PropertiesView propertiesView = GuiUtils.getPropertiesView();
+			if (propertiesView != null) {
+				propertiesView.removeWorkspace(removeWorkspace);
+			}
+			ServiceBusStructureNavigator serviceBusStructureNavigator = GuiUtils.getServiceBusStructureNavigator();
+			if (serviceBusStructureNavigator != null) {
+				serviceBusStructureNavigator.removeWorkspace(removeWorkspace);
+			}
+			ServiceOperationsDepNavigator serviceOperationsDepNavigator = GuiUtils.getServiceOperationsDepNavigator();
+			if (serviceBusStructureNavigator != null) {
+				serviceOperationsDepNavigator.removeWorkspace(removeWorkspace);
+			}
+			VisualGraphView visualGraphView = GuiUtils.getVisualGraphView();
+			if (visualGraphView != null) {
+				visualGraphView.clearContentFromGraph();
+			}
 		}
 
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(null);

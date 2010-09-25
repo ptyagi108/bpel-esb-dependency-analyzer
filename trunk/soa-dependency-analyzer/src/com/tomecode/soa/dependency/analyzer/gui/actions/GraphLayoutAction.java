@@ -1,8 +1,6 @@
 package com.tomecode.soa.dependency.analyzer.gui.actions;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.zest.layouts.algorithms.DirectedGraphLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.GridLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.HorizontalLayoutAlgorithm;
@@ -12,6 +10,7 @@ import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.VerticalLayoutAlgorithm;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.view.VisualGraphView;
 
 /**
@@ -19,6 +18,8 @@ import com.tomecode.soa.dependency.analyzer.view.VisualGraphView;
  * 
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer
  * 
  */
 public final class GraphLayoutAction extends Action {
@@ -32,25 +33,25 @@ public final class GraphLayoutAction extends Action {
 	}
 
 	public final void run() {
-		IWorkbenchPage workbenchPage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		VisualGraphView visualGraphView = (VisualGraphView) workbenchPage.findView(VisualGraphView.ID);
-
-		if (layoutActionType == LayoutActionType.SRING_LAYOUT) {
-			visualGraphView.changeLayout(new SpringLayoutAlgorithm(1), layoutActionType);
-		} else if (layoutActionType == LayoutActionType.TREE_LAYOUT) {
-			visualGraphView.changeLayout(new TreeLayoutAlgorithm(1), layoutActionType);
-		} else if (layoutActionType == LayoutActionType.VERTICAL_LAYOUT) {
-			visualGraphView.changeLayout(new VerticalLayoutAlgorithm(1), layoutActionType);
-		} else if (layoutActionType == LayoutActionType.RADIAL_LAYOUT) {
-			visualGraphView.changeLayout(new RadialLayoutAlgorithm(1), layoutActionType);
-		} else if (layoutActionType == LayoutActionType.HORIZONTAL_LAYOUT) {
-			visualGraphView.changeLayout(new HorizontalLayoutAlgorithm(1), layoutActionType);
-		} else if (layoutActionType == LayoutActionType.HORIZONTAL_TREE_LAYOUT) {
-			visualGraphView.changeLayout(new HorizontalTreeLayoutAlgorithm(1), layoutActionType);
-		} else if (layoutActionType == LayoutActionType.GRID_LAYOUT) {
-			visualGraphView.changeLayout(new GridLayoutAlgorithm(1), layoutActionType);
-		} else if (layoutActionType == LayoutActionType.DIRECTED_LAYOUT) {
-			visualGraphView.changeLayout(new DirectedGraphLayoutAlgorithm(1), layoutActionType);
+		VisualGraphView visualGraphView = GuiUtils.getVisualGraphView();
+		if (visualGraphView != null) {
+			if (layoutActionType == LayoutActionType.SRING_LAYOUT) {
+				visualGraphView.changeLayout(new SpringLayoutAlgorithm(1), layoutActionType);
+			} else if (layoutActionType == LayoutActionType.TREE_LAYOUT) {
+				visualGraphView.changeLayout(new TreeLayoutAlgorithm(1), layoutActionType);
+			} else if (layoutActionType == LayoutActionType.VERTICAL_LAYOUT) {
+				visualGraphView.changeLayout(new VerticalLayoutAlgorithm(1), layoutActionType);
+			} else if (layoutActionType == LayoutActionType.RADIAL_LAYOUT) {
+				visualGraphView.changeLayout(new RadialLayoutAlgorithm(1), layoutActionType);
+			} else if (layoutActionType == LayoutActionType.HORIZONTAL_LAYOUT) {
+				visualGraphView.changeLayout(new HorizontalLayoutAlgorithm(1), layoutActionType);
+			} else if (layoutActionType == LayoutActionType.HORIZONTAL_TREE_LAYOUT) {
+				visualGraphView.changeLayout(new HorizontalTreeLayoutAlgorithm(1), layoutActionType);
+			} else if (layoutActionType == LayoutActionType.GRID_LAYOUT) {
+				visualGraphView.changeLayout(new GridLayoutAlgorithm(1), layoutActionType);
+			} else if (layoutActionType == LayoutActionType.DIRECTED_LAYOUT) {
+				visualGraphView.changeLayout(new DirectedGraphLayoutAlgorithm(1), layoutActionType);
+			}
 		}
 	}
 

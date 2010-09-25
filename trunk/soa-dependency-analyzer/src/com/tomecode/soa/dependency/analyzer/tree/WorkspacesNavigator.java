@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -13,14 +15,15 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import com.tomecode.soa.dependency.analyzer.core.ApplicationManager;
 import com.tomecode.soa.dependency.analyzer.gui.actions.LinkWithNavigatorAction;
+import com.tomecode.soa.dependency.analyzer.gui.actions.view.OpenNewVisualViewAction;
+import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
+import com.tomecode.soa.dependency.analyzer.gui.utils.HideView;
 import com.tomecode.soa.dependency.analyzer.gui.utils.PopupMenuUtils;
+import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.node.WorkspaceRootNode;
 import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
@@ -35,9 +38,11 @@ import com.tomecode.soa.workspace.Workspace;
  * between
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class WorkspacesNavigator extends ViewPart implements ISelectionChangedListener {
+public final class WorkspacesNavigator extends ViewPart implements ISelectionChangedListener, HideView {
 
 	public static final String ID = "view.workspacenavigator";
 
@@ -71,10 +76,8 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 
 		tree.setInput(rootNode);
 
-		// linkWithNavigatorAction = new LinkWithNavigatorAction();
-		// IActionBars actionBars = getViewSite().getActionBars();
-		// actionBars.getToolBarManager().add(linkWithNavigatorAction);
-		// actionBars.getMenuManager().add(linkWithNavigatorAction);
+		IToolBarManager barManager = getViewSite().getActionBars().getToolBarManager();
+		barManager.add(new OpenNewVisualViewAction());
 	}
 
 	/**
@@ -107,60 +110,44 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 		tree.getTree().setFocus();
 	}
 
-	@Override
-	public final void selectionChanged(SelectionChangedEvent event) {
-
-		try {
-
-			IWorkbenchPage workbenchPage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			IViewPart iViewPart = workbenchPage.findView(BpelProcessStructureNavigator.ID);
-
-			IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
-			if (!selection.isEmpty()) {
-
-				if (iViewPart != null) {
-					BpelProcessStructureNavigator navigator = (BpelProcessStructureNavigator) iViewPart;
-					navigator.showProcessStructure(selection.getFirstElement());
-				}
-
-				iViewPart = workbenchPage.findView(ServiceOperationsDepNavigator.ID);
-				if (iViewPart != null) {
-					ServiceOperationsDepNavigator navigator = (ServiceOperationsDepNavigator) iViewPart;
-					navigator.show(selection.getFirstElement());
-				}
-
-				iViewPart = workbenchPage.findView(VisualGraphView.ID);
-				if (iViewPart != null) {
-					VisualGraphView graphView = (VisualGraphView) iViewPart;
-					graphView.showGraph(selection.getFirstElement(), true);
-				}
-
-				iViewPart = workbenchPage.findView(PropertiesView.ID);
-				if (iViewPart != null) {
-					PropertiesView propertiesView = (PropertiesView) iViewPart;
-					propertiesView.show(selection.getFirstElement());
-				}
-				iViewPart = workbenchPage.findView(ProjectStructureNavigator.ID);
-				if (iViewPart != null) {
-					ProjectStructureNavigator projectStructureNavigator = (ProjectStructureNavigator) iViewPart;
-					projectStructureNavigator.showProjectFiles(selection.getFirstElement());
-				}
-
-				iViewPart = workbenchPage.findView(ServiceBusStructureNavigator.ID);
-				if (iViewPart != null) {
-					ServiceBusStructureNavigator navigator = (ServiceBusStructureNavigator) iViewPart;
-					navigator.showStructure(selection.getFirstElement());
-				}
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+	public final void dispose() {
+		WindowChangeListener.getInstance().hideFromView(ID);
+		super.dispose();
 	}
 
-	public void getMWorkspaceNames() {
-
+	@Override
+	public final void selectionChanged(SelectionChangedEvent event) {
+		try {
+			IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
+			if (!selection.isEmpty()) {
+				BpelProcessStructureNavigator bpelProcessStructureNavigator = GuiUtils.getBpelProcessStructureNavigator();
+				if (bpelProcessStructureNavigator != null) {
+					bpelProcessStructureNavigator.showProcessStructure(selection.getFirstElement());
+				}
+				ServiceOperationsDepNavigator serviceOperationsDepNavigator = GuiUtils.getServiceOperationsDepNavigator();
+				if (serviceOperationsDepNavigator != null) {
+					serviceOperationsDepNavigator.show(selection.getFirstElement());
+				}
+				VisualGraphView visualGraphView = GuiUtils.getVisualGraphView();
+				if (visualGraphView != null) {
+					visualGraphView.showGraph(selection.getFirstElement(), true);
+				}
+				PropertiesView propertiesView = GuiUtils.getPropertiesView();
+				if (propertiesView != null) {
+					propertiesView.show(selection.getFirstElement());
+				}
+				ProjectStructureNavigator projectStructureNavigator = GuiUtils.getProjectStructureNavigator();
+				if (projectStructureNavigator != null) {
+					projectStructureNavigator.showProjectFiles(selection.getFirstElement());
+				}
+				ServiceBusStructureNavigator serviceBusStructureNavigator = GuiUtils.getServiceBusStructureNavigator();
+				if (serviceBusStructureNavigator != null) {
+					serviceBusStructureNavigator.show(selection.getFirstElement());
+				}
+			}
+		} catch (Exception e) {
+			MessageDialog.openError(null, "Error", "Opps error:" + e.getMessage());
+		}
 	}
 
 	/**
@@ -230,6 +217,11 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 
 	public final void refreshTree() {
 		tree.refresh();
+	}
+
+	@Override
+	public final void hideMe() {
+		getSite().getPage().hideView(this);
 	}
 
 }

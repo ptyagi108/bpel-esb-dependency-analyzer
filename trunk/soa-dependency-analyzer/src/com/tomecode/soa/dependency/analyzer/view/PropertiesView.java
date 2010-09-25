@@ -12,6 +12,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.HideView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency;
 import com.tomecode.soa.project.Project;
@@ -24,9 +27,11 @@ import com.tomecode.soa.workspace.Workspace;
  * Info about selected items in {@link VisualGraphView}
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class PropertiesView extends ViewPart {
+public final class PropertiesView extends ViewPart implements HideView {
 
 	public static final String ID = "view.properties";
 
@@ -93,7 +98,7 @@ public final class PropertiesView extends ViewPart {
 	private Text txtProcessProjectMultiWorkspacePath;
 
 	public PropertiesView() {
-
+		setTitleImage(ImageFactory.PROPERTIES);
 	}
 
 	@Override
@@ -113,6 +118,32 @@ public final class PropertiesView extends ViewPart {
 		layout.topControl = emptyPage;
 
 		contentPanel.layout();
+
+		// getSite().getWorkbenchWindow().addPerspectiveListener(new
+		// IPerspectiveListener2() {
+		//
+		// @Override
+		// public void perspectiveChanged(IWorkbenchPage paramIWorkbenchPage,
+		// IPerspectiveDescriptor paramIPerspectiveDescriptor, String type) {
+		// }
+		//
+		// @Override
+		// public void perspectiveActivated(IWorkbenchPage paramIWorkbenchPage,
+		// IPerspectiveDescriptor paramIPerspectiveDescriptor) {
+		// }
+		//
+		// @Override
+		// public void perspectiveChanged(IWorkbenchPage paramIWorkbenchPage,
+		// IPerspectiveDescriptor paramIPerspectiveDescriptor,
+		// IWorkbenchPartReference paramIWorkbenchPartReference, String type) {
+		// System.out.println(getClass() + " 2" + type);
+		// if ("viewHide".equals(type)) {
+		// WindowChangeListener.getInstance().hideFromView(ID);
+		// } else if ("viewShow".equals(type)) {
+		// setFocus();
+		// }
+		// }
+		// });
 	}
 
 	/**
@@ -369,6 +400,18 @@ public final class PropertiesView extends ViewPart {
 	@Override
 	public final void setFocus() {
 
+	}
+
+	public void dispose() {
+		WindowChangeListener.getInstance().hideFromView(ID);
+		super.dispose();
+	}
+
+	/**
+	 * hide view
+	 */
+	public final void hideMe() {
+		getSite().getPage().hideView(this);
 	}
 
 	/**
