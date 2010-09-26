@@ -40,7 +40,7 @@
             id="view.serviceoperationsdepnavigator">
     </view>
  	<view 
-            name="VisaulGraph"
+            name="Dependency Graph"
             allowMultiple="true"
             class="com.tomecode.soa.dependency.analyzer.view.VisualGraphView"
             id="view.visualgraph">

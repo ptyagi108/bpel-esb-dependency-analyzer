@@ -33,7 +33,9 @@ public final class Perspective implements IPerspectiveFactory {
 		IFolderLayout bottomLeft = layout.createFolder("bottomLeft", IPageLayout.BOTTOM, 0.75f, "topLeft");
 		bottomLeft.addView(ProjectStructureNavigator.ID);
 
-		layout.addView(VisualGraphView.ID, IPageLayout.RIGHT | IPageLayout.TOP, 0.75f, editorArea);
+		IFolderLayout graphFolder = layout.createFolder("graph", IPageLayout.RIGHT | IPageLayout.TOP, 0.75f, editorArea);
+		graphFolder.addPlaceholder(VisualGraphView.ID + ":*");
+		graphFolder.addView(VisualGraphView.ID);
 
 		IFolderLayout operationsFolder = layout.createFolder("operations", IPageLayout.LEFT | IPageLayout.BOTTOM, 0.50f, editorArea);
 		operationsFolder.addView(ServiceOperationsDepNavigator.ID);
@@ -42,5 +44,6 @@ public final class Perspective implements IPerspectiveFactory {
 		secondFolder.addView(PropertiesView.ID);
 		secondFolder.addView(BpelProcessStructureNavigator.ID);
 		secondFolder.addView(ServiceBusStructureNavigator.ID);
+
 	}
 }
