@@ -17,16 +17,16 @@ public final class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
 	private static final String PERSPECTIVE_ID = "com.tomecode.soa.dependency.analyzer.gui.perspective";
 
-	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
+	public final WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
 		return new ApplicationWorkbenchWindowAdvisor(configurer);
 	}
 
-	public void initialize(IWorkbenchConfigurer configurer) {
+	public final void initialize(IWorkbenchConfigurer configurer) {
 		super.initialize(configurer);
 		configurer.setSaveAndRestore(true);
 	}
 
-	public String getInitialWindowPerspectiveId() {
+	public final String getInitialWindowPerspectiveId() {
 		return PERSPECTIVE_ID;
 	}
 }

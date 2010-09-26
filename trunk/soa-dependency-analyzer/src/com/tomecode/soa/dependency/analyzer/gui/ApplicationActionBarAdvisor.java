@@ -9,6 +9,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
+import com.tomecode.soa.dependency.analyzer.gui.actions.ExportGraphToImageAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.OpenWorkspaceAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.view.OpenNewVisualViewAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.view.ShowBpelProcessStructureViewAction;
@@ -43,7 +44,7 @@ public final class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		super(configurer);
 	}
 
-	protected void makeActions(IWorkbenchWindow window) {
+	protected final void makeActions(IWorkbenchWindow window) {
 		openWorkspaceAction = new OpenWorkspaceAction(window);
 		newVisualViewAction = new OpenNewVisualViewAction();
 		showWorkspaceNavigatorAction = new ShowWorkspaceNavigatorAction();
@@ -54,7 +55,7 @@ public final class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		serviceBusStructureViewAction = new ShowServiceBusStructureViewAction();
 	}
 
-	protected void fillMenuBar(IMenuManager menuBar) {
+	protected final void fillMenuBar(IMenuManager menuBar) {
 		MenuManager fileMenu = new MenuManager("&File", IWorkbenchActionConstants.M_FILE);
 		fileMenu.add(openWorkspaceAction);
 		menuBar.add(fileMenu);
@@ -72,5 +73,11 @@ public final class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		viewMenu.add(showBpelProcessStructureViewAction);
 		viewMenu.add(showServiceOperationDepViewAction);
 		viewMenu.add(serviceBusStructureViewAction);
+
+		MenuManager toolMenu = new MenuManager("&Tools", "Tools");
+		menuBar.add(toolMenu);
+
+		toolMenu.add(new ExportGraphToImageAction());
 	}
+
 }

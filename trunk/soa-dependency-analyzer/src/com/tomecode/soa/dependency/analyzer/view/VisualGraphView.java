@@ -29,6 +29,7 @@ import org.eclipse.zest.core.widgets.GraphNode;
 import org.eclipse.zest.layouts.algorithms.AbstractLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
 
+import com.tomecode.soa.dependency.analyzer.gui.actions.ExportGraphToImageAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.GraphExpanderAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.GraphLayoutAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.RefreshGraphLayout;
@@ -150,6 +151,7 @@ public final class VisualGraphView extends ViewPart {
 		});
 
 		initMenus(graph);
+
 	}
 
 	/**
@@ -202,7 +204,7 @@ public final class VisualGraphView extends ViewPart {
 	/**
 	 * create menu for view and create context menu
 	 */
-	private final void initMenus(Graph graph) {
+	private final void initMenus(final Graph graph) {
 		// create menu
 		IMenuManager menuManager = getViewSite().getActionBars().getMenuManager();
 		RefreshGraphLayout refreshGraphLayout = new RefreshGraphLayout(graphViewer.getGraphControl());
@@ -226,10 +228,15 @@ public final class VisualGraphView extends ViewPart {
 		menuManager.add(actionDirectedLayout);
 
 		menuManager.add(new Separator());
+		ExportGraphToImageAction exportGraphToImageAction = new ExportGraphToImageAction(graph);
+		menuManager.add(exportGraphToImageAction);
+		menuManager.add(new Separator());
 		menuManager.add(refreshGraphLayout);
 
 		MenuManager popupMenuManager = new MenuManager("#PopupMenu");
 		popupMenuManager.createContextMenu(graph);
+
+		popupMenuManager.add(exportGraphToImageAction);
 
 		popupMenuManager.add(new Separator());
 		popupMenuManager.add(defaultAction);
@@ -800,21 +807,6 @@ public final class VisualGraphView extends ViewPart {
 		return graphNode;
 	}
 
-	// /**
-	// * create {@link GraphNode}
-	// *
-	// * @param name
-	// * @param image
-	// * @param data
-	// * @param backgroundColor
-	// * @return
-	// */
-	// private final GraphNode createNode(String name, Image image, Object data,
-	// Color backgroundColor) {
-	// GraphNode graphNode = createNode(name, image, data);
-	// graphNode.setBackgroundColor(backgroundColor);
-	// return graphNode;
-	// }
 
 	/**
 	 * // * change layout algorithm {@link #graph}
@@ -830,6 +822,10 @@ public final class VisualGraphView extends ViewPart {
 				action.setChecked(true);
 			}
 		}
+	}
+
+	public final Graph getGraph() {
+		return graphViewer.getGraphControl();
 	}
 
 }

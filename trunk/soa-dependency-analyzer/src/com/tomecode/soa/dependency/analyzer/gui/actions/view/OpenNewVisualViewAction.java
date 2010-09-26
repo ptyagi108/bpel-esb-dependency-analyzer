@@ -22,8 +22,8 @@ import com.tomecode.soa.dependency.analyzer.view.VisualGraphView;
 public final class OpenNewVisualViewAction extends Action {
 
 	public OpenNewVisualViewAction() {
-		setText("Open new visual view");
-		setToolTipText("Open new  visaul view");
+		setText("Open new denpendecy graph");
+		setToolTipText("Open new denpendecy graph");
 		setImageDescriptor(ImageFactory.graph_view);
 	}
 

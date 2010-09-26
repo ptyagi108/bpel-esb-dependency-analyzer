@@ -54,6 +54,7 @@ public final class ImageFactory {
 	public static final Image MULTI_WORKSPACE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/multi_workspace.png")).createImage();
 	public static final Image WORKSPACE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/workspace.png")).createImage();
 
+	public static final ImageDescriptor openBig = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/openBig.png"));
 	public static final ImageDescriptor open = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/open.png"));
 	public static final Image OPEN = open.createImage();
 
@@ -115,8 +116,8 @@ public final class ImageFactory {
 	public static final Image ORACLE_10G_BDA = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/bpel_dependency_analyzer.png")).createImage();
 	public static final Image ORACLE_10G_ABOUT = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/about.png")).createImage();
 	public static final Image ORACLE_10G_INFO = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/info.png")).createImage();
-	public static final Image ORACLE_10G_EXPORT = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/export.png")).createImage();
-	public static final Image ORACLE_10G_EXPORT_BIG = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/export_big.png")).createImage();
+	public static final ImageDescriptor export = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/export2.png"));
+	public static final ImageDescriptor exportBig = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/icons/exportBig.png"));
 
 	public static final Image OPEN_ESB_BPEL_SEQUENCE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/openEsb/16/sequence.png")).createImage();
 	public static final Image OPEN_ESB_BPEL_SCOPE = ImageDescriptor.createFromURL(ImageFactory.class.getResource("/icons/com/tomecode/soa/openEsb/16/scope.png")).createImage();

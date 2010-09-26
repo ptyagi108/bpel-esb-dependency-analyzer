@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import com.tomecode.soa.dependency.analyzer.core.ApplicationManager;
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 
@@ -37,6 +38,8 @@ import com.tomecode.soa.workspace.Workspace.WorkspaceType;
  */
 public final class OpenNewWorkspaceWizard extends Wizard {
 
+	private final static String TITLE = "Open new workspace";
+
 	private final WorkspaceConfig config;
 
 	/**
@@ -44,7 +47,7 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 	 */
 	public OpenNewWorkspaceWizard() {
 		super();
-		setWindowTitle("Open new workspace");
+		setWindowTitle(TITLE);
 
 		config = new WorkspaceConfig();
 		addPage(new SelectWorkspacePage());
@@ -66,7 +69,8 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 	 * Page for switch workspace
 	 * 
 	 * @author Tomas Frastia
-	 * 
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
 	 */
 	final class SelectWorkspacePage extends WizardPage implements Listener {
 
@@ -76,8 +80,8 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 		private Button bOpenEsbBpel;
 
 		public SelectWorkspacePage() {
-			super("Switch workspace", "Open new workspace", null);
-
+			super("Switch workspace", TITLE, ImageFactory.openBig);
+			setTitle("Select workspace tipe...");
 		}
 
 		@Override
@@ -135,7 +139,8 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 	 * select add workspace to exist or create new multiple workspace
 	 * 
 	 * @author Tomas Frastia
-	 * 
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
 	 */
 	final class SelectMultiWorkspacePage extends WizardPage implements Listener {
 
@@ -150,7 +155,8 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 		private String[] mwNames;
 
 		public SelectMultiWorkspacePage() {
-			super("Select Multiple Workspace", "Select Multi-Workspace", null);
+			super("Select Multiple Workspace", TITLE, ImageFactory.openBig);
+			setTitle("Selected Mutli Workspace...");
 			mwNames = new String[] {};
 		}
 
@@ -274,13 +280,14 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 	 * add workspace paths
 	 * 
 	 * @author Tomas Frastia
-	 * 
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
 	 */
 	final class WorkspacePath extends WizardPage {
 
 		protected WorkspacePath() {
-			super("Workspace path", "Worpspace path", null);
-
+			super("Workspace path", TITLE, ImageFactory.openBig);
+			setTitle("Workspce path");
 		}
 
 		@Override
@@ -350,7 +357,8 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 	 * Summary page
 	 * 
 	 * @author Tomas Frastia
-	 * 
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
 	 */
 	final class Summary extends WizardPage {
 
@@ -361,8 +369,8 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 		private Text labelWorkspaceDirName;
 
 		protected Summary() {
-			super("Summary", "Summary...", null);
-
+			super("Summary", TITLE, ImageFactory.openBig);
+			setTitle("Summary");
 		}
 
 		public final void fillData() {
@@ -417,7 +425,8 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 	 * workspace
 	 * 
 	 * @author Tomas Frastia
-	 * 
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
 	 */
 	public final class WorkspaceConfig {
 		private WorkspaceType workspaceType;

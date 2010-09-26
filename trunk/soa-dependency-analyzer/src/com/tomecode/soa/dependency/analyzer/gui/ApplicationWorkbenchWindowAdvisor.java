@@ -19,11 +19,11 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		super(configurer);
 	}
 
-	public ActionBarAdvisor createActionBarAdvisor(IActionBarConfigurer configurer) {
+	public final ActionBarAdvisor createActionBarAdvisor(IActionBarConfigurer configurer) {
 		return new ApplicationActionBarAdvisor(configurer);
 	}
 
-	public void preWindowOpen() {
+	public final void preWindowOpen() {
 		IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
 		configurer.setInitialSize(new Point(1200, 600));
 		configurer.setShowCoolBar(false);
