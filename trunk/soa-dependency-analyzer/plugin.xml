@@ -64,5 +64,29 @@
             id="view.servicebusstructurenavigator">
     </view>
    </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="com.tomecode.soa.dependency.analyzer.application"
+            name="SOA Dependecy Analyzer">
+         <property
+               name="appName"
+               value="SOA Dependecy Analyzer">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/com/tomecode/soa/icons/bpel_dependency_analyzer.png">
+         </property>
+         <property
+               name="aboutText"
+               value="SOA dependnecy analyzer 0.8&#x0A;&#x0A;http://www.tomecode.com">
+         </property>
+         <property
+               name="windowImages"
+               value="icons/com/tomecode/soa/icons/bpel_dependency_analyzer_small.png,icons/com/tomecode/soa/icons/bpel_dependency_analyzer.png,icons/com/tomecode/soa/icons/bpel_dependency_analyzer.png,icons/com/tomecode/soa/icons/bpel_dependency_analyzer.png,icons/com/tomecode/soa/icons/bpel_dependency_analyzer.png">
+         </property>
+      </product>
+   </extension>
 
 </plugin>
