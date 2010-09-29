@@ -24,7 +24,7 @@ public final class PopupMenuUtils {
 
 	private static final Separator SEPARATOR = new Separator();
 
-	private static final RefreshAction REFRESH_ACTION = new RefreshAction();
+	//private static final RefreshAction REFRESH_ACTION = new RefreshAction();
 
 	private static final RemoveMultiWorkspaceAction REMOVE_MULTI_WORKSPACE_ACTION = new RemoveMultiWorkspaceAction();
 
@@ -50,8 +50,8 @@ public final class PopupMenuUtils {
 		REMOVE_WORKSPACE_ACTION.setEnableFor(selectedNode);
 		manager.add(REMOVE_WORKSPACE_ACTION);
 		manager.add(SEPARATOR);
-		manager.add(REFRESH_ACTION);
-		REFRESH_ACTION.setSelectectedNode(selectedNode);
+	//	manager.add(REFRESH_ACTION);
+//		REFRESH_ACTION.setSelectectedNode(selectedNode);
 	}
 
 	/**

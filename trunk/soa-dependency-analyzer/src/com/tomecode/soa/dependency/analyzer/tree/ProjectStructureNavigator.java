@@ -111,7 +111,7 @@ public final class ProjectStructureNavigator extends ViewPart implements HideVie
 	}
 
 	private final MultiWorkspace findMultiWorkspaceForStructure() {
-		if (rootNode.hasFiles()) {
+		if (rootNode.hasFiles() && rootNode.getProject() != null) {
 			return rootNode.getProject().getWorkpsace().getMultiWorkspace();
 		}
 		return null;
@@ -125,7 +125,7 @@ public final class ProjectStructureNavigator extends ViewPart implements HideVie
 	}
 
 	private final Workspace findWorkspaceForStructure() {
-		if (rootNode.hasFiles()) {
+		if (rootNode.hasFiles() && rootNode.getProject() != null) {
 			return rootNode.getProject().getWorkpsace();
 		}
 		return null;

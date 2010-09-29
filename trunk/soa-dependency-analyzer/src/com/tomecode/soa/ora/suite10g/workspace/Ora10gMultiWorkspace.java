@@ -92,4 +92,14 @@ public class Ora10gMultiWorkspace implements MultiWorkspace {
 		}
 		return null;
 	}
+
+	@Override
+	public final boolean containsWorkspace(Workspace workspace) {
+		for (Ora10gWorkspace ora10gWorkspace : workspaces) {
+			if (workspace.equals(ora10gWorkspace)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

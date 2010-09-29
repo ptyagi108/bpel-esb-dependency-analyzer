@@ -1,5 +1,7 @@
 package com.tomecode.soa.dependency.analyzer.gui.actions;
 
+import java.util.List;
+
 import org.eclipse.jface.action.Action;
 
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
@@ -34,6 +36,7 @@ public final class RemoveMultiWorkspaceAction extends Action {
 	public final void run() {
 		MultiWorkspace multiWorkspace = GuiUtils.getWorkspacesNavigator().removeMultiWorkspace();
 		if (multiWorkspace != null) {
+
 			ProjectStructureNavigator projectStructureNavigator = GuiUtils.getProjectStructureNavigator();
 			if (projectStructureNavigator != null) {
 				projectStructureNavigator.removeMultiWorkspace(multiWorkspace);
@@ -54,10 +57,15 @@ public final class RemoveMultiWorkspaceAction extends Action {
 			if (serviceOperationsDepNavigator != null) {
 				serviceOperationsDepNavigator.removeMultiWorkspace(multiWorkspace);
 			}
-			VisualGraphView visualGraphView = GuiUtils.getVisualGraphView();
-			if (visualGraphView != null) {
-				visualGraphView.clearContentFromGraph();
+
+			List<Integer> instanceNumbers = GuiUtils.getAllVisualGraphInstances();
+			for (Integer intanceNumber : instanceNumbers) {
+				VisualGraphView visualGraphView = GuiUtils.getVisualGraphView(intanceNumber);
+				if (visualGraphView != null) {
+					visualGraphView.removeMultiWorkspace(multiWorkspace);
+				}
 			}
+
 		}
 	}
 

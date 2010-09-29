@@ -75,7 +75,7 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 	final class SelectWorkspacePage extends WizardPage implements Listener {
 
 		private Button bOracle10g;
-		private Button bOracle11g;
+	//	private Button bOracle11g;
 		private Button bOracleSB10g;
 		private Button bOpenEsbBpel;
 
@@ -94,9 +94,9 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 			bOracle10g.setText(WorkspaceType.ORACLE_1OG.toString());
 			bOracle10g.setFocus();
 			bOracle10g.addListener(SWT.Selection, this);
-			bOracle11g = new Button(composite, SWT.RADIO);
-			bOracle11g.setText(WorkspaceType.ORACLE_11G.toString());
-			bOracle11g.addListener(SWT.Selection, this);
+//			bOracle11g = new Button(composite, SWT.RADIO);
+//			bOracle11g.setText(WorkspaceType.ORACLE_11G.toString());
+//			bOracle11g.addListener(SWT.Selection, this);
 			bOracleSB10g = new Button(composite, SWT.RADIO);
 			bOracleSB10g.setText(WorkspaceType.ORACLE_SERVICE_BUS_10G.toString());
 			bOracleSB10g.addListener(SWT.Selection, this);
@@ -112,9 +112,9 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 			if (bOracle10g.getSelection()) {
 				config.setWorkspaceType(WorkspaceType.ORACLE_1OG);
 				setPageComplete(true);
-			} else if (bOracle11g.getSelection()) {
-				config.setWorkspaceType(WorkspaceType.ORACLE_11G);
-				setPageComplete(true);
+//			} else if (bOracle11g.getSelection()) {
+//				config.setWorkspaceType(WorkspaceType.ORACLE_11G);
+//				setPageComplete(true);
 			} else if (bOpenEsbBpel.getSelection()) {
 				config.setWorkspaceType(WorkspaceType.OPEN_ESB);
 				setPageComplete(true);

@@ -1,5 +1,8 @@
 package com.tomecode.soa.dependency.analyzer.gui.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
@@ -27,17 +30,27 @@ import com.tomecode.soa.dependency.analyzer.view.VisualGraphView;
  */
 public final class GuiUtils {
 
+	private static List<Integer> visualGraphInstances = null;
+	static {
+		if (visualGraphInstances == null) {
+			visualGraphInstances = new ArrayList<Integer>();
+			visualGraphInstances.add(0);
+		}
+	}
+
 	private static int visualGraphActivateInstance = 0;
 	private static int visualGraphInstanceNum = 0;
 
 	public final static String newInstanceVisualGraph() {
 		visualGraphInstanceNum++;
 		visualGraphActivateInstance = visualGraphInstanceNum;
+		visualGraphInstances.add(visualGraphActivateInstance);
 		return String.valueOf(visualGraphInstanceNum);
 	}
 
 	public final static void dropInstanceVisualGraph() {
 		visualGraphInstanceNum--;
+		visualGraphInstances.remove(visualGraphActivateInstance);
 	}
 
 	public final static int getActivateViewId() {
@@ -109,7 +122,25 @@ public final class GuiUtils {
 			return (VisualGraphView) findView(VisualGraphView.ID);
 		}
 		return (VisualGraphView) iViewReference.getView(true);
+	}
 
+	/**
+	 * find current {@link VisualGraphView}
+	 * 
+	 * @param instanceNumber
+	 * @return
+	 */
+	public final static VisualGraphView getVisualGraphView(int instanceNumber) {
+		IViewReference iViewReference = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findViewReference(VisualGraphView.ID, String.valueOf(instanceNumber));
+		if (iViewReference != null) {
+			return (VisualGraphView) iViewReference.getView(true);
+		}
+
+		return (VisualGraphView) findView(VisualGraphView.ID);
+	}
+
+	public final static List<Integer> getAllVisualGraphInstances() {
+		return visualGraphInstances;
 	}
 
 	public final static ServiceOperationsDepNavigator getServiceOperationsDepNavigator() {
@@ -153,4 +184,5 @@ public final class GuiUtils {
 		}
 
 	}
+
 }

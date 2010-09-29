@@ -51,15 +51,16 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 	/**
 	 * parse {@link Ora10gMultiWorkspace}
 	 * 
-	 * @param workspaceFolder
+	 * @param name
+	 * @param path
 	 * @return
 	 * @throws ServiceParserException
 	 */
-	public final Ora10gMultiWorkspace parse(String name, File workspaceFolder) throws ServiceParserException {
+	public final Ora10gMultiWorkspace parse(String name, File path) throws ServiceParserException {
 		List<File> jwsFiles = new ArrayList<File>();
-		findAllJws(workspaceFolder, jwsFiles);
+		findAllJws(path, jwsFiles);
 
-		Ora10gMultiWorkspace multiWorkspace = new Ora10gMultiWorkspace(name, workspaceFolder);
+		Ora10gMultiWorkspace multiWorkspace = new Ora10gMultiWorkspace(name, path);
 
 		for (File jwsFile : jwsFiles) {
 

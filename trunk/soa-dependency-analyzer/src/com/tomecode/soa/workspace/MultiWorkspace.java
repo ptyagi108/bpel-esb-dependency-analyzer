@@ -25,4 +25,6 @@ public interface MultiWorkspace {
 	 */
 	WorkspaceType getType();
 
+	boolean containsWorkspace(Workspace workspace);
+
 }

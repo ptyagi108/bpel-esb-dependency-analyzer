@@ -1,6 +1,7 @@
 package com.tomecode.soa.dependency.analyzer.gui.actions;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
@@ -62,10 +63,14 @@ public final class RemoveWorkspaceAction extends Action {
 			if (serviceBusStructureNavigator != null) {
 				serviceOperationsDepNavigator.removeWorkspace(removeWorkspace);
 			}
-			VisualGraphView visualGraphView = GuiUtils.getVisualGraphView();
-			if (visualGraphView != null) {
-				visualGraphView.clearContentFromGraph();
+			List<Integer> instanceNumbers = GuiUtils.getAllVisualGraphInstances();
+			for (Integer intanceNumber : instanceNumbers) {
+				VisualGraphView visualGraphView = GuiUtils.getVisualGraphView(intanceNumber);
+				if (visualGraphView != null) {
+					visualGraphView.removeWorkspace(removeWorkspace);
+				}
 			}
+
 		}
 
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(null);

@@ -88,4 +88,14 @@ public final class OpenEsbMultiWorkspace implements MultiWorkspace {
 		}
 		return null;
 	}
+
+	@Override
+	public final boolean containsWorkspace(Workspace workspace) {
+		for (OpenEsbWorkspace openEsbWorkspace : workspaces) {
+			if (openEsbWorkspace.equals(workspace)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

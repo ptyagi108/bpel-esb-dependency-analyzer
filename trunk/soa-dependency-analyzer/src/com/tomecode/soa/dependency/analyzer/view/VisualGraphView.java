@@ -807,7 +807,6 @@ public final class VisualGraphView extends ViewPart {
 		return graphNode;
 	}
 
-
 	/**
 	 * // * change layout algorithm {@link #graph}
 	 */
@@ -828,4 +827,84 @@ public final class VisualGraphView extends ViewPart {
 		return graphViewer.getGraphControl();
 	}
 
+	/**
+	 * if found that node in graph is this mutli-workspace then clear graph
+	 * 
+	 * @param multiWorkspace
+	 */
+	public final void removeMultiWorkspace(MultiWorkspace multiWorkspace) {
+		if (!graphNodes.isEmpty()) {
+			for (GraphNode graphNode : graphNodes) {
+				if (graphNode.getData() != null) {
+					if (graphNode.getData() instanceof Project) {
+						if (multiWorkspace.equals(((Project) graphNode.getData()).getWorkpsace().getMultiWorkspace())) {
+							clearContentFromGraph();
+							break;
+						}
+					} else if (graphNode.getData() instanceof BpelProcess) {
+						if (multiWorkspace.equals(((BpelProcess) graphNode.getData()).getProject().getWorkpsace().getMultiWorkspace())) {
+							clearContentFromGraph();
+							break;
+						}
+					} else if (graphNode.getData() instanceof MultiWorkspace) {
+						if (multiWorkspace.equals(graphNode.getData())) {
+							clearContentFromGraph();
+							break;
+						}
+					} else if (graphNode.getData() instanceof Workspace) {
+						if (multiWorkspace.equals(((Workspace) graphNode.getData()).getMultiWorkspace())) {
+							clearContentFromGraph();
+							break;
+						}
+					} else if (graphNode.getData() instanceof Service) {
+						if (multiWorkspace.equals(((Service) graphNode.getData()).getProject().getWorkpsace().getMultiWorkspace())) {
+							clearContentFromGraph();
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * if found that node in graph is this workspace then clear graph
+	 * 
+	 * @param workspace
+	 */
+	public final void removeWorkspace(Workspace workspace) {
+		if (!graphNodes.isEmpty()) {
+			for (GraphNode graphNode : graphNodes) {
+				if (graphNode.getData() != null) {
+					if (graphNode.getData() instanceof Project) {
+						MultiWorkspace multiWorkspace = ((Project) graphNode.getData()).getWorkpsace().getMultiWorkspace();
+						if (multiWorkspace.containsWorkspace(workspace)) {
+							clearContentFromGraph();
+							break;
+						}
+					} else if (graphNode.getData() instanceof BpelProcess) {
+						if (workspace.equals(((BpelProcess) graphNode.getData()).getProject().getWorkpsace().getMultiWorkspace())) {
+							clearContentFromGraph();
+							break;
+						}
+					} else if (graphNode.getData() instanceof MultiWorkspace) {
+						if (workspace.equals(graphNode.getData())) {
+							clearContentFromGraph();
+							break;
+						}
+					} else if (graphNode.getData() instanceof Workspace) {
+						if (workspace.equals(((Workspace) graphNode.getData()).getMultiWorkspace())) {
+							clearContentFromGraph();
+							break;
+						}
+					} else if (graphNode.getData() instanceof Service) {
+						if (workspace.equals(((Service) graphNode.getData()).getProject().getWorkpsace().getMultiWorkspace())) {
+							clearContentFromGraph();
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
 }

@@ -195,7 +195,7 @@ public final class EsbProject implements Project {
 
 	@Override
 	public final ProjectType getType() {
-		return ProjectType.OPEN_ESB_BPEL;
+		return ProjectType.ORACLE10G_ESB;
 	}
 
 	public final void setWorkspace(Ora10gWorkspace workspace) {

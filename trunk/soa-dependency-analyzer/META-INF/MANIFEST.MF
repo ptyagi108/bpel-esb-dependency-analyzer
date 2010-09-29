@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SOA dependency analyzer
 Bundle-SymbolicName: com.tomecode.soa.dependency.analyzer;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 0.8.0
 Bundle-Activator: com.tomecode.soa.dependency.analyzer.main.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
