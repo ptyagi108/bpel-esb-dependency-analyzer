@@ -266,9 +266,7 @@ public final class ApplicationManager {
 					return ora10gMultiWorkspace;
 				}
 			}
-
 		}
-
 		throw new ServiceParserException("not found multi workspace with name: " + config.getMultiWorkspaceName(), true);
 	}
 
@@ -276,11 +274,9 @@ public final class ApplicationManager {
 		if (config.isNewMultiWorkspace()) {
 			OraSB10gMultiWorkspace multiWorkspace = oraSB10gMWorkspaceParser.parse(config.getMultiWorkspaceName(), config.getWorkspaceDir());
 			this.multiWorkspaces.add(multiWorkspace);
-
 			writeWorkspaces();
 			return multiWorkspace;
 		}
-
 		for (MultiWorkspace multiWorkspace : multiWorkspaces) {
 			if (multiWorkspace.getType() == config.getWorkspaceType()) {
 				if (multiWorkspace.getName().equalsIgnoreCase(config.getMultiWorkspaceName())) {
@@ -291,9 +287,7 @@ public final class ApplicationManager {
 				}
 			}
 		}
-
 		throw new ServiceParserException("not found multi workspace with name: " + config.getMultiWorkspaceName(), true);
-
 	}
 
 	public final MultiWorkspace refreshMultiWorkspace(MultiWorkspace multiWorkspace) {
@@ -327,7 +321,7 @@ public final class ApplicationManager {
 			if (multiWorkspaces.get(i).equals(removeMultiWorkpsace)) {
 				MultiWorkspace rmMultiWorkspace = multiWorkspaces.get(i);
 				multiWorkspaces.remove(i);
-			//	writeWorkspaces();
+				// writeWorkspaces();
 				return rmMultiWorkspace;
 			}
 
