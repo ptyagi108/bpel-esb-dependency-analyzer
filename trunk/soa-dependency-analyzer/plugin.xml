@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-	
    <extension
          id="application"
          point="org.eclipse.core.runtime.applications">
@@ -10,6 +9,20 @@
                class="com.tomecode.soa.dependency.analyzer.gui.Application">
          </run>
       </application>
+   </extension>
+   <extension point="org.eclipse.ui.editors">
+      <editor
+            allowMultiple="true"
+            name="Flow Graph"
+            class="com.tomecode.soa.dependency.analyzer.view.graph.FlowGraphView"
+            id="view.flowGraph">
+      </editor>
+      <editor
+            name="Dependency Graph"
+            allowMultiple="true"
+            class="com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView"
+            id="view.visualgraph">
+      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
@@ -39,12 +52,18 @@
             class="com.tomecode.soa.dependency.analyzer.tree.ServiceOperationsDepNavigator"
             id="view.serviceoperationsdepnavigator">
     </view>
- 	<view 
+ 	<!--view 
             name="Dependency Graph"
             allowMultiple="true"
             class="com.tomecode.soa.dependency.analyzer.view.VisualGraphView"
             id="view.visualgraph">
-    </view>
+    </view-->
+ 	<!--view 
+            name="Flow Graph"
+            allowMultiple="true"
+            class="com.tomecode.soa.dependency.analyzer.view.FlowGraphView"
+            id="view.visualgraph">
+    </view-->    
  	<view 
             name="Properties"
             allowMultiple="true"
@@ -54,8 +73,14 @@
      	<view 
             name="Project Files"
             allowMultiple="true"
-            class="com.tomecode.soa.dependency.analyzer.tree.ProjectStructureNavigator"
-            id="view.projectStructureNavigator">
+            class="com.tomecode.soa.dependency.analyzer.tree.ProjectFilesNavigator"
+            id="view.projectFilesNavigator">
+    </view>
+     <view 
+            name="Project Services"
+            allowMultiple="true"
+            class="com.tomecode.soa.dependency.analyzer.tree.ProjectServicesNavigator"
+            id="view.projectServiceNavigator">
     </view>
      	<view 
             name="Service Bus Proxy Structure"
