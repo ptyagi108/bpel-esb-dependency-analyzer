@@ -7,6 +7,7 @@ import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.BpelProcessStructureNavigator;
+import com.tomecode.soa.dependency.analyzer.tree.ProjectServicesNavigator;
 
 /**
  * 

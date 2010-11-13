@@ -5,12 +5,14 @@ import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
 import com.tomecode.soa.dependency.analyzer.tree.BpelProcessStructureNavigator;
-import com.tomecode.soa.dependency.analyzer.tree.ProjectStructureNavigator;
+import com.tomecode.soa.dependency.analyzer.tree.ProjectFilesNavigator;
+import com.tomecode.soa.dependency.analyzer.tree.ProjectServicesNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceBusStructureNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceOperationsDepNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.WorkspacesNavigator;
 import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
-import com.tomecode.soa.dependency.analyzer.view.VisualGraphView;
+import com.tomecode.soa.dependency.analyzer.view.graph.FlowGraphView;
+import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
 
 /**
  * Perspective contains {@link WorkspacesNavigator} and {@link VisualGraphView}
@@ -31,12 +33,14 @@ public final class Perspective implements IPerspectiveFactory {
 		top.addView(WorkspacesNavigator.ID);
 
 		IFolderLayout bottomLeft = layout.createFolder("bottomLeft", IPageLayout.BOTTOM, 0.75f, "topLeft");
-		bottomLeft.addView(ProjectStructureNavigator.ID);
+		bottomLeft.addView(ProjectServicesNavigator.ID);
+		bottomLeft.addView(ProjectFilesNavigator.ID);
 
 		IFolderLayout graphFolder = layout.createFolder("graph", IPageLayout.RIGHT | IPageLayout.TOP, 0.75f, editorArea);
 		graphFolder.addPlaceholder(VisualGraphView.ID + ":*");
 		graphFolder.addView(VisualGraphView.ID);
-
+		graphFolder.addView(FlowGraphView.ID);
+		
 		IFolderLayout operationsFolder = layout.createFolder("operations", IPageLayout.LEFT | IPageLayout.BOTTOM, 0.50f, editorArea);
 		operationsFolder.addView(ServiceOperationsDepNavigator.ID);
 

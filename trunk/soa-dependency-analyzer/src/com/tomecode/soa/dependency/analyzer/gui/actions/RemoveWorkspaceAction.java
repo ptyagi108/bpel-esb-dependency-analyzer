@@ -12,12 +12,13 @@ import com.tomecode.soa.dependency.analyzer.core.ApplicationManager;
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.BpelProcessStructureNavigator;
-import com.tomecode.soa.dependency.analyzer.tree.ProjectStructureNavigator;
+import com.tomecode.soa.dependency.analyzer.tree.ProjectFilesNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceBusStructureNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceOperationsDepNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.WorkspacesNavigator;
 import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
-import com.tomecode.soa.dependency.analyzer.view.VisualGraphView;
+import com.tomecode.soa.dependency.analyzer.view.graph.FlowGraphView;
+import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
@@ -43,7 +44,7 @@ public final class RemoveWorkspaceAction extends Action {
 		final Workspace removeWorkspace = workspacesNavigator.removeSelectedWorkspace();
 
 		if (removeWorkspace != null) {
-			ProjectStructureNavigator projectStructureNavigator = GuiUtils.getProjectStructureNavigator();
+			ProjectFilesNavigator projectStructureNavigator = GuiUtils.getProjectStructureNavigator();
 			if (projectStructureNavigator != null) {
 				projectStructureNavigator.removeWorkspace(removeWorkspace);
 			}
@@ -63,14 +64,16 @@ public final class RemoveWorkspaceAction extends Action {
 			if (serviceBusStructureNavigator != null) {
 				serviceOperationsDepNavigator.removeWorkspace(removeWorkspace);
 			}
-			List<Integer> instanceNumbers = GuiUtils.getAllVisualGraphInstances();
-			for (Integer intanceNumber : instanceNumbers) {
-				VisualGraphView visualGraphView = GuiUtils.getVisualGraphView(intanceNumber);
-				if (visualGraphView != null) {
-					visualGraphView.removeWorkspace(removeWorkspace);
-				}
+
+			List<VisualGraphView> visualGraphViews = GuiUtils.getVisualGraphViews();
+			for (VisualGraphView visualGraphView : visualGraphViews) {
+				visualGraphView.removeWorkspace(removeWorkspace);
 			}
 
+			List<FlowGraphView> flowGraphViews = GuiUtils.getFlowGraphViews();
+			for (FlowGraphView flowGraphView : flowGraphViews) {
+				flowGraphView.removeWorkspace(removeWorkspace);
+			}
 		}
 
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(null);

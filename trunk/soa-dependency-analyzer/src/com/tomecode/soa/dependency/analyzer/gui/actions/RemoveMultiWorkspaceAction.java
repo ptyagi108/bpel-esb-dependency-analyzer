@@ -7,12 +7,13 @@ import org.eclipse.jface.action.Action;
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.BpelProcessStructureNavigator;
-import com.tomecode.soa.dependency.analyzer.tree.ProjectStructureNavigator;
+import com.tomecode.soa.dependency.analyzer.tree.ProjectFilesNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceBusStructureNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceOperationsDepNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.WorkspacesNavigator;
 import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
-import com.tomecode.soa.dependency.analyzer.view.VisualGraphView;
+import com.tomecode.soa.dependency.analyzer.view.graph.FlowGraphView;
+import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
 import com.tomecode.soa.workspace.MultiWorkspace;
 
 /**
@@ -37,7 +38,7 @@ public final class RemoveMultiWorkspaceAction extends Action {
 		MultiWorkspace multiWorkspace = GuiUtils.getWorkspacesNavigator().removeMultiWorkspace();
 		if (multiWorkspace != null) {
 
-			ProjectStructureNavigator projectStructureNavigator = GuiUtils.getProjectStructureNavigator();
+			ProjectFilesNavigator projectStructureNavigator = GuiUtils.getProjectStructureNavigator();
 			if (projectStructureNavigator != null) {
 				projectStructureNavigator.removeMultiWorkspace(multiWorkspace);
 			}
@@ -58,14 +59,14 @@ public final class RemoveMultiWorkspaceAction extends Action {
 				serviceOperationsDepNavigator.removeMultiWorkspace(multiWorkspace);
 			}
 
-			List<Integer> instanceNumbers = GuiUtils.getAllVisualGraphInstances();
-			for (Integer intanceNumber : instanceNumbers) {
-				VisualGraphView visualGraphView = GuiUtils.getVisualGraphView(intanceNumber);
-				if (visualGraphView != null) {
-					visualGraphView.removeMultiWorkspace(multiWorkspace);
-				}
+			List<VisualGraphView> visualGraphViews = GuiUtils.getVisualGraphViews();
+			for (VisualGraphView visualGraphView : visualGraphViews) {
+				visualGraphView.removeMultiWorkspace(multiWorkspace);
 			}
-
+			List<FlowGraphView> flowGraphViews = GuiUtils.getFlowGraphViews();
+			for (FlowGraphView flowGraphView : flowGraphViews) {
+				flowGraphView.removeMultiWorkspace(multiWorkspace);
+			}
 		}
 	}
 

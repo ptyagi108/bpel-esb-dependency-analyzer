@@ -14,6 +14,7 @@ import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
  * 
  */
 public final class ProxyStructure extends OsbActivity {
+	
 	private final Proxy proxy;
 
 	/**

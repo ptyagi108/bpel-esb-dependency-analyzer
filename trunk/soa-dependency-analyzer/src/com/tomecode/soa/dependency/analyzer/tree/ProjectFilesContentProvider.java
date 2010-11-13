@@ -8,14 +8,14 @@ import org.eclipse.jface.viewers.Viewer;
 import com.tomecode.soa.util.FileRootNode;
 
 /**
- * Tree content provider for {@link ProjectStructureNavigator}
+ * Tree content provider for {@link ProjectFilesNavigator}
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class ProjectStructureContentProvider implements ITreeContentProvider {
+public final class ProjectFilesContentProvider implements ITreeContentProvider {
 
 	@Override
 	public final Object[] getChildren(Object parent) {

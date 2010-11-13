@@ -26,25 +26,25 @@ import com.tomecode.soa.workspace.Workspace;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class ProjectStructureNavigator extends ViewPart implements HideView {
+public final class ProjectFilesNavigator extends ViewPart implements HideView {
 
-	public static final String ID = "view.projectStructureNavigator";
+	public static final String ID = "view.projectFilesNavigator";
 	/**
 	 * Tree
 	 */
 	private TreeViewer tree;
 
-	private ProjectStructureContentProvider contentProvider;
+	private ProjectFilesContentProvider contentProvider;
 
-	private ProjectStructureLabelProvider labelProvider;
+	private ProjectFilesLabelProvider labelProvider;
 
 	private FileRootNode rootNode;
 
-	public ProjectStructureNavigator() {
+	public ProjectFilesNavigator() {
 		super();
 		rootNode = new FileRootNode();
-		contentProvider = new ProjectStructureContentProvider();
-		labelProvider = new ProjectStructureLabelProvider();
+		contentProvider = new ProjectFilesContentProvider();
+		labelProvider = new ProjectFilesLabelProvider();
 		setTitleToolTip("Project files");
 	}
 

@@ -10,6 +10,7 @@ import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
+import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.suite10g.project.BpelProject;
 import com.tomecode.soa.workspace.MultiWorkspace;
@@ -60,6 +61,11 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 
 	}
 
+	/**
+	 * show data
+	 * 
+	 * @param source
+	 */
 	public final void show(Object source) {
 		if (source instanceof BpelProject) {
 			BpelProject bpelProject = (BpelProject) source;
@@ -68,6 +74,8 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 			setDataToTree((Service) source);
 		} else if (source instanceof OpenEsbBpelProcess) {
 			setDataToTree((OpenEsbBpelProcess) source);
+		} else if (source instanceof OraSB10gProject) {
+			setDataToTree((OraSB10gProject) source);
 		} else {
 			clearTree();
 		}

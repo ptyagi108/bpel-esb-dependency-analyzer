@@ -7,6 +7,8 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -26,8 +28,7 @@ import com.tomecode.soa.dependency.analyzer.gui.utils.PopupMenuUtils;
 import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.node.WorkspaceRootNode;
-import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
-import com.tomecode.soa.dependency.analyzer.view.VisualGraphView;
+import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
@@ -42,7 +43,7 @@ import com.tomecode.soa.workspace.Workspace;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class WorkspacesNavigator extends ViewPart implements ISelectionChangedListener, HideView {
+public final class WorkspacesNavigator extends ViewPart implements ISelectionChangedListener, IDoubleClickListener, HideView {
 
 	public static final String ID = "view.workspacenavigator";
 
@@ -58,12 +59,14 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 		rootNode = new WorkspaceRootNode();
 		setTitleToolTip("Workspace Navigator");
 		setTitleImage(ImageFactory.WORKSPACE_NAVIGATOR);
+
 	}
 
 	@Override
 	public final void createPartControl(Composite parent) {
 		tree = new TreeViewer(parent, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		tree.addSelectionChangedListener(this);
+		tree.addDoubleClickListener(this);
 		tree.setLabelProvider(new WorkspacesLabelProvider());
 		tree.setContentProvider(new WorkspacesContentProvider());
 
@@ -75,7 +78,6 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 		}
 
 		tree.setInput(rootNode);
-
 		IToolBarManager barManager = getViewSite().getActionBars().getToolBarManager();
 		barManager.add(new OpenNewVisualViewAction());
 	}
@@ -113,41 +115,6 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 	public final void dispose() {
 		WindowChangeListener.getInstance().hideFromView(ID);
 		super.dispose();
-	}
-
-	@Override
-	public final void selectionChanged(SelectionChangedEvent event) {
-		try {
-			IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
-			if (!selection.isEmpty()) {
-				BpelProcessStructureNavigator bpelProcessStructureNavigator = GuiUtils.getBpelProcessStructureNavigator();
-				if (bpelProcessStructureNavigator != null) {
-					bpelProcessStructureNavigator.showProcessStructure(selection.getFirstElement());
-				}
-				ServiceOperationsDepNavigator serviceOperationsDepNavigator = GuiUtils.getServiceOperationsDepNavigator();
-				if (serviceOperationsDepNavigator != null) {
-					serviceOperationsDepNavigator.show(selection.getFirstElement());
-				}
-				VisualGraphView visualGraphView = GuiUtils.getVisualGraphView();
-				if (visualGraphView != null) {
-					visualGraphView.showGraph(selection.getFirstElement(), true);
-				}
-				PropertiesView propertiesView = GuiUtils.getPropertiesView();
-				if (propertiesView != null) {
-					propertiesView.show(selection.getFirstElement());
-				}
-				ProjectStructureNavigator projectStructureNavigator = GuiUtils.getProjectStructureNavigator();
-				if (projectStructureNavigator != null) {
-					projectStructureNavigator.showProjectFiles(selection.getFirstElement());
-				}
-				ServiceBusStructureNavigator serviceBusStructureNavigator = GuiUtils.getServiceBusStructureNavigator();
-				if (serviceBusStructureNavigator != null) {
-					serviceBusStructureNavigator.show(selection.getFirstElement());
-				}
-			}
-		} catch (Exception e) {
-			MessageDialog.openError(null, "Error", "Opps error:" + e.getMessage());
-		}
 	}
 
 	/**
@@ -224,4 +191,59 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 		getSite().getPage().hideView(this);
 	}
 
+	@Override
+	public final void doubleClick(DoubleClickEvent event) {
+		try {
+			IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
+			if (!selection.isEmpty()) {
+				BpelProcessStructureNavigator bpelProcessStructureNavigator = GuiUtils.getBpelProcessStructureNavigator();
+				if (bpelProcessStructureNavigator != null) {
+					bpelProcessStructureNavigator.showProcessStructure(selection.getFirstElement());
+				}
+				ServiceOperationsDepNavigator serviceOperationsDepNavigator = GuiUtils.getServiceOperationsDepNavigator();
+				if (serviceOperationsDepNavigator != null) {
+					serviceOperationsDepNavigator.show(selection.getFirstElement());
+				}
+				VisualGraphView visualGraphView = GuiUtils.getVisualGraphView();
+				if (visualGraphView != null) {
+					visualGraphView.showGraph(selection.getFirstElement());
+				}
+
+				showServices(selection.getFirstElement());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				MessageDialog.openError(null, "Error", "oops2 error:" + e.getMessage());
+			}
+	}
+
+	@Override
+	public final void selectionChanged(SelectionChangedEvent event) {
+		try {
+			IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
+			if (!selection.isEmpty()) {
+				showServices(selection.getFirstElement());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			MessageDialog.openError(null, "Error", "oops2 error:" + e.getMessage());
+		}
+	}
+
+	/**
+	 * show information about selected node in {@link ProjectServicesNavigator}
+	 * and {@link ProjectFilesNavigator};
+	 * 
+	 * @param selectedNode
+	 */
+	private final void showServices(Object selectedNode) {
+		ProjectFilesNavigator projectFilesNavigator = GuiUtils.getProjectStructureNavigator();
+		if (projectFilesNavigator != null) {
+			projectFilesNavigator.showProjectFiles(selectedNode);
+		}
+		ProjectServicesNavigator projectServicesNavigator = GuiUtils.getProjectServicesNavigator();
+		if (projectServicesNavigator != null) {
+			projectServicesNavigator.show(selectedNode);
+		}
+	}
 }

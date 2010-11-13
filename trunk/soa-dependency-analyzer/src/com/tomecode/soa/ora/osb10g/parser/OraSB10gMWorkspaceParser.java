@@ -47,18 +47,44 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 
 		multiWorkspace.addWorkspace(workspace);
 
-		File[] files = file.listFiles();
-		if (files != null) {
-			for (File projectFile : files) {
-				if (projectFile.isDirectory()) {
-					OraSB10gProject project = projectParser.parse(projectFile);
-					workspace.addProject(project);
+		if (containsProjectFiles(file)) {
+			OraSB10gProject project = projectParser.parse(file);
+			workspace.addProject(project);
+		} else {
+
+			File[] files = file.listFiles();
+			if (files != null) {
+				for (File projectFile : files) {
+					if (projectFile.isDirectory()) {
+						OraSB10gProject project = projectParser.parse(projectFile);
+						workspace.addProject(project);
+					}
 				}
 			}
 		}
 
 		analyzeDependnecies(multiWorkspace);
 		return multiWorkspace;
+	}
+
+	/**
+	 * contains whether project folder contains .settings or .project
+	 * 
+	 * @param projectFile
+	 * @return
+	 */
+	private final boolean containsProjectFiles(File projectFile) {
+		File[] files = projectFile.listFiles();
+		if (files != null) {
+			for (File f : files) {
+				if (f.isDirectory() && f.getName().equalsIgnoreCase(".settings")) {
+					return true;
+				} else if (f.isFile() && f.getName().equalsIgnoreCase(".project")) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**

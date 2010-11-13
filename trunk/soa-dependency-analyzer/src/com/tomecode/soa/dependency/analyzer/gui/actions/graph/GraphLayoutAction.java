@@ -1,4 +1,4 @@
-package com.tomecode.soa.dependency.analyzer.gui.actions;
+package com.tomecode.soa.dependency.analyzer.gui.actions.graph;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.zest.layouts.algorithms.DirectedGraphLayoutAlgorithm;
@@ -11,7 +11,7 @@ import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.VerticalLayoutAlgorithm;
 
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
-import com.tomecode.soa.dependency.analyzer.view.VisualGraphView;
+import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
 
 /**
  * Action for change graph layout algorithm
@@ -35,7 +35,7 @@ public final class GraphLayoutAction extends Action {
 	public final void run() {
 		VisualGraphView visualGraphView = GuiUtils.getVisualGraphView();
 		if (visualGraphView != null) {
-			if (layoutActionType == LayoutActionType.SRING_LAYOUT) {
+			if (layoutActionType == LayoutActionType.SPRING_LAYOUT) {
 				visualGraphView.changeLayout(new SpringLayoutAlgorithm(1), layoutActionType);
 			} else if (layoutActionType == LayoutActionType.TREE_LAYOUT) {
 				visualGraphView.changeLayout(new TreeLayoutAlgorithm(1), layoutActionType);
@@ -71,18 +71,48 @@ public final class GraphLayoutAction extends Action {
 	 * 
 	 */
 	public enum LayoutActionType {
-		SRING_LAYOUT("Spring Layout"), TREE_LAYOUT("Tree Layout"), VERTICAL_LAYOUT("Vertical Layout"),
+		/**
+		 * Spring layout
+		 */
+		SPRING_LAYOUT("Spring Layout"),
 
+		/**
+		 * Tree layout
+		 */
+		TREE_LAYOUT("Tree Layout"),
+		/**
+		 * Vertical layout
+		 */
+		VERTICAL_LAYOUT("Vertical Layout"),
+		/**
+		 * Radial layout
+		 */
 		RADIAL_LAYOUT("Radial Layout"),
-
+		/**
+		 * Horizontal tree layout
+		 */
 		HORIZONTAL_TREE_LAYOUT("Horizontal Tree Layout"),
-
+		/**
+		 * Horizontal Layout
+		 */
 		HORIZONTAL_LAYOUT("Horizontal Layout"),
-
-		GRID_LAYOUT("Grid Layout"), DIRECTED_LAYOUT("Directed Layout");
+		/**
+		 * Grid layout
+		 */
+		GRID_LAYOUT("Grid Layout"),
+		/**
+		 * Directed layout
+		 */
+		DIRECTED_LAYOUT("Directed Layout");
 
 		private final String title;
 
+		/**
+		 * Constructor
+		 * 
+		 * @param title
+		 *            menu title
+		 */
 		private LayoutActionType(String title) {
 			this.title = title;
 		}

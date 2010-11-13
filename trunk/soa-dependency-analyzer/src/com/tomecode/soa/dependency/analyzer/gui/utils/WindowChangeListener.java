@@ -41,7 +41,11 @@ public final class WindowChangeListener {
 	 */
 	public final void hideFromView(String id) {
 		CloseViewListener listener = actionsTable.get(id);
-		listener.userClose();
+		if (listener != null) {
+			listener.userClose();
+		} else {
+			toString();
+		}
 	}
 
 }

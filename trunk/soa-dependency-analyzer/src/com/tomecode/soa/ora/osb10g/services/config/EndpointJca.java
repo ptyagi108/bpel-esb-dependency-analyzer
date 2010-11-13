@@ -10,18 +10,8 @@ package com.tomecode.soa.ora.osb10g.services.config;
  */
 public final class EndpointJca extends EndpointConfig {
 
-	private final String jcaUri;
-
-	public EndpointJca(String jcaUri) {
+	public EndpointJca() {
 		super(ProviderProtocol.JCA);
-		this.jcaUri = jcaUri;
-	}
-
-	/**
-	 * @return the jcaUri
-	 */
-	public final String getJcaUri() {
-		return jcaUri;
 	}
 
 }

@@ -9,11 +9,12 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
-import com.tomecode.soa.dependency.analyzer.gui.actions.ExportGraphToImageAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.OpenWorkspaceAction;
+import com.tomecode.soa.dependency.analyzer.gui.actions.graph.ExportGraphToImageAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.view.OpenNewVisualViewAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.view.ShowBpelProcessStructureViewAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.view.ShowProjectFilesViewAction;
+import com.tomecode.soa.dependency.analyzer.gui.actions.view.ShowProjectServicesViewAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.view.ShowPropertiesViewAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.view.ShowServiceBusStructureViewAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.view.ShowServiceOperationDepViewAction;
@@ -36,6 +37,7 @@ public final class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	private OpenWorkspaceAction openWorkspaceAction;
 	private ShowPropertiesViewAction openPropertiesViewAction;
 	private ShowProjectFilesViewAction showProjectFilesViewAction;
+	private ShowProjectServicesViewAction projectServicesViewAction;
 	private ShowBpelProcessStructureViewAction showBpelProcessStructureViewAction;
 	private ShowServiceOperationDepViewAction showServiceOperationDepViewAction;
 	private ShowServiceBusStructureViewAction serviceBusStructureViewAction;
@@ -49,10 +51,12 @@ public final class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		newVisualViewAction = new OpenNewVisualViewAction();
 		showWorkspaceNavigatorAction = new ShowWorkspaceNavigatorAction();
 		showProjectFilesViewAction = new ShowProjectFilesViewAction();
+		projectServicesViewAction = new ShowProjectServicesViewAction();
 		openPropertiesViewAction = new ShowPropertiesViewAction();
 		showBpelProcessStructureViewAction = new ShowBpelProcessStructureViewAction();
 		showServiceOperationDepViewAction = new ShowServiceOperationDepViewAction();
 		serviceBusStructureViewAction = new ShowServiceBusStructureViewAction();
+
 	}
 
 	protected final void fillMenuBar(IMenuManager menuBar) {
@@ -68,10 +72,14 @@ public final class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		viewMenu.add(newVisualViewAction);
 		viewMenu.add(new Separator());
 		viewMenu.add(showWorkspaceNavigatorAction);
-		viewMenu.add(openPropertiesViewAction);
+		viewMenu.add(new Separator());
 		viewMenu.add(showProjectFilesViewAction);
-		viewMenu.add(showBpelProcessStructureViewAction);
+		viewMenu.add(projectServicesViewAction);
+		viewMenu.add(new Separator());
 		viewMenu.add(showServiceOperationDepViewAction);
+		viewMenu.add(new Separator());
+		viewMenu.add(openPropertiesViewAction);
+		viewMenu.add(showBpelProcessStructureViewAction);
 		viewMenu.add(serviceBusStructureViewAction);
 
 		MenuManager toolMenu = new MenuManager("&Tools", "Tools");

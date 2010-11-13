@@ -2,11 +2,11 @@ package com.tomecode.soa.util;
 
 import java.io.File;
 
-import com.tomecode.soa.dependency.analyzer.tree.ProjectStructureNavigator;
+import com.tomecode.soa.dependency.analyzer.tree.ProjectFilesNavigator;
 import com.tomecode.soa.project.Project;
 
 /**
- * Helper node for {@link ProjectStructureNavigator}
+ * Helper node for {@link ProjectFilesNavigator}
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com

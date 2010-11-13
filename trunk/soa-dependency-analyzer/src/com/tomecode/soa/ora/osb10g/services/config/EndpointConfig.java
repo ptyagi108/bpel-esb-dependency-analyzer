@@ -1,5 +1,8 @@
 package com.tomecode.soa.ora.osb10g.services.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.tomecode.soa.ora.osb10g.services.BusinessService;
 import com.tomecode.soa.ora.osb10g.services.Proxy;
 
@@ -15,6 +18,8 @@ import com.tomecode.soa.ora.osb10g.services.Proxy;
 public abstract class EndpointConfig {
 
 	protected final ProviderProtocol protocol;
+
+	protected final List<String> uri = new ArrayList<String>();
 
 	/**
 	 * 
@@ -33,6 +38,10 @@ public abstract class EndpointConfig {
 		return protocol;
 	}
 
+	public final void putAllURI(List<String> uris) {
+		this.uri.addAll(uris);
+	}
+
 	/**
 	 * provider protocols
 	 * 
@@ -40,6 +49,13 @@ public abstract class EndpointConfig {
 	 * 
 	 */
 	public enum ProviderProtocol {
-		HTTP, JCA, JMS, LOCAL, SB, WS;
+		/**
+		 * EJB transport
+		 */
+		EJB, HTTP, JCA, JMS, LOCAL, SB, WS,
+		/**
+		 * file transport
+		 */
+		FILE, DSP, FTP, JPD, MAIL, MQ, SFTP, BPEL_10G;
 	}
 }

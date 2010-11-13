@@ -10,18 +10,8 @@ package com.tomecode.soa.ora.osb10g.services.config;
  */
 public final class EndpointJms extends EndpointConfig {
 
-	private String jmsUri;
-
-	public EndpointJms(String jmsUri) {
+	public EndpointJms() {
 		super(ProviderProtocol.JMS);
-		this.jmsUri = jmsUri;
-	}
-
-	/**
-	 * @return the jmsUri
-	 */
-	public final String getJmsUri() {
-		return jmsUri;
 	}
 
 }

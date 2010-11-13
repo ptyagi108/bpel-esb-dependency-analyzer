@@ -1,4 +1,4 @@
-package com.tomecode.soa.dependency.analyzer.view;
+package com.tomecode.soa.dependency.analyzer.view.graph;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,12 +6,12 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.ActionContributionItem;
-import org.eclipse.jface.action.IContributionItem;
-import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -20,8 +20,12 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.internal.ViewSite;
-import org.eclipse.ui.part.ViewPart;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IPersistableElement;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.part.EditorPart;
 import org.eclipse.zest.core.viewers.GraphViewer;
 import org.eclipse.zest.core.widgets.Graph;
 import org.eclipse.zest.core.widgets.GraphConnection;
@@ -29,18 +33,21 @@ import org.eclipse.zest.core.widgets.GraphNode;
 import org.eclipse.zest.layouts.algorithms.AbstractLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
 
-import com.tomecode.soa.dependency.analyzer.gui.actions.ExportGraphToImageAction;
-import com.tomecode.soa.dependency.analyzer.gui.actions.GraphExpanderAction;
-import com.tomecode.soa.dependency.analyzer.gui.actions.GraphLayoutAction;
-import com.tomecode.soa.dependency.analyzer.gui.actions.RefreshGraphLayout;
-import com.tomecode.soa.dependency.analyzer.gui.actions.GraphExpanderAction.ExpandChangeListener;
-import com.tomecode.soa.dependency.analyzer.gui.actions.GraphLayoutAction.LayoutActionType;
+import com.tomecode.soa.dependency.analyzer.gui.actions.graph.ExportGraphToImageAction;
+import com.tomecode.soa.dependency.analyzer.gui.actions.graph.GraphExpanderAction;
+import com.tomecode.soa.dependency.analyzer.gui.actions.graph.GraphLayoutAction;
+import com.tomecode.soa.dependency.analyzer.gui.actions.graph.OpenFlowGraphAction;
+import com.tomecode.soa.dependency.analyzer.gui.actions.graph.OpenVisualGraphAction;
+import com.tomecode.soa.dependency.analyzer.gui.actions.graph.RefreshGraphLayout;
+import com.tomecode.soa.dependency.analyzer.gui.actions.graph.GraphExpanderAction.ExpandChangeListener;
+import com.tomecode.soa.dependency.analyzer.gui.actions.graph.GraphLayoutAction.LayoutActionType;
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.BpelProcessStructureNavigator;
-import com.tomecode.soa.dependency.analyzer.tree.ProjectStructureNavigator;
+import com.tomecode.soa.dependency.analyzer.tree.ProjectFilesNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceBusStructureNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceOperationsDepNavigator;
+import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
 import com.tomecode.soa.dependency.analyzer.view.visual.ZoomHelper;
 import com.tomecode.soa.dependency.analyzer.view.visual.ZoomHelper.ZoomAction;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
@@ -51,6 +58,7 @@ import com.tomecode.soa.openesb.workspace.OpenEsbWorkspace;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.osb10g.services.UnknownFile;
+import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependencies;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gMultiWorkspace;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gWorkspace;
@@ -69,14 +77,15 @@ import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 
 /**
  * 
- * View for Workspace
+ * Visualizer dependencies between services/process
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer
  * 
  */
-public final class VisualGraphView extends ViewPart {
+public final class VisualGraphView extends EditorPart implements IEditorInput {// ViewPart
+																				// {
 
 	public static final String ID = "view.visualgraph";
 
@@ -105,13 +114,27 @@ public final class VisualGraphView extends ViewPart {
 	 */
 	private final List<GraphConnection> graphConnections;
 
+	/**
+	 * open new {@link VisualGraphView} from selected node in graph
+	 */
+	private final OpenVisualGraphAction openVisualGraphAction;
+	/**
+	 * open new {@link FlowGraphView} from selected node in graph
+	 */
+	private final OpenFlowGraphAction openFlowGraphAction;
+
 	public VisualGraphView() {
+		super();
 		setTitleToolTip("Dependency Graph");
-		setTitleImage(ImageFactory.GRAPH_VIEW);
+		setTitleImage(ImageFactory.VISUAL_GRAPH_VIEW);
 		this.graphNodes = new ArrayList<GraphNode>();
 		this.graphConnections = new ArrayList<GraphConnection>();
 		this.expandedInGraphObjects = new ArrayList<Object>();
 		this.isExpandInGraph = true;
+		this.openVisualGraphAction = new OpenVisualGraphAction();
+		this.openVisualGraphAction.setEnabled(false);
+		this.openFlowGraphAction = new OpenFlowGraphAction();
+		this.openFlowGraphAction.setEnabled(false);
 	}
 
 	@Override
@@ -131,7 +154,11 @@ public final class VisualGraphView extends ViewPart {
 				if (!list.isEmpty()) {
 					showPropertiesAboutSelectedNode(list.get(0));
 				} else {
-					GuiUtils.getServiceBusStructureNavigator().show(null);
+					ServiceBusStructureNavigator serviceBusStructureNavigator = GuiUtils.getServiceBusStructureNavigator();
+					if (serviceBusStructureNavigator != null) {
+						GuiUtils.getServiceBusStructureNavigator().show(null);
+					}
+					enableOpenGraphActions(null);
 				}
 			}
 		});
@@ -205,68 +232,62 @@ public final class VisualGraphView extends ViewPart {
 	 * create menu for view and create context menu
 	 */
 	private final void initMenus(final Graph graph) {
-		// create menu
-		IMenuManager menuManager = getViewSite().getActionBars().getMenuManager();
-		RefreshGraphLayout refreshGraphLayout = new RefreshGraphLayout(graphViewer.getGraphControl());
 
-		final GraphLayoutAction defaultAction = new GraphLayoutAction(LayoutActionType.SRING_LAYOUT);
-		defaultAction.setChecked(true);
-		menuManager.add(defaultAction);
-		final GraphLayoutAction actionTreeLyout = new GraphLayoutAction(LayoutActionType.TREE_LAYOUT);
-		menuManager.add(actionTreeLyout);
-		final GraphLayoutAction actionVerticalLayout = new GraphLayoutAction(LayoutActionType.VERTICAL_LAYOUT);
-		menuManager.add(actionVerticalLayout);
-		final GraphLayoutAction actionRadialLayout = new GraphLayoutAction(LayoutActionType.RADIAL_LAYOUT);
-		menuManager.add(actionRadialLayout);
-		final GraphLayoutAction actionHorizontalTreeLayout = new GraphLayoutAction(LayoutActionType.HORIZONTAL_TREE_LAYOUT);
-		menuManager.add(actionHorizontalTreeLayout);
-		final GraphLayoutAction actionHorizontalLayout = new GraphLayoutAction(LayoutActionType.HORIZONTAL_LAYOUT);
-		menuManager.add(actionHorizontalLayout);
-		final GraphLayoutAction actionGridLayout = new GraphLayoutAction(LayoutActionType.GRID_LAYOUT);
-		menuManager.add(actionGridLayout);
-		final GraphLayoutAction actionDirectedLayout = new GraphLayoutAction(LayoutActionType.DIRECTED_LAYOUT);
-		menuManager.add(actionDirectedLayout);
-
-		menuManager.add(new Separator());
-		ExportGraphToImageAction exportGraphToImageAction = new ExportGraphToImageAction(graph);
-		menuManager.add(exportGraphToImageAction);
-		menuManager.add(new Separator());
-		menuManager.add(refreshGraphLayout);
-
-		MenuManager popupMenuManager = new MenuManager("#PopupMenu");
+		Separator separator = new Separator();
+		MenuManager popupMenuManager = new MenuManager("#PopupMenu#VisualGraph");
 		popupMenuManager.createContextMenu(graph);
 
-		popupMenuManager.add(exportGraphToImageAction);
+		popupMenuManager.add(openVisualGraphAction);
+		popupMenuManager.add(openFlowGraphAction);
+		popupMenuManager.add(separator);
 
-		popupMenuManager.add(new Separator());
-		popupMenuManager.add(defaultAction);
-		popupMenuManager.add(actionTreeLyout);
-		popupMenuManager.add(actionVerticalLayout);
-		popupMenuManager.add(actionRadialLayout);
-		popupMenuManager.add(actionHorizontalTreeLayout);
-		popupMenuManager.add(actionHorizontalLayout);
-		popupMenuManager.add(actionGridLayout);
-		popupMenuManager.add(actionDirectedLayout);
-		popupMenuManager.add(new Separator());
+		GraphLayoutAction defaultAction = new GraphLayoutAction(LayoutActionType.SPRING_LAYOUT);
+		defaultAction.setChecked(true);
+		GraphLayoutAction actionTreeLyout = new GraphLayoutAction(LayoutActionType.TREE_LAYOUT);
+		GraphLayoutAction actionVerticalLayout = new GraphLayoutAction(LayoutActionType.VERTICAL_LAYOUT);
+		GraphLayoutAction actionRadialLayout = new GraphLayoutAction(LayoutActionType.RADIAL_LAYOUT);
+		GraphLayoutAction actionHorizontalTreeLayout = new GraphLayoutAction(LayoutActionType.HORIZONTAL_TREE_LAYOUT);
+		GraphLayoutAction actionHorizontalLayout = new GraphLayoutAction(LayoutActionType.HORIZONTAL_LAYOUT);
+		GraphLayoutAction actionGridLayout = new GraphLayoutAction(LayoutActionType.GRID_LAYOUT);
+		GraphLayoutAction actionDirectedLayout = new GraphLayoutAction(LayoutActionType.DIRECTED_LAYOUT);
 
+		MenuManager menuLayout = new MenuManager("Layout");
+		menuLayout.add(separator);
+		menuLayout.add(defaultAction);
+		menuLayout.add(actionTreeLyout);
+		menuLayout.add(actionVerticalLayout);
+		menuLayout.add(actionRadialLayout);
+		menuLayout.add(actionHorizontalTreeLayout);
+		menuLayout.add(actionHorizontalLayout);
+		menuLayout.add(actionGridLayout);
+		menuLayout.add(actionDirectedLayout);
+		menuLayout.add(separator);
+		popupMenuManager.add(menuLayout);
+		popupMenuManager.add(separator);
+
+		RefreshGraphLayout refreshGraphLayout = new RefreshGraphLayout(graphViewer.getGraphControl());
 		popupMenuManager.add(refreshGraphLayout);
-		menuManager.add(new Separator());
+		popupMenuManager.add(separator);
+		ExportGraphToImageAction exportGraphToImageAction = new ExportGraphToImageAction(graph);
+		popupMenuManager.add(exportGraphToImageAction);
+		popupMenuManager.add(separator);
 
+		MenuManager menuZoom = new MenuManager("Zoom");
 		ZoomHelper zoomManager = new ZoomHelper(graph);
-
 		Vector<Double> v = new Vector<Double>(zoomManager.getZoomActions().keySet());
 		Collections.sort(v);
 
 		for (Enumeration<Double> e = v.elements(); e.hasMoreElements();) {
 			ZoomAction zoomAction = zoomManager.getZoomActions().get(e.nextElement());
-			menuManager.add(zoomAction);
-			popupMenuManager.add(zoomAction);
+			menuZoom.add(zoomAction);
 		}
-
+		popupMenuManager.add(menuZoom);
 		// create popupmenu
 		graph.setMenu(popupMenuManager.getMenu());
 
-		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+		// IToolBarManager toolBarManager =
+		// getViewSite().getActionBars().getToolBarManager();
+		IToolBarManager toolBarManager = getEditorSite().getActionBars().getToolBarManager();
 		toolBarManager.add(refreshGraphLayout);
 
 		GraphExpanderAction graphExpanderAction = new GraphExpanderAction();
@@ -287,6 +308,7 @@ public final class VisualGraphView extends ViewPart {
 		toolBarManager.add(zoomManager.getZoomInAction());
 		toolBarManager.add(zoomManager.getZoomOutAction());
 		toolBarManager.add(zoomManager.getZoomResetAction());
+
 	}
 
 	/**
@@ -299,15 +321,20 @@ public final class VisualGraphView extends ViewPart {
 			GraphConnection connection = (GraphConnection) object;
 			GuiUtils.getPropertiesView().show(connection.getData());
 			if (connection.getData() != null) {
-				ProjectStructureNavigator projectStructureNavigator = GuiUtils.getProjectStructureNavigator();
+				ProjectFilesNavigator projectStructureNavigator = GuiUtils.getProjectStructureNavigator();
 				if (projectStructureNavigator != null) {
 					projectStructureNavigator.showProjectFiles(connection.getData());
 				}
 			}
+			ServiceBusStructureNavigator serviceBusStructureNavigator = GuiUtils.getServiceBusStructureNavigator();
+			if (serviceBusStructureNavigator != null) {
+				serviceBusStructureNavigator.show(connection.getData());
+			}
 
-			GuiUtils.getServiceBusStructureNavigator().show(connection.getData());
 		} else if (object instanceof GraphNode) {
 			GraphNode graphNode = (GraphNode) object;
+
+			enableOpenGraphActions(graphNode.getData());
 
 			PropertiesView propertiesView = GuiUtils.getPropertiesView();
 			if (propertiesView != null) {
@@ -325,27 +352,38 @@ public final class VisualGraphView extends ViewPart {
 			if (serviceOperationsDepNavigator != null) {
 				serviceOperationsDepNavigator.show(graphNode.getData());
 			}
-			ProjectStructureNavigator projectStructureNavigator = GuiUtils.getProjectStructureNavigator();
+			ProjectFilesNavigator projectStructureNavigator = GuiUtils.getProjectStructureNavigator();
 			if (projectStructureNavigator != null) {
 				projectStructureNavigator.showProjectFiles(graphNode.getData());
 			}
 		}
+
 	}
 
-	@SuppressWarnings("restriction")
+	/**
+	 * enable or disable {@link #openVisualGraphAction} or
+	 * {@link #openFlowGraphAction}
+	 * 
+	 * @param data
+	 */
+	private final void enableOpenGraphActions(Object data) {
+		openVisualGraphAction.setData(data);
+		openFlowGraphAction.setData(data);
+	}
+
 	@Override
 	public final void setFocus() {
-		ViewSite site = (ViewSite) getSite();
-		if (site.getSecondaryId() == null) {
-			GuiUtils.setActivateViewId(0);
-		} else {
-			int i = Integer.parseInt(site.getSecondaryId());
-			GuiUtils.setActivateViewId(i);
-		}
+		// EditorSite site = (EditorSite) getSite();
+		// if (site.getId() == null) {
+		// GuiUtils.setActivateViewId(0);
+		// } else {
+		// int i = Integer.parseInt(site.getId());
+		// GuiUtils.setActivateViewId(i);
+		// }
 	}
 
 	public final void dispose() {
-		GuiUtils.dropInstanceVisualGraph();
+		// GuiUtils.dropActiveVisaulGraph();
 		super.dispose();
 	}
 
@@ -355,7 +393,7 @@ public final class VisualGraphView extends ViewPart {
 	 * @param source
 	 */
 
-	public final void showGraph(Object source, boolean addToBrowser) {
+	public final void showGraph(Object source) {
 
 		boolean backup = isExpandInGraph;
 		isExpandInGraph = false;
@@ -377,10 +415,30 @@ public final class VisualGraphView extends ViewPart {
 		} else if (source instanceof BpelProcess) {
 			BpelProcess bpelProcess = (BpelProcess) source;
 			createProcessAndProcessGraph(bpelProcess, null);
+		} else if (source instanceof Service) {
+			applyDependencies((Service) source, null);
 		}
-		graphViewer.getGraphControl().applyLayout();
 
+		graphViewer.getGraphControl().applyLayout();
 		isExpandInGraph = backup;
+	}
+
+	private final void applyDependencies(Service sourceService, GraphNode existsSource) {
+
+		GraphNode source = existsSource == null ? createNode(sourceService.getName(), sourceService.getImage(), sourceService) : existsSource;
+		ServiceDependencies serviceDependencies = sourceService.getServiceDependencies();
+		for (ServiceDependency serviceDependency : serviceDependencies.getDependnecies()) {
+
+			for (Service service : serviceDependency.getServices()) {
+				GraphNode destination = findDataInNodes(service);
+				if (destination == null && !(service instanceof UnknownFile)) {
+					destination = createNode(service.getName(), service.getImage(), service);
+					createConnection(source, destination, null, false);
+				}
+
+			}
+
+		}
 	}
 
 	/**
@@ -811,15 +869,25 @@ public final class VisualGraphView extends ViewPart {
 	 * // * change layout algorithm {@link #graph}
 	 */
 	public final void changeLayout(AbstractLayoutAlgorithm layoutAlgorithm, LayoutActionType type) {
-		graphViewer.getGraphControl().setLayoutAlgorithm(layoutAlgorithm, true);
-		IContributionItem[] items = getViewSite().getActionBars().getMenuManager().getItems();
-		for (IContributionItem item : items) {
-			GraphLayoutAction action = (GraphLayoutAction) ((ActionContributionItem) item).getAction();
-			if (action.getType() != type) {
-				action.setChecked(false);
-			} else {
-				action.setChecked(true);
+		Graph graph = graphViewer.getGraphControl();
+		graph.setLayoutAlgorithm(layoutAlgorithm, true);
+
+		MenuItem[] menuItems = graph.getMenu().getItems();
+		for (MenuItem item : menuItems) {
+			if ("Layout".equals(item.getText())) {
+				MenuItem[] menuItemsLayouts = item.getMenu().getItems();
+				for (MenuItem itemLayout : menuItemsLayouts) {
+					ActionContributionItem actionContributionItem = (ActionContributionItem) itemLayout.getData();
+					GraphLayoutAction action = (GraphLayoutAction) actionContributionItem.getAction();
+					if (action.getType() != type) {
+						action.setChecked(false);
+					} else {
+						action.setChecked(true);
+					}
+				}
+				break;
 			}
+
 		}
 	}
 
@@ -906,5 +974,68 @@ public final class VisualGraphView extends ViewPart {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void doSave(IProgressMonitor arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void doSaveAs() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public final void init(IEditorSite site, IEditorInput input) throws PartInitException {
+		setSite(site);
+		setInput(input);
+
+		// getCommandStack().addCommandStackListener(this);
+		// getSite().getWorkbenchWindow().getSelectionService()
+		// .addSelectionListener(this);
+		// initializeActionRegistry();
+	}
+
+	@Override
+	public boolean isDirty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isSaveAsAllowed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean exists() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public ImageDescriptor getImageDescriptor() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getName() {
+		return "Dependency ";
+	}
+
+	@Override
+	public IPersistableElement getPersistable() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public final String getToolTipText() {
+		return "Dependency view";
 	}
 }

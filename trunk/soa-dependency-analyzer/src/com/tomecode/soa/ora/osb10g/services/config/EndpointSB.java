@@ -10,18 +10,8 @@ package com.tomecode.soa.ora.osb10g.services.config;
  */
 public final class EndpointSB extends EndpointConfig {
 
-	private String serviceName;
-
-	public EndpointSB(String serviceName) {
+	public EndpointSB() {
 		super(ProviderProtocol.SB);
-		this.serviceName = serviceName;
-	}
-
-	/**
-	 * @return the serviceName
-	 */
-	public final String getServiceName() {
-		return serviceName;
 	}
 
 }

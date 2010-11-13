@@ -8,14 +8,14 @@ import org.eclipse.swt.graphics.Image;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
- * Label provider for {@link ProjectStructureNavigator}
+ * Label provider for {@link ProjectFilesNavigator}
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class ProjectStructureLabelProvider extends LabelProvider {
+public final class ProjectFilesLabelProvider extends LabelProvider {
 
 	private File root;
 

@@ -1,4 +1,4 @@
-package com.tomecode.soa.dependency.analyzer.gui.actions;
+package com.tomecode.soa.dependency.analyzer.gui.actions.graph;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.zest.core.widgets.Graph;

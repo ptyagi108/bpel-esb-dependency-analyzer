@@ -6,7 +6,7 @@ import java.util.List;
 import org.eclipse.jface.action.Action;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
-import com.tomecode.soa.dependency.analyzer.view.VisualGraphView;
+import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
 
 /**
  * 
@@ -71,7 +71,7 @@ public final class BrowserManager {
 
 		public final void run() {
 			if (currentIndex == 0) {
-				visualGraphView.showGraph(objects.get(currentIndex--), false);
+				visualGraphView.showGraph(objects.get(currentIndex--));
 				setEnabled(false);
 			} else {
 				setEnabled(true);
@@ -81,7 +81,7 @@ public final class BrowserManager {
 				} else {
 					currentIndex--;
 				}
-				visualGraphView.showGraph(objects.get(currentIndex), false);
+				visualGraphView.showGraph(objects.get(currentIndex));
 			}
 
 		}
@@ -104,11 +104,11 @@ public final class BrowserManager {
 
 		public final void run() {
 			if (currentIndex >= objects.size() - 1) {
-				visualGraphView.showGraph(objects.get(currentIndex), false);
+				visualGraphView.showGraph(objects.get(currentIndex));
 				setEnabled(false);
 			} else {
 				currentIndex++;
-				visualGraphView.showGraph(objects.get(currentIndex), false);
+				visualGraphView.showGraph(objects.get(currentIndex));
 				setEnabled(true);
 			}
 

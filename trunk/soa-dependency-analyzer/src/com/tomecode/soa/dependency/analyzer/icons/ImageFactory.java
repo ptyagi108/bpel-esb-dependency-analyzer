@@ -42,8 +42,11 @@ public final class ImageFactory {
 	public static final ImageDescriptor dependency_by_operation_tree = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/dependencyByOperationTree.png");
 	public static final Image DEPENDNECY_BY_OPERATION_TREE = dependency_by_operation_tree.createImage();
 
-	public static final ImageDescriptor graph_view = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/graphView.png");
-	public static final Image GRAPH_VIEW = graph_view.createImage();
+	public static final ImageDescriptor visual_graph_view = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/graphView.png");
+	public static final Image VISUAL_GRAPH_VIEW = visual_graph_view.createImage();
+
+	public static final ImageDescriptor flow_graph_view = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/flowView.png");
+	public static final Image FLOW_GRAPH_VIEW = flow_graph_view.createImage();
 
 	public static final ImageDescriptor workspace_navigator = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/workspaceNavigator.png");
 	public static final Image WORKSPACE_NAVIGATOR = workspace_navigator.createImage();

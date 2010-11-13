@@ -6,11 +6,11 @@ import org.eclipse.ui.PlatformUI;
 import com.tomecode.soa.dependency.analyzer.gui.event.CloseViewListener;
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
-import com.tomecode.soa.dependency.analyzer.tree.ProjectStructureNavigator;
+import com.tomecode.soa.dependency.analyzer.tree.ProjectFilesNavigator;
 
 /**
  * 
- * Show view: {@link ProjectStructureNavigator}
+ * Show view: {@link ProjectFilesNavigator}
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
@@ -24,14 +24,14 @@ public final class ShowProjectFilesViewAction extends Action implements CloseVie
 		setText("Show Project Files View");
 		setToolTipText("Show Project Files View");
 		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor("IMG_DEF_VIEW"));
-		WindowChangeListener.getInstance().register(ProjectStructureNavigator.ID, this);
+		WindowChangeListener.getInstance().register(ProjectFilesNavigator.ID, this);
 	}
 
 	public final void run() {
 		if (isChecked()) {
-			GuiUtils.showView(ProjectStructureNavigator.ID);
+			GuiUtils.showView(ProjectFilesNavigator.ID);
 		} else {
-			GuiUtils.hideView(ProjectStructureNavigator.ID);
+			GuiUtils.hideView(ProjectFilesNavigator.ID);
 		}
 
 	}
