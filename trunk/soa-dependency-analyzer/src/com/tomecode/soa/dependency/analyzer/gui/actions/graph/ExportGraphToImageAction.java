@@ -58,8 +58,10 @@ public final class ExportGraphToImageAction extends Action {
 					} else {
 						IViewPart viewPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(VisualGraphView.ID);
 						if (viewPart != null) {
-						//	VisualGraphView graphView = (VisualGraphView) viewPart;
-							//ImageExporter.export(graphView.getGraph(), wizard.getFile(), wizard.getFormat());
+							// VisualGraphView graphView = (VisualGraphView)
+							// viewPart;
+							// ImageExporter.export(graphView.getGraph(),
+							// wizard.getFile(), wizard.getFormat());
 						}
 					}
 				} catch (Exception e) {

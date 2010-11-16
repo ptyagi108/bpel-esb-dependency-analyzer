@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.OsbActivityDependency;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependencies;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.ServiceDependencyType;
@@ -17,7 +18,7 @@ import com.tomecode.soa.project.Project;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public abstract class Service {
+public abstract class Service implements ImageFace{
 
 	/**
 	 * PROXY service file

@@ -51,24 +51,18 @@
             allowMultiple="true"
             class="com.tomecode.soa.dependency.analyzer.tree.ServiceOperationsDepNavigator"
             id="view.serviceoperationsdepnavigator">
-    </view>
- 	<!--view 
-            name="Dependency Graph"
-            allowMultiple="true"
-            class="com.tomecode.soa.dependency.analyzer.view.VisualGraphView"
-            id="view.visualgraph">
-    </view-->
- 	<!--view 
-            name="Flow Graph"
-            allowMultiple="true"
-            class="com.tomecode.soa.dependency.analyzer.view.FlowGraphView"
-            id="view.visualgraph">
-    </view-->    
+    </view>   
  	<view 
             name="Properties"
             allowMultiple="true"
             class="com.tomecode.soa.dependency.analyzer.view.PropertiesView"
             id="view.properties">
+    </view>
+ 	<view 
+            name="Properties about OSB 10g Adapter"
+            allowMultiple="true"
+            class="com.tomecode.soa.dependency.analyzer.view.PropertiesViewOsbAdapter"
+            id="view.properties.osb.adapter">
     </view>
      	<view 
             name="Project Files"

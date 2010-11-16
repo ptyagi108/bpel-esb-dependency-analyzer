@@ -2,8 +2,7 @@ package com.tomecode.soa.project;
 
 import java.io.File;
 
-import org.eclipse.swt.graphics.Image;
-
+import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
@@ -16,7 +15,7 @@ import com.tomecode.soa.workspace.Workspace;
  * 
  */
 
-public interface Project {
+public interface Project extends ImageFace {
 
 	/**
 	 * project name
@@ -45,12 +44,5 @@ public interface Project {
 	 * @return
 	 */
 	Workspace getWorkpsace();
-
-	/**
-	 * image for GUI
-	 * 
-	 * @return
-	 */
-	Image getImage();
 
 }

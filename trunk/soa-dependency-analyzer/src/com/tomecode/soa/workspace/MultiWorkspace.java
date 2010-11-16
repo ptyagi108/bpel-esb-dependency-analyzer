@@ -2,6 +2,7 @@ package com.tomecode.soa.workspace;
 
 import java.io.File;
 
+import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 
 /**
@@ -14,7 +15,7 @@ import com.tomecode.soa.workspace.Workspace.WorkspaceType;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public interface MultiWorkspace {
+public interface MultiWorkspace extends ImageFace {
 
 	String getName();
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
 import com.tomecode.soa.ora.osb10g.services.Service;
 
@@ -17,7 +18,7 @@ import com.tomecode.soa.ora.osb10g.services.Service;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class OsbActivityDependency {
+public final class OsbActivityDependency implements ImageFace {
 
 	private Service parentService;
 

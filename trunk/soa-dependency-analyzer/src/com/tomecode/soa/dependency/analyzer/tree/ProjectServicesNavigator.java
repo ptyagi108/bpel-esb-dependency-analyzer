@@ -7,8 +7,10 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
@@ -17,6 +19,7 @@ import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.gui.utils.HideView;
 import com.tomecode.soa.dependency.analyzer.gui.utils.PopupMenuUtils;
 import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
+import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
 import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
 import com.tomecode.soa.project.Project;
@@ -121,6 +124,25 @@ public final class ProjectServicesNavigator extends ViewPart implements HideView
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(null, "Error", "oops2 error:" + e.getMessage());
+		}
+	}
+
+	/**
+	 * 
+	 * {@link LabelProvider} for {@link ProjectServicesNavigator}
+	 * 
+	 * @author Tomas Frastia
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
+	 * 
+	 */
+	final class ProjectServicesLabelProvider extends LabelProvider {
+
+		public final Image getImage(Object element) {
+			if (element instanceof ImageFace) {
+				return ((ImageFace) element).getImage();
+			}
+			return null;
 		}
 	}
 

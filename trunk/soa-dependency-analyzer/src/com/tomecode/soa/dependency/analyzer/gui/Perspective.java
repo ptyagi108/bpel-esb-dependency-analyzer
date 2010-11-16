@@ -11,6 +11,7 @@ import com.tomecode.soa.dependency.analyzer.tree.ServiceBusStructureNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceOperationsDepNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.WorkspacesNavigator;
 import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
+import com.tomecode.soa.dependency.analyzer.view.PropertiesViewOsbAdapter;
 import com.tomecode.soa.dependency.analyzer.view.graph.FlowGraphView;
 import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
 
@@ -40,7 +41,7 @@ public final class Perspective implements IPerspectiveFactory {
 		graphFolder.addPlaceholder(VisualGraphView.ID + ":*");
 		graphFolder.addView(VisualGraphView.ID);
 		graphFolder.addView(FlowGraphView.ID);
-		
+
 		IFolderLayout operationsFolder = layout.createFolder("operations", IPageLayout.LEFT | IPageLayout.BOTTOM, 0.50f, editorArea);
 		operationsFolder.addView(ServiceOperationsDepNavigator.ID);
 
@@ -48,6 +49,6 @@ public final class Perspective implements IPerspectiveFactory {
 		secondFolder.addView(PropertiesView.ID);
 		secondFolder.addView(BpelProcessStructureNavigator.ID);
 		secondFolder.addView(ServiceBusStructureNavigator.ID);
-
+		secondFolder.addView(PropertiesViewOsbAdapter.ID);
 	}
 }

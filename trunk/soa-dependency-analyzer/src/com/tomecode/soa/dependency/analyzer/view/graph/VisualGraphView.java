@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Vector;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
@@ -33,14 +34,15 @@ import org.eclipse.zest.core.widgets.GraphNode;
 import org.eclipse.zest.layouts.algorithms.AbstractLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
 
+import com.tomecode.soa.dependency.analyzer.gui.actions.graph.DeleteSelectedNodeInGraph;
 import com.tomecode.soa.dependency.analyzer.gui.actions.graph.ExportGraphToImageAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.graph.GraphExpanderAction;
+import com.tomecode.soa.dependency.analyzer.gui.actions.graph.GraphExpanderAction.ExpandChangeListener;
 import com.tomecode.soa.dependency.analyzer.gui.actions.graph.GraphLayoutAction;
+import com.tomecode.soa.dependency.analyzer.gui.actions.graph.GraphLayoutAction.LayoutActionType;
 import com.tomecode.soa.dependency.analyzer.gui.actions.graph.OpenFlowGraphAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.graph.OpenVisualGraphAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.graph.RefreshGraphLayout;
-import com.tomecode.soa.dependency.analyzer.gui.actions.graph.GraphExpanderAction.ExpandChangeListener;
-import com.tomecode.soa.dependency.analyzer.gui.actions.graph.GraphLayoutAction.LayoutActionType;
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.BpelProcessStructureNavigator;
@@ -48,6 +50,7 @@ import com.tomecode.soa.dependency.analyzer.tree.ProjectFilesNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceBusStructureNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceOperationsDepNavigator;
 import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
+import com.tomecode.soa.dependency.analyzer.view.PropertiesViewOsbAdapter;
 import com.tomecode.soa.dependency.analyzer.view.visual.ZoomHelper;
 import com.tomecode.soa.dependency.analyzer.view.visual.ZoomHelper.ZoomAction;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
@@ -77,7 +80,8 @@ import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 
 /**
  * 
- * Visualizer dependencies between services/process
+ * 
+ * Visual graph for visualizing dependencies between servies/processes
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
@@ -114,6 +118,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	 */
 	private final List<GraphConnection> graphConnections;
 
+	// *******************************ACTIONS**************************
 	/**
 	 * open new {@link VisualGraphView} from selected node in graph
 	 */
@@ -122,6 +127,13 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	 * open new {@link FlowGraphView} from selected node in graph
 	 */
 	private final OpenFlowGraphAction openFlowGraphAction;
+
+	/**
+	 * delete selected node in graph
+	 */
+	private final DeleteSelectedNodeInGraph deleteSelectedNodeInGraph;
+
+	// *******************************ACTIONS**************************
 
 	public VisualGraphView() {
 		super();
@@ -135,6 +147,8 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 		this.openVisualGraphAction.setEnabled(false);
 		this.openFlowGraphAction = new OpenFlowGraphAction();
 		this.openFlowGraphAction.setEnabled(false);
+		this.deleteSelectedNodeInGraph = new DeleteSelectedNodeInGraph();
+		this.deleteSelectedNodeInGraph.setEnabled(false);
 	}
 
 	@Override
@@ -158,7 +172,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 					if (serviceBusStructureNavigator != null) {
 						GuiUtils.getServiceBusStructureNavigator().show(null);
 					}
-					enableOpenGraphActions(null);
+					setDataForGraphActions(null);
 				}
 			}
 		});
@@ -229,6 +243,33 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	}
 
 	/**
+	 * delete selected node and all connections
+	 * 
+	 * @param selectedNode
+	 */
+	public final void deleteSelectedNode(Object selectedNode) {
+		GraphNode graphNode = (GraphNode) selectedNode;
+
+		List<GraphConnection> forRemove = new ArrayList<GraphConnection>();
+		for (GraphConnection connection : graphConnections) {
+			if (graphNode.equals(connection.getSource()) || graphNode.equals(connection.getDestination())) {
+				forRemove.add(connection);
+			}
+		}
+
+		for (GraphConnection remove : forRemove) {
+			graphConnections.remove(remove);
+			remove.dispose();
+		}
+
+		graphNodes.remove(graphNode);
+		graphNode.dispose();
+
+		setDataForGraphActions(null);
+		// graphViewer.refresh();
+	}
+
+	/**
 	 * create menu for view and create context menu
 	 */
 	private final void initMenus(final Graph graph) {
@@ -239,6 +280,8 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 
 		popupMenuManager.add(openVisualGraphAction);
 		popupMenuManager.add(openFlowGraphAction);
+		popupMenuManager.add(separator);
+		popupMenuManager.add(deleteSelectedNodeInGraph);
 		popupMenuManager.add(separator);
 
 		GraphLayoutAction defaultAction = new GraphLayoutAction(LayoutActionType.SPRING_LAYOUT);
@@ -334,7 +377,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 		} else if (object instanceof GraphNode) {
 			GraphNode graphNode = (GraphNode) object;
 
-			enableOpenGraphActions(graphNode.getData());
+			setDataForGraphActions(graphNode);
 
 			PropertiesView propertiesView = GuiUtils.getPropertiesView();
 			if (propertiesView != null) {
@@ -356,19 +399,30 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 			if (projectStructureNavigator != null) {
 				projectStructureNavigator.showProjectFiles(graphNode.getData());
 			}
+
+			PropertiesViewOsbAdapter propertiesViewOsbAdapter = GuiUtils.getPropertiesViewOsbAdapter();
+			if (propertiesViewOsbAdapter != null) {
+				propertiesViewOsbAdapter.show(graphNode.getData());
+			}
 		}
 
 	}
 
 	/**
-	 * enable or disable {@link #openVisualGraphAction} or
-	 * {@link #openFlowGraphAction}
+	 * set data (selected node) for graph actions
 	 * 
-	 * @param data
+	 * @param graphNode
 	 */
-	private final void enableOpenGraphActions(Object data) {
-		openVisualGraphAction.setData(data);
-		openFlowGraphAction.setData(data);
+	private final void setDataForGraphActions(GraphNode graphNode) {
+		if (graphNode == null) {
+			openVisualGraphAction.setData(null);
+			openFlowGraphAction.setData(null);
+		} else {
+			openVisualGraphAction.setData(graphNode.getData());
+			openFlowGraphAction.setData(graphNode.getData());
+		}
+
+		deleteSelectedNodeInGraph.setData(graphNode);
 	}
 
 	@Override
@@ -425,14 +479,14 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 
 	private final void applyDependencies(Service sourceService, GraphNode existsSource) {
 
-		GraphNode source = existsSource == null ? createNode(sourceService.getName(), sourceService.getImage(), sourceService) : existsSource;
+		GraphNode source = existsSource == null ? createNode(sourceService.getName(), sourceService.getImage(), sourceService, ToolTipFactory.createToolTip(sourceService)) : existsSource;
 		ServiceDependencies serviceDependencies = sourceService.getServiceDependencies();
 		for (ServiceDependency serviceDependency : serviceDependencies.getDependnecies()) {
 
 			for (Service service : serviceDependency.getServices()) {
 				GraphNode destination = findDataInNodes(service);
 				if (destination == null && !(service instanceof UnknownFile)) {
-					destination = createNode(service.getName(), service.getImage(), service);
+					destination = createNode(service.getName(), service.getImage(), service, ToolTipFactory.createToolTip(service));
 					createConnection(source, destination, null, false);
 				}
 
@@ -461,19 +515,20 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	 * @param existsSource
 	 */
 	private final void createProxyAndService(Service service, GraphNode existsSource) {
-		GraphNode source = existsSource != null ? existsSource : createNode(service.getName(), service.getImage(), service);
+		GraphNode source = existsSource != null ? existsSource : createNode(service.getName(), service.getImage(), service, ToolTipFactory.createToolTip(service));
 		for (ServiceDependency serviceDependency : service.getServiceDependencies().getDependnecies()) {
 
 			if (serviceDependency.getServices().isEmpty()) {
 				if (findUnknownConnection(source, serviceDependency.getRefPath()) == null) {
-					GraphNode unknowNode = createNode(serviceDependency.getRefPath(), ImageFactory.UNKNOWN, serviceDependency);
+					// TODO: tool tip is null
+					GraphNode unknowNode = createNode(serviceDependency.getRefPath(), ImageFactory.UNKNOWN, serviceDependency, null);
 					createConnection(source, unknowNode, serviceDependency, false);
 				}
 			} else {
 				GraphNode destination = findDataInNodes(serviceDependency.getServices().get(0));
 				if (destination == null) {
 					Service target = serviceDependency.getServices().get(0);
-					destination = createNode(target.getName(), target.getImage(), target);
+					destination = createNode(target.getName(), target.getImage(), target, ToolTipFactory.createToolTip(target));
 					createConnection(source, destination, serviceDependency, false);
 				} else {
 					if (findConnection(source, destination) == null) {
@@ -518,7 +573,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	 */
 	private final void applyDependnecies(OpenEsbBpelProcess bpelProcess, GraphNode existsSource) {
 
-		GraphNode source = existsSource == null ? createNode(bpelProcess.getName(), bpelProcess.getImage(), bpelProcess) : existsSource;
+		GraphNode source = existsSource == null ? createNode(bpelProcess.getName(), bpelProcess.getImage(), bpelProcess, ToolTipFactory.createToolTip(bpelProcess)) : existsSource;
 		for (PartnerLink partnerLink : bpelProcess.getPartnerLinks()) {
 			for (OpenEsbBpelProcess depBpelProcess : partnerLink.getDependenciesProcesses()) {
 
@@ -540,7 +595,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 					}
 
 				} else {
-					GraphNode destination = createNode(depBpelProcess.getName(), depBpelProcess.getImage(), depBpelProcess);
+					GraphNode destination = createNode(depBpelProcess.getName(), depBpelProcess.getImage(), depBpelProcess, ToolTipFactory.createToolTip(depBpelProcess));
 					createConnection(source, destination, partnerLink, true);
 				}
 			}
@@ -591,12 +646,12 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	 * @param existsSource
 	 */
 	private final void applyDependencies(OraSB10gProject project, GraphNode existsSource) {
-		GraphNode source = existsSource == null ? createNode(project.getName(), project.getImage(), project) : existsSource;
+		GraphNode source = existsSource == null ? createNode(project.getName(), project.getImage(), project, ToolTipFactory.createToolTip(project)) : existsSource;
 		for (Service service : project.getServices()) {
 
 			GraphNode destination = findDataInNodes(service);
 			if (destination == null && !(service instanceof UnknownFile)) {
-				destination = createNode(service.getName(), service.getImage(), service);
+				destination = createNode(service.getName(), service.getImage(), service, ToolTipFactory.createToolTip(service));
 				createConnection(source, destination, null, false);
 			}
 
@@ -612,9 +667,9 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	 * @param existsSource
 	 */
 	private final void applyDependenciesOpenEsbBpel(OpenEsbBpelProject bpelProject, List<OpenEsbBpelProcess> processes, GraphNode existsSource) {
-		GraphNode source = existsSource == null ? createNode(bpelProject.getName(), bpelProject.getImage(), bpelProject) : existsSource;
+		GraphNode source = existsSource == null ? createNode(bpelProject.getName(), bpelProject.getImage(), bpelProject, ToolTipFactory.createToolTip(bpelProject)) : existsSource;
 		for (OpenEsbBpelProcess openEsbBpelProcess : processes) {
-			GraphNode destination = createNode(openEsbBpelProcess.getName(), openEsbBpelProcess.getImage(), openEsbBpelProcess);
+			GraphNode destination = createNode(openEsbBpelProcess.getName(), openEsbBpelProcess.getImage(), openEsbBpelProcess, ToolTipFactory.createToolTip(openEsbBpelProcess));
 			createConnection(source, destination, openEsbBpelProcess, false);
 		}
 	}
@@ -631,7 +686,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	 */
 	private final void applyDependencies(BpelProject bpelProject, List<PartnerLinkBinding> partnerLinkBindings, GraphNode existsSource) {
 		int curveDepth = 30;
-		GraphNode source = existsSource == null ? createNode(bpelProject.getName(), bpelProject.getImage(), bpelProject) : existsSource;
+		GraphNode source = existsSource == null ? createNode(bpelProject.getName(), bpelProject.getImage(), bpelProject, ToolTipFactory.createToolTip(bpelProject)) : existsSource;
 		for (PartnerLinkBinding partnerLinkBinding : partnerLinkBindings) {
 			// BPEL dependency
 			if (partnerLinkBinding.getDependencyBpelProject() != null) {
@@ -648,7 +703,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 						createConnection(source, existsDestination, partnerLinkBinding, true);
 					} else {
 						// new object in graph
-						GraphNode destination = createNode(project.getName(), project.getImage(), project);
+						GraphNode destination = createNode(project.getName(), project.getImage(), project, ToolTipFactory.createToolTip(project));
 						createConnection(source, destination, partnerLinkBinding, true);
 					}
 				}
@@ -663,7 +718,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 					createConnection(source, existsDestination, partnerLinkBinding, true);
 				} else {
 					// new object in graph
-					GraphNode destination = createNode(esbProject.getName(), esbProject.getImage(), esbProject);
+					GraphNode destination = createNode(esbProject.getName(), esbProject.getImage(), esbProject, ToolTipFactory.createToolTip(esbProject));
 					createConnection(source, destination, partnerLinkBinding, true);
 				}
 			}
@@ -675,13 +730,13 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 					// create connection to exists object in graph
 					GraphNode destination = findDataInNodes(project);
 					if (destination == null) {
-						destination = createNode(project.getName(), project.getImage(), project);
+						destination = createNode(project.getName(), project.getImage(), project, ToolTipFactory.createToolTip(project));
 						createConnection(source, destination, partnerLinkBinding, true);
 					}
 
 				} else {
 					// new object in graph
-					GraphNode destination = createNode(project.getName(), project.getImage(), project);
+					GraphNode destination = createNode(project.getName(), project.getImage(), project, ToolTipFactory.createToolTip(project));
 					createConnection(source, destination, partnerLinkBinding, true);
 				}
 			}
@@ -720,23 +775,24 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	private final void createWorkspaceAndProjectsGraph(Workspace workspace, GraphNode existSource) {
 		if (workspace.getType() == WorkspaceType.ORACLE_1OG) {
 			Ora10gWorkspace ora10gWorkspace = (Ora10gWorkspace) workspace;
-			GraphNode source = existSource == null ? createNode(ora10gWorkspace.getName(), ora10gWorkspace.getImage(), ora10gWorkspace) : existSource;
+			GraphNode source = existSource == null ? createNode(ora10gWorkspace.getName(), ora10gWorkspace.getImage(), ora10gWorkspace, ToolTipFactory.createToolTip(ora10gWorkspace)) : existSource;
 			for (Project project : ora10gWorkspace.getProjects()) {
 				GraphNode existsProjectGraphNode = findDataInNodes(project);
 				if (existsProjectGraphNode == null) {
-					GraphNode destination = createNode(project.getName(), project.getImage(), project);
+					GraphNode destination = createNode(project.getName(), project.getImage(), project, ToolTipFactory.createToolTip(project));
 					createConnection(source, destination, project, false);
 				}
 			}
 
 		} else if (workspace.getType() == WorkspaceType.OPEN_ESB) {
 			OpenEsbWorkspace openEsbWorkspace = (OpenEsbWorkspace) workspace;
-			GraphNode source = existSource == null ? createNode(openEsbWorkspace.getName(), openEsbWorkspace.getImage(), openEsbWorkspace) : existSource;
+			GraphNode source = existSource == null ? createNode(openEsbWorkspace.getName(), openEsbWorkspace.getImage(), openEsbWorkspace, ToolTipFactory.createToolTip(openEsbWorkspace))
+					: existSource;
 			for (Project project : openEsbWorkspace.getProjects()) {
 
 				GraphNode existsProjectGraphNode = findDataInNodes(project);
 				if (existsProjectGraphNode == null) {
-					GraphNode destination = createNode(project.getName(), project.getImage(), project);
+					GraphNode destination = createNode(project.getName(), project.getImage(), project, ToolTipFactory.createToolTip(project));
 					createConnection(source, destination, project, false);
 				}
 				// if (existsProjectGraphNode != null &&
@@ -750,11 +806,12 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 			}
 		} else if (workspace.getType() == WorkspaceType.ORACLE_SERVICE_BUS_10G) {
 			OraSB10gWorkspace oraSB10gWorkspace = (OraSB10gWorkspace) workspace;
-			GraphNode source = existSource == null ? createNode(oraSB10gWorkspace.getName(), oraSB10gWorkspace.getImage(), oraSB10gWorkspace) : existSource;
+			GraphNode source = existSource == null ? createNode(oraSB10gWorkspace.getName(), oraSB10gWorkspace.getImage(), oraSB10gWorkspace, ToolTipFactory.createToolTip(oraSB10gWorkspace))
+					: existSource;
 			for (OraSB10gProject project : oraSB10gWorkspace.getProjects()) {
 				GraphNode existsProjectGraphNode = findDataInNodes(project);
 				if (existsProjectGraphNode == null) {
-					GraphNode destination = createNode(project.getName(), project.getImage(), project);
+					GraphNode destination = createNode(project.getName(), project.getImage(), project, ToolTipFactory.createToolTip(project));
 					createConnection(source, destination, project, false);
 				}
 			}
@@ -804,24 +861,24 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	 * @param multiWorkspace
 	 */
 	private final void createMultiWorkspaceAndWorkspaceGraph(MultiWorkspace multiWorkspace) {
-		GraphNode multiWorkspaceNode = createNode(multiWorkspace.getName(), ImageFactory.MULTI_WORKSPACE, multiWorkspace);
+		GraphNode multiWorkspaceNode = createNode(multiWorkspace.getName(), multiWorkspace.getImage(), multiWorkspace, ToolTipFactory.createToolTip(multiWorkspace));
 
 		if (multiWorkspace.getType() == WorkspaceType.ORACLE_1OG) {
 			Ora10gMultiWorkspace ora10gMultiWorkspace = (Ora10gMultiWorkspace) multiWorkspace;
 			for (Ora10gWorkspace workspace : ora10gMultiWorkspace.getWorkspaces()) {
-				GraphNode workspaceNode = createNode(workspace.getName(), workspace.getImage(), workspace);
+				GraphNode workspaceNode = createNode(workspace.getName(), workspace.getImage(), workspace, ToolTipFactory.createToolTip(workspace));
 				createConnection(multiWorkspaceNode, workspaceNode, workspace, false);
 			}
 		} else if (multiWorkspace.getType() == WorkspaceType.OPEN_ESB) {
 			OpenEsbMultiWorkspace esbMultiWorkspace = (OpenEsbMultiWorkspace) multiWorkspace;
 			for (OpenEsbWorkspace workspace : esbMultiWorkspace.getWorkspaces()) {
-				GraphNode workspaceNode = createNode(workspace.getName(), workspace.getImage(), workspace);
+				GraphNode workspaceNode = createNode(workspace.getName(), workspace.getImage(), workspace, ToolTipFactory.createToolTip(workspace));
 				createConnection(multiWorkspaceNode, workspaceNode, workspace, false);
 			}
 		} else if (multiWorkspace.getType() == WorkspaceType.ORACLE_SERVICE_BUS_10G) {
 			OraSB10gMultiWorkspace oraSB10gMultiWorkspace = (OraSB10gMultiWorkspace) multiWorkspace;
 			for (OraSB10gWorkspace workspace : oraSB10gMultiWorkspace.getWorkspaces()) {
-				GraphNode workspaceNode = createNode(workspace.getName(), workspace.getImage(), workspace);
+				GraphNode workspaceNode = createNode(workspace.getName(), workspace.getImage(), workspace, ToolTipFactory.createToolTip(workspace));
 				createConnection(multiWorkspaceNode, workspaceNode, workspace, false);
 			}
 		}
@@ -858,9 +915,12 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	 *            node business object
 	 * @return new {@link GraphNode}
 	 */
-	private final GraphNode createNode(String name, Image image, Object data) {
+	private final GraphNode createNode(String name, Image image, Object data, IFigure toolTip) {
 		GraphNode graphNode = new GraphNode(graphViewer.getGraphControl(), SWT.NONE, name, image);
 		graphNode.setData(data);
+		if (toolTip != null) {
+			graphNode.setTooltip(toolTip);
+		}
 		graphNodes.add(graphNode);
 		return graphNode;
 	}
@@ -1038,4 +1098,5 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	public final String getToolTipText() {
 		return "Dependency view";
 	}
+
 }

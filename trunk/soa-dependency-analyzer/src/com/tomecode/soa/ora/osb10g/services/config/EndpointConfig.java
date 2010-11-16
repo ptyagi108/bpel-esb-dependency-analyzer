@@ -17,9 +17,13 @@ import com.tomecode.soa.ora.osb10g.services.Proxy;
  */
 public abstract class EndpointConfig {
 
-	protected final ProviderProtocol protocol;
+	protected ProviderProtocol protocol;
 
-	protected final List<String> uri = new ArrayList<String>();
+	protected final List<String> uris;
+
+	public EndpointConfig() {
+		this.uris = new ArrayList<String>();
+	}
 
 	/**
 	 * 
@@ -28,6 +32,7 @@ public abstract class EndpointConfig {
 	 * @param providerProtocol
 	 */
 	public EndpointConfig(ProviderProtocol providerProtocol) {
+		this();
 		this.protocol = providerProtocol;
 	}
 
@@ -39,13 +44,19 @@ public abstract class EndpointConfig {
 	}
 
 	public final void putAllURI(List<String> uris) {
-		this.uri.addAll(uris);
+		this.uris.addAll(uris);
+	}
+
+	public final List<String> getUris() {
+		return uris;
 	}
 
 	/**
 	 * provider protocols
 	 * 
 	 * @author Tomas Frastia
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
 	 * 
 	 */
 	public enum ProviderProtocol {

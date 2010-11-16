@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 import com.tomecode.soa.workspace.Workspace.WorkspaceType;
@@ -18,7 +21,7 @@ import com.tomecode.soa.workspace.Workspace.WorkspaceType;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public class Ora10gMultiWorkspace implements MultiWorkspace {
+public final class Ora10gMultiWorkspace implements MultiWorkspace {
 
 	/**
 	 * workspace name
@@ -101,5 +104,10 @@ public class Ora10gMultiWorkspace implements MultiWorkspace {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public final Image getImage() {
+		return ImageFactory.MULTI_WORKSPACE;
 	}
 }

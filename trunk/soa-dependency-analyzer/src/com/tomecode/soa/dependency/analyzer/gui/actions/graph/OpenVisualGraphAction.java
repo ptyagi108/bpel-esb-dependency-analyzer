@@ -1,7 +1,5 @@
 package com.tomecode.soa.dependency.analyzer.gui.actions.graph;
 
-import org.eclipse.jface.action.Action;
-
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
@@ -14,9 +12,7 @@ import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class OpenVisualGraphAction extends Action {
-
-	private Object selectedNode;
+public final class OpenVisualGraphAction extends BasicActionForGraphEvent {
 
 	public OpenVisualGraphAction() {
 		setText("Open new in Visual Graph");
@@ -29,17 +25,8 @@ public final class OpenVisualGraphAction extends Action {
 		VisualGraphView graphView = GuiUtils.newVisualGraphView();
 		if (graphView != null) {
 			graphView.showGraph(selectedNode);
+			setEnabled(false);
 		}
 	}
 
-	/**
-	 * set data for graph
-	 * 
-	 * @param selectedNode
-	 *            if is not null then is enabled
-	 */
-	public final void setData(Object selectedNode) {
-		this.selectedNode = selectedNode;
-		setEnabled(selectedNode != null);
-	}
 }

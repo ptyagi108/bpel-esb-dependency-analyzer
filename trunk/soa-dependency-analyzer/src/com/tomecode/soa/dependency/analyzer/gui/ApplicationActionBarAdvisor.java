@@ -15,6 +15,7 @@ import com.tomecode.soa.dependency.analyzer.gui.actions.view.OpenNewVisualViewAc
 import com.tomecode.soa.dependency.analyzer.gui.actions.view.ShowBpelProcessStructureViewAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.view.ShowProjectFilesViewAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.view.ShowProjectServicesViewAction;
+import com.tomecode.soa.dependency.analyzer.gui.actions.view.ShowPropertiesOSBAdapter;
 import com.tomecode.soa.dependency.analyzer.gui.actions.view.ShowPropertiesViewAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.view.ShowServiceBusStructureViewAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.view.ShowServiceOperationDepViewAction;
@@ -41,6 +42,7 @@ public final class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	private ShowBpelProcessStructureViewAction showBpelProcessStructureViewAction;
 	private ShowServiceOperationDepViewAction showServiceOperationDepViewAction;
 	private ShowServiceBusStructureViewAction serviceBusStructureViewAction;
+	private ShowPropertiesOSBAdapter propertiesOSBAdapter;
 
 	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
 		super(configurer);
@@ -56,7 +58,7 @@ public final class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		showBpelProcessStructureViewAction = new ShowBpelProcessStructureViewAction();
 		showServiceOperationDepViewAction = new ShowServiceOperationDepViewAction();
 		serviceBusStructureViewAction = new ShowServiceBusStructureViewAction();
-
+		propertiesOSBAdapter = new ShowPropertiesOSBAdapter();
 	}
 
 	protected final void fillMenuBar(IMenuManager menuBar) {
@@ -81,7 +83,9 @@ public final class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		viewMenu.add(openPropertiesViewAction);
 		viewMenu.add(showBpelProcessStructureViewAction);
 		viewMenu.add(serviceBusStructureViewAction);
-
+		viewMenu.add(new Separator());
+		//
+		viewMenu.add(propertiesOSBAdapter);
 		MenuManager toolMenu = new MenuManager("&Tools", "Tools");
 		menuBar.add(toolMenu);
 

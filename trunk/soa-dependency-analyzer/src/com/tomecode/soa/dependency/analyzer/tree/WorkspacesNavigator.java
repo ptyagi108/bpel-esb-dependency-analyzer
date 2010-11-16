@@ -11,10 +11,12 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
@@ -26,8 +28,10 @@ import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.gui.utils.HideView;
 import com.tomecode.soa.dependency.analyzer.gui.utils.PopupMenuUtils;
 import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
+import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.node.WorkspaceRootNode;
+import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
 import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
@@ -210,11 +214,11 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 				}
 
 				showServices(selection.getFirstElement());
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				MessageDialog.openError(null, "Error", "oops2 error:" + e.getMessage());
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			MessageDialog.openError(null, "Error", "oops2 error:" + e.getMessage());
+		}
 	}
 
 	@Override
@@ -232,7 +236,7 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 
 	/**
 	 * show information about selected node in {@link ProjectServicesNavigator}
-	 * and {@link ProjectFilesNavigator};
+	 * and {@link ProjectFilesNavigator} and {@link PropertiesView}
 	 * 
 	 * @param selectedNode
 	 */
@@ -244,6 +248,28 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 		ProjectServicesNavigator projectServicesNavigator = GuiUtils.getProjectServicesNavigator();
 		if (projectServicesNavigator != null) {
 			projectServicesNavigator.show(selectedNode);
+		}
+		PropertiesView propertiesView = GuiUtils.getPropertiesView();
+		if (propertiesView != null) {
+			propertiesView.show(selectedNode);
+		}
+	}
+
+	/**
+	 * {@link LabelProvider} for {@link WorkspacesNavigator}
+	 * 
+	 * @author Tomas Frastia
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
+	 * 
+	 */
+	final class WorkspacesLabelProvider extends LabelProvider {
+
+		public final Image getImage(Object element) {
+			if (element instanceof ImageFace) {
+				return ((ImageFace) element).getImage();
+			}
+			return null;
 		}
 	}
 }

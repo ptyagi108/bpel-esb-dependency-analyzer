@@ -2,6 +2,8 @@ package com.tomecode.soa.workspace;
 
 import java.io.File;
 
+import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
+
 /**
  * 
  * Basic interface for all workspaces
@@ -10,7 +12,7 @@ import java.io.File;
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
-public interface Workspace {
+public interface Workspace extends ImageFace {
 
 	/**
 	 * workspace name

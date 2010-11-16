@@ -22,6 +22,10 @@ import com.tomecode.soa.ora.osb10g.services.config.EndpointMail;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointSB;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointSFTP;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointWS;
+import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificDsp;
+import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificEJB;
+import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificHttp;
+import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificJms;
 import com.tomecode.soa.parser.AbstractParser;
 
 /**
@@ -137,6 +141,7 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	private final EndpointJms parseJMStransport(Element eEndpointConfig) {
 		EndpointJms jms = new EndpointJms();
 		jms.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
+		jms.setProviderSpecificJms(parseProviderSpecificJms(eEndpointConfig.element("provider-specific")));
 		return jms;
 	}
 
@@ -173,7 +178,22 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	private final EndpointDsp parseDSPtransport(Element eEndpointConfig) {
 		EndpointDsp dsp = new EndpointDsp();
 		dsp.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
+		dsp.setProviderSpecificDsp(parseProviderSpecificDsp(eEndpointConfig.element("provider-specific")));
 		return dsp;
+	}
+
+	/**
+	 * parse {@link ProviderSpecificDsp}
+	 * 
+	 * @param element
+	 * @return
+	 */
+	private final ProviderSpecificDsp parseProviderSpecificDsp(Element element) {
+		ProviderSpecificDsp providerSpecificDsp = new ProviderSpecificDsp();
+		if (element != null) {
+			providerSpecificDsp.setRequestResponse(Boolean.parseBoolean(element.elementTextTrim("request-response")));
+		}
+		return providerSpecificDsp;
 	}
 
 	/**
@@ -233,7 +253,26 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	private final EndpointHttp parseHttpTransport(Element eEndpointConfig) {
 		EndpointHttp http = new EndpointHttp();
 		http.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
+		http.setProviderSpecificHttp(parseProviderSpecificHttp(eEndpointConfig.element("provider-specific")));
 		return http;
+	}
+
+	/**
+	 * parse provider specific HTTP
+	 * 
+	 * @param element
+	 * @return
+	 */
+	private final ProviderSpecificHttp parseProviderSpecificHttp(Element element) {
+		ProviderSpecificHttp providerSpecificHttp = new ProviderSpecificHttp();
+		if (element != null) {
+			Element outboundProperties = element.element("outbound-properties");
+			if (outboundProperties != null) {
+				providerSpecificHttp.setRequestMethod(outboundProperties.elementTextTrim("request-method"));
+			}
+		}
+
+		return providerSpecificHttp;
 	}
 
 	/**
@@ -245,7 +284,36 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	private final EndpointEJB parseEJBtransport(Element eEndpointConfig) {
 		EndpointEJB ejb = new EndpointEJB();
 		ejb.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
+		ejb.setProviderSpecificEJB(parseProviderSpecificEJB(eEndpointConfig.element("provider-specific")));
 		return ejb;
+	}
+
+	/**
+	 * parse {@link ProviderSpecificEJB}
+	 * 
+	 * @param element
+	 * @return
+	 */
+	private final ProviderSpecificEJB parseProviderSpecificEJB(Element element) {
+		ProviderSpecificEJB providerSpecificEJB = new ProviderSpecificEJB();
+		if (element != null) {
+			Element eService = element.element("service");
+			if (eService != null) {
+				Element e = eService.element("clientJar");
+				if (e != null) {
+					providerSpecificEJB.setClientJar(e.attributeValue("ref"));
+				}
+				e = eService.element("ejbHome");
+				if (e != null) {
+					providerSpecificEJB.setEjbHome(e.attributeValue("classname"));
+				}
+				e = eService.element("ejbObject");
+				if (e != null) {
+					providerSpecificEJB.setEjbObject(e.attributeValue("classname"));
+				}
+			}
+		}
+		return providerSpecificEJB;
 	}
 
 	/**
@@ -266,5 +334,28 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 			}
 		}
 		return list;
+	}
+
+	/**
+	 * parse provider specific JMS
+	 * 
+	 * @param list
+	 * @return
+	 */
+	private final ProviderSpecificJms parseProviderSpecificJms(Element element) {
+		ProviderSpecificJms providerSpecificJms = new ProviderSpecificJms();
+		if (element != null) {
+			providerSpecificJms.setQueue(Boolean.parseBoolean(element.elementTextTrim("is-queue")));
+			Element outboundProperties = element.element("outbound-properties");
+			if (outboundProperties != null) {
+				boolean isResponseRequired = Boolean.parseBoolean(outboundProperties.elementTextTrim("response-required"));
+				providerSpecificJms.setResponseRequired(isResponseRequired);
+				if (!isResponseRequired) {
+					return providerSpecificJms;
+				}
+				providerSpecificJms.setResponseURI(outboundProperties.elementText("response-URI"));
+			}
+		}
+		return providerSpecificJms;
 	}
 }

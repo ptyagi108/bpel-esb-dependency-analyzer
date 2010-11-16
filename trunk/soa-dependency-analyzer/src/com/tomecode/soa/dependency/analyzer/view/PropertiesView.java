@@ -4,14 +4,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.gui.utils.HideView;
 import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
@@ -157,42 +155,37 @@ public final class PropertiesView extends ViewPart implements HideView {
 		processPage.setLayout(new FillLayout());
 
 		ScrolledComposite sc = new ScrolledComposite(processPage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
-		Composite composite = createComposite(sc);
+		Composite composite = GuiUtils.createCompositeWithGrid(sc);
 
-		Group groupProcess = createGroup(composite, "Bpel Process...");
-		createLabel(groupProcess, "Type: ");
-		txtProcessType = createText(groupProcess);
-		createLabel(groupProcess, "Name: ");
-		txtProcessName = createText(groupProcess);
-		createLabel(groupProcess, "Path: ");
-		txtProcessPath = createText(groupProcess);
+		Group groupProcess = GuiUtils.createGroupWithGrid(composite, "Bpel Process...");
+		GuiUtils.createLabelWithGrid(groupProcess, "Type ");
+		txtProcessType = GuiUtils.createTextWithGrid(groupProcess);
+		GuiUtils.createLabelWithGrid(groupProcess, "Name ");
+		txtProcessName = GuiUtils.createTextWithGrid(groupProcess);
+		GuiUtils.createLabelWithGrid(groupProcess, "Path ");
+		txtProcessPath = GuiUtils.createTextWithGrid(groupProcess);
 
-		Group groupProject = createGroup(composite, "Project...");
-		createLabel(groupProject, "Type: ");
-		txtProcessProjectType = createText(groupProject);
-		createLabel(groupProject, "Name: ");
-		txtProcessProjectName = createText(groupProject);
-		createLabel(groupProject, "Path:");
-		txtProcessProjectPath = createText(groupProject);
+		Group groupProject = GuiUtils.createGroupWithGrid(composite, "Project...");
+		GuiUtils.createLabelWithGrid(groupProject, "Type ");
+		txtProcessProjectType = GuiUtils.createTextWithGrid(groupProject);
+		GuiUtils.createLabelWithGrid(groupProject, "Name ");
+		txtProcessProjectName = GuiUtils.createTextWithGrid(groupProject);
+		GuiUtils.createLabelWithGrid(groupProject, "Path:");
+		txtProcessProjectPath = GuiUtils.createTextWithGrid(groupProject);
 
-		Group groupWorkspace = createGroup(composite, "Workspace...");
-		createLabel(groupWorkspace, "Name: ");
-		txtProcessProjectWorkspace = createText(groupWorkspace);
-		createLabel(groupWorkspace, "Path: ");
-		txtProcessProjectWorkspacePath = createText(groupWorkspace);
+		Group groupWorkspace = GuiUtils.createGroupWithGrid(composite, "Workspace...");
+		GuiUtils.createLabelWithGrid(groupWorkspace, "Name ");
+		txtProcessProjectWorkspace = GuiUtils.createTextWithGrid(groupWorkspace);
+		GuiUtils.createLabelWithGrid(groupWorkspace, "Path ");
+		txtProcessProjectWorkspacePath = GuiUtils.createTextWithGrid(groupWorkspace);
 
-		Group groupMultiWorkspace = createGroup(composite, "Multi Workspace...");
-		createLabel(groupMultiWorkspace, "Name: ");
-		txtProcessProjectMultiWorkspaceName = createText(groupMultiWorkspace);
-		createLabel(groupMultiWorkspace, "Path: ");
-		txtProcessProjectMultiWorkspacePath = createText(groupMultiWorkspace);
+		Group groupMultiWorkspace = GuiUtils.createGroupWithGrid(composite, "Multi Workspace...");
+		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Name ");
+		txtProcessProjectMultiWorkspaceName = GuiUtils.createTextWithGrid(groupMultiWorkspace);
+		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Path ");
+		txtProcessProjectMultiWorkspacePath = GuiUtils.createTextWithGrid(groupMultiWorkspace);
 
-		composite.pack();
-		sc.setMinSize(composite.getSize());
-		sc.setExpandHorizontal(true);
-		sc.setExpandVertical(true);
-		sc.setContent(composite);
-
+		finishPage(composite, sc);
 	}
 
 	/**
@@ -205,43 +198,39 @@ public final class PropertiesView extends ViewPart implements HideView {
 		servicePage.setLayout(new FillLayout());
 
 		ScrolledComposite sc = new ScrolledComposite(servicePage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
-		Composite composite = createComposite(sc);
+		Composite composite = GuiUtils.createCompositeWithGrid(sc);
 
-		Group groupService = createGroup(composite, "Service...");
-		createLabel(groupService, "Type: ");
-		txtServiceType = createText(groupService);
-		createLabel(groupService, "Name: ");
-		txtServiceName = createText(groupService);
-		createLabel(groupService, "Folder: ");
-		txtServiceFolder = createText(groupService);
-		createLabel(groupService, "Path: ");
-		txtServicePath = createText(groupService);
+		Group groupService = GuiUtils.createGroupWithGrid(composite, "Service...");
+		GuiUtils.createLabelWithGrid(groupService, "Type ");
+		txtServiceType = GuiUtils.createTextWithGrid(groupService);
+		GuiUtils.createLabelWithGrid(groupService, "Name ");
+		txtServiceName = GuiUtils.createTextWithGrid(groupService);
+		GuiUtils.createLabelWithGrid(groupService, "Folder ");
+		txtServiceFolder = GuiUtils.createTextWithGrid(groupService);
+		GuiUtils.createLabelWithGrid(groupService, "Path ");
+		txtServicePath = GuiUtils.createTextWithGrid(groupService);
 
-		Group groupProject = createGroup(composite, "Project...");
-		createLabel(groupProject, "Type: ");
-		txtServiceProjectType = createText(groupProject);
-		createLabel(groupProject, "Name: ");
-		txtServiceProjectName = createText(groupProject);
-		createLabel(groupProject, "Path:");
-		txtServiceProjectPath = createText(groupProject);
+		Group groupProject = GuiUtils.createGroupWithGrid(composite, "Project...");
+		GuiUtils.createLabelWithGrid(groupProject, "Type ");
+		txtServiceProjectType = GuiUtils.createTextWithGrid(groupProject);
+		GuiUtils.createLabelWithGrid(groupProject, "Name ");
+		txtServiceProjectName = GuiUtils.createTextWithGrid(groupProject);
+		GuiUtils.createLabelWithGrid(groupProject, "Path:");
+		txtServiceProjectPath = GuiUtils.createTextWithGrid(groupProject);
 
-		Group groupWorkspace = createGroup(composite, "Workspace...");
-		createLabel(groupWorkspace, "Name: ");
-		txtServiceProjectWorkspace = createText(groupWorkspace);
-		createLabel(groupWorkspace, "Path: ");
-		txtServiceProjectWorkspacePath = createText(groupWorkspace);
+		Group groupWorkspace = GuiUtils.createGroupWithGrid(composite, "Workspace...");
+		GuiUtils.createLabelWithGrid(groupWorkspace, "Name ");
+		txtServiceProjectWorkspace = GuiUtils.createTextWithGrid(groupWorkspace);
+		GuiUtils.createLabelWithGrid(groupWorkspace, "Path ");
+		txtServiceProjectWorkspacePath = GuiUtils.createTextWithGrid(groupWorkspace);
 
-		Group groupMultiWorkspace = createGroup(composite, "Multi Workspace...");
-		createLabel(groupMultiWorkspace, "Name: ");
-		txtServiceProjectMultiWorkspaceName = createText(groupMultiWorkspace);
-		createLabel(groupMultiWorkspace, "Path: ");
-		txtServiceProjectMultiWorkspacePath = createText(groupMultiWorkspace);
+		Group groupMultiWorkspace = GuiUtils.createGroupWithGrid(composite, "Multi Workspace...");
+		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Name ");
+		txtServiceProjectMultiWorkspaceName = GuiUtils.createTextWithGrid(groupMultiWorkspace);
+		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Path ");
+		txtServiceProjectMultiWorkspacePath = GuiUtils.createTextWithGrid(groupMultiWorkspace);
 
-		composite.pack();
-		sc.setMinSize(composite.getSize());
-		sc.setExpandHorizontal(true);
-		sc.setExpandVertical(true);
-		sc.setContent(composite);
+		finishPage(composite, sc);
 
 	}
 
@@ -250,30 +239,19 @@ public final class PropertiesView extends ViewPart implements HideView {
 		serviceDepPage.setLayout(new FillLayout());
 
 		ScrolledComposite sc = new ScrolledComposite(serviceDepPage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
-		Composite composite = createComposite(sc);
+		Composite composite = GuiUtils.createCompositeWithGrid(sc);
 
-		Group groupService = createGroup(composite, "Unknown Service...");
-		createLabel(groupService, "Name: ");
-		txtServiceDepName = createText(groupService);
-		createLabel(groupService, "Type: ");
-		txtServiceDepOsbType = createText(groupService);
-		createLabel(groupService, "In Activity: ");
-		txtServiceDepOsbActivity = createText(groupService);
-		createLabel(groupService, "Project: ");
-		txtServiceDepProjectName = createText(groupService);
+		Group groupService = GuiUtils.createGroupWithGrid(composite, "Unknown Service...");
+		GuiUtils.createLabelWithGrid(groupService, "Name ");
+		txtServiceDepName = GuiUtils.createTextWithGrid(groupService);
+		GuiUtils.createLabelWithGrid(groupService, "Type ");
+		txtServiceDepOsbType = GuiUtils.createTextWithGrid(groupService);
+		GuiUtils.createLabelWithGrid(groupService, "In Activity ");
+		txtServiceDepOsbActivity = GuiUtils.createTextWithGrid(groupService);
+		GuiUtils.createLabelWithGrid(groupService, "Project ");
+		txtServiceDepProjectName = GuiUtils.createTextWithGrid(groupService);
 
-		composite.pack();
-		sc.setMinSize(composite.getSize());
-		sc.setExpandHorizontal(true);
-		sc.setExpandVertical(true);
-		sc.setContent(composite);
-	}
-
-	private final Composite createComposite(ScrolledComposite sc) {
-		Composite composite = new Composite(sc, SWT.NONE);
-		composite.setLayout(new GridLayout(1, false));
-		composite.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_VERTICAL | GridData.GRAB_HORIZONTAL));
-		return composite;
+		finishPage(composite, sc);
 	}
 
 	/**
@@ -286,42 +264,37 @@ public final class PropertiesView extends ViewPart implements HideView {
 		projectPage.setLayout(new FillLayout());
 
 		ScrolledComposite sc = new ScrolledComposite(projectPage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
-		Composite composite = createComposite(sc);
+		Composite composite = GuiUtils.createCompositeWithGrid(sc);
 
-		Group groupProject = createGroup(composite, "Project...");
-		createLabel(groupProject, "Type: ");
-		txtProjectType = createText(groupProject);
-		createLabel(groupProject, "Name: ");
-		txtProjectName = createText(groupProject);
-		createLabel(groupProject, "Path:");
-		txtProjectPath = createText(groupProject);
+		Group groupProject = GuiUtils.createGroupWithGrid(composite, "Project...");
+		GuiUtils.createLabelWithGrid(groupProject, "Type ");
+		txtProjectType = GuiUtils.createTextWithGrid(groupProject);
+		GuiUtils.createLabelWithGrid(groupProject, "Name ");
+		txtProjectName = GuiUtils.createTextWithGrid(groupProject);
+		GuiUtils.createLabelWithGrid(groupProject, "Path:");
+		txtProjectPath = GuiUtils.createTextWithGrid(groupProject);
 
-		Group groupWorkspace = createGroup(composite, "Workspace...");
-		createLabel(groupWorkspace, "Name: ");
-		txtProjectWorkspace = createText(groupWorkspace);
-		createLabel(groupWorkspace, "Path: ");
-		txtProjectWorkspacePath = createText(groupWorkspace);
+		Group groupWorkspace = GuiUtils.createGroupWithGrid(composite, "Workspace...");
+		GuiUtils.createLabelWithGrid(groupWorkspace, "Name ");
+		txtProjectWorkspace = GuiUtils.createTextWithGrid(groupWorkspace);
+		GuiUtils.createLabelWithGrid(groupWorkspace, "Path ");
+		txtProjectWorkspacePath = GuiUtils.createTextWithGrid(groupWorkspace);
 
-		Group groupMultiWorkspace = createGroup(composite, "Multi Workspace...");
-		createLabel(groupMultiWorkspace, "Name: ");
-		txtProjectMultiWorkspaceName = createText(groupMultiWorkspace);
-		createLabel(groupMultiWorkspace, "Path: ");
-		txtProjectMultiWorkspacePath = createText(groupMultiWorkspace);
+		Group groupMultiWorkspace = GuiUtils.createGroupWithGrid(composite, "Multi Workspace...");
+		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Name ");
+		txtProjectMultiWorkspaceName = GuiUtils.createTextWithGrid(groupMultiWorkspace);
+		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Path ");
+		txtProjectMultiWorkspacePath = GuiUtils.createTextWithGrid(groupMultiWorkspace);
 
+		finishPage(composite, sc);
+	}
+
+	private void finishPage(Composite composite, ScrolledComposite sc) {
 		composite.pack();
 		sc.setMinSize(composite.getSize());
 		sc.setExpandHorizontal(true);
 		sc.setExpandVertical(true);
 		sc.setContent(composite);
-
-	}
-
-	private final Group createGroup(Composite composite, String title) {
-		Group group = new Group(composite, SWT.SHADOW_IN);
-		group.setText(title);
-		group.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_VERTICAL | GridData.GRAB_HORIZONTAL));
-		group.setLayout(new GridLayout(2, false));
-		return group;
 	}
 
 	/**
@@ -334,27 +307,23 @@ public final class PropertiesView extends ViewPart implements HideView {
 		workspacePage.setLayout(new FillLayout());
 
 		ScrolledComposite sc = new ScrolledComposite(workspacePage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
-		Composite composite = createComposite(sc);
+		Composite composite = GuiUtils.createCompositeWithGrid(sc);
 
-		Group groupWorkspace = createGroup(composite, "Workspace...");
-		createLabel(groupWorkspace, "Type: ");
-		txtWorkspaceParentType = createText(groupWorkspace);
-		createLabel(groupWorkspace, "Name: ");
-		txtWorkspaceName = createText(groupWorkspace);
-		createLabel(groupWorkspace, "Path: ");
-		txtWorkspacePath = createText(groupWorkspace);
+		Group groupWorkspace = GuiUtils.createGroupWithGrid(composite, "Workspace...");
+		GuiUtils.createLabelWithGrid(groupWorkspace, "Type ");
+		txtWorkspaceParentType = GuiUtils.createTextWithGrid(groupWorkspace);
+		GuiUtils.createLabelWithGrid(groupWorkspace, "Name ");
+		txtWorkspaceName = GuiUtils.createTextWithGrid(groupWorkspace);
+		GuiUtils.createLabelWithGrid(groupWorkspace, "Path ");
+		txtWorkspacePath = GuiUtils.createTextWithGrid(groupWorkspace);
 
-		Group groupMultiWorkspace = createGroup(composite, "Multi Workspace...");
-		createLabel(groupMultiWorkspace, "Name: ");
-		txtWorkspaceParent = createText(groupMultiWorkspace);
-		createLabel(groupMultiWorkspace, "Path: ");
-		txtWorkspaceParentPath = createText(groupMultiWorkspace);
+		Group groupMultiWorkspace = GuiUtils.createGroupWithGrid(composite, "Multi Workspace...");
+		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Name ");
+		txtWorkspaceParent = GuiUtils.createTextWithGrid(groupMultiWorkspace);
+		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Path ");
+		txtWorkspaceParentPath = GuiUtils.createTextWithGrid(groupMultiWorkspace);
 
-		composite.pack();
-		sc.setMinSize(composite.getSize());
-		sc.setExpandHorizontal(true);
-		sc.setExpandVertical(true);
-		sc.setContent(composite);
+		finishPage(composite, sc);
 	}
 
 	/**
@@ -367,35 +336,17 @@ public final class PropertiesView extends ViewPart implements HideView {
 		multiWokrspacePage.setLayout(new FillLayout());
 
 		ScrolledComposite sc = new ScrolledComposite(multiWokrspacePage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
-		Composite composite = createComposite(sc);
+		Composite composite = GuiUtils.createCompositeWithGrid(sc);
 
-		Group groupMultiWorkspace = createGroup(composite, "Multi Workspace...");
-		createLabel(groupMultiWorkspace, "Type: ");
-		txtMultiWorkspaceType = createText(groupMultiWorkspace);
-		createLabel(groupMultiWorkspace, "Name: ");
-		txtMultiWorkspaceName = createText(groupMultiWorkspace);
-		createLabel(groupMultiWorkspace, "Path: ");
-		txtMultiWorkspacePath = createText(groupMultiWorkspace);
-		composite.pack();
+		Group groupMultiWorkspace = GuiUtils.createGroupWithGrid(composite, "Multi Workspace...");
+		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Type ");
+		txtMultiWorkspaceType = GuiUtils.createTextWithGrid(groupMultiWorkspace);
+		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Name ");
+		txtMultiWorkspaceName = GuiUtils.createTextWithGrid(groupMultiWorkspace);
+		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Path ");
+		txtMultiWorkspacePath = GuiUtils.createTextWithGrid(groupMultiWorkspace);
 
-		sc.setMinSize(composite.getSize());
-		sc.setExpandHorizontal(true);
-		sc.setExpandVertical(true);
-		sc.setContent(composite);
-	}
-
-	private final Label createLabel(Composite parent, String title) {
-		Label label = new Label(parent, SWT.NONE);
-		label.setLayoutData(new GridData());
-		label.setText(title);
-		return label;
-	}
-
-	private final Text createText(Composite parent) {
-		Text text = new Text(parent, SWT.BORDER | SWT.READ_ONLY);
-		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		text.setText("");
-		return text;
+		finishPage(composite, sc);
 	}
 
 	@Override

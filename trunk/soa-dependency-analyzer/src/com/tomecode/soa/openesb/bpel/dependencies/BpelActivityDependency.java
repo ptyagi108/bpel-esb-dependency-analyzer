@@ -6,6 +6,7 @@ import java.util.List;
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.bpel.activity.Activity;
+import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.services.BpelProcess;
 
@@ -15,7 +16,7 @@ import com.tomecode.soa.services.BpelProcess;
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
-public final class BpelActivityDependency {
+public final class BpelActivityDependency implements ImageFace {
 
 	private String partnerLink;
 	private Activity activity;

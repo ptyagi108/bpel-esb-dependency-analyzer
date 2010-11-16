@@ -10,7 +10,25 @@ package com.tomecode.soa.ora.osb10g.services.config;
  */
 public final class EndpointDsp extends EndpointConfig {
 
+	private ProviderSpecificDsp providerSpecificDsp;
+
 	public EndpointDsp() {
 		super(ProviderProtocol.DSP);
 	}
+
+	/**
+	 * @return the providerSpecificDsp
+	 */
+	public final ProviderSpecificDsp getProviderSpecificDsp() {
+		return providerSpecificDsp;
+	}
+
+	/**
+	 * @param providerSpecificDsp
+	 *            the providerSpecificDsp to set
+	 */
+	public final void setProviderSpecificDsp(ProviderSpecificDsp providerSpecificDsp) {
+		this.providerSpecificDsp = providerSpecificDsp;
+	}
+
 }

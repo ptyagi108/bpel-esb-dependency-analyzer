@@ -2,8 +2,11 @@ package com.tomecode.soa.ora.suite10g.project;
 
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
 import com.tomecode.soa.bpel.activity.Activity;
 import com.tomecode.soa.bpel.activity.ActivityType;
+import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 
 /**
  * Partner link operation
@@ -12,7 +15,7 @@ import com.tomecode.soa.bpel.activity.ActivityType;
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
-public final class Operation {
+public final class Operation implements ImageFace {
 
 	private static final long serialVersionUID = -5643471889740129373L;
 
@@ -199,5 +202,11 @@ public final class Operation {
 
 	public final Operation clone() {
 		return new Operation(activity, name, operation, ownerBpelProject, partnerLinkBinding, activities);
+	}
+
+	@Override
+	public Image getImage() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

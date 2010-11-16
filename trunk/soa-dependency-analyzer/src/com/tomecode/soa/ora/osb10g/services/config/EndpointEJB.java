@@ -10,9 +10,25 @@ package com.tomecode.soa.ora.osb10g.services.config;
  */
 public final class EndpointEJB extends EndpointConfig {
 
+	private ProviderSpecificEJB providerSpecificEJB;
+
 	public EndpointEJB() {
 		super(ProviderProtocol.EJB);
+	}
 
+	/**
+	 * @return the providerSpecificEJB
+	 */
+	public final ProviderSpecificEJB getProviderSpecificEJB() {
+		return providerSpecificEJB;
+	}
+
+	/**
+	 * @param providerSpecificEJB
+	 *            the providerSpecificEJB to set
+	 */
+	public final void setProviderSpecificEJB(ProviderSpecificEJB providerSpecificEJB) {
+		this.providerSpecificEJB = providerSpecificEJB;
 	}
 
 }

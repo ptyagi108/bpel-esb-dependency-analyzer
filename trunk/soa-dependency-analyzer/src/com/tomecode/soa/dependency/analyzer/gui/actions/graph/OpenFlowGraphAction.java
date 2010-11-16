@@ -1,7 +1,5 @@
 package com.tomecode.soa.dependency.analyzer.gui.actions.graph;
 
-import org.eclipse.jface.action.Action;
-
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.view.graph.FlowGraphView;
@@ -16,9 +14,7 @@ import com.tomecode.soa.workspace.Workspace;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class OpenFlowGraphAction extends Action {
-
-	private Object selectedNode;
+public final class OpenFlowGraphAction extends BasicActionForGraphEvent {
 
 	public OpenFlowGraphAction() {
 		setText("Open new in Flow Graph");
@@ -30,6 +26,7 @@ public final class OpenFlowGraphAction extends Action {
 		FlowGraphView graphView = GuiUtils.newFlowGraphView();
 		if (graphView != null) {
 			graphView.showGraph(selectedNode);
+			setEnabled(false);
 		}
 	}
 

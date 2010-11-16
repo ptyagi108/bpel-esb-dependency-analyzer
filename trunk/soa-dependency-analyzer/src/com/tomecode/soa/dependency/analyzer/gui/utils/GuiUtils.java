@@ -4,10 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
@@ -20,6 +30,7 @@ import com.tomecode.soa.dependency.analyzer.tree.ServiceBusStructureNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceOperationsDepNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.WorkspacesNavigator;
 import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
+import com.tomecode.soa.dependency.analyzer.view.PropertiesViewOsbAdapter;
 import com.tomecode.soa.dependency.analyzer.view.graph.FlowGraphView;
 import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
 
@@ -34,43 +45,6 @@ import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
  * 
  */
 public final class GuiUtils {
-
-	// private static List<Integer> visualGraphInstances = null;
-	// static {
-	// if (visualGraphInstances == null) {
-	// visualGraphInstances = new ArrayList<Integer>();
-	// visualGraphInstances.add(0);
-	// }
-	// }
-
-	// private static int visualGraphActivateInstance = 0;
-	// private static int visualGraphInstanceNum = 0;
-
-	// public final static String newInstanceVisualGraph() {
-	// visualGraphInstanceNum++;
-	// visualGraphActivateInstance = visualGraphInstanceNum;
-	// visualGraphInstances.add(visualGraphActivateInstance);
-	// return String.valueOf(visualGraphInstanceNum);
-	// }
-	//
-	// public final static void dropInstanceVisualGraph() {
-	// // TODO: fixnut mazanie aktivnych instacii grafu
-	// if (visualGraphInstanceNum > 0) {
-	// visualGraphInstanceNum--;
-	// }
-	//
-	// if (!visualGraphInstances.isEmpty()) {
-	// visualGraphInstances.remove(visualGraphActivateInstance);
-	// }
-	// }
-
-	// public final static int getActivateViewId() {
-	// return visualGraphActivateInstance;
-	// }
-	//
-	// public final static void setActivateViewId(int i) {
-	// visualGraphActivateInstance = i;
-	// }
 
 	/**
 	 * find reference for {@link WorkspacesNavigator} in application
@@ -88,6 +62,15 @@ public final class GuiUtils {
 	 */
 	public static final PropertiesView getPropertiesView() {
 		return (PropertiesView) findView(PropertiesView.ID);
+	}
+
+	/**
+	 * find reference for {@link PropertiesViewOsbAdapter}
+	 * 
+	 * @return
+	 */
+	public static final PropertiesViewOsbAdapter getPropertiesViewOsbAdapter() {
+		return (PropertiesViewOsbAdapter) findView(PropertiesViewOsbAdapter.ID);
 	}
 
 	/**
@@ -141,25 +124,10 @@ public final class GuiUtils {
 	}
 
 	/**
-	 * find current {@link VisualGraphView}
+	 * find reference for {@link ServiceOperationsDepNavigator}
 	 * 
-	 * @param instanceNumber
 	 * @return
 	 */
-	public final static VisualGraphView getVisualGraphView(int instanceNumber) {
-		IViewReference iViewReference = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findViewReference(VisualGraphView.ID, String.valueOf(instanceNumber));
-		// if (iViewReference != null) {
-		// return (VisualGraphView) iViewReference.getView(true);
-		// }
-		//
-		// return (VisualGraphView) findView(VisualGraphView.ID);
-		return null;
-	}
-
-	// public final static List<Integer> getAllVisualGraphInstances() {
-	// return visualGraphInstances;
-	// }
-
 	public final static ServiceOperationsDepNavigator getServiceOperationsDepNavigator() {
 		return (ServiceOperationsDepNavigator) findView(ServiceOperationsDepNavigator.ID);
 	}
@@ -284,4 +252,119 @@ public final class GuiUtils {
 		return graphViews;
 	}
 
+	// ********************************************************************
+	// ********************************************************************
+	// ********************************************************************
+	/**
+	 * create {@link Composite} with {@link GridLayout}
+	 * 
+	 * @param sc
+	 * @return
+	 */
+	public final static Composite createCompositeWithGrid(ScrolledComposite sc) {
+		Composite composite = new Composite(sc, SWT.NONE);
+		composite.setLayout(new GridLayout(1, false));
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_VERTICAL | GridData.GRAB_HORIZONTAL));
+
+		return composite;
+	}
+
+	/**
+	 * create composite for grid
+	 * 
+	 * @param parent
+	 * @param numColumns
+	 * @return
+	 */
+	public final static Composite createCompositeWithGrid(Composite parent, int numColumns) {
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new GridLayout(numColumns, false));
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_VERTICAL | GridData.GRAB_HORIZONTAL));
+
+		return composite;
+	}
+
+	/**
+	 * create new group for grid
+	 * 
+	 * @param composite
+	 * @param title
+	 * @param numColumns
+	 * @return
+	 */
+	public static final Group createGroupWithGrid(Composite composite, String title, int numColumns) {
+		Group group = new Group(composite, SWT.SHADOW_IN);
+		group.setText(title);
+		group.setLayout(new GridLayout(numColumns, false));
+		group.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_VERTICAL | GridData.GRAB_HORIZONTAL));
+		return group;
+	}
+
+	/**
+	 * create label
+	 * 
+	 * @param parent
+	 * @param title
+	 * @return
+	 */
+	public final static Label createLabelWithGrid(Composite parent, String title) {
+		Label label = new Label(parent, SWT.NONE);
+		label.setText(title);
+		return label;
+	}
+
+	/**
+	 * create text for grid
+	 * 
+	 * @param parent
+	 * @return
+	 */
+	public static final Text createTextWithGrid(Composite parent) {
+		return createTextWithGrid(parent, "");
+	}
+
+	/**
+	 * create text for grid
+	 * 
+	 * @param parent
+	 * @param text
+	 * @return
+	 */
+	public static final Text createTextWithGrid(Composite parent, String text) {
+		Text textComponent = new Text(parent, SWT.BORDER | SWT.READ_ONLY);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		textComponent.setLayoutData(gridData);
+		textComponent.setText(text);
+		return textComponent;
+	}
+
+	/**
+	 * create new group for grid
+	 * 
+	 * @param composite
+	 * @param title
+	 * @return
+	 */
+	public static final Group createGroupWithGrid(Composite composite, String title) {
+		return createGroupWithGrid(composite, title, 2);
+	}
+
+	/**
+	 * create bold font
+	 * 
+	 * @param font
+	 * @return
+	 */
+	public final static Font createFont() {
+		Font font = Display.getCurrent().getSystemFont();
+		FontData fontData = font.getFontData()[0];
+		return new Font(Display.getCurrent(), new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD));
+
+	}
+
+	public final static org.eclipse.draw2d.Label createLabel2dBold(String text) {
+		org.eclipse.draw2d.Label label = new org.eclipse.draw2d.Label(text);
+		label.setFont(createFont());
+		return label;
+	}
 }
