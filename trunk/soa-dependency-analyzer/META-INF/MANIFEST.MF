@@ -11,6 +11,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.gef;bundle-version="3.6.1",
  org.eclipse.ui.views;bundle-version="3.5.0"
 Bundle-ActivationPolicy: lazy
+Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: lib/dom4j-1.6.1.jar,
  .

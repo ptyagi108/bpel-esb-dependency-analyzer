@@ -6,6 +6,8 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
@@ -33,6 +35,9 @@ import com.tomecode.soa.dependency.analyzer.gui.actions.view.ShowWorkspaceNaviga
  */
 public final class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
+	private IWorkbenchAction exitAction;
+	private IWorkbenchAction aboutAction;
+
 	private OpenNewVisualViewAction newVisualViewAction;
 	private ShowWorkspaceNavigatorAction showWorkspaceNavigatorAction;
 	private OpenWorkspaceAction openWorkspaceAction;
@@ -59,11 +64,18 @@ public final class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		showServiceOperationDepViewAction = new ShowServiceOperationDepViewAction();
 		serviceBusStructureViewAction = new ShowServiceBusStructureViewAction();
 		propertiesOSBAdapter = new ShowPropertiesOSBAdapter();
+
+		exitAction = ActionFactory.QUIT.create(window);
+		register(exitAction);
+		aboutAction = ActionFactory.ABOUT.create(window);
+		register(aboutAction);
 	}
 
 	protected final void fillMenuBar(IMenuManager menuBar) {
 		MenuManager fileMenu = new MenuManager("&File", IWorkbenchActionConstants.M_FILE);
 		fileMenu.add(openWorkspaceAction);
+		fileMenu.add(new Separator());
+		fileMenu.add(exitAction);
 		menuBar.add(fileMenu);
 		menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
 		MenuManager visualMenu = new MenuManager("&Visual", IWorkbenchActionConstants.M_EDIT);
@@ -87,9 +99,13 @@ public final class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		//
 		viewMenu.add(propertiesOSBAdapter);
 		MenuManager toolMenu = new MenuManager("&Tools", "Tools");
+		menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
 		menuBar.add(toolMenu);
-
 		toolMenu.add(new ExportGraphToImageAction());
+
+		MenuManager aboutMenu = new MenuManager("About", "About");
+		menuBar.add(aboutMenu);
+		aboutMenu.add(aboutAction);
 	}
 
 }

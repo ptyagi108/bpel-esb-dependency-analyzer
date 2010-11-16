@@ -63,7 +63,6 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 		rootNode = new WorkspaceRootNode();
 		setTitleToolTip("Workspace Navigator");
 		setTitleImage(ImageFactory.WORKSPACE_NAVIGATOR);
-
 	}
 
 	@Override

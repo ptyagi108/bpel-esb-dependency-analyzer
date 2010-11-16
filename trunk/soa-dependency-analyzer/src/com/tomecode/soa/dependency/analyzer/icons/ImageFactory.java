@@ -114,11 +114,7 @@ public final class ImageFactory {
 	public static final Image ORACLE_10G_OPERATION = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/operation.gif").createImage();
 	public static final Image ORACLE_10G_SEARCH = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/search.png").createImage();
 	public static final Image ORACLE_10G_ERROR = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/error.png").createImage();
-	public static final Image ORACLE_10G_EXIT = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/exit.png").createImage();
 	public static final Image ORACLE_10G_ISSUES = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/issues.png").createImage();
-	public static final Image ORACLE_10G_BDA_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/bpel_dependency_analyzer_small.png").createImage();
-	public static final Image ORACLE_10G_BDA = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/bpel_dependency_analyzer.png").createImage();
-	public static final Image ORACLE_10G_ABOUT = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/about.png").createImage();
 	public static final Image ORACLE_10G_INFO = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/info.png").createImage();
 	public static final ImageDescriptor export = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/export2.png");
 	public static final ImageDescriptor exportBig = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/exportBig.png");
