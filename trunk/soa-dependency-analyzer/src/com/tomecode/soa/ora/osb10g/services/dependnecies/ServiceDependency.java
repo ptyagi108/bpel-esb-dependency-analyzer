@@ -79,7 +79,7 @@ public final class ServiceDependency {
 	 * 
 	 * @return name of project from {@link #refPath}
 	 */
-	public final String getProjectName() {
+	public final String getProjectNameFromRefPath() {
 		if (refPath != null) {
 			int index = refPath.indexOf("/");
 			if (index != -1) {

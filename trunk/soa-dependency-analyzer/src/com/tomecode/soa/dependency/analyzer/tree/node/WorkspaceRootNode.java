@@ -3,9 +3,11 @@ package com.tomecode.soa.dependency.analyzer.tree.node;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tomecode.soa.dependency.analyzer.tree.WorkspacesNavigator;
 import com.tomecode.soa.workspace.MultiWorkspace;
 
 /**
+ * Root node {@link WorkspacesNavigator}
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
@@ -49,6 +51,15 @@ public final class WorkspaceRootNode {
 					objects.set(i, newMultiWorkspace);
 				}
 			}
+		}
+	}
+
+	public final void refreshMultiWorkspaceNode(MultiWorkspace multiWorkspace) {
+		for (int i = 0; i <= objects.size() - 1; i++) {
+			if (objects.get(i).equals(multiWorkspace)) {
+				objects.set(i, multiWorkspace);
+			}
+
 		}
 	}
 

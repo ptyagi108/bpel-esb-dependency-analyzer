@@ -18,6 +18,7 @@ import com.tomecode.soa.parser.AbstractParser;
 import com.tomecode.soa.parser.ServiceParserException;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.project.ProjectType;
+import com.tomecode.soa.workspace.Workspace;
 
 /**
  * 
@@ -128,8 +129,9 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 	 * @param multiWorkspace
 	 */
 	private final void analysesBpelProjectDependencies(Ora10gMultiWorkspace multiWorkspace) {
-		for (Ora10gWorkspace workspace : multiWorkspace.getWorkspaces()) {
-			for (Project project : workspace.getProjects()) {
+		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+			Ora10gWorkspace ora10gWorkspace = (Ora10gWorkspace) workspace;
+			for (Project project : ora10gWorkspace.getProjects()) {
 				if (project.getType() == ProjectType.ORACLE10G_BPEL) {
 					((BpelProject) project).analysisProjectDependencies();
 				}
@@ -144,9 +146,10 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 	 * @param multiWorkspace
 	 */
 	private final void analysesDepBetweenBpelEsb(Ora10gMultiWorkspace multiWorkspace) {
-		for (Ora10gWorkspace workspace : multiWorkspace.getWorkspaces()) {
+		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+			Ora10gWorkspace ora10gWorkspace = (Ora10gWorkspace) workspace;
 
-			for (Project project : workspace.getProjects()) {
+			for (Project project : ora10gWorkspace.getProjects()) {
 				if (project.getType() == ProjectType.ORACLE10G_BPEL) {
 					BpelProject bpelProject = (BpelProject) project;
 					for (PartnerLinkBinding partnerLinkBinding : bpelProject.getPartnerLinkBindings()) {
@@ -239,8 +242,9 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 	 * @return if not found, return <b>null</b>
 	 */
 	private final BpelProject findBpelByName(Ora10gMultiWorkspace multiWorkspace, String bpelProcessName) {
-		for (Ora10gWorkspace workspace : multiWorkspace.getWorkspaces()) {
-			for (Project project : workspace.getProjects()) {
+		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+			Ora10gWorkspace ora10gWorkspace = (Ora10gWorkspace) workspace;
+			for (Project project : ora10gWorkspace.getProjects()) {
 				if (project.getType() == ProjectType.ORACLE10G_BPEL) {
 					BpelProject bpelProject = (BpelProject) project;
 					if (bpelProject.toString().equals(bpelProcessName)) {
@@ -325,8 +329,10 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 	 * @param workspace
 	 */
 	private final void analysesBpelDependencies(Ora10gMultiWorkspace multiWorkspace) {
-		for (Ora10gWorkspace workspace : multiWorkspace.getWorkspaces()) {
-			for (Project service : workspace.getProjects()) {
+		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+			Ora10gWorkspace ora10gWorkspace = (Ora10gWorkspace) workspace;
+
+			for (Project service : ora10gWorkspace.getProjects()) {
 				if (service.getType() == ProjectType.ORACLE10G_BPEL) {
 					BpelProject bpel = (BpelProject) service;
 					for (PartnerLinkBinding partnerLinkBinding : bpel.getPartnerLinkBindings()) {
@@ -350,8 +356,10 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 	 * @param multiWorkspace
 	 */
 	private final void analysesEsbDependencies(Ora10gMultiWorkspace multiWorkspace) {
-		for (Ora10gWorkspace workspace : multiWorkspace.getWorkspaces()) {
-			for (Project project : workspace.getProjects()) {
+		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+			Ora10gWorkspace ora10gWorkspace = (Ora10gWorkspace) workspace;
+
+			for (Project project : ora10gWorkspace.getProjects()) {
 				if (project.getType() == ProjectType.ORACLE10G_ESB) {
 					EsbProject esbProject = (EsbProject) project;
 
@@ -394,8 +402,10 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 	 * @return
 	 */
 	private final EsbProject findEsbProjectByQname(String qName, URL serviceURL, Ora10gMultiWorkspace multiWorkspace) {
-		for (Ora10gWorkspace workspace : multiWorkspace.getWorkspaces()) {
-			for (Project project : workspace.getProjects()) {
+		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+			Ora10gWorkspace ora10gWorkspace = (Ora10gWorkspace) workspace;
+
+			for (Project project : ora10gWorkspace.getProjects()) {
 				if (project.getType() == ProjectType.ORACLE10G_ESB) {
 					EsbProject esbProject = (EsbProject) project;
 					EsbProject fProject = esbProject.findEsbProjectByQname(qName, serviceURL);

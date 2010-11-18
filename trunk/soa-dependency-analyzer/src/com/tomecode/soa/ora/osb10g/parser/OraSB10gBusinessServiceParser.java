@@ -1,6 +1,7 @@
 package com.tomecode.soa.ora.osb10g.parser;
 
 import java.io.File;
+import java.io.InputStream;
 
 import org.dom4j.Element;
 
@@ -18,14 +19,30 @@ import com.tomecode.soa.parser.ServiceParserException;
 public final class OraSB10gBusinessServiceParser extends OraSB10gBasicServiceParser {
 
 	/**
-	 * Parse OSB Business Service file
+	 * Parse Business Service in OSB 10g
 	 * 
 	 * @param file
 	 * @return
 	 * @throws ServiceParserException
 	 */
 	public final BusinessService parseBusinessService(File file) throws ServiceParserException {
-		Element eXml = parseXml(file);
+		return parseBusinessService(file, parseXml(file));
+
+	}
+
+	/**
+	 * Parse Business Service in OSB 10g
+	 * 
+	 * @param file
+	 * @param inputStream
+	 * @return
+	 * @throws ServiceParserException
+	 */
+	public final BusinessService parseBusinessService(File file, InputStream inputStream) throws ServiceParserException {
+		return parseBusinessService(file, parseXml(inputStream));
+	}
+
+	private final BusinessService parseBusinessService(File file, Element eXml) {
 		if ("xml-fragment".equals(eXml.getName())) {
 			BusinessService businessService = new BusinessService(file);
 			businessService.setEndpointConfig(parseEndpointConfig(eXml));
@@ -33,5 +50,4 @@ public final class OraSB10gBusinessServiceParser extends OraSB10gBasicServicePar
 		}
 		return null;
 	}
-
 }

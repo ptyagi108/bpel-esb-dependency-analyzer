@@ -7,7 +7,7 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.zest.core.widgets.Graph;
 
-import com.tomecode.soa.dependency.analyzer.gui.displays.ExportGraphToImageWizard;
+import com.tomecode.soa.dependency.analyzer.gui.wizards.ExportGraphToImageWizard;
 import com.tomecode.soa.dependency.analyzer.icons.ImageExporter;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;

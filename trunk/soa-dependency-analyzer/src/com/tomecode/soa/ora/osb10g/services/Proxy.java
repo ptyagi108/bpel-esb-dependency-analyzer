@@ -49,11 +49,16 @@ public final class Proxy extends Service {
 		super(file, ServiceDependencyType.PROXY_SERVICE);
 		this.file = file;
 
-		int index = file.getName().indexOf(".proxy");
+		int index = file.getName().toLowerCase().indexOf(".proxy");
 		if (index != -1) {
 			name = file.getName().substring(0, index);
 		} else {
-			name = file.getName();
+			index = file.getName().toLowerCase().indexOf(".proxyservice");
+			if (index != -1) {
+				name = file.getName().substring(0, index);
+			} else {
+				name = file.getName();
+			}
 		}
 
 		structure = new ProxyStructure(this);

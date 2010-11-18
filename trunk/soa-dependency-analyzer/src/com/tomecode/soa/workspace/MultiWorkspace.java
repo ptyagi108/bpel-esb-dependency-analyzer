@@ -1,6 +1,7 @@
 package com.tomecode.soa.workspace;
 
 import java.io.File;
+import java.util.List;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.workspace.Workspace.WorkspaceType;
@@ -17,8 +18,18 @@ import com.tomecode.soa.workspace.Workspace.WorkspaceType;
  */
 public interface MultiWorkspace extends ImageFace {
 
+	/**
+	 * Multi workspace name
+	 * 
+	 * @return
+	 */
 	String getName();
 
+	/**
+	 * Multi workspace folder
+	 * 
+	 * @return
+	 */
 	File getFile();
 
 	/**
@@ -28,4 +39,10 @@ public interface MultiWorkspace extends ImageFace {
 
 	boolean containsWorkspace(Workspace workspace);
 
+	/**
+	 * list of {@link Workspace}
+	 * 
+	 * @return
+	 */
+	List<Workspace> getWorkspaces();
 }

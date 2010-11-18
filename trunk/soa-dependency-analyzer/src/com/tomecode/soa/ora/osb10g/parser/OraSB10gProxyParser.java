@@ -1,6 +1,7 @@
 package com.tomecode.soa.ora.osb10g.parser;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,20 +88,40 @@ public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 	// }
 
 	/**
-	 * parse OSB 10g PROXY service
+	 * parse Proxy Service in OSB 10g
 	 * 
 	 * @param file
 	 * @return
 	 * @throws ServiceParserException
 	 */
 	public final Proxy parseProxy(File file) throws ServiceParserException {
-		Element eXml = parseXml(file);
-		Element eCoreEntry = eXml.element("coreEntry");
-		Proxy proxy = new Proxy(file);
-		proxy.setEndpointConfig(parseEndpointConfig(eXml));
-		parseCoreEntrty(eCoreEntry, proxy);
-		parseFlow(eXml.element("router"), proxy);
-		return proxy;
+		return parseProxy(file, parseXml(file));
+	}
+
+	/**
+	 * parse Proxy Service in OSB 10g
+	 * 
+	 * @param file
+	 * @param inputStream
+	 * @return
+	 * @throws ServiceParserException
+	 */
+	public final Proxy parseProxy(File file, InputStream inputStream) throws ServiceParserException {
+		return parseProxy(file, parseXml(inputStream));
+	}
+
+	public final Proxy parseProxy(File file, Element eXml) throws ServiceParserException {
+		if (eXml != null) {
+			Element eCoreEntry = eXml.element("coreEntry");
+			if (eCoreEntry != null) {
+				Proxy proxy = new Proxy(file);
+				proxy.setEndpointConfig(parseEndpointConfig(eXml));
+				parseCoreEntrty(eCoreEntry, proxy);
+				parseFlow(eXml.element("router"), proxy);
+				return proxy;
+			}
+		}
+		return null;
 	}
 
 	/**

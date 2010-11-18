@@ -1,4 +1,4 @@
-package com.tomecode.soa.dependency.analyzer.gui.displays;
+package com.tomecode.soa.dependency.analyzer.gui.wizards;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 
 /**
- * Wizard for open new workspace
+ * Wizard to open a new workspace
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
@@ -75,7 +75,7 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 	final class SelectWorkspacePage extends WizardPage implements Listener {
 
 		private Button bOracle10g;
-	//	private Button bOracle11g;
+		// private Button bOracle11g;
 		private Button bOracleSB10g;
 		private Button bOpenEsbBpel;
 
@@ -94,11 +94,11 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 			bOracle10g.setText(WorkspaceType.ORACLE_1OG.toString());
 			bOracle10g.setFocus();
 			bOracle10g.addListener(SWT.Selection, this);
-//			bOracle11g = new Button(composite, SWT.RADIO);
-//			bOracle11g.setText(WorkspaceType.ORACLE_11G.toString());
-//			bOracle11g.addListener(SWT.Selection, this);
+			// bOracle11g = new Button(composite, SWT.RADIO);
+			// bOracle11g.setText(WorkspaceType.ORACLE_11G.toString());
+			// bOracle11g.addListener(SWT.Selection, this);
 			bOracleSB10g = new Button(composite, SWT.RADIO);
-			bOracleSB10g.setText(WorkspaceType.ORACLE_SERVICE_BUS_10G.toString());
+			bOracleSB10g.setText(WorkspaceType.ORACLE_SERVICE_BUS_10G.toString() + (" (from Workspace)"));
 			bOracleSB10g.addListener(SWT.Selection, this);
 			bOpenEsbBpel = new Button(composite, SWT.RADIO);
 			bOpenEsbBpel.setText(WorkspaceType.OPEN_ESB.toString());
@@ -112,9 +112,9 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 			if (bOracle10g.getSelection()) {
 				config.setWorkspaceType(WorkspaceType.ORACLE_1OG);
 				setPageComplete(true);
-//			} else if (bOracle11g.getSelection()) {
-//				config.setWorkspaceType(WorkspaceType.ORACLE_11G);
-//				setPageComplete(true);
+				// } else if (bOracle11g.getSelection()) {
+				// config.setWorkspaceType(WorkspaceType.ORACLE_11G);
+				// setPageComplete(true);
 			} else if (bOpenEsbBpel.getSelection()) {
 				config.setWorkspaceType(WorkspaceType.OPEN_ESB);
 				setPageComplete(true);
@@ -208,7 +208,6 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 			bSelectExistsMultipleWorkspace.addListener(SWT.Selection, this);
 
 			comboMWorkspaces = new Combo(composite, SWT.READ_ONLY);
-
 			comboMWorkspaces.setItems(mwNames);
 			comboMWorkspaces.setEnabled(false);
 
@@ -332,7 +331,7 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 					dialog.setText("Select workspace directory...");
 
 					String dir = dialog.open();
-					if (dialog != null) {
+					if (dir != null) {
 						textFile.setText(dir);
 						config.setWorkspaceDir(new File(dir));
 						setPageComplete(true);

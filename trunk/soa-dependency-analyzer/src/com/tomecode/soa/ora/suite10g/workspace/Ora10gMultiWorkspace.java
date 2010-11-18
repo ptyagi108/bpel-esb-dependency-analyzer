@@ -35,7 +35,7 @@ public final class Ora10gMultiWorkspace implements MultiWorkspace {
 	/**
 	 * list of {@link Ora10gWorkspace}
 	 */
-	private List<Ora10gWorkspace> workspaces;
+	private List<Workspace> workspaces;
 
 	/**
 	 * Constructor
@@ -46,7 +46,7 @@ public final class Ora10gMultiWorkspace implements MultiWorkspace {
 	 *            workspace folder( user enter)
 	 */
 	public Ora10gMultiWorkspace(String name, File file) {
-		this.workspaces = new ArrayList<Ora10gWorkspace>();
+		this.workspaces = new ArrayList<Workspace>();
 		this.name = name;
 		this.file = file;
 	}
@@ -78,7 +78,7 @@ public final class Ora10gMultiWorkspace implements MultiWorkspace {
 		this.workspaces.add(workspace);
 	}
 
-	public final List<Ora10gWorkspace> getWorkspaces() {
+	public final List<Workspace> getWorkspaces() {
 		return workspaces;
 	}
 
@@ -90,7 +90,7 @@ public final class Ora10gMultiWorkspace implements MultiWorkspace {
 	public final Ora10gWorkspace removeWorkspace(Workspace workspace) {
 		for (int i = 0; i <= workspaces.size() - 1; i++) {
 			if (workspaces.get(i).equals(workspace)) {
-				return workspaces.remove(i);
+				return (Ora10gWorkspace) workspaces.remove(i);
 			}
 		}
 		return null;
@@ -98,7 +98,7 @@ public final class Ora10gMultiWorkspace implements MultiWorkspace {
 
 	@Override
 	public final boolean containsWorkspace(Workspace workspace) {
-		for (Ora10gWorkspace ora10gWorkspace : workspaces) {
+		for (Workspace ora10gWorkspace : workspaces) {
 			if (workspace.equals(ora10gWorkspace)) {
 				return true;
 			}

@@ -10,8 +10,10 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Shell;
 
 import com.tomecode.soa.dependency.analyzer.core.ApplicationManager;
-import com.tomecode.soa.dependency.analyzer.gui.displays.OpenNewWorkspaceWizard.WorkspaceConfig;
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
+import com.tomecode.soa.dependency.analyzer.gui.wizards.AddNewProjectToWorkspaceWizard.AddNewProjectToWorkspaceConfig;
+import com.tomecode.soa.dependency.analyzer.gui.wizards.OpenNewWorkspaceWizard.WorkspaceConfig;
+import com.tomecode.soa.dependency.analyzer.tree.WorkspacesNavigator;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 
@@ -24,6 +26,44 @@ import com.tomecode.soa.workspace.Workspace.WorkspaceType;
  * 
  */
 public final class LoadingDialogs {
+
+	public final static void showAddNewWorkspace(final Shell shell, final AddNewProjectToWorkspaceConfig config) {
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
+		try {
+
+			dialog.run(true, true, new IRunnableWithProgress() {
+
+				@Override
+				public final void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					monitor.beginTask("Parse project: " + config.getPath() + "...", 100);
+					monitor.subTask("Prepare parser...");
+					monitor.worked(15);
+
+					monitor.subTask("Parsing project	...");
+					monitor.worked(40);
+
+					ApplicationManager.getInstance().addProject(config);
+
+					monitor.subTask("Refresh Workspace Navigator...");
+					monitor.worked(40);
+				}
+
+			});
+		} catch (Exception e) {
+
+		}
+
+		// wait for finish task
+		dialog.open();
+		// close dialog
+		dialog.close();
+
+		WorkspacesNavigator navigator = GuiUtils.getWorkspacesNavigator();
+		if (navigator != null) {
+			navigator.updateMultiWorkspace(config.getSelectedMultiWorkspace());
+			navigator.refreshTree();
+		}
+	}
 
 	/**
 	 * Show {@link ProgressMonitorDialog} which parse workspace

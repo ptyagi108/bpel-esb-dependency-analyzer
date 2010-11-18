@@ -11,18 +11,24 @@ import java.util.List;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
-import com.tomecode.soa.dependency.analyzer.gui.displays.OpenNewWorkspaceWizard.WorkspaceConfig;
+import com.tomecode.soa.dependency.analyzer.gui.wizards.AddNewProjectToWorkspaceWizard.AddNewProjectToWorkspaceConfig;
+import com.tomecode.soa.dependency.analyzer.gui.wizards.OpenNewWorkspaceWizard.WorkspaceConfig;
 import com.tomecode.soa.openesb.bpel.parser.OpenEsbMWorkspaceParser;
 import com.tomecode.soa.openesb.workspace.OpenEsbMultiWorkspace;
 import com.tomecode.soa.ora.osb10g.parser.OraSB10gMWorkspaceParser;
+import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gMultiWorkspace;
+import com.tomecode.soa.ora.osb10g.workspace.OraSB10gWorkspace;
 import com.tomecode.soa.ora.suite10g.parser.Ora10gMWorkspaceParser;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gMultiWorkspace;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gWorkspace;
 import com.tomecode.soa.parser.ServiceParserException;
+import com.tomecode.soa.project.Project;
+import com.tomecode.soa.project.ProjectType;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 import com.tomecode.soa.workspace.Workspace.WorkspaceType;
@@ -112,7 +118,7 @@ public final class ApplicationManager {
 
 			writeData(rootElement);
 
-			output = new XMLWriter(new FileWriter(file));
+			output = new XMLWriter(new FileWriter(file), OutputFormat.createPrettyPrint());
 			output.write(document);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -130,29 +136,82 @@ public final class ApplicationManager {
 	}
 
 	/**
-	 * write data to xml
+	 * write data to XML
 	 * 
 	 * @param rootElement
 	 */
 	private final void writeData(Element rootElement) {
 		for (MultiWorkspace multiWorkspace : multiWorkspaces) {
-			Element eMultiWorkspace = DocumentHelper.createElement("multi-workspace");
-			rootElement.add(eMultiWorkspace);
+			Element eRoot = DocumentHelper.createElement("multi-workspace");
+			rootElement.add(eRoot);
 
-			eMultiWorkspace.addAttribute("name", multiWorkspace.getName());
+			eRoot.addAttribute("name", multiWorkspace.getName());
 			if (multiWorkspace.getType() == WorkspaceType.ORACLE_1OG) {
-				eMultiWorkspace.addAttribute("type", "oracle-10g");
+				eRoot.addAttribute("type", "oracle-10g");
 			} else if (multiWorkspace.getType() == WorkspaceType.ORACLE_SERVICE_BUS_10G) {
-				eMultiWorkspace.addAttribute("type", "oracle-10g-osb");
+				eRoot.addAttribute("type", "oracle-10g-osb");
 			} else if (multiWorkspace.getType() == WorkspaceType.OPEN_ESB) {
-				eMultiWorkspace.addAttribute("type", "open-esb");
+				eRoot.addAttribute("type", "open-esb");
+			}
+
+			// multi-workspace path
+			Element ePath = DocumentHelper.createElement("path");
+			eRoot.add(ePath);
+			ePath.addText(multiWorkspace.getFile().toString());
+
+			writeWorkspace(eRoot, multiWorkspace.getWorkspaces());
+		}
+	}
+
+	/**
+	 * write list of {@link Workspace}
+	 * 
+	 * @param eRoot
+	 * @param workspaces
+	 */
+	private final void writeWorkspace(Element eRoot, List<Workspace> workspaces) {
+		Element eWorkspaces = DocumentHelper.createElement("workspaces");
+		eRoot.add(eWorkspaces);
+
+		for (Workspace workspace : workspaces) {
+			Element eWorkspace = DocumentHelper.createElement("workspace");
+			eWorkspaces.add(eWorkspace);
+
+			Element eWorkspaceName = DocumentHelper.createElement("name");
+			eWorkspaceName.setText(workspace.getName());
+			eWorkspace.add(eWorkspaceName);
+
+			Element eWorkspacePath = DocumentHelper.createElement("path");
+			eWorkspacePath.setText(workspace.getFile().toString());
+			eWorkspace.add(eWorkspacePath);
+
+			writeProjects(eWorkspace, workspace.getProjects());
+		}
+	}
+
+	/**
+	 * write list of {@link Project}
+	 * 
+	 * @param eRoot
+	 * @param projects
+	 */
+	private final void writeProjects(Element eRoot, List<Project> projects) {
+		Element eProjects = DocumentHelper.createElement("projects");
+		eRoot.add(eProjects);
+
+		for (Project project : projects) {
+			Element eProject = DocumentHelper.createElement("project");
+			eProjects.add(eProject);
+			if (project.getType() == ProjectType.ORACLE_SERVICE_BUS_1OG) {
+				OraSB10gProject oraSB10gProject = (OraSB10gProject) project;
+				eProject.addAttribute("isJar", String.valueOf(oraSB10gProject.isAsJar()));
 			}
 
 			Element ePath = DocumentHelper.createElement("path");
-			eMultiWorkspace.add(ePath);
-			ePath.addText(multiWorkspace.getFile().toString());
-		}
+			eProject.add(ePath);
+			ePath.setText(project.getFile().toString());
 
+		}
 	}
 
 	/**
@@ -175,8 +234,10 @@ public final class ApplicationManager {
 					MultiWorkspace multiWorkspace = ora10gParser.parse(name, new File(path));
 					multiWorkspaces.add(multiWorkspace);
 				} else if ("oracle-10g-osb".equalsIgnoreCase(type)) {
-					OraSB10gMWorkspaceParser osb10gParser = new OraSB10gMWorkspaceParser();
-					MultiWorkspace multiWorkspace = osb10gParser.parse(name, new File(path));
+					MultiWorkspace multiWorkspace = restoreOSB10g(eMultiWorkspace.element("workspaces"), name, path);
+
+					OraSB10gMWorkspaceParser parser = new OraSB10gMWorkspaceParser();
+					parser.parse(multiWorkspace);
 					multiWorkspaces.add(multiWorkspace);
 				} else if ("open-esb".equals(type)) {
 					OpenEsbMWorkspaceParser openEsbParser = new OpenEsbMWorkspaceParser();
@@ -187,6 +248,46 @@ public final class ApplicationManager {
 		}
 	}
 
+	/**
+	 * {@link OraSB10gMultiWorkspace}
+	 * 
+	 * @param eWorkspaces
+	 * @param name
+	 * @param path
+	 * @return
+	 */
+	private final OraSB10gMultiWorkspace restoreOSB10g(Element eWorkspaces, String name, String path) {
+		OraSB10gMultiWorkspace multiWorkspace = new OraSB10gMultiWorkspace(name, new File(path));
+		if (eWorkspaces != null) {
+			List<?> eWorkspace = eWorkspaces.elements("workspace");
+			for (Object o : eWorkspace) {
+				Element element = (Element) o;
+
+				OraSB10gWorkspace workspace = new OraSB10gWorkspace(element.elementTextTrim("name"), new File(element.elementTextTrim("path")));
+				multiWorkspace.addWorkspace(workspace);
+
+				Element eProjects = element.element("projects");
+				if (eProjects != null) {
+					List<?> list = eProjects.elements("project");
+					for (Object op : list) {
+						Element ee = (Element) op;
+						boolean isJar = Boolean.parseBoolean(ee.attributeValue("isJar"));
+						OraSB10gProject project = new OraSB10gProject(new File(ee.elementTextTrim("path")), isJar);
+						workspace.addProject(project);
+					}
+				}
+			}
+		}
+
+		return multiWorkspace;
+	}
+
+	/**
+	 * get {@link MultiWorkspace} by type
+	 * 
+	 * @param type
+	 * @return
+	 */
 	public final List<MultiWorkspace> getMultiWorkspaces(WorkspaceType type) {
 		List<MultiWorkspace> newMultiWorkspaces = new ArrayList<MultiWorkspace>();
 		for (MultiWorkspace multiWorkspace : multiWorkspaces) {
@@ -199,6 +300,11 @@ public final class ApplicationManager {
 
 	}
 
+	/**
+	 * create new {@link Ora10gMWorkspaceParser}
+	 * 
+	 * @return
+	 */
 	public final Ora10gMWorkspaceParser newOra10gMultiWorkspace() {
 		return new Ora10gMWorkspaceParser();
 	}
@@ -357,4 +463,20 @@ public final class ApplicationManager {
 		}
 		return null;
 	}
+
+	/**
+	 * add new project to workspace
+	 * 
+	 * @param config
+	 */
+	public final void addProject(AddNewProjectToWorkspaceConfig config) {
+		WorkspaceType type = config.getSelectedWorkspace().getType();
+		if (type == WorkspaceType.ORACLE_SERVICE_BUS_10G) {
+			OraSB10gProject project = oraSB10gMWorkspaceParser.addNewProject(config.isAsFolder(), config.getPath());
+			OraSB10gWorkspace workspace = (OraSB10gWorkspace) config.getSelectedWorkspace();
+			workspace.addProject(project);
+		}
+		writeWorkspaces();
+	}
+
 }

@@ -8,6 +8,7 @@ import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
+import com.tomecode.soa.project.Project;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
@@ -28,12 +29,15 @@ public final class OraSB10gWorkspace implements Workspace {
 	 */
 	private File file;
 
+	/**
+	 * parent {@link MultiWorkspace}
+	 */
 	private MultiWorkspace parent;
 
 	/**
 	 * list of {@link OraSB10gProject}
 	 */
-	private final List<OraSB10gProject> projects;
+	private final List<Project> projects;
 
 	/**
 	 * Constructor
@@ -44,7 +48,7 @@ public final class OraSB10gWorkspace implements Workspace {
 	 *            workspace file
 	 */
 	public OraSB10gWorkspace(String name, File file) {
-		this.projects = new ArrayList<OraSB10gProject>();
+		this.projects = new ArrayList<Project>();
 		this.name = name;
 		this.file = file;
 	}
@@ -78,7 +82,7 @@ public final class OraSB10gWorkspace implements Workspace {
 		this.projects.add(project);
 	}
 
-	public final List<OraSB10gProject> getProjects() {
+	public final List<Project> getProjects() {
 		return this.projects;
 	}
 

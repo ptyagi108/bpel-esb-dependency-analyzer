@@ -1,6 +1,7 @@
 package com.tomecode.soa.ora.osb10g.parser;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 
 import org.dom4j.Element;
@@ -39,8 +40,8 @@ import com.tomecode.soa.ora.osb10g.activity.splitjoin.Variables;
 import com.tomecode.soa.ora.osb10g.activity.splitjoin.While;
 import com.tomecode.soa.ora.osb10g.services.SplitJoin;
 import com.tomecode.soa.ora.osb10g.services.SplitJoinStructure;
-import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependencies;
+import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.ServiceDependencyType;
 import com.tomecode.soa.parser.AbstractParser;
 import com.tomecode.soa.parser.ServiceParserException;
@@ -56,17 +57,35 @@ import com.tomecode.soa.parser.ServiceParserException;
 public final class OraSB10gSplitJoinParser extends AbstractParser {
 
 	/**
-	 * parse {@link SplitJoin} file
+	 * parse Split Join in OSB 10g;
 	 * 
 	 * @param file
 	 * @return
 	 * @throws ServiceParserException
 	 */
 	public final SplitJoin parseSplitJoin(File file) throws ServiceParserException {
-		Element eXml = parseXml(file);
-		SplitJoin splitJoin = new SplitJoin(file, eXml.attributeValue("name"));
-		parseActivities(splitJoin.getServiceDependencies(), eXml.elements(), splitJoin.getStructure());
-		return splitJoin;
+		return parseSplitJoin(file, parseXml(file));
+	}
+
+	/**
+	 * parse Split Join in OSB 10g;
+	 * 
+	 * @param file
+	 * @param inputStream
+	 * @return
+	 * @throws ServiceParserException
+	 */
+	public final SplitJoin parseSplitJoin(File file, InputStream inputStream) throws ServiceParserException {
+		return parseSplitJoin(file, inputStream);
+	}
+
+	public final SplitJoin parseSplitJoin(File file, Element eXml) throws ServiceParserException {
+		if (eXml != null) {
+			SplitJoin splitJoin = new SplitJoin(file, eXml.attributeValue("name"));
+			parseActivities(splitJoin.getServiceDependencies(), eXml.elements(), splitJoin.getStructure());
+			return splitJoin;
+		}
+		return null;
 	}
 
 	/**
@@ -171,8 +190,8 @@ public final class OraSB10gSplitJoinParser extends AbstractParser {
 					parseVariables(element, dataFlyout, true);
 				}
 			} else if ("invoke".equals(element.getName())) {
-				Invoke invoke = new Invoke(element.attributeValue("name"), element.attributeValue("operation"), element.attributeValue("partnerLink"), element.attributeValue("inputVariable"), element
-						.attributeValue("outputVariable"));
+				Invoke invoke = new Invoke(element.attributeValue("name"), element.attributeValue("operation"), element.attributeValue("partnerLink"), element.attributeValue("inputVariable"),
+						element.attributeValue("outputVariable"));
 				root.addActivity(invoke);
 
 				Element eInvokeInfo = element.element("invokeInfo");

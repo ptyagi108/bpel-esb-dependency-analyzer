@@ -1,6 +1,9 @@
 package com.tomecode.soa.parser;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -18,17 +21,32 @@ import org.dom4j.io.SAXReader;
 public abstract class AbstractParser {
 
 	/**
-	 * parse file to Xml
+	 * parse file to XML
 	 * 
 	 * @param file
 	 * @return
 	 * @throws ServiceParserException
 	 */
 	protected final Element parseXml(File file) throws ServiceParserException {
+		try {
+			return parseXml(new FileInputStream(file));
+		} catch (IOException e) {
+			throw new ServiceParserException(e);
+		}
+	}
+
+	/**
+	 * parse file to XML
+	 * 
+	 * @param inputStream
+	 * @return
+	 * @throws ServiceParserException
+	 */
+	protected final Element parseXml(InputStream inputStream) throws ServiceParserException {
 		SAXReader saxReader = new SAXReader();
 		Document document;
 		try {
-			document = saxReader.read(file);
+			document = saxReader.read(inputStream);
 		} catch (DocumentException e) {
 			throw new ServiceParserException(e);
 		} catch (Exception e) {
@@ -38,7 +56,7 @@ public abstract class AbstractParser {
 	}
 
 	/**
-	 * return file name whitout file extension
+	 * return file name without file extension
 	 * 
 	 * @param name
 	 * @return

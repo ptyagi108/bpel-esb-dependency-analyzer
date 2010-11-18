@@ -5,7 +5,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchWindow;
 
-import com.tomecode.soa.dependency.analyzer.gui.displays.OpenNewWorkspaceWizard;
+import com.tomecode.soa.dependency.analyzer.gui.wizards.OpenNewWorkspaceWizard;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
@@ -25,7 +25,6 @@ public final class OpenWorkspaceAction extends Action {
 	public OpenWorkspaceAction() {
 		setImageDescriptor(ImageFactory.open);
 		setText("Open new workspace");
-
 	}
 
 	public OpenWorkspaceAction(IWorkbenchWindow window) {

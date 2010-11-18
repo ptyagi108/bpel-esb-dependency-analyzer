@@ -1,0 +1,45 @@
+fix + OSB10g
+
+
+1. v projektovom strome dvojkilkom otvorit editor, 
+2. v projektovom strome pridat do CONTEXT MENU pre otvorenie graf/flow
+4. pridat contextove menu do vsetkych  pre otvorenie graf/flow 
+++5. nacitanie do vsetkych view spravit paralerne... new thread
+6. opravit chyby spojene s mazanim projektov tak aby sa zmazal aj graf/flow
+7.zmiznutie/zmazanie oznacneych nodov v visaugraph
+8.properties page OSB 10g adapters
+9.detailny tooltip pridany do visalgraph
+10.provider-specific; http, jms, sb, dsp,ejb
+11.osb detail properties panel - !! ESTE TREBA DOLADIT!!
+12.osb- endpointConfiguracia -parsovanie aj custom adapterov
+
+12. parsovanie exportovanych jar suborov kotre obsahuju proxy/business/etc z osb 10g
+
+========================================================================================
+flow graf
+6. upravit parser pre osb10g proxy tak by sa proxy malo
+
+	proxy.getReques()-->vstky service z ktorych je volana proxy
+	proxt.getResponse()--vsteky service ktore su vracene z proxy.. alebo volane z resposne .
+7. zobrazovanie vacsich detailov o adapteroch v graf/flow t.j. request a response queue
+8. zmaznie projektou alebo inych nodov z graf/flow
+9. zobraznie iba request flowu
+10.zobraznie iba response flowu
+========================================================================================
+flow pridat aj pre ORACLE SOA SUITE 10g bPEL/ESB
+
+
+OSB properties view
+-----informacie o osb properties
+
+
+
+
+
+11.filter pre graf - zobrazit ktore options sa maju zobrazovat a ktore nie(services,proxy,atd)
+12.filter pre flow - zobrazit ktore options sa maju zobrazovat a ktore nie(services,proxy atd)
+13.ked si vyberien neaky zavislost tak oznacit v akych aktivitach sa zobrazi
+	
+	
+
+

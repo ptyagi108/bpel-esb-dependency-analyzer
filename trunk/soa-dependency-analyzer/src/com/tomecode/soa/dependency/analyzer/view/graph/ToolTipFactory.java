@@ -18,6 +18,7 @@ import com.tomecode.soa.ora.osb10g.services.config.EndpointDsp;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointEJB;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointHttp;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointJms;
+import com.tomecode.soa.ora.osb10g.services.config.EndpointUNKNOWN;
 import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificJms;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.ServiceDependencyType;
 import com.tomecode.soa.project.Project;
@@ -78,31 +79,30 @@ public final class ToolTipFactory {
 	}
 
 	/**
-	 * add endpoint config to tooltip
+	 * add endpoint config for tooltip
 	 * 
 	 * @param endpointConfig
 	 * @param tooltip
 	 */
 	private static final void addEndpointConfingToTooltip(EndpointConfig endpointConfig, IFigure tooltip) {
 		tooltip.add(GuiUtils.createLabel2dBold("Endpoint Type:"));
-		if (endpointConfig.getProtocol() == null) {
-			tooltip.add(new org.eclipse.draw2d.Label(""));
+		if (endpointConfig.getProtocol() == ProviderProtocol.UNKNOWN) {
+			tooltip.add(new org.eclipse.draw2d.Label(((EndpointUNKNOWN) endpointConfig).getProviderId()));
 		} else {
 			tooltip.add(new org.eclipse.draw2d.Label(endpointConfig.getProtocol().toString()));
-			if (!endpointConfig.getUris().isEmpty()) {
-				tooltip.add(GuiUtils.createLabel2dBold("URIs:"));
-				Iterator<String> i = endpointConfig.getUris().iterator();
-				while (i.hasNext()) {
-					tooltip.add(new org.eclipse.draw2d.Label(i.next()));
-					if (i.hasNext()) {
-						tooltip.add(new org.eclipse.draw2d.Label(""));
-					}
+		}
+		if (!endpointConfig.getUris().isEmpty()) {
+			tooltip.add(GuiUtils.createLabel2dBold("URIs:"));
+			Iterator<String> i = endpointConfig.getUris().iterator();
+			while (i.hasNext()) {
+				tooltip.add(new org.eclipse.draw2d.Label(i.next()));
+				if (i.hasNext()) {
+					tooltip.add(new org.eclipse.draw2d.Label(""));
 				}
-
 			}
-			fillProviderSpecific(endpointConfig, tooltip);
 
 		}
+		fillProviderSpecific(endpointConfig, tooltip);
 	}
 
 	/**

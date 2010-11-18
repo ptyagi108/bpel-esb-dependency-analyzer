@@ -1,4 +1,4 @@
-package com.tomecode.soa.dependency.analyzer.gui.displays;
+package com.tomecode.soa.dependency.analyzer.gui.wizards;
 
 import java.io.File;
 
@@ -182,13 +182,9 @@ public final class ExportGraphToImageWizard extends Wizard {
 						imageFile = null;
 						setPageComplete(false);
 					} else {
-						if (dialog != null) {
-							textFile.setText(file);
-							imageFile = new File(file);
-							setPageComplete(true);
-						} else {
-							setPageComplete(false);
-						}
+						textFile.setText(file);
+						imageFile = new File(file);
+						setPageComplete(true);
 					}
 
 				}

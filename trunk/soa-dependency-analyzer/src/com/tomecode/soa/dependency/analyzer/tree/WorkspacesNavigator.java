@@ -139,6 +139,10 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 		rootNode.refreshMultiWorkspaceNode(oldMultiWorkspace, newMultiWorkspace);
 	}
 
+	public final void updateMultiWorkspace(MultiWorkspace multiWorkspace) {
+		rootNode.refreshMultiWorkspaceNode(multiWorkspace);
+	}
+
 	/**
 	 * show selected node in {@link VisualGraphView} if
 	 * {@link #linkWithNavigatorAction} is checked
@@ -187,6 +191,8 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 
 	public final void refreshTree() {
 		tree.refresh();
+		tree.refresh(true);
+		tree.refresh(rootNode);
 	}
 
 	@Override

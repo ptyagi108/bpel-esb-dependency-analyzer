@@ -12,6 +12,7 @@ import com.tomecode.soa.ora.osb10g.workspace.OraSB10gMultiWorkspace;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gWorkspace;
 import com.tomecode.soa.parser.AbstractParser;
 import com.tomecode.soa.project.Project;
+import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
@@ -68,6 +69,23 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 	}
 
 	/**
+	 * parse {@link MultiWorkspace}
+	 * 
+	 * @param multiWorkspace
+	 */
+	public final void parse(MultiWorkspace multiWorkspace) {
+		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+
+			for (Project project : workspace.getProjects()) {
+				OraSB10gProject oraSB10gProject = (OraSB10gProject) project;
+				projectParser.parse(oraSB10gProject);
+			}
+		}
+
+		analyzeDependnecies((OraSB10gMultiWorkspace) multiWorkspace);
+	}
+
+	/**
 	 * contains whether project folder contains .settings or .project
 	 * 
 	 * @param projectFile
@@ -93,27 +111,39 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 	 * @param multiWorkspace
 	 */
 	private final void analyzeDependnecies(OraSB10gMultiWorkspace multiWorkspace) {
-		for (OraSB10gWorkspace workspace : multiWorkspace.getWorkspaces()) {
-			for (OraSB10gProject project : workspace.getProjects()) {
-				for (Service service : project.getServices()) {
+		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+			OraSB10gWorkspace oraSB10gWorkspace = (OraSB10gWorkspace) workspace;
+
+			for (Project project : oraSB10gWorkspace.getProjects()) {
+				OraSB10gProject oraSB10gProject = (OraSB10gProject) project;
+
+				for (Service service : oraSB10gProject.getServices()) {
 
 					ServiceDependencies serviceDependencies = service.getServiceDependencies();
+
+					if (service.toString().equals("AQ_processBatch")) {
+						toString();
+					}
+
 					for (ServiceDependency serviceDependency : serviceDependencies.getDependnecies()) {
 						// name of dependency project
-						String depProjectName = serviceDependency.getProjectName();
+						String depProjectName = serviceDependency.getProjectNameFromRefPath();
 						if (depProjectName != null) {
-							OraSB10gProject depProject = findProjectByName(workspace, depProjectName);
+							OraSB10gProject depProject = findProjectByName(oraSB10gWorkspace, depProjectName);
 							if (depProject != null) {
 								Service targetService = findService(depProject, serviceDependency.getServiceName(), serviceDependency.getRealPath(), serviceDependency.getType());
 								if (targetService == null) {
-									UnknownService unknownService = serviceDependencies.findUnknownService(depProject, serviceDependency.getServiceName());
-									unknownService = (unknownService == null ? new UnknownService(depProject, serviceDependency.getServiceName()) : unknownService);
-									serviceDependency.addService(unknownService);
-									service.getActivityDependency().addDependecy(serviceDependency.getActivity(), unknownService);
+//									UnknownService unknownService = serviceDependencies.findUnknownService(depProject, serviceDependency.getServiceName());
+//									unknownService = (unknownService == null ? new UnknownService(depProject, serviceDependency.getServiceName()) : unknownService);
+//									serviceDependency.addService(unknownService);
+//									service.getActivityDependency().addDependecy(serviceDependency.getActivity(), unknownService);
+									addUnknowService(serviceDependencies, depProject, serviceDependency, service);									
 								} else {
 									serviceDependency.addService(targetService);
 									service.getActivityDependency().addDependecy(serviceDependency.getActivity(), targetService);
 								}
+							} else {
+								addUnknowService(serviceDependencies, depProject, serviceDependency, service);
 							}
 						}
 					}
@@ -122,6 +152,12 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 		}
 	}
 
+	private final void addUnknowService(ServiceDependencies serviceDependencies,OraSB10gProject depProject, ServiceDependency serviceDependency, Service service){
+		UnknownService unknownService = serviceDependencies.findUnknownService(depProject, serviceDependency.getServiceName());
+		unknownService = (unknownService == null ? new UnknownService(depProject, serviceDependency.getServiceName()) : unknownService);
+		serviceDependency.addService(unknownService);
+		service.getActivityDependency().addDependecy(serviceDependency.getActivity(), unknownService);
+	}
 	/**
 	 * find {@link Service} in project by parameter
 	 * 
@@ -156,12 +192,26 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 	 * @return
 	 */
 	private final OraSB10gProject findProjectByName(OraSB10gWorkspace workspace, String projectName) {
-		for (OraSB10gProject project : workspace.getProjects()) {
+		for (Project project : workspace.getProjects()) {
 			if (project.getName().equals(projectName)) {
-				return project;
+				return (OraSB10gProject) project;
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * parse new project
+	 * 
+	 * @param asFolder
+	 * @param path
+	 * @return
+	 */
+	public final OraSB10gProject addNewProject(boolean asFolder, File path) {
+		if (asFolder) {
+			return projectParser.parse(path);
+		}
+		return projectParser.parseJar(path);
 	}
 
 }

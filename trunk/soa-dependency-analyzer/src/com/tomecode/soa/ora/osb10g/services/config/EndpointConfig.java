@@ -67,6 +67,6 @@ public abstract class EndpointConfig {
 		/**
 		 * file transport
 		 */
-		FILE, DSP, FTP, JPD, MAIL, MQ, SFTP, BPEL_10G;
+		FILE, DSP, FTP, JPD, MAIL, MQ, SFTP, BPEL_10G, UNKNOWN;
 	}
 }

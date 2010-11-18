@@ -24,6 +24,7 @@ import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig.ProviderProtocol;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointEJB;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointJms;
+import com.tomecode.soa.ora.osb10g.services.config.EndpointUNKNOWN;
 
 /**
  * detail informations about selected adapter in OSB 10
@@ -249,7 +250,13 @@ public final class PropertiesViewOsbAdapter extends ViewPart implements HideView
 			Proxy proxy = (Proxy) data;
 			textProxyName.setText(proxy.getName());
 			EndpointConfig endpointConfig = proxy.getEndpointConfig();
-			textProxyTrasportProvider.setText(endpointConfig.getProtocol() == null ? "" : endpointConfig.getProtocol().toString());
+
+			if (endpointConfig.getProtocol() == ProviderProtocol.UNKNOWN) {
+				textProxyTrasportProvider.setText(((EndpointUNKNOWN) endpointConfig).getProviderId());
+			} else {
+				textProxyTrasportProvider.setText(endpointConfig.getProtocol().toString());
+			}
+
 			fillUriList(groupProxyUri, endpointConfig.getUris());
 			proxyPage.pack(true);
 			showContent(proxyPage);

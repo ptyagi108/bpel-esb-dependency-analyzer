@@ -38,7 +38,7 @@ public final class OpenEsbMultiWorkspace implements MultiWorkspace {
 	/**
 	 * list of {@link Workspace}
 	 */
-	private List<OpenEsbWorkspace> workspaces;
+	private List<Workspace> workspaces;
 
 	/**
 	 * Constructor
@@ -50,7 +50,7 @@ public final class OpenEsbMultiWorkspace implements MultiWorkspace {
 	 */
 	public OpenEsbMultiWorkspace(String name, File workspceFolder) {
 		super();
-		this.workspaces = new ArrayList<OpenEsbWorkspace>();
+		this.workspaces = new ArrayList<Workspace>();
 		this.name = name;
 		this.file = workspceFolder;
 	}
@@ -65,7 +65,7 @@ public final class OpenEsbMultiWorkspace implements MultiWorkspace {
 		return file;
 	}
 
-	public final List<OpenEsbWorkspace> getWorkspaces() {
+	public final List<Workspace> getWorkspaces() {
 		return workspaces;
 	}
 
@@ -86,7 +86,7 @@ public final class OpenEsbMultiWorkspace implements MultiWorkspace {
 	public final OpenEsbWorkspace removeWorkspace(Workspace workspace) {
 		for (int i = 0; i <= workspaces.size() - 1; i++) {
 			if (workspaces.get(i).equals(workspace)) {
-				return workspaces.remove(i);
+				return (OpenEsbWorkspace) workspaces.remove(i);
 			}
 		}
 		return null;
@@ -94,7 +94,7 @@ public final class OpenEsbMultiWorkspace implements MultiWorkspace {
 
 	@Override
 	public final boolean containsWorkspace(Workspace workspace) {
-		for (OpenEsbWorkspace openEsbWorkspace : workspaces) {
+		for (Workspace openEsbWorkspace : workspaces) {
 			if (openEsbWorkspace.equals(workspace)) {
 				return true;
 			}

@@ -429,7 +429,7 @@ public final class PropertiesView extends ViewPart implements HideView {
 			String name = dependency.getServiceName();
 			txtServiceDepOsbActivity.setText(name == null ? "" : name);
 			txtServiceDepOsbActivity.setText(dependency.getActivity().toString());
-			txtServiceDepProjectName.setText(dependency.getProjectName());
+			txtServiceDepProjectName.setText(dependency.getProjectNameFromRefPath());
 			showContent(serviceDepPage);
 		} else if (dataForProperties instanceof BpelProcess) {
 			BpelProcess bpelProcess = (BpelProcess) dataForProperties;

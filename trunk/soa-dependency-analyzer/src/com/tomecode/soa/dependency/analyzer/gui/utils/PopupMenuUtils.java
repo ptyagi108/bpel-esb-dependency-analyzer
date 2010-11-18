@@ -3,6 +3,7 @@ package com.tomecode.soa.dependency.analyzer.gui.utils;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
 
+import com.tomecode.soa.dependency.analyzer.gui.actions.AddNewProjectToWorkspaceAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.OpenWorkspaceAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.RemoveMultiWorkspaceAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.RemoveWorkspaceAction;
@@ -43,6 +44,8 @@ public final class PopupMenuUtils {
 	 */
 	private static final OpenFlowGraphAction OPEN_FLOW_GRAPH_ACTION = new OpenFlowGraphAction();
 
+	private static final AddNewProjectToWorkspaceAction ADD_NEW_PROJECT_TO_WORKSPACE = new AddNewProjectToWorkspaceAction();
+
 	private PopupMenuUtils() {
 
 	}
@@ -62,6 +65,8 @@ public final class PopupMenuUtils {
 		manager.add(OPEN_FLOW_GRAPH_ACTION);
 		manager.add(SEPARATOR);
 		manager.add(OPEN_WORKSPACE_ACTION);
+		manager.add(SEPARATOR);
+		manager.add(ADD_NEW_PROJECT_TO_WORKSPACE);
 		manager.add(SEPARATOR);
 		REMOVE_MULTI_WORKSPACE_ACTION.setEnableFor(selectedNode);
 		manager.add(REMOVE_MULTI_WORKSPACE_ACTION);

@@ -21,6 +21,7 @@ import com.tomecode.soa.ora.osb10g.services.config.EndpointMQ;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointMail;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointSB;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointSFTP;
+import com.tomecode.soa.ora.osb10g.services.config.EndpointUNKNOWN;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointWS;
 import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificDsp;
 import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificEJB;
@@ -81,7 +82,20 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 				return parseBPEL10Gtransport(eEndpointConfig);
 			}
 		}
-		return null;
+		return parseUnknownEndpoint(eEndpointConfig);
+	}
+
+	/**
+	 * parse unknown endpoint
+	 * 
+	 * @param eEndpointConfig
+	 * @return
+	 */
+	private final EndpointUNKNOWN parseUnknownEndpoint(Element eEndpointConfig) {
+		EndpointUNKNOWN unknown = new EndpointUNKNOWN();
+		unknown.setProviderId(eEndpointConfig.elementText("provider-id"));
+		unknown.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
+		return unknown;
 	}
 
 	/**

@@ -808,7 +808,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 			OraSB10gWorkspace oraSB10gWorkspace = (OraSB10gWorkspace) workspace;
 			GraphNode source = existSource == null ? createNode(oraSB10gWorkspace.getName(), oraSB10gWorkspace.getImage(), oraSB10gWorkspace, ToolTipFactory.createToolTip(oraSB10gWorkspace))
 					: existSource;
-			for (OraSB10gProject project : oraSB10gWorkspace.getProjects()) {
+			for (Project project : oraSB10gWorkspace.getProjects()) {
 				GraphNode existsProjectGraphNode = findDataInNodes(project);
 				if (existsProjectGraphNode == null) {
 					GraphNode destination = createNode(project.getName(), project.getImage(), project, ToolTipFactory.createToolTip(project));
@@ -865,19 +865,19 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 
 		if (multiWorkspace.getType() == WorkspaceType.ORACLE_1OG) {
 			Ora10gMultiWorkspace ora10gMultiWorkspace = (Ora10gMultiWorkspace) multiWorkspace;
-			for (Ora10gWorkspace workspace : ora10gMultiWorkspace.getWorkspaces()) {
+			for (Workspace workspace : ora10gMultiWorkspace.getWorkspaces()) {
 				GraphNode workspaceNode = createNode(workspace.getName(), workspace.getImage(), workspace, ToolTipFactory.createToolTip(workspace));
 				createConnection(multiWorkspaceNode, workspaceNode, workspace, false);
 			}
 		} else if (multiWorkspace.getType() == WorkspaceType.OPEN_ESB) {
 			OpenEsbMultiWorkspace esbMultiWorkspace = (OpenEsbMultiWorkspace) multiWorkspace;
-			for (OpenEsbWorkspace workspace : esbMultiWorkspace.getWorkspaces()) {
+			for (Workspace workspace : esbMultiWorkspace.getWorkspaces()) {
 				GraphNode workspaceNode = createNode(workspace.getName(), workspace.getImage(), workspace, ToolTipFactory.createToolTip(workspace));
 				createConnection(multiWorkspaceNode, workspaceNode, workspace, false);
 			}
 		} else if (multiWorkspace.getType() == WorkspaceType.ORACLE_SERVICE_BUS_10G) {
 			OraSB10gMultiWorkspace oraSB10gMultiWorkspace = (OraSB10gMultiWorkspace) multiWorkspace;
-			for (OraSB10gWorkspace workspace : oraSB10gMultiWorkspace.getWorkspaces()) {
+			for (Workspace workspace : oraSB10gMultiWorkspace.getWorkspaces()) {
 				GraphNode workspaceNode = createNode(workspace.getName(), workspace.getImage(), workspace, ToolTipFactory.createToolTip(workspace));
 				createConnection(multiWorkspaceNode, workspaceNode, workspace, false);
 			}

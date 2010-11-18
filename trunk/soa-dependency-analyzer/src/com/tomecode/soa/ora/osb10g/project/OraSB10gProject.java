@@ -26,7 +26,17 @@ import com.tomecode.soa.workspace.Workspace;
  */
 public final class OraSB10gProject implements Project {
 
+	/**
+	 * if is true then this project is JAR file
+	 */
+	private boolean asJar;
+	/**
+	 * project file or folder
+	 */
 	private File file;
+	/**
+	 * parent {@link Workspace}
+	 */
 	private OraSB10gWorkspace workspace;
 
 	private OraSB10gFolders oraSB10gFolders;
@@ -35,8 +45,16 @@ public final class OraSB10gProject implements Project {
 
 	private final List<Service> servicesWithFlow;
 
-	public OraSB10gProject(File file) {
+	/**
+	 * Constructor
+	 * 
+	 * @param file
+	 *            project file or folder
+	 * @param asJar
+	 */
+	public OraSB10gProject(File file, boolean asJar) {
 		this.file = file;
+		this.asJar = asJar;
 		this.services = new ArrayList<Service>();
 		this.servicesWithFlow = new ArrayList<Service>();
 		this.oraSB10gFolders = new OraSB10gFolders(this, file, null, null);
@@ -103,5 +121,9 @@ public final class OraSB10gProject implements Project {
 
 	public final Image getImage() {
 		return ImageFactory.OSB_10G_PROJECT;
+	}
+
+	public final boolean isAsJar() {
+		return asJar;
 	}
 }
