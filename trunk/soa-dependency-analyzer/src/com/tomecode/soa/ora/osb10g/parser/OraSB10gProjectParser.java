@@ -10,7 +10,10 @@ import java.util.jar.JarInputStream;
 
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.services.OraSB10gFolder;
+import com.tomecode.soa.ora.osb10g.services.ResourceFile;
 import com.tomecode.soa.ora.osb10g.services.Service;
+import com.tomecode.soa.ora.osb10g.services.UnknownFile;
+import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.ServiceDependencyType;
 import com.tomecode.soa.parser.ServiceParserException;
 
 /**
@@ -94,7 +97,9 @@ public final class OraSB10gProjectParser {
 				Service service = parseServiceInJar(new File(entry.getName()), jarFile.getInputStream(entry));
 				if (service != null) {
 					service.setFolder(folder);
-					project.getFolders().addService(service);
+
+					folder.addService(service);
+					project.getFolders().addToAllServices(service);
 				}
 				// }
 			}
@@ -150,6 +155,7 @@ public final class OraSB10gProjectParser {
 					if (service != null) {
 						service.setFolder(null);
 						project.getFolders().addService(service);
+						project.getFolders().addToAllServices(service);
 					}
 				}
 			}
@@ -186,12 +192,35 @@ public final class OraSB10gProjectParser {
 				e.printStackTrace();
 				// TODO: error
 			}
-		} else if (name.endsWith(".xq") || name.endsWith(".xquery")) {
-
-		} else if (!name.equals(".project")) {
-			// return new UnknownFile(file);
+		} else if (name.equals(".project")) {
+			return null;
 		}
-		return null;
+
+		return parseResourceFile(file);
+	}
+
+	/**
+	 * parse resource file
+	 * 
+	 * @param file
+	 * @return
+	 */
+	private final Service parseResourceFile(File file) {
+		String name = file.getName().toLowerCase();
+		if (name.endsWith(".xq") || name.endsWith(".xquery")) {
+			return new ResourceFile(file, ServiceDependencyType.XQUERY);
+		} else if (name.endsWith(".wsdl")) {
+			return new ResourceFile(file, ServiceDependencyType.WSDL);
+		} else if (name.endsWith(".xmlschema")) {
+			return new ResourceFile(file, ServiceDependencyType.XMLSCHEMA);
+		} else if (name.endsWith(".serviceaccount")) {
+			return new ResourceFile(file, ServiceDependencyType.SERVICEACCOUNT);
+		} else if (name.endsWith(".archive")) {
+			return new ResourceFile(file, ServiceDependencyType.ARCHIVE);
+		} else if (name.endsWith(".skp")) {
+			return new ResourceFile(file, ServiceDependencyType.SKP);
+		}
+		return new UnknownFile(file);
 	}
 
 	/**
@@ -224,10 +253,8 @@ public final class OraSB10gProjectParser {
 				e.printStackTrace();
 				// TODO: error
 			}
-		} else if (name.endsWith(".xq") || name.endsWith(".xquery")) {
-
 		}
-		return null;
+		return parseResourceFile(file);
 	}
 
 	/**
@@ -249,6 +276,7 @@ public final class OraSB10gProjectParser {
 					if (service != null) {
 						service.setFolder(root);
 						root.addService(service);
+						project.getFolders().addToAllServices(service);
 					}
 				}
 			}

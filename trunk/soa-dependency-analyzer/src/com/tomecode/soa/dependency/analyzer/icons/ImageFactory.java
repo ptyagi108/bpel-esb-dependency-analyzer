@@ -221,6 +221,12 @@ public final class ImageFactory {
 	public static final Image OSB_10G_SPLITJOIN_CATCH = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/splitjoin/catch.gif").createImage();
 	public static final Image OSB_10G_SPLITJOIN_CATCHALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/splitjoin/catchAll.gif").createImage();
 
+	public static final Image OSB_10G_ARCHIVE = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/archive.gif").createImage();
+	public static final Image OSB_10G_WSDL_TRANSFORMATION = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/wsdlTransform.gif").createImage();
+	public static final Image OSB_10G_XML_SCHEMA = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/xmlSchema.gif").createImage();
+	public static final Image OSB_10G_XQ_TRANSFORMATION = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/xqTransform.gif").createImage();
+	public static final Image OSB_10G_OSB_FOLDER = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/osbfolder.png").createImage();
+
 	public static final Image UNKNOWN = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/unknown.png").createImage();
 	public static final Image UNKNOWN_BIG = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/unknown_big.png").createImage();
 

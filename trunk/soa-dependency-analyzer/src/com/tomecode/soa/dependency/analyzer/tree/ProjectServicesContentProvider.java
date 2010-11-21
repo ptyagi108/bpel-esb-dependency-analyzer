@@ -5,6 +5,7 @@ import org.eclipse.jface.viewers.Viewer;
 
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
+import com.tomecode.soa.ora.osb10g.services.OraSB10gFolder;
 
 /**
  * 
@@ -25,7 +26,9 @@ final class ProjectServicesContentProvider implements ITreeContentProvider {
 		if (parent instanceof EmptyNode) {
 			return ((EmptyNode) parent).getChildren();
 		} else if (parent instanceof OraSB10gProject) {
-			return ((OraSB10gProject) parent).getServices().toArray();
+			return ((OraSB10gProject) parent).getFolders().getAll();// .getServices().toArray();
+		} else if (parent instanceof OraSB10gFolder) {
+			return ((OraSB10gFolder) parent).getAll();
 		}
 		return null;
 	}
@@ -35,7 +38,9 @@ final class ProjectServicesContentProvider implements ITreeContentProvider {
 		if (element instanceof EmptyNode) {
 			return ((EmptyNode) element).getChildren();
 		} else if (element instanceof OraSB10gProject) {
-			return ((OraSB10gProject) element).getServices().toArray();
+			return ((OraSB10gProject) element).getFolders().getAll();
+		} else if (element instanceof OraSB10gFolder) {
+			return ((OraSB10gFolder) element).getAll();
 		}
 		return null;
 	}
@@ -45,7 +50,9 @@ final class ProjectServicesContentProvider implements ITreeContentProvider {
 		if (element instanceof EmptyNode) {
 			return ((EmptyNode) element).hasChildren();
 		} else if (element instanceof OraSB10gProject) {
-			return ((OraSB10gProject) element).getServices().isEmpty();
+			return ((OraSB10gProject) element).getFolders().getAll().length != 0;
+		} else if (element instanceof OraSB10gFolder) {
+			return ((OraSB10gFolder) element).getAll().length != 0;
 		}
 		return false;
 	}

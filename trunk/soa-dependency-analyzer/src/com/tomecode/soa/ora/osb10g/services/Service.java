@@ -49,7 +49,10 @@ public abstract class Service implements ImageFace {
 
 	private final OsbActivityDependency activityDependency;
 
-	private ServiceDependencyType type;
+	/**
+	 * type of dependency	
+	 */
+	protected ServiceDependencyType type;
 
 	/**
 	 * Constructor

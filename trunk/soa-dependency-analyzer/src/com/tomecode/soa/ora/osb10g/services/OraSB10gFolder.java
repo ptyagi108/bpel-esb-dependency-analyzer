@@ -4,6 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 
 /**
@@ -15,7 +19,7 @@ import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public class OraSB10gFolder {
+public class OraSB10gFolder implements ImageFace {
 
 	/**
 	 * list of folders in this folder
@@ -205,4 +209,17 @@ public class OraSB10gFolder {
 		return sb.toString();
 	}
 
+	public final Object[] getAll() {
+		Object[] target = new Object[this.folders.size() + this.services.size()];
+
+		System.arraycopy(this.folders.toArray(), 0, target, 0, this.folders.size());
+		System.arraycopy(this.services.toArray(), 0, target, this.folders.size(), this.services.size());
+
+		return target;
+	}
+
+	@Override
+	public final Image getImage() {
+		return ImageFactory.OSB_10G_OSB_FOLDER;
+	}
 }

@@ -12,6 +12,8 @@ import com.tomecode.soa.ora.osb10g.services.Service;
  * {@link #targetService}
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class ServiceDependency {
@@ -137,15 +139,52 @@ public final class ServiceDependency {
 	 * Type of dependency
 	 * 
 	 * @author Tomas Frastia
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
 	 * 
 	 */
 	public enum ServiceDependencyType {
-		PROXY_SERVICE("ProxyRef", "Proxy Service"), BUSINESS_SERVICE("BusinessServiceRef", "Business Service"), WSDL("", "WSDL"), UNKNOWN("", "Unknown"), SPLITJOIN("", "SplitJoin flow");
+		/**
+		 * proxy service
+		 */
+		PROXY_SERVICE("ProxyRef", "Proxy Service"),
+		/**
+		 * business service
+		 */
+		BUSINESS_SERVICE("BusinessServiceRef", "Business Service"),
 
+		/**
+		 * WSDL
+		 */
+		WSDL("", "WSDL"),
+
+		/**
+		 * Unknown file
+		 */
+		UNKNOWN("", "Unknown"),
+		/**
+		 * split join
+		 */
+		SPLITJOIN("", "SplitJoin flow"),
+
+		XQUERY("", "Xquery"), XMLSCHEMA("", "XMLSchema"), SERVICEACCOUNT("", "Service Account"), ARCHIVE("", "Archive"), SKP("", "Service Key Provider");
+
+		/**
+		 * in element
+		 */
 		private final String element;
 
+		/**
+		 * name
+		 */
 		private final String name;
 
+		/**
+		 * Constructor
+		 * 
+		 * @param element
+		 * @param name
+		 */
 		private ServiceDependencyType(String element, String name) {
 			this.element = element;
 			this.name = name;

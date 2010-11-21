@@ -3,6 +3,7 @@ package com.tomecode.soa.dependency.analyzer.gui.actions.graph;
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.view.graph.FlowGraphView;
+import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
@@ -39,10 +40,14 @@ public final class OpenFlowGraphAction extends BasicActionForGraphEvent {
 	public final void setData(Object selectedNode) {
 		this.selectedNode = selectedNode;
 		setEnabled(false);
-		if (selectedNode != null) {
-			if (!(selectedNode instanceof Workspace) || !(selectedNode instanceof MultiWorkspace)) {
-				setEnabled(true);
+
+		if (selectedNode instanceof Service) {
+			if (selectedNode != null) {
+				if (!(selectedNode instanceof Workspace) || !(selectedNode instanceof MultiWorkspace)) {
+					setEnabled(true);
+				}
 			}
 		}
+
 	}
 }
