@@ -117,47 +117,132 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 			for (Project project : oraSB10gWorkspace.getProjects()) {
 				OraSB10gProject oraSB10gProject = (OraSB10gProject) project;
 
-				for (Service service : oraSB10gProject.getServices()) {
+				if (oraSB10gProject.isAsJar()) {
 
-					ServiceDependencies serviceDependencies = service.getServiceDependencies();
+					for (Service service : oraSB10gProject.getServices()) {
 
-					if (service.toString().equals("AQ_processBatch")) {
-						toString();
-					}
+						ServiceDependencies serviceDependencies = service.getServiceDependencies();
+						for (ServiceDependency serviceDependency : serviceDependencies.getDependnecies()) {
+							// find dependency in selected project
+							Service targetService = findServiceInJarProject(oraSB10gProject, serviceDependency);
+							if (targetService != null) {
+								serviceDependency.addService(targetService);
+								service.getActivityDependency().addDependecy(serviceDependency.getActivity(), targetService);
+							} else {
 
-					for (ServiceDependency serviceDependency : serviceDependencies.getDependnecies()) {
-						// name of dependency project
-						String depProjectName = serviceDependency.getProjectNameFromRefPath();
-						if (depProjectName != null) {
-							OraSB10gProject depProject = findProjectByName(oraSB10gWorkspace, depProjectName);
-							if (depProject != null) {
-								Service targetService = findService(depProject, serviceDependency.getServiceName(), serviceDependency.getRealPath(), serviceDependency.getType());
-								if (targetService == null) {
-//									UnknownService unknownService = serviceDependencies.findUnknownService(depProject, serviceDependency.getServiceName());
-//									unknownService = (unknownService == null ? new UnknownService(depProject, serviceDependency.getServiceName()) : unknownService);
-//									serviceDependency.addService(unknownService);
-//									service.getActivityDependency().addDependecy(serviceDependency.getActivity(), unknownService);
-									addUnknowService(serviceDependencies, depProject, serviceDependency, service);									
-								} else {
+								// find dependency in others projects
+								targetService = findServiceInOtherJarProject(multiWorkspace, oraSB10gProject, serviceDependency);
+								if (targetService != null) {
 									serviceDependency.addService(targetService);
 									service.getActivityDependency().addDependecy(serviceDependency.getActivity(), targetService);
+								} else {
+									addUnknowService(serviceDependencies, oraSB10gProject, serviceDependency, service);
 								}
-							} else {
-								addUnknowService(serviceDependencies, depProject, serviceDependency, service);
+							}
+						}
+
+					}
+
+				} else {
+
+					for (Service service : oraSB10gProject.getServices()) {
+
+						ServiceDependencies serviceDependencies = service.getServiceDependencies();
+						for (ServiceDependency serviceDependency : serviceDependencies.getDependnecies()) {
+							// name of dependency project
+							String depProjectName = serviceDependency.getProjectNameFromRefPath();
+							if (depProjectName != null) {
+								OraSB10gProject depProject = findProjectByName(oraSB10gWorkspace, depProjectName);
+								if (depProject != null) {
+									Service targetService = findService(depProject, serviceDependency.getServiceName(), serviceDependency.getRealPath(), serviceDependency.getType());
+									if (targetService == null) {
+										addUnknowService(serviceDependencies, depProject, serviceDependency, service);
+									} else {
+										serviceDependency.addService(targetService);
+										service.getActivityDependency().addDependecy(serviceDependency.getActivity(), targetService);
+									}
+								} else {
+									addUnknowService(serviceDependencies, depProject, serviceDependency, service);
+								}
+							}
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+	}
+
+	/**
+	 * find dependencies in other jar projects
+	 * 
+	 * @param multiWorkspace
+	 * @param ingnoreProject
+	 * @param serviceDependency
+	 * @return
+	 */
+	private final Service findServiceInOtherJarProject(OraSB10gMultiWorkspace multiWorkspace, OraSB10gProject ingnoreProject, ServiceDependency serviceDependency) {
+		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+			for (Project project : workspace.getProjects()) {
+				OraSB10gProject sb10gProject = (OraSB10gProject) project;
+
+				// only in jar project
+				if (sb10gProject.isAsJar()) {
+
+					if (!ingnoreProject.equals(project)) {
+
+						Service target = findServiceInJarProject(sb10gProject, serviceDependency);
+						if (target != null) {
+							return target;
+						}
+					}
+
+				}
+
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * find service in project (from jar)
+	 * 
+	 * @param project
+	 * @param serviceDependency
+	 * @return
+	 */
+	private final Service findServiceInJarProject(OraSB10gProject project, ServiceDependency serviceDependency) {
+
+		for (Service service : project.getServices()) {
+			if (service.getType() == serviceDependency.getType()) {
+				if (service.getName().equals(serviceDependency.getServiceName())) {
+					String refPath = serviceDependency.getRefPath();
+					if (refPath == null) {
+						return service;
+					} else {
+
+						if (service.getFolder() != null) {
+							if (service.getFolder().getPath().equals(serviceDependency.getRefPathWithoutServiceName())) {
+								return service;
 							}
 						}
 					}
 				}
 			}
 		}
+		return null;
 	}
 
-	private final void addUnknowService(ServiceDependencies serviceDependencies,OraSB10gProject depProject, ServiceDependency serviceDependency, Service service){
+	private final void addUnknowService(ServiceDependencies serviceDependencies, OraSB10gProject depProject, ServiceDependency serviceDependency, Service service) {
 		UnknownService unknownService = serviceDependencies.findUnknownService(depProject, serviceDependency.getServiceName());
 		unknownService = (unknownService == null ? new UnknownService(depProject, serviceDependency.getServiceName()) : unknownService);
 		serviceDependency.addService(unknownService);
 		service.getActivityDependency().addDependecy(serviceDependency.getActivity(), unknownService);
 	}
+
 	/**
 	 * find {@link Service} in project by parameter
 	 * 
@@ -170,7 +255,8 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 	private final Service findService(OraSB10gProject project, String serviceName, String realPath, ServiceDependencyType type) {
 		for (Service service : project.getServices()) {
 			if (service.getType() == type) {
-				if (service.getName().equals(serviceName)) {
+
+				if (service.getOrginalName().equals(serviceName)) {
 					if (realPath == null) {
 						return service;
 					} else {

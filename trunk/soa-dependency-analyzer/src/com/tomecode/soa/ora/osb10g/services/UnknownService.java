@@ -19,6 +19,7 @@ public final class UnknownService extends Service {
 		super(null, ServiceDependencyType.UNKNOWN);
 		this.project = project;
 		this.name = name;
+		this.orginalName = name;
 	}
 
 	@Override

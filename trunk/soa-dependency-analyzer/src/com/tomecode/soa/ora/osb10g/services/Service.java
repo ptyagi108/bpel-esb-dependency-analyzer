@@ -18,7 +18,7 @@ import com.tomecode.soa.project.Project;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public abstract class Service implements ImageFace{
+public abstract class Service implements ImageFace {
 
 	/**
 	 * PROXY service file
@@ -29,6 +29,9 @@ public abstract class Service implements ImageFace{
 	 * service name
 	 */
 	protected String name;
+
+	protected String orginalName;
+
 	/**
 	 * parent project
 	 */
@@ -48,6 +51,12 @@ public abstract class Service implements ImageFace{
 
 	private ServiceDependencyType type;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param file
+	 * @param type
+	 */
 	public Service(File file, ServiceDependencyType type) {
 		this.file = file;
 		this.type = type;
@@ -98,5 +107,9 @@ public abstract class Service implements ImageFace{
 
 	public final ServiceDependencyType getType() {
 		return type;
+	}
+
+	public final String getOrginalName() {
+		return orginalName;
 	}
 }

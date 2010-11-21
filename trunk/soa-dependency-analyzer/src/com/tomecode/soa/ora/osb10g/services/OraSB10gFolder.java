@@ -17,18 +17,38 @@ import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
  */
 public class OraSB10gFolder {
 
+	/**
+	 * list of folders in this folder
+	 */
 	protected final List<OraSB10gFolder> folders;
 
+	/**
+	 * list of services in this folder
+	 */
 	protected final List<Service> services;
 
+	/**
+	 * file system path
+	 */
 	private File fileSystemPath;
 
+	/**
+	 * path in OSB
+	 */
 	private String path;
 
+	/**
+	 * folder name
+	 */
 	private String name;
 
+	/**
+	 * parent folder
+	 */
 	private OraSB10gFolder parent;
-
+	/**
+	 * project
+	 */
 	private OraSB10gProject project;
 
 	/**
@@ -49,25 +69,53 @@ public class OraSB10gFolder {
 		this.fileSystemPath = fileSystemPath;
 		this.path = path;
 		this.name = name;
+		if ("/Users/tomasfrastia/Downloads/OSB Project 5-dep/adapter".equals(path)) {
+			toString();
+		}
 	}
 
+	/**
+	 * get parent folder
+	 * 
+	 * @return
+	 */
 	public final OraSB10gFolder getParent() {
 		return parent;
 	}
 
+	/**
+	 * set parent for this folder
+	 * 
+	 * @param parent
+	 */
 	public final void setParent(OraSB10gFolder parent) {
 		this.parent = parent;
 	}
 
+	/**
+	 * add new folder
+	 * 
+	 * @param folder
+	 */
 	public final void addFolder(OraSB10gFolder folder) {
 		folder.setParent(this);
 		this.folders.add(folder);
 	}
 
+	/**
+	 * list of folders in this folder
+	 * 
+	 * @return
+	 */
 	public final List<OraSB10gFolder> getFolders() {
 		return folders;
 	}
 
+	/**
+	 * add new service
+	 * 
+	 * @param service
+	 */
 	public final void addService(Service service) {
 		this.services.add(service);
 		project.addService(service);
@@ -104,4 +152,57 @@ public class OraSB10gFolder {
 	public final String toString() {
 		return name;
 	}
+
+	/**
+	 * find a path if not exists path then will created a new path
+	 * 
+	 * @param project
+	 * @param index
+	 * @param paths
+	 * @param jarPath
+	 * @return
+	 */
+	protected final OraSB10gFolder findFolderAndCreate(OraSB10gProject project, int index, String[] paths, File jarPath) {
+
+		String targetFolderName = paths[index];
+		if (folders.isEmpty()) {
+			String realPath = makePath(index, paths);
+			addFolder(new OraSB10gFolder(project, new File(jarPath + "/$/" + realPath), realPath, targetFolderName));
+		}
+
+		for (OraSB10gFolder folder : folders) {
+			if (folder.getName().equals(targetFolderName)) {
+				if (index >= paths.length - 1) {
+					return folder;
+				}
+				index++;
+				return folder.findFolderAndCreate(project, index, paths, jarPath);
+			}
+		}
+
+		String realPath = makePath(index, paths);
+		OraSB10gFolder newFolder = new OraSB10gFolder(project, new File(jarPath + "/$/" + realPath), realPath, targetFolderName);
+		addFolder(newFolder);
+
+		index++;
+		if (index <= paths.length - 1) {
+			return newFolder.findFolderAndCreate(project, index, paths, jarPath);
+		}
+
+		return newFolder;
+	}
+
+	private static final String makePath(int index, String[] paths) {
+
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i <= index; i++) {
+			sb.append(paths[i]);
+			if (i++ < index) {
+				sb.append("/");
+				i--;
+			}
+		}
+		return sb.toString();
+	}
+
 }

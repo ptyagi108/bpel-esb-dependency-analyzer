@@ -54,6 +54,14 @@ public final class ServiceDependency {
 		return refPath;
 	}
 
+	public final String getRefPathWithoutServiceName() {
+		int index = refPath.lastIndexOf("/");
+		if (index != -1) {
+			return refPath.substring(0, index);
+		}
+		return refPath;
+	}
+
 	/**
 	 * @return the type
 	 */

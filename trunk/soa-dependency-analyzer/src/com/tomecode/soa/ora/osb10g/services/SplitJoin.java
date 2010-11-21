@@ -31,6 +31,7 @@ public final class SplitJoin extends Service {
 	public SplitJoin(File file, String name) {
 		super(file, ServiceDependencyType.SPLITJOIN);
 		this.name = name;
+		this.orginalName = name;
 		this.structure = new SplitJoinStructure(this);
 	}
 

@@ -61,6 +61,7 @@ public final class Proxy extends Service {
 			}
 		}
 
+		orginalName = name;
 		structure = new ProxyStructure(this);
 	}
 

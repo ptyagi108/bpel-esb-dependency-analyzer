@@ -2,7 +2,6 @@ package com.tomecode.soa.ora.osb10g.parser;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.jar.JarEntry;
@@ -24,15 +23,6 @@ import com.tomecode.soa.parser.ServiceParserException;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
 public final class OraSB10gProjectParser {
-
-	public static final void main(String[] arg) throws FileNotFoundException, IOException {
-		OraSB10gProjectParser parser = new OraSB10gProjectParser();
-
-		// OraSB10gProject project = parser.parseJar(new
-		// File("/Users/tomasfrastia/Downloads/varky/sbconfig-alsbcore-var-NSIFAT-20101020150117.jar"));
-		OraSB10gProject project = parser.parseJar(new File("/Users/tomasfrastia/Downloads/varky/var-new/sbconfig-osbcore-base-1.0.63.jar"));
-		project.toString();// /Users/tomasfrastia/Downloads/varky/sbconfig-alsbcore-var-NSIFAT-20101020150117.jar
-	}
 
 	/**
 	 * PROXY service parser
@@ -89,20 +79,24 @@ public final class OraSB10gProjectParser {
 			JarEntry entry = null;
 			while ((entry = inputStream.getNextJarEntry()) != null) {
 
-				if (entry.getName().equalsIgnoreCase("ExportInfo") || entry.getName().equalsIgnoreCase("_folderdata.LocationData") || entry.getName().equalsIgnoreCase("_projectdata.LocationData")) {
+				if (entry.getName().equalsIgnoreCase("ExportInfo") || entry.getName().contains("_folderdata.LocationData") || entry.getName().contains("_projectdata.LocationData")) {
 					continue;
 				}
 
-				if (entry.isDirectory()) {
-					// TODO:problem
+				OraSB10gFolder folder = null;
+				int index = entry.getName().lastIndexOf("/");
+				if (index != -1) {
+					String path = entry.getName().substring(0, index);
+					folder = project.getFolders().findAndCreate(project, path, jar);
 				} else {
-					Service service = parseServiceInJar(new File(entry.getName()), jarFile.getInputStream(entry));
-					if (service != null) {
-						service.setFolder(null);
-						project.getOraSB10gFolders().addService(service);
-					}
+					System.err.print("******************");
 				}
-
+				Service service = parseServiceInJar(new File(entry.getName()), jarFile.getInputStream(entry));
+				if (service != null) {
+					service.setFolder(folder);
+					project.getFolders().addService(service);
+				}
+				// }
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -142,14 +136,20 @@ public final class OraSB10gProjectParser {
 		if (files != null) {
 			for (File file : files) {
 				if (file.isDirectory() && !file.getName().equals(".settings")) {
-					OraSB10gFolder folder = new OraSB10gFolder(project, file, file.getName(), file.getPath());
-					project.getOraSB10gFolders().addFolder(folder);
+
+					String path = file.getPath().replace(project.getFile().toString(), "");
+					if (path.startsWith(File.separator)) {
+						path = path.substring(1);
+					}
+
+					OraSB10gFolder folder = new OraSB10gFolder(project, file, path, file.getName());
+					project.getFolders().addFolder(folder);
 					parseFolders(project, folder, file);
 				} else if (file.isFile()) {
 					Service service = parseService(file);
 					if (service != null) {
 						service.setFolder(null);
-						project.getOraSB10gFolders().addService(service);
+						project.getFolders().addService(service);
 					}
 				}
 			}
@@ -179,7 +179,7 @@ public final class OraSB10gProjectParser {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		} else if (name.endsWith(".biz") || name.endsWith(".BusinessService")) {
+		} else if (name.endsWith(".biz") || name.endsWith(".businessservice")) {
 			try {
 				return businessServiceParser.parseBusinessService(file);
 			} catch (ServiceParserException e) {
@@ -217,7 +217,7 @@ public final class OraSB10gProjectParser {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		} else if (name.endsWith(".biz") || name.endsWith(".BusinessService")) {
+		} else if (name.endsWith(".biz") || name.endsWith("businessservice")) {
 			try {
 				return businessServiceParser.parseBusinessService(file, fileStream);
 			} catch (ServiceParserException e) {

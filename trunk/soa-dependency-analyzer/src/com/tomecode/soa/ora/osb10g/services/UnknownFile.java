@@ -19,6 +19,7 @@ public final class UnknownFile extends Service {
 	public UnknownFile(File file) {
 		super(file, ServiceDependencyType.UNKNOWN);
 		this.name = file.getName();
+		this.orginalName= name;
 	}
 
 	@Override

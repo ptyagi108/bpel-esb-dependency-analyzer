@@ -18,16 +18,25 @@ import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.Servi
  */
 public final class BusinessService extends Service {
 
+
 	private EndpointConfig endpointConfig;
 
 	public BusinessService(File file) {
 		super(file, ServiceDependencyType.BUSINESS_SERVICE);
-		int index = file.getName().indexOf(".biz");
+		String tmpName = file.getName().toLowerCase();
+		int index = tmpName.indexOf(".biz");
 		if (index != -1) {
 			name = file.getName().substring(0, index);
 		} else {
-			name = file.getName();
+			index = tmpName.indexOf(".businessservice");
+			if (index != -1) {
+				name = file.getName().substring(0, index);
+			} else {
+				name = file.getName();
+			}
 		}
+		orginalName = name;
+		name = name.replace("_", " ");
 	}
 
 	@Override
@@ -45,5 +54,7 @@ public final class BusinessService extends Service {
 	public final void setEndpointConfig(EndpointConfig endpointConfig) {
 		this.endpointConfig = endpointConfig;
 	}
+
+	
 
 }

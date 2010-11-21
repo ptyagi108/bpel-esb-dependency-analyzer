@@ -39,7 +39,7 @@ public final class OraSB10gProject implements Project {
 	 */
 	private OraSB10gWorkspace workspace;
 
-	private OraSB10gFolders oraSB10gFolders;
+	private OraSB10gFolders folders;
 
 	private final List<Service> services;
 
@@ -57,7 +57,7 @@ public final class OraSB10gProject implements Project {
 		this.asJar = asJar;
 		this.services = new ArrayList<Service>();
 		this.servicesWithFlow = new ArrayList<Service>();
-		this.oraSB10gFolders = new OraSB10gFolders(this, file, null, null);
+		this.folders = new OraSB10gFolders(this, file, null, null);
 	}
 
 	public final void addService(Service service) {
@@ -88,8 +88,8 @@ public final class OraSB10gProject implements Project {
 	/**
 	 * @return the oraSB10gFolders
 	 */
-	public final OraSB10gFolders getOraSB10gFolders() {
-		return oraSB10gFolders;
+	public final OraSB10gFolders getFolders() {
+		return folders;
 	}
 
 	public final void setWorkspace(OraSB10gWorkspace workspace) {

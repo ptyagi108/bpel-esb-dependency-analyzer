@@ -537,6 +537,7 @@ public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 	private final void parseService(ServiceDependencies serviceDependencies, Element element, OsbActivity root) {
 		Element eService = element.element("service");
 		if (eService != null) {
+
 			ServiceDependencyType type = ServiceDependencyType.parse(eService.attributeValue("type"));
 			if (type == ServiceDependencyType.UNKNOWN) {
 				Element eXqueryText = eService.element("xqueryText");
