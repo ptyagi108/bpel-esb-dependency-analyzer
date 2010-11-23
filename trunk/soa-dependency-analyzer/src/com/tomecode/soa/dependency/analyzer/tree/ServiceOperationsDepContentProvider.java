@@ -10,6 +10,7 @@ import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.OsbActivityDependency;
 import com.tomecode.soa.ora.suite10g.project.BpelOperations;
+import com.tomecode.soa.ora.suite10g.project.BpelProject;
 import com.tomecode.soa.ora.suite10g.project.Operation;
 
 /**
@@ -43,6 +44,8 @@ final class ServiceOperationsDepContentProvider implements ITreeContentProvider 
 			return ((BpelOperations) parent).getOperations().toArray();
 		} else if (parent instanceof Service) {
 			return ((Service) parent).getActivityDependency().getActivityDependencies().toArray();
+		} else if (parent instanceof BpelProject) {
+			return ((BpelProject) parent).getBpelOperations().getOperations().toArray();
 		} else if (parent instanceof OsbActivityDependency) {
 			return ((OsbActivityDependency) parent).getServices().toArray();
 		} else if (parent instanceof OpenEsbBpelProcess) {
@@ -68,6 +71,8 @@ final class ServiceOperationsDepContentProvider implements ITreeContentProvider 
 			return ((Operation) element).hasChildren();
 		} else if (element instanceof BpelOperations) {
 			return !((BpelOperations) element).getOperations().isEmpty();
+		} else if (element instanceof BpelProject) {
+			return !((BpelProject) element).getBpelOperations().getOperations().isEmpty();
 		} else if (element instanceof Service) {
 			return !((Service) element).getActivityDependency().getActivityDependencies().isEmpty();
 		} else if (element instanceof OsbActivityDependency) {
@@ -90,6 +95,8 @@ final class ServiceOperationsDepContentProvider implements ITreeContentProvider 
 			return ((Operation) element).getChildren();
 		} else if (element instanceof BpelOperations) {
 			return ((BpelOperations) element).getOperations().toArray();
+		} else if (element instanceof BpelProject) {
+			return ((BpelProject) element).getBpelOperations().getOperations().toArray();
 		} else if (element instanceof Service) {
 			return ((Service) element).getActivityDependency().getActivityDependencies().toArray();
 		} else if (element instanceof OsbActivityDependency) {

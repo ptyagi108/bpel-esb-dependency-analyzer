@@ -2,6 +2,10 @@ package com.tomecode.soa.ora.suite10g.project;
 
 import java.io.Serializable;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.suite10g.esb.EsbProject;
 import com.tomecode.soa.project.UnknownProject;
 
@@ -12,7 +16,7 @@ import com.tomecode.soa.project.UnknownProject;
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
-public final class PartnerLinkBinding implements Serializable {
+public final class PartnerLinkBinding implements ImageFace, Serializable {
 
 	private static final long serialVersionUID = -2868489731373353648L;
 	/**
@@ -117,5 +121,10 @@ public final class PartnerLinkBinding implements Serializable {
 		}
 
 		return null;
+	}
+
+	@Override
+	public final Image getImage() {
+		return ImageFactory.ORACLE_10G_PARTNERLINK;
 	}
 }

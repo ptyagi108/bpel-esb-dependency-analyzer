@@ -21,6 +21,7 @@ import com.tomecode.soa.ora.osb10g.services.config.EndpointJms;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointUNKNOWN;
 import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificJms;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.ServiceDependencyType;
+import com.tomecode.soa.ora.suite10g.project.PartnerLinkBinding;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.services.BpelProcess;
 import com.tomecode.soa.workspace.MultiWorkspace;
@@ -195,6 +196,21 @@ public final class ToolTipFactory {
 		GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.numColumns = 2;
 		tooltip.setLayoutManager(gridLayout);
+		return tooltip;
+	}
+
+	/**
+	 * create tool tip for {@link PartnerLinkBinding}
+	 * 
+	 * @param partnerLinkBinding
+	 * @return
+	 */
+	public final static IFigure createToolTip(PartnerLinkBinding partnerLinkBinding) {
+		IFigure tooltip = createDefaultToolTip();
+		tooltip.add(new org.eclipse.draw2d.Label(partnerLinkBinding.getImage()));
+		tooltip.add(new org.eclipse.draw2d.Label(partnerLinkBinding.toString()));
+		tooltip.add(GuiUtils.createLabel2dBold("WSDL Location:"));
+		tooltip.add(new org.eclipse.draw2d.Label(partnerLinkBinding.getWsdlLocation()));
 		return tooltip;
 	}
 }

@@ -100,7 +100,7 @@ public final class OraSB10gProject implements Project {
 		return file.getName();
 	}
 
-	public String getName() {
+	public final String getName() {
 		return file.getName();
 	}
 

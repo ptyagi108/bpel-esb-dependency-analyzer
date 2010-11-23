@@ -3,7 +3,6 @@ package com.tomecode.soa.dependency.analyzer.gui.actions.graph;
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
-import com.tomecode.soa.ora.osb10g.services.Service;
 
 /**
  * Open selected node in tree in new {@link VisualGraphView}
@@ -30,11 +29,13 @@ public final class OpenVisualGraphAction extends BasicActionForGraphEvent {
 		}
 	}
 
-	public final void setData(Object data) {
-		if (data instanceof Service) {
-			super.setData(data);
-		} else {
-			super.setData(null);
-		}
-	}
+	// public final void setData(Object data) {
+	// if (data instanceof Service) {
+	// super.setData(data);
+	// } else if (data instanceof BpelProject) {
+	// super.setData(data);
+	// } else {
+	// super.setData(null);
+	// }
+	// }
 }

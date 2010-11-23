@@ -487,7 +487,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 				GraphNode destination = findDataInNodes(service);
 				if (destination == null && !(service instanceof UnknownFile)) {
 					destination = createNode(service.getName(), service.getImage(), service, ToolTipFactory.createToolTip(service));
-					createConnection(source, destination, null, false);
+					createConnection(source, destination, null, null, false);
 				}
 
 			}
@@ -522,17 +522,17 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 				if (findUnknownConnection(source, serviceDependency.getRefPath()) == null) {
 					// TODO: tool tip is null
 					GraphNode unknowNode = createNode(serviceDependency.getRefPath(), ImageFactory.UNKNOWN, serviceDependency, null);
-					createConnection(source, unknowNode, serviceDependency, false);
+					createConnection(source, unknowNode, serviceDependency, null, false);
 				}
 			} else {
 				GraphNode destination = findDataInNodes(serviceDependency.getServices().get(0));
 				if (destination == null) {
 					Service target = serviceDependency.getServices().get(0);
 					destination = createNode(target.getName(), target.getImage(), target, ToolTipFactory.createToolTip(target));
-					createConnection(source, destination, serviceDependency, false);
+					createConnection(source, destination, serviceDependency, null, false);
 				} else {
 					if (findConnection(source, destination) == null) {
-						createConnection(source, destination, serviceDependency, false);
+						createConnection(source, destination, serviceDependency, null, false);
 					}
 				}
 			}
@@ -583,20 +583,20 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 					GraphConnection existsConnection = findConnection(source, existsNode);
 					if (existsConnection != null) {
 						existsConnection.setCurveDepth(30);
-						GraphConnection connection = createConnection(source, existsNode, partnerLink, true);
+						GraphConnection connection = createConnection(source, existsNode, partnerLink, null, true);
 						connection.setCurveDepth(10);
 					} else {
 						if (source.equals(existsNode)) {
-							GraphConnection connection = createConnection(source, existsNode, partnerLink, true);
+							GraphConnection connection = createConnection(source, existsNode, partnerLink, null, true);
 							connection.setCurveDepth(30);
 						} else {
-							createConnection(source, existsNode, partnerLink, true);
+							createConnection(source, existsNode, partnerLink, null, true);
 						}
 					}
 
 				} else {
 					GraphNode destination = createNode(depBpelProcess.getName(), depBpelProcess.getImage(), depBpelProcess, ToolTipFactory.createToolTip(depBpelProcess));
-					createConnection(source, destination, partnerLink, true);
+					createConnection(source, destination, partnerLink, null, true);
 				}
 			}
 		}
@@ -652,7 +652,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 			GraphNode destination = findDataInNodes(service);
 			if (destination == null && !(service instanceof UnknownFile)) {
 				destination = createNode(service.getName(), service.getImage(), service, ToolTipFactory.createToolTip(service));
-				createConnection(source, destination, null, false);
+				createConnection(source, destination, null, null, false);
 			}
 
 		}
@@ -670,7 +670,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 		GraphNode source = existsSource == null ? createNode(bpelProject.getName(), bpelProject.getImage(), bpelProject, ToolTipFactory.createToolTip(bpelProject)) : existsSource;
 		for (OpenEsbBpelProcess openEsbBpelProcess : processes) {
 			GraphNode destination = createNode(openEsbBpelProcess.getName(), openEsbBpelProcess.getImage(), openEsbBpelProcess, ToolTipFactory.createToolTip(openEsbBpelProcess));
-			createConnection(source, destination, openEsbBpelProcess, false);
+			createConnection(source, destination, openEsbBpelProcess, null, false);
 		}
 	}
 
@@ -693,18 +693,18 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 				BpelProject project = partnerLinkBinding.getDependencyBpelProject();
 				// self dependency
 				if (bpelProject.equals(project)) {
-					GraphConnection connection = createConnection(source, source, partnerLinkBinding, true);
+					GraphConnection connection = createConnection(source, source, partnerLinkBinding, ToolTipFactory.createToolTip(partnerLinkBinding), true);
 					connection.setCurveDepth(curveDepth);
 					curveDepth++;
 				} else {
 					if (existsSource != null) {
 						// create connection to exists object in graph
 						GraphNode existsDestination = findDataInNodes(project);
-						createConnection(source, existsDestination, partnerLinkBinding, true);
+						createConnection(source, existsDestination, partnerLinkBinding, ToolTipFactory.createToolTip(partnerLinkBinding), true);
 					} else {
 						// new object in graph
 						GraphNode destination = createNode(project.getName(), project.getImage(), project, ToolTipFactory.createToolTip(project));
-						createConnection(source, destination, partnerLinkBinding, true);
+						createConnection(source, destination, partnerLinkBinding, ToolTipFactory.createToolTip(partnerLinkBinding), true);
 					}
 				}
 			}
@@ -715,11 +715,11 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 				if (existsSource != null) {
 					// create connection to exists object in graph
 					GraphNode existsDestination = findDataInNodes(esbProject);
-					createConnection(source, existsDestination, partnerLinkBinding, true);
+					createConnection(source, existsDestination, partnerLinkBinding, ToolTipFactory.createToolTip(partnerLinkBinding), true);
 				} else {
 					// new object in graph
 					GraphNode destination = createNode(esbProject.getName(), esbProject.getImage(), esbProject, ToolTipFactory.createToolTip(esbProject));
-					createConnection(source, destination, partnerLinkBinding, true);
+					createConnection(source, destination, partnerLinkBinding, ToolTipFactory.createToolTip(partnerLinkBinding), true);
 				}
 			}
 			// Unknown project dependency
@@ -731,13 +731,13 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 					GraphNode destination = findDataInNodes(project);
 					if (destination == null) {
 						destination = createNode(project.getName(), project.getImage(), project, ToolTipFactory.createToolTip(project));
-						createConnection(source, destination, partnerLinkBinding, true);
+						createConnection(source, destination, partnerLinkBinding, ToolTipFactory.createToolTip(partnerLinkBinding), true);
 					}
 
 				} else {
 					// new object in graph
 					GraphNode destination = createNode(project.getName(), project.getImage(), project, ToolTipFactory.createToolTip(project));
-					createConnection(source, destination, partnerLinkBinding, true);
+					createConnection(source, destination, partnerLinkBinding, ToolTipFactory.createToolTip(partnerLinkBinding), true);
 				}
 			}
 		}
@@ -780,7 +780,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 				GraphNode existsProjectGraphNode = findDataInNodes(project);
 				if (existsProjectGraphNode == null) {
 					GraphNode destination = createNode(project.getName(), project.getImage(), project, ToolTipFactory.createToolTip(project));
-					createConnection(source, destination, project, false);
+					createConnection(source, destination, project, null, false);
 				}
 			}
 
@@ -793,7 +793,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 				GraphNode existsProjectGraphNode = findDataInNodes(project);
 				if (existsProjectGraphNode == null) {
 					GraphNode destination = createNode(project.getName(), project.getImage(), project, ToolTipFactory.createToolTip(project));
-					createConnection(source, destination, project, false);
+					createConnection(source, destination, project, null, false);
 				}
 				// if (existsProjectGraphNode != null &&
 				// existsConnection(source, existsProjectGraphNode)) {
@@ -812,7 +812,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 				GraphNode existsProjectGraphNode = findDataInNodes(project);
 				if (existsProjectGraphNode == null) {
 					GraphNode destination = createNode(project.getName(), project.getImage(), project, ToolTipFactory.createToolTip(project));
-					createConnection(source, destination, project, false);
+					createConnection(source, destination, project, null, false);
 				}
 			}
 		}
@@ -867,38 +867,43 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 			Ora10gMultiWorkspace ora10gMultiWorkspace = (Ora10gMultiWorkspace) multiWorkspace;
 			for (Workspace workspace : ora10gMultiWorkspace.getWorkspaces()) {
 				GraphNode workspaceNode = createNode(workspace.getName(), workspace.getImage(), workspace, ToolTipFactory.createToolTip(workspace));
-				createConnection(multiWorkspaceNode, workspaceNode, workspace, false);
+				createConnection(multiWorkspaceNode, workspaceNode, workspace, null, false);
 			}
 		} else if (multiWorkspace.getType() == WorkspaceType.OPEN_ESB) {
 			OpenEsbMultiWorkspace esbMultiWorkspace = (OpenEsbMultiWorkspace) multiWorkspace;
 			for (Workspace workspace : esbMultiWorkspace.getWorkspaces()) {
 				GraphNode workspaceNode = createNode(workspace.getName(), workspace.getImage(), workspace, ToolTipFactory.createToolTip(workspace));
-				createConnection(multiWorkspaceNode, workspaceNode, workspace, false);
+				createConnection(multiWorkspaceNode, workspaceNode, workspace, null, false);
 			}
 		} else if (multiWorkspace.getType() == WorkspaceType.ORACLE_SERVICE_BUS_10G) {
 			OraSB10gMultiWorkspace oraSB10gMultiWorkspace = (OraSB10gMultiWorkspace) multiWorkspace;
 			for (Workspace workspace : oraSB10gMultiWorkspace.getWorkspaces()) {
 				GraphNode workspaceNode = createNode(workspace.getName(), workspace.getImage(), workspace, ToolTipFactory.createToolTip(workspace));
-				createConnection(multiWorkspaceNode, workspaceNode, workspace, false);
+				createConnection(multiWorkspaceNode, workspaceNode, workspace, null, false);
 			}
 		}
 
 	}
 
 	/**
-	 * create connection between source and target {@link GraphNode}
+	 * * create connection between source and target {@link GraphNode}
 	 * 
 	 * @param source
 	 * @param destination
 	 * @param data
-	 *            business object
-	 * @return {@link GraphConnection} from source and destination
+	 * @param toolTip
+	 * @param withText
+	 * @return
 	 */
-	private final GraphConnection createConnection(GraphNode source, GraphNode destination, Object data, boolean withText) {
+	private final GraphConnection createConnection(GraphNode source, GraphNode destination, Object data, IFigure toolTip, boolean withText) {
 		GraphConnection connection = new GraphConnection(graphViewer.getGraphControl(), SWT.ARROW_DOWN, source, destination);
 		connection.setData(data);
 		if (data != null && withText) {
 			connection.setText(data.toString());
+		}
+
+		if (toolTip != null) {
+			connection.setTooltip(toolTip);
 		}
 		graphConnections.add(connection);
 		return connection;
