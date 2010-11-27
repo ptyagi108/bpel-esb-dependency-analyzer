@@ -119,6 +119,17 @@ public final class GuiUtils {
 		return (VisualGraphView) window.getActiveEditor();
 	}
 
+	/**
+	 * get active {@link VisualGraphView}
+	 * 
+	 * @return
+	 */
+	public static final VisualGraphView getActiveVisualGraphView() {
+		IWorkbenchPage window = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		IEditorPart editorPart = window.getActiveEditor();
+		return (VisualGraphView) editorPart;
+	}
+
 	public static final IEditorReference[] getEditors() {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences();
 	}

@@ -35,6 +35,7 @@ public final class ExportGraphToImageWizard extends Wizard {
 	private static final String TITLE = "Export graph to image...";
 	private File imageFile;
 	private int imageFormat;
+	private String fileExtension;
 
 	public ExportGraphToImageWizard() {
 		super();
@@ -46,6 +47,13 @@ public final class ExportGraphToImageWizard extends Wizard {
 	@Override
 	public final boolean performFinish() {
 		return true;
+	}
+
+	/**
+	 * @return the fileExtension
+	 */
+	public final String getFileExtension() {
+		return fileExtension;
 	}
 
 	public final int getFormat() {
@@ -79,15 +87,19 @@ public final class ExportGraphToImageWizard extends Wizard {
 		public final void handleEvent(Event event) {
 			if (bJpeg.getSelection()) {
 				imageFormat = SWT.IMAGE_JPEG;
+				fileExtension = "jpeg";
 				setPageComplete(true);
 			} else if (bPng.getSelection()) {
 				imageFormat = SWT.IMAGE_PNG;
+				fileExtension = "png";
 				setPageComplete(true);
 			} else if (bBmp.getSelection()) {
 				imageFormat = SWT.IMAGE_BMP;
+				fileExtension = "bmp";
 				setPageComplete(true);
 			} else if (bGif.getSelection()) {
 				imageFormat = SWT.IMAGE_GIF;
+				fileExtension = "gif";
 				setPageComplete(true);
 			}
 		}
@@ -174,6 +186,7 @@ public final class ExportGraphToImageWizard extends Wizard {
 				public final void widgetSelected(SelectionEvent event) {
 					FileDialog dialog = new FileDialog(getShell(), SWT.SAVE);
 					dialog.setFilterPath(textFile.getText());
+					dialog.setFilterExtensions(new String[] { fileExtension });
 					dialog.setText("Save to file...");
 
 					String file = dialog.open();
