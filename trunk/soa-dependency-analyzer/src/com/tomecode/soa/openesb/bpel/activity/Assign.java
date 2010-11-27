@@ -10,6 +10,8 @@ import com.tomecode.soa.activity.ActivityType;
  * assign activity in Open ESB - BPEL process
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class Assign extends Activity {
@@ -37,6 +39,8 @@ public final class Assign extends Activity {
 	 * copy element for {@link Assign}
 	 * 
 	 * @author Tomas Frastia
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
 	 * 
 	 */
 	public static final class Copy {

@@ -1,13 +1,18 @@
 package com.tomecode.soa.openesb.bpel.activity;
 
+import org.eclipse.swt.graphics.Image;
+
 import com.tomecode.soa.activity.Activity;
 import com.tomecode.soa.activity.ActivityType;
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
  * 
  * onEvenet element in Open ESB - BPEL process
  * 
- * @author Frastia Tomas
+ * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class OnEvent extends Activity {
@@ -29,13 +34,17 @@ public final class OnEvent extends Activity {
 	 * @param variable
 	 * @param messageType
 	 */
-	public OnEvent(ActivityType type, String partnerLink, String operation, String portType, String variable, String messageType) {
-		super(type, null);
+	public OnEvent(String partnerLink, String operation, String portType, String variable, String messageType) {
+		super(ActivityType.OPEN_ESB_BPEL_ONEVENT, null);
 		this.partnerLink = partnerLink;
 		this.operation = operation;
 		this.portType = portType;
 		this.variable = variable;
 		this.messageType = messageType;
+	}
+
+	public final Image getImage() {
+		return ImageFactory.OPEN_ESB_BPEL_ONEVENT;
 	}
 
 	/**

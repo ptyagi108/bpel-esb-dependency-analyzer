@@ -1,14 +1,18 @@
 package com.tomecode.soa.openesb.bpel.activity;
 
+import org.eclipse.swt.graphics.Image;
+
 import com.tomecode.soa.activity.Activity;
 import com.tomecode.soa.activity.ActivityType;
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
- * 
  * 
  * onMessage activity in Open ESB - BPEL process
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class OnMessage extends Activity {
@@ -26,20 +30,23 @@ public final class OnMessage extends Activity {
 	/**
 	 * Constructor
 	 * 
-	 * @param type
 	 * @param variable
 	 * @param partnerLink
 	 * @param operation
 	 * @param portType
 	 * @param messageExchange
 	 */
-	public OnMessage(ActivityType type, String variable, String partnerLink, String operation, String portType, String messageExchange) {
-		super(type, null);
+	public OnMessage(String variable, String partnerLink, String operation, String portType, String messageExchange) {
+		super(ActivityType.OPEN_ESB_BPEL_ONMESSAGE, null);
 		this.variable = variable;
 		this.partnerLink = partnerLink;
 		this.operation = operation;
 		this.portType = portType;
 		this.messageExchange = messageExchange;
+	}
+
+	public final Image getImage() {
+		return ImageFactory.OPEN_ESB_BPEL_ONMESSAGE;
 	}
 
 	/**

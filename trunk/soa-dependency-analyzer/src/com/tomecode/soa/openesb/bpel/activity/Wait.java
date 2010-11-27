@@ -6,7 +6,9 @@ import com.tomecode.soa.activity.ActivityType;
 /**
  * wait activity in Open ESB - BPEL process
  * 
- * @author Frastia Tomas
+ * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class Wait extends Activity {

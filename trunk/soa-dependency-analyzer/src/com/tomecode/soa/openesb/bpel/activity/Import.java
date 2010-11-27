@@ -1,4 +1,4 @@
-package com.tomecode.soa.openesb.bpel;
+package com.tomecode.soa.openesb.bpel.activity;
 
 /**
  * 
@@ -7,7 +7,7 @@ package com.tomecode.soa.openesb.bpel;
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
- *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
 public final class Import {
 

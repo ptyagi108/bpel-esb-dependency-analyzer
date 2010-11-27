@@ -1,12 +1,17 @@
 package com.tomecode.soa.openesb.bpel.activity;
 
+import org.eclipse.swt.graphics.Image;
+
 import com.tomecode.soa.activity.Activity;
 import com.tomecode.soa.activity.ActivityType;
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
  * forEach activity in Open ESB - BPEL process
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class ForEach extends Activity {
@@ -36,6 +41,10 @@ public final class ForEach extends Activity {
 		this.startCounterValue = startCounterValue;
 		this.finalCounterValue = finalCounterValue;
 		this.completionConditionBranches = completionConditionBranches;
+	}
+
+	public final Image getImage() {
+		return ImageFactory.OPEN_ESB_BPEL_FOREACH;
 	}
 
 	/**

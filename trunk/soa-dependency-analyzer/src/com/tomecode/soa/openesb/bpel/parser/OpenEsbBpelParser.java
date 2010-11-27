@@ -7,7 +7,6 @@ import org.dom4j.Element;
 
 import com.tomecode.soa.activity.Activity;
 import com.tomecode.soa.activity.ActivityType;
-import com.tomecode.soa.openesb.bpel.Import;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcessStructure;
 import com.tomecode.soa.openesb.bpel.activity.Assign;
@@ -16,10 +15,12 @@ import com.tomecode.soa.openesb.bpel.activity.Catch;
 import com.tomecode.soa.openesb.bpel.activity.Compensate;
 import com.tomecode.soa.openesb.bpel.activity.CompensateScope;
 import com.tomecode.soa.openesb.bpel.activity.Else;
+import com.tomecode.soa.openesb.bpel.activity.Elseif;
 import com.tomecode.soa.openesb.bpel.activity.Empty;
 import com.tomecode.soa.openesb.bpel.activity.Exit;
 import com.tomecode.soa.openesb.bpel.activity.ForEach;
 import com.tomecode.soa.openesb.bpel.activity.If;
+import com.tomecode.soa.openesb.bpel.activity.Import;
 import com.tomecode.soa.openesb.bpel.activity.Invoke;
 import com.tomecode.soa.openesb.bpel.activity.OnAlarm;
 import com.tomecode.soa.openesb.bpel.activity.OnEvent;
@@ -143,8 +144,8 @@ public final class OpenEsbBpelParser extends AbstractParser {
 				root.addActivity(new Throw(element.attributeValue("name"), element.attributeValue("faultVariable")));
 			} else if (element.getName().equals("onEvent")) {
 				String partnerLink = element.attributeValue("partnerLink");
-				OnEvent onEvent = new OnEvent(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), partnerLink, element.attributeValue("operation"), element.attributeValue("portType"),
-						element.attributeValue("variable"), element.attributeValue("messageType"));
+				OnEvent onEvent = new OnEvent(partnerLink, element.attributeValue("operation"), element.attributeValue("portType"), element.attributeValue("variable"),
+						element.attributeValue("messageType"));
 				root.addActivity(onEvent);
 				strukture.getProcess().addActivityDependency(onEvent, partnerLink);
 				parseProcessActivities(element.elements(), onEvent, strukture);
@@ -169,8 +170,8 @@ public final class OpenEsbBpelParser extends AbstractParser {
 				parseProcessActivities(element.elements(), whilee, strukture);
 			} else if (element.getName().equals("onMessage")) {
 				String partnerLink = element.attributeValue("partnerLink");
-				OnMessage onMessageActivity = new OnMessage(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("variable"), partnerLink,
-						element.attributeValue("operation"), element.attributeValue("portType"), element.attributeValue("messageExchange"));
+				OnMessage onMessageActivity = new OnMessage(element.attributeValue("variable"), partnerLink, element.attributeValue("operation"), element.attributeValue("portType"),
+						element.attributeValue("messageExchange"));
 				root.addActivity(onMessageActivity);
 				strukture.getProcess().addActivityDependency(onMessageActivity, partnerLink);
 				parseProcessActivities(element.elements(), onMessageActivity, strukture);
@@ -181,17 +182,13 @@ public final class OpenEsbBpelParser extends AbstractParser {
 				root.addActivity(repeatUntil);
 				parseProcessActivities(element.elements(), repeatUntil, strukture);
 			} else if (element.getName().equals("if")) {
-				If if1 = new If(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("name"), element.elementTextTrim("condition"));
-				root.addActivity(if1);
-				parseProcessActivities(element.elements(), if1, strukture);
-			} else if (element.getName().equals("if")) {
-				If if1 = new If(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("name"), element.elementTextTrim("condition"));
+				If if1 = new If(element.attributeValue("name"), element.elementTextTrim("condition"));
 				root.addActivity(if1);
 				parseProcessActivities(element.elements(), if1, strukture);
 			} else if (element.getName().equals("elseif")) {
-				If if1 = new If(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("name"), element.elementTextTrim("condition"));
-				root.addActivity(if1);
-				parseProcessActivities(element.elements(), if1, strukture);
+				Elseif elseIf = new Elseif(element.attributeValue("name"), element.elementTextTrim("condition"));
+				root.addActivity(elseIf);
+				parseProcessActivities(element.elements(), elseIf, strukture);
 			} else if (element.getName().equals("else")) {
 				Else else1 = new Else();
 				root.addActivity(else1);
@@ -283,7 +280,7 @@ public final class OpenEsbBpelParser extends AbstractParser {
 	 * @return parsed {@link OnAlarm}
 	 */
 	private final OnAlarm parseActivityOnAlarm(Element eOnAlaram) {
-		OnAlarm onAlarm = new OnAlarm(ActivityType.parseOpenEsbBpelActivtyType(eOnAlaram.getName()));
+		OnAlarm onAlarm = new OnAlarm();
 		Element e = eOnAlaram.element("for");
 		if (e != null) {
 			onAlarm.setFor(e.getTextTrim());
