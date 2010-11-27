@@ -1,7 +1,9 @@
-package com.tomecode.soa.bpel.activity;
+package com.tomecode.soa.openesb.bpel.activity;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.bpel.activity.Activity;
+import com.tomecode.soa.bpel.activity.ActivityType;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
@@ -26,12 +28,12 @@ public final class Throw extends Activity {
 	 * @param faultVariable
 	 */
 	public Throw(String name, String faultVariable) {
-		super(ActivityType.ORACLE_10G_THROW, name);
+		super(ActivityType.OPEN_ESB_BPEL_THROW, name);
 		this.faultVariable = faultVariable;
 	}
 
 	public final Image getImage() {
-		return ImageFactory.ORACLE_10G_THROW;
+		return ImageFactory.OPEN_ESB_BPEL_THROW;
 	}
 
 	public final String getFaultVariable() {

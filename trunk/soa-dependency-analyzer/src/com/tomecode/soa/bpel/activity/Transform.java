@@ -1,9 +1,15 @@
 package com.tomecode.soa.bpel.activity;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+
 /**
  * Transform activity in BPEL process
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class Transform extends Activity {
@@ -24,6 +30,10 @@ public final class Transform extends Activity {
 		super(ActivityType.ORACLE_10G_TRANSFORMATE, name);
 		this.fromVariable = fromVariable;
 		this.toVariable = toVariable;
+	}
+
+	public final Image getImage() {
+		return ImageFactory.ORACLE_10G_TRANSFORM;
 	}
 
 	public final String getFromVariable() {

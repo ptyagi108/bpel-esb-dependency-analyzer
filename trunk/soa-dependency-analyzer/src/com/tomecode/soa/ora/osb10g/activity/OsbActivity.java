@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.ora.osb10g.activity.splitjoin.ErrorHandlers;
 
 /**
@@ -13,7 +14,7 @@ import com.tomecode.soa.ora.osb10g.activity.splitjoin.ErrorHandlers;
  * @author Tomas Frastia
  * 
  */
-public abstract class OsbActivity {
+public abstract class OsbActivity implements ImageFace {
 
 	/**
 	 * list of activities

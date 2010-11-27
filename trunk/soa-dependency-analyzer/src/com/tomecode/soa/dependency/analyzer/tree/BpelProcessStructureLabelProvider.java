@@ -4,6 +4,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.bpel.activity.Activity;
+import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.suite10g.project.BpelProject;
 import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProcessStrukture;
@@ -22,6 +23,7 @@ import com.tomecode.soa.services.BpelProcess;
 final class BpelProcessStructureLabelProvider extends LabelProvider {
 
 	public final Image getImage(Object element) {
+
 		if (element instanceof Ora10gBpelProcessStrukture) {
 			return ImageFactory.ORACLE_10G_BPEL_PROCESS;
 		} else if (element instanceof BpelProcess) {
@@ -31,7 +33,15 @@ final class BpelProcessStructureLabelProvider extends LabelProvider {
 		} else if (element instanceof Activity) {
 			Activity activity = ((Activity) element);
 			if (activity.getActivtyType() != null) {
-				return activity.getActivtyType().getImage();
+				Image image = activity.getActivtyType().getImage();
+				if (image == null) {
+					if (element instanceof ImageFace) {
+						return ((ImageFace) element).getImage();
+					}
+				}
+
+				return image;
+
 			}
 		}
 		return null;

@@ -1,7 +1,9 @@
-package com.tomecode.soa.bpel.activity;
+package com.tomecode.soa.openesb.bpel.activity;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.bpel.activity.Activity;
+import com.tomecode.soa.bpel.activity.ActivityType;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
@@ -27,13 +29,13 @@ public final class While extends Activity {
 	 * @param variable
 	 */
 	public While(String name, String condition, String variable) {
-		super(ActivityType.ORACLE_10G_WHILE, name);
+		super(ActivityType.OPEN_ESB_BPEL_WHILE, name);
 		this.variable = variable;
 		this.condition = condition;
 	}
 
 	public final Image getImage() {
-		return ImageFactory.ORACLE_10G_WHILE;
+		return ImageFactory.OPEN_ESB_BPEL_WHILE;
 	}
 
 	/**

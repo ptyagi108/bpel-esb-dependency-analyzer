@@ -3,14 +3,20 @@ package com.tomecode.soa.bpel.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
+
 /**
  * 
  * BPEL Activities
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public class Activity {
+public class Activity implements ImageFace {
 
 	private static final long serialVersionUID = -6772380545433052884L;
 
@@ -161,4 +167,13 @@ public class Activity {
 	public boolean compare(Activity activity) {
 		return toString().equals(activity.toString());
 	}
+
+	@Override
+	public Image getImage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	// @Override
+	// public abstract Image getImage();
 }

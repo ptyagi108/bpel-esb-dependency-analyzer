@@ -1,9 +1,16 @@
 package com.tomecode.soa.bpel.activity;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+
 /**
  * pager activity in BPEL process
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
+ * 
  * 
  */
 public final class Pager extends Activity {
@@ -16,7 +23,10 @@ public final class Pager extends Activity {
 	 * @param name
 	 */
 	public Pager(String name) {
-		super(ActivityType.ORACLE_10G_EMAIL, name);
+		super(ActivityType.ORACLE_10G_PAGER, name);
 	}
 
+	public final Image getImage() {
+		return ImageFactory.ORACLE_10G_PAGER;
+	}
 }

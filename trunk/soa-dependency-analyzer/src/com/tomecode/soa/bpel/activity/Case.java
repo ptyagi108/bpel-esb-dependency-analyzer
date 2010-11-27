@@ -1,9 +1,15 @@
 package com.tomecode.soa.bpel.activity;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+
 /**
  * case from switch in BPEL process
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class Case extends Activity {
@@ -24,6 +30,20 @@ public final class Case extends Activity {
 	public Case(String name, String variable) {
 		super(ActivityType.ORACLE_10G_CASE, name);
 		this.variable = variable;
+	}
+
+	public final Image getImage() {
+		return ImageFactory.ORACLE_10G_SWITCH;
+	}
+
+	/**
+	 * 
+	 * variable in case activity
+	 * 
+	 * @return the variable
+	 */
+	public final String getVariable() {
+		return variable;
 	}
 
 	// /**

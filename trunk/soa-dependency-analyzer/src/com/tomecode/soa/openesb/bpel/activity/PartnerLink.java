@@ -1,8 +1,14 @@
-package com.tomecode.soa.openesb.bpel;
+package com.tomecode.soa.openesb.bpel.activity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.bpel.activity.Activity;
+import com.tomecode.soa.bpel.activity.ActivityType;
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.wsdl.Wsdl;
 
 /**
@@ -12,9 +18,7 @@ import com.tomecode.soa.wsdl.Wsdl;
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
-public final class PartnerLink {
-
-	private String name;
+public final class PartnerLink extends Activity {
 
 	private String partnerLinkType;
 
@@ -28,8 +32,16 @@ public final class PartnerLink {
 
 	private List<OpenEsbBpelProcess> dependenciesProcesses;
 
+	/**
+	 * 
+	 * @param name
+	 * @param initializePartnerRole
+	 * @param partnerLinkType
+	 * @param myRole
+	 * @param partnerRole
+	 */
 	public PartnerLink(String name, String initializePartnerRole, String partnerLinkType, String myRole, String partnerRole) {
-		this.name = name;
+		super(ActivityType.OPEN_ESB_BPEL_PARTNERLINK, name);
 		this.initializePartnerRole = initializePartnerRole;
 		this.partnerLinkType = partnerLinkType;
 		this.myRole = myRole;
@@ -37,11 +49,8 @@ public final class PartnerLink {
 		this.dependenciesProcesses = new ArrayList<OpenEsbBpelProcess>();
 	}
 
-	/**
-	 * @return the name
-	 */
-	public final String getName() {
-		return name;
+	public final Image getImage() {
+		return ImageFactory.OPEN_ESB_BPEL_PARTNERLINK;
 	}
 
 	/**

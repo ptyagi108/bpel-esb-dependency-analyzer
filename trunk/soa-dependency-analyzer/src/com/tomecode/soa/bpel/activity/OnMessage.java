@@ -1,9 +1,15 @@
 package com.tomecode.soa.bpel.activity;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+
 /**
  * OnMessage activity in BPEL process
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class OnMessage extends Activity {
@@ -48,25 +54,34 @@ public final class OnMessage extends Activity {
 		return operation;
 	}
 
-//	/**
-//	 * find variable in activity
-//	 */
-//	public final void findVariable(FindUsageVariableResult findUsageVariableResult) {
-//		if (variable != null && findUsageVariableResult.getVariable().toString().equals(variable)) {
-//			findUsageVariableResult.addUsage(this);
-//		} else if (headerVariable != null && findUsageVariableResult.getVariable().toString().equals(headerVariable)) {
-//			findUsageVariableResult.addUsage(this);
-//		}
-//	}
-//
-//	/**
-//	 * find partnerLink in activity
-//	 */
-//	public final void findPartnerLink(FindUsagePartnerLinkResult usage) {
-//		if (partnerLink != null && usage.getPartnerLink().getName().equals(partnerLink)) {
-//			usage.addUsage(this);
-//		}
-//	}
+	public final Image getImage() {
+		return ImageFactory.ORACLE_10G_ONMESSAGE;
+	}
+
+	// /**
+	// * find variable in activity
+	// */
+	// public final void findVariable(FindUsageVariableResult
+	// findUsageVariableResult) {
+	// if (variable != null &&
+	// findUsageVariableResult.getVariable().toString().equals(variable)) {
+	// findUsageVariableResult.addUsage(this);
+	// } else if (headerVariable != null &&
+	// findUsageVariableResult.getVariable().toString().equals(headerVariable))
+	// {
+	// findUsageVariableResult.addUsage(this);
+	// }
+	// }
+	//
+	// /**
+	// * find partnerLink in activity
+	// */
+	// public final void findPartnerLink(FindUsagePartnerLinkResult usage) {
+	// if (partnerLink != null &&
+	// usage.getPartnerLink().getName().equals(partnerLink)) {
+	// usage.addUsage(this);
+	// }
+	// }
 
 	public final boolean compare(Activity activity) {
 		if (super.compare(activity)) {

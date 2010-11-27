@@ -1,7 +1,9 @@
-package com.tomecode.soa.bpel.activity;
+package com.tomecode.soa.openesb.bpel.activity;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.bpel.activity.Activity;
+import com.tomecode.soa.bpel.activity.ActivityType;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
@@ -25,11 +27,11 @@ public final class Variable extends Activity {
 	 * @param messageType
 	 */
 	public Variable(String name, String messageType) {
-		super(ActivityType.ORACLE_10G_VARIABLE, name);
+		super(ActivityType.OPEN_ESB_BPEL_VARIABLE, name);
 	}
 
 	public final Image getImage() {
-		return ImageFactory.ORACLE_10G_VARIABLE;
+		return ImageFactory.OPEN_ESB_BPEL_VARIABLE;
 	}
 
 	public final String toString() {

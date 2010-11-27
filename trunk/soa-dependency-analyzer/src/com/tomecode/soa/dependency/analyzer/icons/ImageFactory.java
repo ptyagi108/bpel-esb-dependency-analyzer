@@ -126,7 +126,7 @@ public final class ImageFactory {
 	public static final Image OPEN_ESB_BPEL_BPEL_MODULE = Activator.getImageDescriptor("/icons/com/tomecode/soa/openEsb/16/bpelModule.png").createImage();
 	public static final Image OPEN_ESB_BPEL_PICK = Activator.getImageDescriptor("/icons/com/tomecode/soa/openEsb/16/pick.png").createImage();
 	public static final Image OPEN_ESB_BPEL_PARTNERLINK = Activator.getImageDescriptor("/icons/com/tomecode/soa/openEsb/16/partner.png").createImage();
-	public static final Image OPEN_ESB_BPEL_RECEIVEK = Activator.getImageDescriptor("/icons/com/tomecode/soa/openEsb/16/receive.png").createImage();
+	public static final Image OPEN_ESB_BPEL_RECEIVE = Activator.getImageDescriptor("/icons/com/tomecode/soa/openEsb/16/receive.png").createImage();
 	public static final Image OPEN_ESB_BPEL_INVOKE = Activator.getImageDescriptor("/icons/com/tomecode/soa/openEsb/16/invoke.png").createImage();
 	public static final Image OPEN_ESB_BPEL_REPLY = Activator.getImageDescriptor("/icons/com/tomecode/soa/openEsb/16/reply.png").createImage();
 	public static final Image OPEN_ESB_BPEL_THROW = Activator.getImageDescriptor("/icons/com/tomecode/soa/openEsb/16/throw.png").createImage();

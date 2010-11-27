@@ -3,10 +3,16 @@ package com.tomecode.soa.bpel.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+
 /**
  * Assign in BPEL process
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class Assign extends Activity {
@@ -29,11 +35,18 @@ public final class Assign extends Activity {
 		operations.add(operation);
 	}
 
+	@Override
+	public final Image getImage() {
+		return ImageFactory.ORACLE_10G_ASSIGN;
+	}
+
 	/**
 	 * 
 	 * assign operation
 	 * 
 	 * @author Tomas Frastia
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
 	 * 
 	 */
 	public static final class AssignOperation {

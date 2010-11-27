@@ -1,9 +1,15 @@
 package com.tomecode.soa.bpel.activity;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+
 /**
  * Invoke BPEL activity
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class Invoke extends Activity {
@@ -27,8 +33,8 @@ public final class Invoke extends Activity {
 	 * @param partnerLink
 	 * @param operation
 	 */
-	public Invoke(ActivityType type, String name, String inputVariable, String outputVariable, String partnerLink, String operation) {
-		super(type, name);
+	public Invoke(String name, String inputVariable, String outputVariable, String partnerLink, String operation) {
+		super(ActivityType.ORACLE_10G_INVOKE, name);
 		this.inputVariable = inputVariable;
 		this.outputVariable = outputVariable;
 		this.partnerLink = partnerLink;
@@ -49,6 +55,10 @@ public final class Invoke extends Activity {
 
 	public final String getOutputVariable() {
 		return outputVariable;
+	}
+
+	public final Image getImage() {
+		return ImageFactory.ORACLE_10G_INVOKE;
 	}
 
 	// /**

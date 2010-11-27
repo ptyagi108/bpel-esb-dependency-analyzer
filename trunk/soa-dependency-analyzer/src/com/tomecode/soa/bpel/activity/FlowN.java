@@ -1,10 +1,15 @@
 package com.tomecode.soa.bpel.activity;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
  * flowN activity in BPEL process
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class FlowN extends Activity {
@@ -24,6 +29,24 @@ public final class FlowN extends Activity {
 		super(ActivityType.ORACLE_10G_FLOWN, name);
 		this.n = n;
 		this.indexVariable = indexVariable;
+	}
+
+	public final Image getImage() {
+		return ImageFactory.ORACLE_10G_FLOWN;
+	}
+
+	/**
+	 * @return the n
+	 */
+	public final String getN() {
+		return n;
+	}
+
+	/**
+	 * @return the indexVariable
+	 */
+	public final String getIndexVariable() {
+		return indexVariable;
 	}
 
 	// /**

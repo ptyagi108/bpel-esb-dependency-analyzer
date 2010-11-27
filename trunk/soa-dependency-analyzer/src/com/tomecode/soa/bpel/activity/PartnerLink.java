@@ -1,9 +1,16 @@
 package com.tomecode.soa.bpel.activity;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+
 /**
  * partner link in BPEL process
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
+ * 
  * 
  */
 public final class PartnerLink extends Activity {
@@ -19,18 +26,21 @@ public final class PartnerLink extends Activity {
 	/**
 	 * Constructor
 	 * 
-	 * @param type
 	 * @param name
 	 * @param partnerLinkType
 	 * @param myRole
 	 * @param partnerRole
 	 */
-	public PartnerLink(ActivityType type, String name, String partnerLinkType, String myRole, String partnerRole) {
-		super(type, name);
+	public PartnerLink(String name, String partnerLinkType, String myRole, String partnerRole) {
+		super(ActivityType.ORACLE_10G_PARTNERLINK, name);
 		this.partnerLinkType = partnerLinkType;
 		this.myRole = myRole;
 		this.partnerRole = partnerRole;
 
+	}
+
+	public final Image getImage() {
+		return ImageFactory.ORACLE_10G_PARTNERLINK;
 	}
 
 	public final String getPartnerLinkType() {

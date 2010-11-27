@@ -1,7 +1,9 @@
-package com.tomecode.soa.bpel.activity;
+package com.tomecode.soa.openesb.bpel.activity;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.bpel.activity.Activity;
+import com.tomecode.soa.bpel.activity.ActivityType;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
@@ -10,6 +12,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
+ * 
  * 
  */
 public final class Reply extends Activity {
@@ -31,14 +34,14 @@ public final class Reply extends Activity {
 	 * @param operation
 	 */
 	public Reply(String name, String variable, String partnerLink, String operation) {
-		super(ActivityType.ORACLE_10G_REPLY, name);
+		super(ActivityType.OPEN_ESB_BPEL_REPLY, name);
 		this.variable = variable;
 		this.partnerLink = partnerLink;
 		this.operation = operation;
 	}
 
 	public final Image getImage() {
-		return ImageFactory.ORACLE_10G_REPLY;
+		return ImageFactory.OPEN_ESB_BPEL_REPLY;
 	}
 
 	public final String getOperation() {

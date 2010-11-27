@@ -1,9 +1,15 @@
 package com.tomecode.soa.bpel.activity;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+
 /**
  * wait activity in BPEL process
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class Wait extends Activity {
@@ -21,6 +27,17 @@ public final class Wait extends Activity {
 	public Wait(String name, String variable) {
 		super(ActivityType.ORACLE_10G_WAIT, name);
 		this.variable = variable;
+	}
+
+	public final Image getImage() {
+		return ImageFactory.ORACLE_10G_WAIT;
+	}
+
+	/**
+	 * @return the variable
+	 */
+	public final String getVariable() {
+		return variable;
 	}
 
 	// /**

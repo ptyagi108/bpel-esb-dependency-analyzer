@@ -7,32 +7,32 @@ import org.dom4j.Element;
 
 import com.tomecode.soa.bpel.activity.Activity;
 import com.tomecode.soa.bpel.activity.ActivityType;
-import com.tomecode.soa.bpel.activity.Catch;
-import com.tomecode.soa.bpel.activity.Empty;
-import com.tomecode.soa.bpel.activity.Invoke;
-import com.tomecode.soa.bpel.activity.Receive;
-import com.tomecode.soa.bpel.activity.Reply;
-import com.tomecode.soa.bpel.activity.Throw;
-import com.tomecode.soa.bpel.activity.Variable;
-import com.tomecode.soa.bpel.activity.While;
 import com.tomecode.soa.openesb.bpel.Import;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcessStructure;
-import com.tomecode.soa.openesb.bpel.PartnerLink;
 import com.tomecode.soa.openesb.bpel.activity.Assign;
+import com.tomecode.soa.openesb.bpel.activity.Assign.Copy;
+import com.tomecode.soa.openesb.bpel.activity.Catch;
 import com.tomecode.soa.openesb.bpel.activity.Compensate;
 import com.tomecode.soa.openesb.bpel.activity.CompensateScope;
 import com.tomecode.soa.openesb.bpel.activity.Else;
+import com.tomecode.soa.openesb.bpel.activity.Empty;
 import com.tomecode.soa.openesb.bpel.activity.Exit;
 import com.tomecode.soa.openesb.bpel.activity.ForEach;
 import com.tomecode.soa.openesb.bpel.activity.If;
+import com.tomecode.soa.openesb.bpel.activity.Invoke;
 import com.tomecode.soa.openesb.bpel.activity.OnAlarm;
 import com.tomecode.soa.openesb.bpel.activity.OnEvent;
 import com.tomecode.soa.openesb.bpel.activity.OnMessage;
+import com.tomecode.soa.openesb.bpel.activity.PartnerLink;
+import com.tomecode.soa.openesb.bpel.activity.Receive;
 import com.tomecode.soa.openesb.bpel.activity.RepeatUntil;
+import com.tomecode.soa.openesb.bpel.activity.Reply;
 import com.tomecode.soa.openesb.bpel.activity.Rethrow;
+import com.tomecode.soa.openesb.bpel.activity.Throw;
+import com.tomecode.soa.openesb.bpel.activity.Variable;
 import com.tomecode.soa.openesb.bpel.activity.Wait;
-import com.tomecode.soa.openesb.bpel.activity.Assign.Copy;
+import com.tomecode.soa.openesb.bpel.activity.While;
 import com.tomecode.soa.parser.AbstractParser;
 import com.tomecode.soa.parser.ServiceParserException;
 
@@ -48,7 +48,7 @@ import com.tomecode.soa.parser.ServiceParserException;
 public final class OpenEsbBpelParser extends AbstractParser {
 
 	/**
-	 * parse of bpel process
+	 * parse of BPEL process
 	 * 
 	 * @param bpelFile
 	 * @return
@@ -115,34 +115,32 @@ public final class OpenEsbBpelParser extends AbstractParser {
 				parseProcessActivities(element.elements(), activity, strukture);
 
 			} else if (element.getName().equals("partnerLink")) {
-				com.tomecode.soa.bpel.activity.PartnerLink partnerLink = new com.tomecode.soa.bpel.activity.PartnerLink(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element
-						.attributeValue("name"), element.attributeValue("partnerLinkType"), element.attributeValue("myRole"), element.attributeValue("partnerRole"));
+				PartnerLink partnerLink = new PartnerLink(element.attributeValue("name"), null, element.attributeValue("partnerLinkType"), element.attributeValue("myRole"),
+						element.attributeValue("partnerRole"));
 				root.addActivity(partnerLink);
 			} else if (element.getName().equals("receive")) {
 				String partnerLink = element.attributeValue("partnerLink");
-				Receive receive = new Receive(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("name"), element.attributeValue("variable"), partnerLink, element
-						.attributeValue("operation"));
+				Receive receive = new Receive(element.attributeValue("name"), element.attributeValue("variable"), partnerLink, element.attributeValue("operation"));
 				root.addActivity(receive);
 
 				strukture.getProcess().addActivityDependency(receive, partnerLink);
 			} else if (element.getName().equals("invoke")) {
 				String partnerLink = element.attributeValue("partnerLink");
-				Invoke invoke = new Invoke(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("name"), element.attributeValue("inputVariable"), element
-						.attributeValue("outputVariable"), partnerLink, element.attributeValue("operation"));
+				Invoke invoke = new Invoke(element.attributeValue("name"), element.attributeValue("inputVariable"), element.attributeValue("outputVariable"), partnerLink,
+						element.attributeValue("operation"));
 				root.addActivity(invoke);
 				strukture.getProcess().addActivityDependency(invoke, partnerLink);
 				parseProcessActivities(element.elements(), invoke, strukture);
 			} else if (element.getName().equals("reply")) {
-				root.addActivity(new Reply(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("name"), element.attributeValue("variable"), element
-						.attributeValue("partnerLink"), element.attributeValue("operation")));
+				root.addActivity(new Reply(element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation")));
 			} else if (element.getName().equals("variable")) {
-				root.addActivity(new Variable(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("name"), element.attributeValue("messageType")));
+				root.addActivity(new Variable(element.attributeValue("name"), element.attributeValue("messageType")));
 			} else if (element.getName().equals("catch")) {
-				Catch catchActivity = new Catch(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("faultName"), element.attributeValue("faultVariable"));
+				Catch catchActivity = new Catch(element.attributeValue("faultName"), element.attributeValue("faultVariable"));
 				root.addActivity(catchActivity);
 				parseProcessActivities(element.elements(), catchActivity, strukture);
 			} else if (element.getName().equals("throw")) {
-				root.addActivity(new Throw(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("name"), element.attributeValue("faultVariable")));
+				root.addActivity(new Throw(element.attributeValue("name"), element.attributeValue("faultVariable")));
 			} else if (element.getName().equals("onEvent")) {
 				String partnerLink = element.attributeValue("partnerLink");
 				OnEvent onEvent = new OnEvent(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), partnerLink, element.attributeValue("operation"), element.attributeValue("portType"),
@@ -161,7 +159,7 @@ public final class OpenEsbBpelParser extends AbstractParser {
 			} else if (element.getName().equals("rethrow")) {
 				root.addActivity(new Rethrow(element.attributeValue("name")));
 			} else if (element.getName().equals("empty")) {
-				root.addActivity(new Empty(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("name")));
+				root.addActivity(new Empty(element.attributeValue("name")));
 			} else if (element.getName().equals("compensateScope")) {
 				root.addActivity(new CompensateScope(element.attributeValue("name")));
 			} else if (element.getName().equals("compensate")) {
@@ -171,8 +169,8 @@ public final class OpenEsbBpelParser extends AbstractParser {
 				parseProcessActivities(element.elements(), whilee, strukture);
 			} else if (element.getName().equals("onMessage")) {
 				String partnerLink = element.attributeValue("partnerLink");
-				OnMessage onMessageActivity = new OnMessage(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("variable"), partnerLink, element
-						.attributeValue("operation"), element.attributeValue("portType"), element.attributeValue("messageExchange"));
+				OnMessage onMessageActivity = new OnMessage(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("variable"), partnerLink,
+						element.attributeValue("operation"), element.attributeValue("portType"), element.attributeValue("messageExchange"));
 				root.addActivity(onMessageActivity);
 				strukture.getProcess().addActivityDependency(onMessageActivity, partnerLink);
 				parseProcessActivities(element.elements(), onMessageActivity, strukture);
@@ -254,9 +252,9 @@ public final class OpenEsbBpelParser extends AbstractParser {
 	private final While parseActivityWhile(Element eWhile) {
 		Element eCondition = eWhile.element("condition");
 		if (eCondition != null) {
-			return new While(ActivityType.parseOpenEsbBpelActivtyType(eWhile.getName()), eWhile.attributeValue("name"), eCondition.getTextTrim(), null);
+			return new While(eWhile.attributeValue("name"), eCondition.getTextTrim(), null);
 		}
-		return new While(ActivityType.parseOpenEsbBpelActivtyType(eWhile.getName()), eWhile.attributeValue("name"), null, null);
+		return new While(eWhile.attributeValue("name"), null, null);
 	}
 
 	/**

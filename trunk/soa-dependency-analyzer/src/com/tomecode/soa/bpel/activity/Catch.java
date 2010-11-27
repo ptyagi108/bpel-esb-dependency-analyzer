@@ -1,9 +1,15 @@
 package com.tomecode.soa.bpel.activity;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+
 /**
  * catch activity in BPEL process
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class Catch extends Activity {
@@ -18,13 +24,17 @@ public final class Catch extends Activity {
 	 * @param name
 	 * @param faultVariable
 	 */
-	public Catch(ActivityType type, String name, String faultVariable) {
-		super(type, name);
+	public Catch(String name, String faultVariable) {
+		super(ActivityType.ORACLE_10G_CATCH, name);
 		this.faultVariable = faultVariable;
 	}
 
 	public final String getFaultVariable() {
 		return faultVariable;
+	}
+
+	public final Image getImage() {
+		return ImageFactory.ORACLE_10G_CATCH;
 	}
 
 }

@@ -12,10 +12,13 @@ import org.dom4j.Element;
 import com.tomecode.soa.bpel.activity.Activity;
 import com.tomecode.soa.bpel.activity.ActivityType;
 import com.tomecode.soa.bpel.activity.Assign;
+import com.tomecode.soa.bpel.activity.Assign.AssignOperation;
+import com.tomecode.soa.bpel.activity.Assign.OperationType;
 import com.tomecode.soa.bpel.activity.Case;
 import com.tomecode.soa.bpel.activity.CaseOtherwise;
 import com.tomecode.soa.bpel.activity.Catch;
 import com.tomecode.soa.bpel.activity.Email;
+import com.tomecode.soa.bpel.activity.Empty;
 import com.tomecode.soa.bpel.activity.Fax;
 import com.tomecode.soa.bpel.activity.FlowN;
 import com.tomecode.soa.bpel.activity.HumanTask;
@@ -33,8 +36,6 @@ import com.tomecode.soa.bpel.activity.Variable;
 import com.tomecode.soa.bpel.activity.Voice;
 import com.tomecode.soa.bpel.activity.Wait;
 import com.tomecode.soa.bpel.activity.While;
-import com.tomecode.soa.bpel.activity.Assign.AssignOperation;
-import com.tomecode.soa.bpel.activity.Assign.OperationType;
 import com.tomecode.soa.ora.suite10g.project.BpelOperations;
 import com.tomecode.soa.ora.suite10g.project.BpelProject;
 import com.tomecode.soa.ora.suite10g.project.Operation;
@@ -196,32 +197,32 @@ public final class Ora10gBpelParser extends AbstractParser {
 					ex.printStackTrace();
 				}
 			} else if (element.getName().equals("variable")) {
-				Variable variable = new Variable(ActivityType.ORACLE_10G_VARIABLE, element.attributeValue("name"), element.attributeValue("messageType"));
+				Variable variable = new Variable(element.attributeValue("name"), element.attributeValue("messageType"));
 				root.addActivity(variable);
 			} else if (element.getName().equals("partnerLink")) {
-				PartnerLink partnerLink = new PartnerLink(ActivityType.ORACLE_10G_PARTNERLINK, element.attributeValue("name"), element.attributeValue("partnerLinkType"), element
-						.attributeValue("myRole"), element.attributeValue("partnerRole"));
+				PartnerLink partnerLink = new PartnerLink(element.attributeValue("name"), element.attributeValue("partnerLinkType"), element.attributeValue("myRole"),
+						element.attributeValue("partnerRole"));
 				root.addActivity(partnerLink);
 			} else if (element.getName().equals("receive")) {
-				root.addActivity(new Receive(ActivityType.ORACLE_10G_RECEIVE, element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element
-						.attributeValue("operation")));
+				root.addActivity(new Receive(element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation")));
 			} else if (element.getName().equals("invoke")) {
-				root.addActivity(new Invoke(ActivityType.ORACLE_1G0_INVOKE, element.attributeValue("name"), element.attributeValue("inputVariable"), element.attributeValue("outputVariable"), element
-						.attributeValue("partnerLink"), element.attributeValue("operation")));
+				root.addActivity(new Invoke(element.attributeValue("name"), element.attributeValue("inputVariable"), element.attributeValue("outputVariable"), element.attributeValue("partnerLink"),
+						element.attributeValue("operation")));
 			} else if (element.getName().equals("reply")) {
-				root.addActivity(new Reply(ActivityType.REPLY, element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element
-						.attributeValue("operation")));
+				root.addActivity(new Reply(element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation")));
 			} else if (element.getName().equals("throw")) {
-				root.addActivity(new Throw(ActivityType.ORACLE_10G_THROW, element.attributeValue("name"), element.attributeValue("faultVariable")));
+				root.addActivity(new Throw(element.attributeValue("name"), element.attributeValue("faultVariable")));
 			} else if (element.getName().equals("onMessage")) {
-				OnMessage onMessageActivity = new OnMessage(element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"), element
-						.attributeValue("headerVariable"));
+				OnMessage onMessageActivity = new OnMessage(element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"),
+						element.attributeValue("headerVariable"));
 				root.addActivity(onMessageActivity);
 				parseBpelProcessActivities(element.elements(), onMessageActivity, strukture);
 			} else if (element.getName().equals("catch")) {
-				Catch catchActivity = new Catch(ActivityType.CATCH, element.attributeValue("faultName"), element.attributeValue("faultVariable"));
+				Catch catchActivity = new Catch(element.attributeValue("faultName"), element.attributeValue("faultVariable"));
 				root.addActivity(catchActivity);
 				parseBpelProcessActivities(element.elements(), catchActivity, strukture);
+			} else if (element.getName().equals("empty")) {
+				root.addActivity(new Empty(element.attributeValue("name")));
 			} else if (element.getName().equals("assign")) {
 				parseAssignActivity(element, root);
 			} else if (element.getName().equals("case")) {
@@ -265,8 +266,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 				root.addActivity(wait);
 
 			} else if (element.getName().equals("while")) {
-				While whileActivity = new While(ActivityType.ORACLE_10G_WHILE, element.attributeValue("name"), element.attributeValue("condition"), getVariableFromExpression(element
-						.attributeValue("condition")));
+				While whileActivity = new While(element.attributeValue("name"), element.attributeValue("condition"), getVariableFromExpression(element.attributeValue("condition")));
 				root.addActivity(whileActivity);
 				parseBpelProcessActivities(element.elements(), whileActivity, strukture);
 			} else if (element.getName().equals("flowN")) {
@@ -441,19 +441,18 @@ public final class Ora10gBpelParser extends AbstractParser {
 	private final Activity parseBpelActivity(Element element) {
 
 		if (element.getName().equals("receive")) {
-			return new Receive(ActivityType.ORACLE_10G_RECEIVE, element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element
-					.attributeValue("operation"));
+			return new Receive(element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"));
 		} else if (element.getName().equals("invoke")) {
-			return new Invoke(ActivityType.ORACLE_1G0_INVOKE, element.attributeValue("name"), element.attributeValue("inputVariable"), element.attributeValue("outputVariable"), element
-					.attributeValue("partnerLink"), element.attributeValue("operation"));
+			return new Invoke(element.attributeValue("name"), element.attributeValue("inputVariable"), element.attributeValue("outputVariable"), element.attributeValue("partnerLink"),
+					element.attributeValue("operation"));
 		} else if (element.getName().equals("reply")) {
-			return new Reply(ActivityType.REPLY, element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"));
+			return new Reply(element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"));
 		} else if (element.getName().equals("throw")) {
-			return new Throw(ActivityType.ORACLE_10G_THROW, element.attributeValue("name"), element.attributeValue("faultVariable"));
+			return new Throw(element.attributeValue("name"), element.attributeValue("faultVariable"));
 		} else if (element.getName().equals("onMessage")) {
 			return new OnMessage(element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"), element.attributeValue("headerVariable"));
 		} else if (element.getName().equals("catch")) {
-			return new Catch(ActivityType.CATCH, element.attributeValue("faultName"), element.attributeValue("faultVariable"));
+			return new Catch(element.attributeValue("faultName"), element.attributeValue("faultVariable"));
 		} else if (element.getName().equals("assign")) {
 			Element eAnnotation = element.element("annotation");
 			if (eAnnotation != null) {
@@ -503,7 +502,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 		} else if (element.getName().equals("wait")) {
 			return new Wait(element.attributeValue("name"), null);
 		} else if (element.getName().equals("while")) {
-			return new While(ActivityType.ORACLE_10G_WHILE, element.attributeValue("name"), null, null);
+			return new While(element.attributeValue("name"), null, null);
 		} else if (element.getName().equals("flowN")) {
 			return new FlowN(element.attributeValue("name"), null, null);
 		}

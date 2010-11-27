@@ -8,6 +8,8 @@ import com.tomecode.soa.bpel.activity.ActivityType;
  * Exit activity in Open ESB - BPEL process
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
 public final class Exit extends Activity {
