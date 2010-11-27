@@ -5,6 +5,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+
 /**
  * Oracle 10g ESB SVC service
  * 
@@ -34,7 +38,7 @@ public final class EsbSvc implements BasicEsbNode {
 	/**
 	 * owner project
 	 */
-	private EsbProject ownerEsbProject;
+	private Ora10gEsbProject ownerEsbProject;
 
 	/**
 	 * Constructor
@@ -58,11 +62,11 @@ public final class EsbSvc implements BasicEsbNode {
 		this.qName = qName;
 	}
 
-	public final EsbProject getOwnerEsbProject() {
+	public final Ora10gEsbProject getOwnerEsbProject() {
 		return ownerEsbProject;
 	}
 
-	public final void setOwnerEsbProject(EsbProject esbProject) {
+	public final void setOwnerEsbProject(Ora10gEsbProject esbProject) {
 		this.ownerEsbProject = esbProject;
 	}
 
@@ -134,13 +138,13 @@ public final class EsbSvc implements BasicEsbNode {
 	}
 
 	/**
-	 * find {@link EsbProject} by qname
+	 * find {@link Ora10gEsbProject} by qname
 	 * 
 	 * @param qName
 	 * @param sericeURL
 	 * @return
 	 */
-	public final EsbProject findEsbProjectByQname(String qName, URL sericeURL) {
+	public final Ora10gEsbProject findEsbProjectByQname(String qName, URL sericeURL) {
 		if (this.qName.equalsIgnoreCase(qName)) {
 			if (this.concreteWSDLURL != null) {
 				if (this.concreteWSDLURL.equalsIgnoreCase(sericeURL.getFile())) {
@@ -154,6 +158,11 @@ public final class EsbSvc implements BasicEsbNode {
 
 	public final List<EsbOperation> getEsbOperations() {
 		return childs;
+	}
+
+	@Override
+	public final Image getImage() {
+		return ImageFactory.ORACLE_10G_SERVICE;
 	}
 
 	// public ImageIcon getIcon() {

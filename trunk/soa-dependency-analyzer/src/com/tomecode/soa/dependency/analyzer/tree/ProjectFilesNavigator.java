@@ -9,7 +9,7 @@ import com.tomecode.soa.dependency.analyzer.gui.utils.HideView;
 import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
 import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.osb10g.services.SplitJoin;
-import com.tomecode.soa.ora.suite10g.project.BpelProject;
+import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.project.UnknownProject;
 import com.tomecode.soa.services.BpelProcess;
@@ -76,8 +76,8 @@ public final class ProjectFilesNavigator extends ViewPart implements HideView {
 			setProject(((SplitJoin) source).getProject());
 		} else if (source instanceof BpelProcess) {
 			setProject(((BpelProcess) source).getProject());
-		} else if (source instanceof BpelProject) {
-			setProject(((BpelProject) source));
+		} else if (source instanceof Ora10gBpelProject) {
+			setProject(((Ora10gBpelProject) source));
 		} else {
 			clearTree();
 		}

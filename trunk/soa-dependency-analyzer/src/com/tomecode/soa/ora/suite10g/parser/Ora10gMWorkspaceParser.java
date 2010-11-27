@@ -8,9 +8,9 @@ import java.util.List;
 import org.dom4j.Element;
 
 import com.tomecode.soa.ora.suite10g.esb.EsbOperation;
-import com.tomecode.soa.ora.suite10g.esb.EsbProject;
+import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.ora.suite10g.esb.EsbSvc;
-import com.tomecode.soa.ora.suite10g.project.BpelProject;
+import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
 import com.tomecode.soa.ora.suite10g.project.PartnerLinkBinding;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gMultiWorkspace;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gWorkspace;
@@ -133,7 +133,7 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 			Ora10gWorkspace ora10gWorkspace = (Ora10gWorkspace) workspace;
 			for (Project project : ora10gWorkspace.getProjects()) {
 				if (project.getType() == ProjectType.ORACLE10G_BPEL) {
-					((BpelProject) project).analysisProjectDependencies();
+					((Ora10gBpelProject) project).analysisProjectDependencies();
 				}
 			}
 		}
@@ -151,7 +151,7 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 
 			for (Project project : ora10gWorkspace.getProjects()) {
 				if (project.getType() == ProjectType.ORACLE10G_BPEL) {
-					BpelProject bpelProject = (BpelProject) project;
+					Ora10gBpelProject bpelProject = (Ora10gBpelProject) project;
 					for (PartnerLinkBinding partnerLinkBinding : bpelProject.getPartnerLinkBindings()) {
 						if (partnerLinkBinding.getDependencyEsbProject() == null) {
 
@@ -159,7 +159,7 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 							if (urlWsdl != null) {
 								String qName = esbParser.convertWsdlToQname(urlWsdl);
 								if (qName != null) {
-									EsbProject qNameProject = findEsbProjectByQname(qName, urlWsdl, multiWorkspace);
+									Ora10gEsbProject qNameProject = findEsbProjectByQname(qName, urlWsdl, multiWorkspace);
 									if (qNameProject != null) {
 										partnerLinkBinding.setDependencyEsbProject(qNameProject);// .setDependencyProject(qNameProject);
 									}
@@ -170,14 +170,14 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 						}
 					}
 				} else if (project.getType() == ProjectType.ORACLE10G_ESB) {
-					EsbProject esbProject = (EsbProject) project;
+					Ora10gEsbProject esbProject = (Ora10gEsbProject) project;
 
 					List<EsbSvc> esbSvcs = esbProject.getAllEsbSvc();
 					for (EsbSvc esbSvc : esbSvcs) {
 						URL url = parseWsdlToUrl(esbSvc.getWsdlURL());
 						if (url != null) {
 							if (url.getFile().startsWith("/orabpel")) {
-								BpelProject bpelProject = findBpelProjectForEsb(multiWorkspace, url.getFile());
+								Ora10gBpelProject bpelProject = findBpelProjectForEsb(multiWorkspace, url.getFile());
 								if (bpelProject != null) {
 									compareEsbAndBpelOperation(esbSvc, bpelProject);
 								}
@@ -197,7 +197,7 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 	 * @param esbSvc
 	 * @param bpelProject
 	 */
-	private final void compareEsbAndBpelOperation(EsbSvc esbSvc, BpelProject bpelProject) {
+	private final void compareEsbAndBpelOperation(EsbSvc esbSvc, Ora10gBpelProject bpelProject) {
 		for (EsbOperation esbOperation : esbSvc.getEsbOperations()) {
 			if (bpelProject.getWsdl() != null) {
 				if (bpelProject.getWsdl().existWsldOperation(esbOperation.getWsdlOperation())) {
@@ -218,7 +218,7 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 	 * @param url
 	 * @return
 	 */
-	private final BpelProject findBpelProjectForEsb(Ora10gMultiWorkspace multiWorkspace, String url) {
+	private final Ora10gBpelProject findBpelProjectForEsb(Ora10gMultiWorkspace multiWorkspace, String url) {
 		int index = url.indexOf("?wsdl");
 		if (index != -1) {
 			url = url.replace("?", ".");
@@ -241,12 +241,12 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 	 * @param bpelProcessName
 	 * @return if not found, return <b>null</b>
 	 */
-	private final BpelProject findBpelByName(Ora10gMultiWorkspace multiWorkspace, String bpelProcessName) {
+	private final Ora10gBpelProject findBpelByName(Ora10gMultiWorkspace multiWorkspace, String bpelProcessName) {
 		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
 			Ora10gWorkspace ora10gWorkspace = (Ora10gWorkspace) workspace;
 			for (Project project : ora10gWorkspace.getProjects()) {
 				if (project.getType() == ProjectType.ORACLE10G_BPEL) {
-					BpelProject bpelProject = (BpelProject) project;
+					Ora10gBpelProject bpelProject = (Ora10gBpelProject) project;
 					if (bpelProject.toString().equals(bpelProcessName)) {
 						return bpelProject;
 					}
@@ -272,7 +272,7 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 				try {
 
 					parsedBpelEsbFiles.add(bpelFile);
-					BpelProject bpelProject = bpelParser.parseBpelXml(bpelFile);
+					Ora10gBpelProject bpelProject = bpelParser.parseBpelXml(bpelFile);
 					bpelProject.setInJws(isInJws);
 					bpelProject.setWorkspace(workspace);
 					workspace.addProject(bpelProject);
@@ -286,7 +286,7 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 					try {
 
 						parsedBpelEsbFiles.add(esbFile);
-						EsbProject esbProject = esbParser.parse(esbFile);
+						Ora10gEsbProject esbProject = esbParser.parse(esbFile);
 						esbProject.setInJws(isInJws);
 						esbProject.setWorkspace(workspace);
 						workspace.addProject(esbProject);
@@ -334,7 +334,7 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 
 			for (Project service : ora10gWorkspace.getProjects()) {
 				if (service.getType() == ProjectType.ORACLE10G_BPEL) {
-					BpelProject bpel = (BpelProject) service;
+					Ora10gBpelProject bpel = (Ora10gBpelProject) service;
 					for (PartnerLinkBinding partnerLinkBinding : bpel.getPartnerLinkBindings()) {
 						if (partnerLinkBinding.getDependencyEsbProject() == null) {
 							try {
@@ -361,7 +361,7 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 
 			for (Project project : ora10gWorkspace.getProjects()) {
 				if (project.getType() == ProjectType.ORACLE10G_ESB) {
-					EsbProject esbProject = (EsbProject) project;
+					Ora10gEsbProject esbProject = (Ora10gEsbProject) project;
 
 					analyzeEsbDependencies(multiWorkspace, esbProject);
 				}
@@ -375,12 +375,12 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 	 * @param multiWorkspace
 	 * @param sourceEsbProject
 	 */
-	private final void analyzeEsbDependencies(Ora10gMultiWorkspace multiWorkspace, EsbProject sourceEsbProject) {
+	private final void analyzeEsbDependencies(Ora10gMultiWorkspace multiWorkspace, Ora10gEsbProject sourceEsbProject) {
 		for (EsbSvc esbSvc : sourceEsbProject.getAllEsbSvc()) {
 			URL url = parseWsdlToUrl(esbSvc.getWsdlURL());
 			if (url != null) {
 				String qName = esbParser.convertWsdlToQname(url);
-				EsbProject esbProject = findEsbProjectByQname(qName, url, multiWorkspace);
+				Ora10gEsbProject esbProject = findEsbProjectByQname(qName, url, multiWorkspace);
 				if (esbProject != null) {
 					esbSvc.getOwnerEsbProject().addDependency(esbProject);
 					// /esbSvc.get
@@ -392,7 +392,7 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 	}
 
 	/**
-	 * find {@link EsbProject} by qName
+	 * find {@link Ora10gEsbProject} by qName
 	 * 
 	 * @param qName
 	 *            //service/@name
@@ -401,14 +401,14 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 	 * @param workspace
 	 * @return
 	 */
-	private final EsbProject findEsbProjectByQname(String qName, URL serviceURL, Ora10gMultiWorkspace multiWorkspace) {
+	private final Ora10gEsbProject findEsbProjectByQname(String qName, URL serviceURL, Ora10gMultiWorkspace multiWorkspace) {
 		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
 			Ora10gWorkspace ora10gWorkspace = (Ora10gWorkspace) workspace;
 
 			for (Project project : ora10gWorkspace.getProjects()) {
 				if (project.getType() == ProjectType.ORACLE10G_ESB) {
-					EsbProject esbProject = (EsbProject) project;
-					EsbProject fProject = esbProject.findEsbProjectByQname(qName, serviceURL);
+					Ora10gEsbProject esbProject = (Ora10gEsbProject) project;
+					Ora10gEsbProject fProject = esbProject.findEsbProjectByQname(qName, serviceURL);
 					if (fProject != null) {
 						return fProject;
 					}

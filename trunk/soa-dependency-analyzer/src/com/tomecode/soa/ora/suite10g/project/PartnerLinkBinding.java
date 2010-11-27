@@ -6,7 +6,7 @@ import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
-import com.tomecode.soa.ora.suite10g.esb.EsbProject;
+import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.project.UnknownProject;
 
 /**
@@ -31,15 +31,15 @@ public final class PartnerLinkBinding implements ImageFace, Serializable {
 	/**
 	 * dependency ESB project
 	 */
-	private final EsbProject[] dependencyEsbProject;
+	private final Ora10gEsbProject[] dependencyEsbProject;
 	/**
 	 * dependency BPEL project
 	 */
-	private final BpelProject[] dependencyBpelProject;
+	private final Ora10gBpelProject[] dependencyBpelProject;
 
 	private final UnknownProject[] unknownProject;
 
-	private BpelProject parent;
+	private Ora10gBpelProject parent;
 
 	/**
 	 * Constructor
@@ -50,8 +50,8 @@ public final class PartnerLinkBinding implements ImageFace, Serializable {
 	 *            WSDL URL
 	 */
 	public PartnerLinkBinding(String name, String wsdlLocation) {
-		dependencyBpelProject = new BpelProject[1];
-		dependencyEsbProject = new EsbProject[1];
+		dependencyBpelProject = new Ora10gBpelProject[1];
+		dependencyEsbProject = new Ora10gEsbProject[1];
 		unknownProject = new UnknownProject[1];
 		this.name = name;
 		this.wsdlLocation = wsdlLocation;
@@ -65,33 +65,33 @@ public final class PartnerLinkBinding implements ImageFace, Serializable {
 		return wsdlLocation;
 	}
 
-	public final EsbProject getDependencyEsbProject() {
+	public final Ora10gEsbProject getDependencyEsbProject() {
 		return dependencyEsbProject[0];
 	}
 
-	public final BpelProject getDependencyBpelProject() {
+	public final Ora10gBpelProject getDependencyBpelProject() {
 		return dependencyBpelProject[0];
 	}
 
-	public final void setDependencyEsbProject(EsbProject dependencyEsbProject) {
+	public final void setDependencyEsbProject(Ora10gEsbProject dependencyEsbProject) {
 		this.dependencyEsbProject[0] = dependencyEsbProject;
 		if (this.dependencyEsbProject[0] != null) {
 			unknownProject[0] = null;
 		}
 	}
 
-	public final void setDependencyBpelProject(BpelProject dependencyBpelProject) {
+	public final void setDependencyBpelProject(Ora10gBpelProject dependencyBpelProject) {
 		this.dependencyBpelProject[0] = dependencyBpelProject;
 		if (this.dependencyBpelProject[0] != null) {
 			unknownProject[0] = null;
 		}
 	}
 
-	public void setParent(BpelProject parent) {
+	public void setParent(Ora10gBpelProject parent) {
 		this.parent = parent;
 	}
 
-	public final BpelProject getParent() {
+	public final Ora10gBpelProject getParent() {
 		return parent;
 	}
 

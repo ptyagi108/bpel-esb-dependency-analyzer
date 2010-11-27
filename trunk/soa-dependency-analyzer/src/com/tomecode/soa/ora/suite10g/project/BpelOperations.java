@@ -24,7 +24,7 @@ public final class BpelOperations implements DependencyNode {
 	 */
 	private final List<Operation> operations;
 
-	private BpelProject bpelProject;
+	private Ora10gBpelProject bpelProject;
 
 	/**
 	 * Constructor
@@ -38,7 +38,7 @@ public final class BpelOperations implements DependencyNode {
 	 * 
 	 * @param process
 	 */
-	public BpelOperations(BpelProject process) {
+	public BpelOperations(Ora10gBpelProject process) {
 		this();
 		this.bpelProject = process;
 
@@ -48,7 +48,7 @@ public final class BpelOperations implements DependencyNode {
 		operations.add(operation);
 	}
 
-	public final BpelProject getBpelProcess() {
+	public final Ora10gBpelProject getBpelProcess() {
 		return bpelProject;
 	}
 

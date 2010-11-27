@@ -11,7 +11,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.openesb.project.OpenEsbBpelProject;
-import com.tomecode.soa.ora.suite10g.project.BpelProject;
+import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
 import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProcessStrukture;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
@@ -67,8 +67,8 @@ public final class BpelProcessStructureNavigator extends ViewPart implements Hid
 	 * @param source
 	 */
 	public final void showProcessStructure(Object source) {
-		if (source instanceof BpelProject) {
-			rootNode.set(((BpelProject) source).getBpelProcessStrukture());
+		if (source instanceof Ora10gBpelProject) {
+			rootNode.set(((Ora10gBpelProject) source).getBpelProcessStrukture());
 			tree.setInput(rootNode);
 			tree.expandAll();
 		} else if (source instanceof OpenEsbBpelProject) {

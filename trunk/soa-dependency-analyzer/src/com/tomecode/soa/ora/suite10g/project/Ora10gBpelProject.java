@@ -22,7 +22,7 @@ import com.tomecode.soa.wsdl.Wsdl;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class BpelProject implements Project {
+public final class Ora10gBpelProject implements Project {
 
 	/**
 	 * if true then project is in *.jws
@@ -57,7 +57,7 @@ public final class BpelProject implements Project {
 	 * @param src
 	 * @param bpelXmlFile
 	 */
-	public BpelProject(String id, String src, File bpelXmlFile, File file) {
+	public Ora10gBpelProject(String id, String src, File bpelXmlFile, File file) {
 		this.partnerLinkBindings = new ArrayList<PartnerLinkBinding>();
 		this.dependencyProjects = new ArrayList<Project>();
 		this.bpelOperations = new BpelOperations(this);

@@ -65,8 +65,8 @@ import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependencies;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gMultiWorkspace;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gWorkspace;
-import com.tomecode.soa.ora.suite10g.esb.EsbProject;
-import com.tomecode.soa.ora.suite10g.project.BpelProject;
+import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
+import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
 import com.tomecode.soa.ora.suite10g.project.PartnerLinkBinding;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gMultiWorkspace;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gWorkspace;
@@ -628,7 +628,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	 */
 	private final void createProjectAndProjectGraph(Project project, GraphNode existsSource) {
 		if (project.getType() == ProjectType.ORACLE10G_BPEL) {
-			BpelProject bpelProject = (BpelProject) project;
+			Ora10gBpelProject bpelProject = (Ora10gBpelProject) project;
 			applyDependencies(bpelProject, bpelProject.getPartnerLinkBindings(), existsSource);
 		} else if (project.getType() == ProjectType.OPEN_ESB_BPEL) {
 			OpenEsbBpelProject bpelProject = (OpenEsbBpelProject) project;
@@ -675,22 +675,22 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	}
 
 	/**
-	 * create dependency graph where source object is {@link BpelProject} and
+	 * create dependency graph where source object is {@link Ora10gBpelProject} and
 	 * destination is list of dependencies project
 	 * 
 	 * @param bpelProject
-	 *            source {@link BpelProject}
+	 *            source {@link Ora10gBpelProject}
 	 * @param dependencyProjects
 	 *            list of dependency project
 	 * @param existsSource
 	 */
-	private final void applyDependencies(BpelProject bpelProject, List<PartnerLinkBinding> partnerLinkBindings, GraphNode existsSource) {
+	private final void applyDependencies(Ora10gBpelProject bpelProject, List<PartnerLinkBinding> partnerLinkBindings, GraphNode existsSource) {
 		int curveDepth = 30;
 		GraphNode source = existsSource == null ? createNode(bpelProject.getName(), bpelProject.getImage(), bpelProject, ToolTipFactory.createToolTip(bpelProject)) : existsSource;
 		for (PartnerLinkBinding partnerLinkBinding : partnerLinkBindings) {
 			// BPEL dependency
 			if (partnerLinkBinding.getDependencyBpelProject() != null) {
-				BpelProject project = partnerLinkBinding.getDependencyBpelProject();
+				Ora10gBpelProject project = partnerLinkBinding.getDependencyBpelProject();
 				// self dependency
 				if (bpelProject.equals(project)) {
 					GraphConnection connection = createConnection(source, source, partnerLinkBinding, ToolTipFactory.createToolTip(partnerLinkBinding), true);
@@ -710,7 +710,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 			}
 			// ESB project dependency
 			else if (partnerLinkBinding.getDependencyEsbProject() != null) {
-				EsbProject esbProject = partnerLinkBinding.getDependencyEsbProject();
+				Ora10gEsbProject esbProject = partnerLinkBinding.getDependencyEsbProject();
 
 				if (existsSource != null) {
 					// create connection to exists object in graph

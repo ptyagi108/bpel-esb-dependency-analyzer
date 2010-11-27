@@ -9,8 +9,15 @@ import com.tomecode.soa.openesb.bpel.dependencies.BpelActivityDependency;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.OsbActivityDependency;
+import com.tomecode.soa.ora.suite10g.esb.BasicEsbNode;
+import com.tomecode.soa.ora.suite10g.esb.BasicEsbNode.EsbNodeType;
+import com.tomecode.soa.ora.suite10g.esb.EsbGrp;
+import com.tomecode.soa.ora.suite10g.esb.EsbOperation;
+import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
+import com.tomecode.soa.ora.suite10g.esb.EsbSvc;
+import com.tomecode.soa.ora.suite10g.esb.EsbSys;
 import com.tomecode.soa.ora.suite10g.project.BpelOperations;
-import com.tomecode.soa.ora.suite10g.project.BpelProject;
+import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
 import com.tomecode.soa.ora.suite10g.project.Operation;
 
 /**
@@ -24,14 +31,16 @@ import com.tomecode.soa.ora.suite10g.project.Operation;
  */
 final class ServiceOperationsDepContentProvider implements ITreeContentProvider {
 
+	private final Object[] EMPTY = new Object[] {};
+
 	// TODO: what is it?
-	private boolean showWithActivities;
+	// private boolean showWithActivities;
 
 	/**
 	 * Constructor
 	 */
 	ServiceOperationsDepContentProvider() {
-		this.showWithActivities = true;
+		// this.showWithActivities = true;
 	}
 
 	@Override
@@ -44,8 +53,14 @@ final class ServiceOperationsDepContentProvider implements ITreeContentProvider 
 			return ((BpelOperations) parent).getOperations().toArray();
 		} else if (parent instanceof Service) {
 			return ((Service) parent).getActivityDependency().getActivityDependencies().toArray();
-		} else if (parent instanceof BpelProject) {
-			return ((BpelProject) parent).getBpelOperations().getOperations().toArray();
+		} else if (parent instanceof Ora10gBpelProject) {
+			return ((Ora10gBpelProject) parent).getBpelOperations().getOperations().toArray();
+		} else if (parent instanceof Ora10gEsbProject) {
+			return ((Ora10gEsbProject) parent).getBasicEsbNodes().toArray();
+		} else if (parent instanceof BasicEsbNode) {
+			return getEsbServices((BasicEsbNode) parent);
+		} else if (parent instanceof EsbOperation) {
+			return ((EsbOperation) parent).getDependencyNodes().toArray();
 		} else if (parent instanceof OsbActivityDependency) {
 			return ((OsbActivityDependency) parent).getServices().toArray();
 		} else if (parent instanceof OpenEsbBpelProcess) {
@@ -71,8 +86,14 @@ final class ServiceOperationsDepContentProvider implements ITreeContentProvider 
 			return ((Operation) element).hasChildren();
 		} else if (element instanceof BpelOperations) {
 			return !((BpelOperations) element).getOperations().isEmpty();
-		} else if (element instanceof BpelProject) {
-			return !((BpelProject) element).getBpelOperations().getOperations().isEmpty();
+		} else if (element instanceof Ora10gBpelProject) {
+			return !((Ora10gBpelProject) element).getBpelOperations().getOperations().isEmpty();
+		} else if (element instanceof Ora10gEsbProject) {
+			return !((Ora10gEsbProject) element).getBasicEsbNodes().isEmpty();
+		} else if (element instanceof BasicEsbNode) {
+			return getEsbServices((BasicEsbNode) element).length != 0;
+		} else if (element instanceof EsbOperation) {
+			return !((EsbOperation) element).getDependencyNodes().isEmpty();
 		} else if (element instanceof Service) {
 			return !((Service) element).getActivityDependency().getActivityDependencies().isEmpty();
 		} else if (element instanceof OsbActivityDependency) {
@@ -95,8 +116,14 @@ final class ServiceOperationsDepContentProvider implements ITreeContentProvider 
 			return ((Operation) element).getChildren();
 		} else if (element instanceof BpelOperations) {
 			return ((BpelOperations) element).getOperations().toArray();
-		} else if (element instanceof BpelProject) {
-			return ((BpelProject) element).getBpelOperations().getOperations().toArray();
+		} else if (element instanceof Ora10gBpelProject) {
+			return ((Ora10gBpelProject) element).getBpelOperations().getOperations().toArray();
+		} else if (element instanceof Ora10gEsbProject) {
+			return ((Ora10gEsbProject) element).getBasicEsbNodes().toArray();
+		} else if (element instanceof BasicEsbNode) {
+			return getEsbServices((BasicEsbNode) element);
+		} else if (element instanceof EsbOperation) {
+			return ((EsbOperation) element).getDependencyNodes().toArray();
 		} else if (element instanceof Service) {
 			return ((Service) element).getActivityDependency().getActivityDependencies().toArray();
 		} else if (element instanceof OsbActivityDependency) {
@@ -116,7 +143,7 @@ final class ServiceOperationsDepContentProvider implements ITreeContentProvider 
 	 *            the showWithActivities to set
 	 */
 	public final void setShowWithActivities(boolean showWithActivities) {
-		this.showWithActivities = showWithActivities;
+		// this.showWithActivities = showWithActivities;
 	}
 
 	@Override
@@ -129,4 +156,20 @@ final class ServiceOperationsDepContentProvider implements ITreeContentProvider 
 
 	}
 
+	public final Object[] getEsbServices(BasicEsbNode basicEsbNode) {
+		if (basicEsbNode.getType() == EsbNodeType.ESBGRP) {
+			EsbGrp esbGrp = (EsbGrp) basicEsbNode;
+			return esbGrp.getBasicEsbNodes().toArray();
+		} else if (basicEsbNode.getType() == EsbNodeType.ESBSVC) {
+			EsbSvc esbSvc = (EsbSvc) basicEsbNode;
+			return esbSvc.getEsbOperations().toArray();
+		} else if (basicEsbNode.getType() == EsbNodeType.ESBSYS) {
+			EsbSys esbSys = (EsbSys) basicEsbNode;
+			return esbSys.getBasicEsbNodes().toArray();
+		} else if (basicEsbNode.getType() == EsbNodeType.ESBOPERATION) {
+			EsbOperation esbOperation = (EsbOperation) basicEsbNode;
+			return esbOperation.getDependencyNodes().toArray();
+		}
+		return EMPTY;
+	}
 }

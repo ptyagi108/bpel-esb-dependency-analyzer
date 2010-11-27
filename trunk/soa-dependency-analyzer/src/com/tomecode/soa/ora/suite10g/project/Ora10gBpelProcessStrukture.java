@@ -15,7 +15,7 @@ public final class Ora10gBpelProcessStrukture extends Activity {
 
 	private static final long serialVersionUID = -8082029461398462336L;
 
-	private BpelProject bpelProject;
+	private Ora10gBpelProject bpelProject;
 
 	/**
 	 * Constructor
@@ -30,7 +30,7 @@ public final class Ora10gBpelProcessStrukture extends Activity {
 	 * 
 	 * @param bpelProcess
 	 */
-	public Ora10gBpelProcessStrukture(BpelProject bpelProcess) {
+	public Ora10gBpelProcessStrukture(Ora10gBpelProject bpelProcess) {
 		this();
 		this.bpelProject = bpelProcess;
 	}
@@ -43,7 +43,7 @@ public final class Ora10gBpelProcessStrukture extends Activity {
 		return bpelProject.toString();
 	}
 
-	public final BpelProject getProject() {
+	public final Ora10gBpelProject getProject() {
 		return bpelProject;
 	}
 

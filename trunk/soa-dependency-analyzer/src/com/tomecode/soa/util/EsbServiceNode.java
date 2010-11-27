@@ -1,13 +1,13 @@
 package com.tomecode.soa.util;
 
 import com.tomecode.soa.dependency.analyzer.tree.node.DependencyNode;
-import com.tomecode.soa.ora.suite10g.esb.EsbProject;
+import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.project.Project;
 
 /**
  * 
  * Simple helper tree node for esb project - wraper treeNode for
- * {@link EsbProject} wich does not show project dependencies
+ * {@link Ora10gEsbProject} wich does not show project dependencies
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
@@ -18,14 +18,14 @@ public final class EsbServiceNode implements DependencyNode {
 
 	private static final long serialVersionUID = -2232894399903425396L;
 
-	private EsbProject esbProject;
+	private Ora10gEsbProject esbProject;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param esbProject
 	 */
-	public EsbServiceNode(EsbProject esbProject) {
+	public EsbServiceNode(Ora10gEsbProject esbProject) {
 		this.esbProject = esbProject;
 	}
 

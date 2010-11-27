@@ -23,7 +23,7 @@ import com.tomecode.soa.workspace.Workspace;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class EsbProject implements Project {
+public final class Ora10gEsbProject implements Project {
 
 	private static final long serialVersionUID = 1517251079778988223L;
 
@@ -41,15 +41,21 @@ public final class EsbProject implements Project {
 	 */
 	private final List<Project> projectDependecies;
 
+	/**
+	 * parent workspace
+	 */
 	private Ora10gWorkspace workspace;
 
 	/**
+	 * 
 	 * Constructor
 	 * 
-	 * @param projectFolder
 	 * @param name
+	 *            project name
+	 * @param projectFolder
+	 *            project folder
 	 */
-	public EsbProject(String name, File projectFolder) {
+	public Ora10gEsbProject(String name, File projectFolder) {
 		this.name = name;
 		this.projectFolder = projectFolder;
 		// super(name, projectFolder, ProjectType.ORACLE10G_ESB);
@@ -74,13 +80,13 @@ public final class EsbProject implements Project {
 	}
 
 	/**
-	 * find {@link EsbProject} by qName and service URL
+	 * find {@link Ora10gEsbProject} by qName and service URL
 	 * 
 	 * @param qName
 	 * @param serviceURL
 	 * @return if return null then not found
 	 */
-	public final EsbProject findEsbProjectByQname(String qName, URL serviceURL) {
+	public final Ora10gEsbProject findEsbProjectByQname(String qName, URL serviceURL) {
 		for (BasicEsbNode basicEsbNode : basicEsbNodes) {
 			if (basicEsbNode.getQname().equals(qName)) {
 				return this;

@@ -9,8 +9,8 @@ import com.tomecode.soa.openesb.workspace.OpenEsbMultiWorkspace;
 import com.tomecode.soa.openesb.workspace.OpenEsbWorkspace;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gMultiWorkspace;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gWorkspace;
-import com.tomecode.soa.ora.suite10g.esb.EsbProject;
-import com.tomecode.soa.ora.suite10g.project.BpelProject;
+import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
+import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gMultiWorkspace;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gWorkspace;
 
@@ -36,10 +36,10 @@ final class WorkspacesContentProvider implements ITreeContentProvider {
 			return ((Ora10gMultiWorkspace) parent).getWorkspaces().toArray();
 		} else if (parent instanceof Ora10gWorkspace) {
 			return ((Ora10gWorkspace) parent).getChildren();
-		} else if (parent instanceof BpelProject) {
-			return ((BpelProject) parent).getDependencyProjects().toArray();
-		} else if (parent instanceof EsbProject) {
-			return ((EsbProject) parent).getProjectDependecies().toArray();
+		} else if (parent instanceof Ora10gBpelProject) {
+			return ((Ora10gBpelProject) parent).getDependencyProjects().toArray();
+		} else if (parent instanceof Ora10gEsbProject) {
+			return ((Ora10gEsbProject) parent).getProjectDependecies().toArray();
 		} else if (parent instanceof OpenEsbMultiWorkspace) {
 			return ((OpenEsbMultiWorkspace) parent).getWorkspaces().toArray();
 		} else if (parent instanceof OpenEsbWorkspace) {
@@ -68,10 +68,10 @@ final class WorkspacesContentProvider implements ITreeContentProvider {
 			return ((Ora10gMultiWorkspace) element).hasChildren();
 		} else if (element instanceof Ora10gWorkspace) {
 			return ((Ora10gWorkspace) element).hasChildren();
-		} else if (element instanceof BpelProject) {
-			return !((BpelProject) element).getDependencyProjects().isEmpty();
-		} else if (element instanceof EsbProject) {
-			return !((EsbProject) element).getProjectDependecies().isEmpty();
+		} else if (element instanceof Ora10gBpelProject) {
+			return !((Ora10gBpelProject) element).getDependencyProjects().isEmpty();
+		} else if (element instanceof Ora10gEsbProject) {
+			return !((Ora10gEsbProject) element).getProjectDependecies().isEmpty();
 		} else if (element instanceof OpenEsbMultiWorkspace) {
 			return !((OpenEsbMultiWorkspace) element).getWorkspaces().isEmpty();
 		} else if (element instanceof OpenEsbWorkspace) {
@@ -94,10 +94,10 @@ final class WorkspacesContentProvider implements ITreeContentProvider {
 			return ((Ora10gMultiWorkspace) element).getChildren();
 		} else if (element instanceof Ora10gWorkspace) {
 			return ((Ora10gWorkspace) element).getChildren();
-		} else if (element instanceof BpelProject) {
-			return ((BpelProject) element).getDependencyProjects().toArray();
-		} else if (element instanceof EsbProject) {
-			return ((EsbProject) element).getProjectDependecies().toArray();
+		} else if (element instanceof Ora10gBpelProject) {
+			return ((Ora10gBpelProject) element).getDependencyProjects().toArray();
+		} else if (element instanceof Ora10gEsbProject) {
+			return ((Ora10gEsbProject) element).getProjectDependecies().toArray();
 		} else if (element instanceof OpenEsbMultiWorkspace) {
 			return ((OpenEsbMultiWorkspace) element).getWorkspaces().toArray();
 		} else if (element instanceof OpenEsbWorkspace) {

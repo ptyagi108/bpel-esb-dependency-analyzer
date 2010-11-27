@@ -38,12 +38,13 @@ public final class Operation implements ImageFace {
 	/**
 	 * owner project
 	 */
-	private BpelProject ownerBpelProject;
+	private Ora10gBpelProject ownerBpelProject;
+
 	/**
 	 * default value is true but if service not found (unknown ) then default
 	 * value is false
 	 */
-	private boolean visiblePartnerLinksDependnecie = true;
+	// private boolean visiblePartnerLinksDependnecie = true;
 
 	/**
 	 * Constructor
@@ -53,7 +54,7 @@ public final class Operation implements ImageFace {
 	 * @param operation
 	 * @param partnerLinkBinding
 	 */
-	public Operation(String activity, String name, String operation, BpelProject ownerBpelProject, PartnerLinkBinding partnerLinkBinding, List<Activity> activities) {
+	public Operation(String activity, String name, String operation, Ora10gBpelProject ownerBpelProject, PartnerLinkBinding partnerLinkBinding, List<Activity> activities) {
 		this.activity = activity;
 		this.activtyType = ActivityType.parseOra10gBpelActivityType(activity);
 		this.name = name;
@@ -170,11 +171,11 @@ public final class Operation implements ImageFace {
 	// return !getAllowsChildren();
 	// }
 
-	public final BpelProject getOwnerBpelProject() {
+	public final Ora10gBpelProject getOwnerBpelProject() {
 		return ownerBpelProject;
 	}
 
-	public final BpelProject getPartnerLinkBpelProcess() {
+	public final Ora10gBpelProject getPartnerLinkBpelProcess() {
 		return partnerLinkBinding.getDependencyBpelProject();
 	}
 
@@ -196,17 +197,16 @@ public final class Operation implements ImageFace {
 	// return null;
 	// }
 
-	public final void setVisiblePartnerLinks(boolean visible) {
-		this.visiblePartnerLinksDependnecie = visible;
-	}
+	// public final void setVisiblePartnerLinks(boolean visible) {
+	// this.visiblePartnerLinksDependnecie = visible;
+	// }
 
 	public final Operation clone() {
 		return new Operation(activity, name, operation, ownerBpelProject, partnerLinkBinding, activities);
 	}
 
 	@Override
-	public Image getImage() {
-		// TODO Auto-generated method stub
+	public final Image getImage() {
 		return null;
 	}
 }

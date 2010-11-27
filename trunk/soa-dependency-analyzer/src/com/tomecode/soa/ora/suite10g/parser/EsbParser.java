@@ -9,7 +9,7 @@ import org.dom4j.Element;
 
 import com.tomecode.soa.ora.suite10g.esb.EsbGrp;
 import com.tomecode.soa.ora.suite10g.esb.EsbOperation;
-import com.tomecode.soa.ora.suite10g.esb.EsbProject;
+import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.ora.suite10g.esb.EsbRoutingRule;
 import com.tomecode.soa.ora.suite10g.esb.EsbSvc;
 import com.tomecode.soa.ora.suite10g.esb.EsbSys;
@@ -36,15 +36,15 @@ public final class EsbParser extends AbstractParser {
 	}
 
 	/**
-	 * parse {@link EsbProject}
+	 * parse {@link Ora10gEsbProject}
 	 * 
 	 * @param file
 	 *            project folder
 	 * @return
 	 * @throws ServiceParserException
 	 */
-	public final EsbProject parse(File projectFolder) throws ServiceParserException {
-		EsbProject esbProject = new EsbProject(findProjectName(projectFolder), projectFolder);
+	public final Ora10gEsbProject parse(File projectFolder) throws ServiceParserException {
+		Ora10gEsbProject esbProject = new Ora10gEsbProject(findProjectName(projectFolder), projectFolder);
 
 		List<File> findedFiles = new ArrayList<File>();
 		findEsbsvcFiles(projectFolder, findedFiles, ".esbsys");
@@ -69,7 +69,7 @@ public final class EsbParser extends AbstractParser {
 		return esbProject;
 	}
 
-	private final void parseEsbGrp(File esbGrpFile, EsbProject esbProject) throws ServiceParserException {
+	private final void parseEsbGrp(File esbGrpFile, Ora10gEsbProject esbProject) throws ServiceParserException {
 		Element eService = parseXml(esbGrpFile);
 
 		EsbGrp esbGrp = new EsbGrp(esbGrpFile, eService.attributeValue("name"), eService.attributeValue("qname"));
@@ -155,7 +155,7 @@ public final class EsbParser extends AbstractParser {
 	 * @param file
 	 * @throws ServiceParserException
 	 */
-	public final void parseEsbsvc(File file, EsbProject esbProject) throws ServiceParserException {
+	public final void parseEsbsvc(File file, Ora10gEsbProject esbProject) throws ServiceParserException {
 		Element eService = parseXml(file);
 		EsbSvc esb = new EsbSvc(file, eService.attributeValue("name"), eService.attributeValue("qname"));
 		esb.setOwnerEsbProject(esbProject);

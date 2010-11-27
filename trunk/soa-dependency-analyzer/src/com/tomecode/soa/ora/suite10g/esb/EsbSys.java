@@ -5,6 +5,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+
 /**
  * service system for Oracle 10g
  * 
@@ -16,7 +21,7 @@ import java.util.List;
 public final class EsbSys implements BasicEsbNode {
 
 	private static final long serialVersionUID = -5469410851019923440L;
-	private EsbProject ownerEsbProject;
+	private Ora10gEsbProject ownerEsbProject;
 	private File esbSysFile;
 	private String name;
 	private String qName;
@@ -59,7 +64,7 @@ public final class EsbSys implements BasicEsbNode {
 		childs.add(basicEsbNode);
 	}
 
-	public final EsbProject getOwnerEsbProject() {
+	public final Ora10gEsbProject getOwnerEsbProject() {
 		return ownerEsbProject;
 	}
 
@@ -75,7 +80,7 @@ public final class EsbSys implements BasicEsbNode {
 		return qName;
 	}
 
-	public final void setOwnerEsbProject(EsbProject esbProject) {
+	public final void setOwnerEsbProject(Ora10gEsbProject esbProject) {
 		this.ownerEsbProject = esbProject;
 	}
 
@@ -122,19 +127,19 @@ public final class EsbSys implements BasicEsbNode {
 	}
 
 	/**
-	 * find {@link EsbProject} by qName and serviceURL
+	 * find {@link Ora10gEsbProject} by qName and serviceURL
 	 * 
 	 * @param qName
 	 * @param sericeURL
 	 * @return
 	 */
-	public final EsbProject findEsbProjectByQname(String qName, URL sericeURL) {
+	public final Ora10gEsbProject findEsbProjectByQname(String qName, URL sericeURL) {
 		for (BasicEsbNode basicEsbNode : childs) {
 			if (basicEsbNode.getType() == EsbNodeType.ESBSYS) {
 				if (basicEsbNode.getQname().equals(qName)) {
 					return ((EsbSys) basicEsbNode.get()).getOwnerEsbProject();
 				} else {
-					EsbProject esbProject = ((EsbSys) basicEsbNode.get()).findEsbProjectByQname(qName, sericeURL);
+					Ora10gEsbProject esbProject = ((EsbSys) basicEsbNode.get()).findEsbProjectByQname(qName, sericeURL);
 					if (esbProject != null) {
 						return esbProject;
 					}
@@ -143,13 +148,13 @@ public final class EsbSys implements BasicEsbNode {
 				if (basicEsbNode.getQname().equals(qName)) {
 					return ((EsbGrp) basicEsbNode.get()).getOwnerEsbProject();
 				} else {
-					EsbProject esbProject = ((EsbGrp) basicEsbNode.get()).findEsbProjectByQname(qName, sericeURL);
+					Ora10gEsbProject esbProject = ((EsbGrp) basicEsbNode.get()).findEsbProjectByQname(qName, sericeURL);
 					if (esbProject != null) {
 						return esbProject;
 					}
 				}
 			} else if (basicEsbNode.getType() == EsbNodeType.ESBSVC) {
-				EsbProject esbProject = ((EsbSvc) basicEsbNode.get()).findEsbProjectByQname(qName, sericeURL);
+				Ora10gEsbProject esbProject = ((EsbSvc) basicEsbNode.get()).findEsbProjectByQname(qName, sericeURL);
 				if (esbProject != null) {
 					return esbProject;
 				}
@@ -163,7 +168,7 @@ public final class EsbSys implements BasicEsbNode {
 	}
 
 	/**
-	 * find all {@link EsbSvc} in {@link EsbProject}
+	 * find all {@link EsbSvc} in {@link Ora10gEsbProject}
 	 * 
 	 * @param esbSvcs
 	 */
@@ -179,6 +184,11 @@ public final class EsbSys implements BasicEsbNode {
 				esbSvcs.add((EsbSvc) basicEsbNode.get());
 			}
 		}
+	}
+
+	@Override
+	public final Image getImage() {
+		return ImageFactory.ORACLE_10G_SYSTEM;
 	}
 
 	// public final ImageIcon getIcon() {

@@ -5,6 +5,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+
 /**
  * Oracle 10g - service group
  * 
@@ -19,7 +23,7 @@ public final class EsbGrp implements BasicEsbNode {
 
 	private final List<BasicEsbNode> childs;
 
-	private EsbProject ownerEsbProject;
+	private Ora10gEsbProject ownerEsbProject;
 	/**
 	 * service group file
 	 */
@@ -100,21 +104,21 @@ public final class EsbGrp implements BasicEsbNode {
 		return null;
 	}
 
-	public final EsbProject getOwnerEsbProject() {
+	public final Ora10gEsbProject getOwnerEsbProject() {
 		return ownerEsbProject;
 	}
 
-	public final void setOwnerEsbProject(EsbProject ownerEsbProject) {
+	public final void setOwnerEsbProject(Ora10gEsbProject ownerEsbProject) {
 		this.ownerEsbProject = ownerEsbProject;
 	}
 
-	public final EsbProject findEsbProjectByQname(String qName, URL serviceURL) {
+	public final Ora10gEsbProject findEsbProjectByQname(String qName, URL serviceURL) {
 		for (BasicEsbNode basicEsbNode : childs) {
 			if (basicEsbNode.getType() == EsbNodeType.ESBSYS) {
 				if (basicEsbNode.getQname().equals(qName)) {
 					return ((EsbSys) basicEsbNode.get()).getOwnerEsbProject();
 				} else {
-					EsbProject esbProject = ((EsbSys) basicEsbNode.get()).findEsbProjectByQname(qName, serviceURL);
+					Ora10gEsbProject esbProject = ((EsbSys) basicEsbNode.get()).findEsbProjectByQname(qName, serviceURL);
 					if (esbProject != null) {
 						return esbProject;
 					}
@@ -123,7 +127,7 @@ public final class EsbGrp implements BasicEsbNode {
 				if (basicEsbNode.getQname().equals(qName)) {
 					return ((EsbGrp) basicEsbNode.get()).getOwnerEsbProject();
 				} else {
-					EsbProject esbProject = ((EsbGrp) basicEsbNode.get()).findEsbProjectByQname(qName, serviceURL);
+					Ora10gEsbProject esbProject = ((EsbGrp) basicEsbNode.get()).findEsbProjectByQname(qName, serviceURL);
 					if (esbProject != null) {
 						return esbProject;
 					}
@@ -153,6 +157,11 @@ public final class EsbGrp implements BasicEsbNode {
 				esbSvcs.add((EsbSvc) basicEsbNode.get());
 			}
 		}
+	}
+
+	@Override
+	public final Image getImage() {
+		return ImageFactory.ORACLE_10G_SERVICE_GROUPE;
 	}
 
 	// public ImageIcon getIcon() {

@@ -1,29 +1,33 @@
 package com.tomecode.soa.dependency.analyzer.tree.node;
 
-import com.tomecode.soa.ora.suite10g.esb.EsbProject;
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.project.Project;
 
 /**
  * 
  * Simple helper tree node for ESB project - wrapper treeNode for
- * {@link EsbProject} which does not show project dependencies
+ * {@link Ora10gEsbProject} which does not show project dependencies
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
-public final class EsbServiceNode implements DependencyNode {
+public final class EsbServiceNode implements DependencyNode, ImageFace {
 
 	private static final long serialVersionUID = -2232894399903425396L;
 
-	private EsbProject esbProject;
+	private Ora10gEsbProject esbProject;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param esbProject
 	 */
-	public EsbServiceNode(EsbProject esbProject) {
+	public EsbServiceNode(Ora10gEsbProject esbProject) {
 		this.esbProject = esbProject;
 	}
 
@@ -46,6 +50,11 @@ public final class EsbServiceNode implements DependencyNode {
 	@Override
 	public Project getProject() {
 		return esbProject;
+	}
+
+	@Override
+	public final Image getImage() {
+		return ImageFactory.ORACLE_10G_ESB;
 	}
 
 }

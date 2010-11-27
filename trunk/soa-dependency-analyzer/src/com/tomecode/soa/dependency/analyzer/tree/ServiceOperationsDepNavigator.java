@@ -15,8 +15,9 @@ import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.services.Service;
+import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.ora.suite10g.project.BpelOperations;
-import com.tomecode.soa.ora.suite10g.project.BpelProject;
+import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
 import com.tomecode.soa.ora.suite10g.project.Operation;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
@@ -72,8 +73,8 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 	 * @param source
 	 */
 	public final void show(Object source) {
-		if (source instanceof BpelProject) {
-			BpelProject bpelProject = (BpelProject) source;
+		if (source instanceof Ora10gBpelProject) {
+			Ora10gBpelProject bpelProject = (Ora10gBpelProject) source;
 			setDataToTree(bpelProject.getBpelOperations());
 		} else if (source instanceof Service) {
 			setDataToTree((Service) source);
@@ -81,6 +82,8 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 			setDataToTree((OpenEsbBpelProcess) source);
 		} else if (source instanceof OraSB10gProject) {
 			setDataToTree((OraSB10gProject) source);
+		} else if (source instanceof Ora10gEsbProject) {
+			setDataToTree((Ora10gEsbProject) source);
 		} else {
 			clearTree();
 		}
@@ -107,8 +110,8 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 	private final MultiWorkspace findMultiWorkspaceInTree() {
 		if (rootNode.hasChildren()) {
 			Object objectInTree = rootNode.getChildren()[0];
-			if (objectInTree instanceof BpelProject) {
-				return ((BpelProject) objectInTree).getWorkpsace().getMultiWorkspace();
+			if (objectInTree instanceof Ora10gBpelProject) {
+				return ((Ora10gBpelProject) objectInTree).getWorkpsace().getMultiWorkspace();
 			}
 		}
 		return null;
@@ -117,8 +120,8 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 	private final Workspace findWorkspaceInTree() {
 		if (rootNode.hasChildren()) {
 			Object objectInTree = rootNode.getChildren()[0];
-			if (objectInTree instanceof BpelProject) {
-				return ((BpelProject) objectInTree).getWorkpsace();
+			if (objectInTree instanceof Ora10gBpelProject) {
+				return ((Ora10gBpelProject) objectInTree).getWorkpsace();
 			}
 		}
 		return null;
