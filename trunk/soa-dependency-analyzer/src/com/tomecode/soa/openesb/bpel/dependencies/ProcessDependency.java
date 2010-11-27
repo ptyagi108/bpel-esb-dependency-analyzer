@@ -3,7 +3,7 @@ package com.tomecode.soa.openesb.bpel.dependencies;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tomecode.soa.bpel.activity.Activity;
+import com.tomecode.soa.activity.Activity;
 import com.tomecode.soa.services.BpelProcess;
 
 /**

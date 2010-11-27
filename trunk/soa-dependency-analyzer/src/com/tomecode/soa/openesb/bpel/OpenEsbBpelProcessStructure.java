@@ -1,6 +1,6 @@
 package com.tomecode.soa.openesb.bpel;
 
-import com.tomecode.soa.bpel.activity.Activity;
+import com.tomecode.soa.activity.Activity;
 
 /**
  * 

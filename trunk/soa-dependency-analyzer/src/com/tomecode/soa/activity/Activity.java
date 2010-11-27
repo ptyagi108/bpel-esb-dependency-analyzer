@@ -1,4 +1,4 @@
-package com.tomecode.soa.bpel.activity;
+package com.tomecode.soa.activity;
 
 import java.util.ArrayList;
 import java.util.List;

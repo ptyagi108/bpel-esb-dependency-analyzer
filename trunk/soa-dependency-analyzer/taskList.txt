@@ -12,8 +12,19 @@ fix + OSB10g
 10.provider-specific; http, jms, sb, dsp,ejb
 11.osb detail properties panel - !! ESTE TREBA DOLADIT!!
 12.osb- endpointConfiguracia -parsovanie aj custom adapterov
+13 parsovanie exportovanych jar suborov ktore obsahuju proxy/business/etc z osb 10g
 
-12. parsovanie exportovanych jar suborov kotre obsahuju proxy/business/etc z osb 10g
+
+
+14.oprava exportu 
+15.integracia esb servicov z Oracle SOA suite10g
+16.pridanie do tooltipov ake z ktorych aktivit ide volanie
+17.napojenie open bpel, hlbsia analyza
+18.release beta
+
+
+
+
 
 ========================================================================================
 flow graf

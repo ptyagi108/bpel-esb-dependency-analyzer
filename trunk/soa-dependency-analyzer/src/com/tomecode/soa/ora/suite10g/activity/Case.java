@@ -1,21 +1,26 @@
-package com.tomecode.soa.bpel.activity;
+package com.tomecode.soa.ora.suite10g.activity;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.activity.Activity;
+import com.tomecode.soa.activity.ActivityType;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
- * wait activity in BPEL process
+ * case from switch in BPEL process
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class Wait extends Activity {
+public final class Case extends Activity {
 
-	private static final long serialVersionUID = 8837403543290074974L;
+	private static final long serialVersionUID = 804854324731704322L;
 
+	/**
+	 * variable in case
+	 */
 	private String variable;
 
 	/**
@@ -24,16 +29,19 @@ public final class Wait extends Activity {
 	 * @param name
 	 * @param variable
 	 */
-	public Wait(String name, String variable) {
-		super(ActivityType.ORACLE_10G_WAIT, name);
+	public Case(String name, String variable) {
+		super(ActivityType.ORACLE_10G_CASE, name);
 		this.variable = variable;
 	}
 
 	public final Image getImage() {
-		return ImageFactory.ORACLE_10G_WAIT;
+		return ImageFactory.ORACLE_10G_SWITCH;
 	}
 
 	/**
+	 * 
+	 * variable in case activity
+	 * 
 	 * @return the variable
 	 */
 	public final String getVariable() {
@@ -50,4 +58,5 @@ public final class Wait extends Activity {
 	// findUsageVariableResult.addUsage(this);
 	// }
 	// }
+
 }

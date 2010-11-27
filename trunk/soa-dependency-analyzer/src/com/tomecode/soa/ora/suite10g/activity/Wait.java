@@ -1,7 +1,9 @@
-package com.tomecode.soa.bpel.activity;
+package com.tomecode.soa.ora.suite10g.activity;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.activity.Activity;
+import com.tomecode.soa.activity.ActivityType;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
@@ -12,13 +14,11 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class While extends Activity {
+public final class Wait extends Activity {
 
-	private static final long serialVersionUID = 912793397218119096L;
+	private static final long serialVersionUID = 8837403543290074974L;
 
 	private String variable;
-
-	private String condition;
 
 	/**
 	 * Constructor
@@ -26,14 +26,13 @@ public final class While extends Activity {
 	 * @param name
 	 * @param variable
 	 */
-	public While(String name, String condition, String variable) {
-		super(ActivityType.ORACLE_10G_WHILE, name);
+	public Wait(String name, String variable) {
+		super(ActivityType.ORACLE_10G_WAIT, name);
 		this.variable = variable;
-		this.condition = condition;
 	}
 
 	public final Image getImage() {
-		return ImageFactory.ORACLE_10G_WHILE;
+		return ImageFactory.ORACLE_10G_WAIT;
 	}
 
 	/**
@@ -41,13 +40,6 @@ public final class While extends Activity {
 	 */
 	public final String getVariable() {
 		return variable;
-	}
-
-	/**
-	 * @return the condition
-	 */
-	public final String getCondition() {
-		return condition;
 	}
 
 	// /**

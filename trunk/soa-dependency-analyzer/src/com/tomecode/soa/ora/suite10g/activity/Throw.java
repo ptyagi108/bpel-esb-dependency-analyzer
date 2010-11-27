@@ -1,4 +1,4 @@
-package com.tomecode.soa.openesb.bpel.activity;
+package com.tomecode.soa.ora.suite10g.activity;
 
 import org.eclipse.swt.graphics.Image;
 
@@ -7,16 +7,17 @@ import com.tomecode.soa.activity.ActivityType;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
- * catch activity in BPEL process
+ * 
+ * throw activity in BPEL process
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class Catch extends Activity {
+public final class Throw extends Activity {
 
-	private static final long serialVersionUID = 3511714056068910893L;
+	private static final long serialVersionUID = -6296106634300381880L;
 
 	private String faultVariable;
 
@@ -26,17 +27,17 @@ public final class Catch extends Activity {
 	 * @param name
 	 * @param faultVariable
 	 */
-	public Catch(String name, String faultVariable) {
-		super(ActivityType.OPEN_ESB_BPEL_CATCH, name);
+	public Throw(String name, String faultVariable) {
+		super(ActivityType.ORACLE_10G_THROW, name);
 		this.faultVariable = faultVariable;
+	}
+
+	public final Image getImage() {
+		return ImageFactory.ORACLE_10G_THROW;
 	}
 
 	public final String getFaultVariable() {
 		return faultVariable;
-	}
-
-	public final Image getImage() {
-		return ImageFactory.OPEN_ESB_BPEL_CATCH;
 	}
 
 }

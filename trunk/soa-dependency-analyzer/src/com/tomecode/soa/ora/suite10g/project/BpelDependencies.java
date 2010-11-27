@@ -3,7 +3,7 @@ package com.tomecode.soa.ora.suite10g.project;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tomecode.soa.bpel.activity.Activity;
+import com.tomecode.soa.activity.Activity;
 
 /**
  * 

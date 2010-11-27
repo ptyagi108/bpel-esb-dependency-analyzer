@@ -1,4 +1,4 @@
-package com.tomecode.soa.bpel.activity;
+package com.tomecode.soa.activity;
 
 import org.eclipse.swt.graphics.Image;
 

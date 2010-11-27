@@ -1,7 +1,7 @@
 package com.tomecode.soa.openesb.bpel.activity;
 
-import com.tomecode.soa.bpel.activity.Activity;
-import com.tomecode.soa.bpel.activity.ActivityType;
+import com.tomecode.soa.activity.Activity;
+import com.tomecode.soa.activity.ActivityType;
 
 /**
  * else activity in Open ESB - BPEL process

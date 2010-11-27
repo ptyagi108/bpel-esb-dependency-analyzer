@@ -3,7 +3,7 @@ package com.tomecode.soa.dependency.analyzer.tree;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.tomecode.soa.bpel.activity.Activity;
+import com.tomecode.soa.activity.Activity;
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.openesb.project.OpenEsbBpelProject;

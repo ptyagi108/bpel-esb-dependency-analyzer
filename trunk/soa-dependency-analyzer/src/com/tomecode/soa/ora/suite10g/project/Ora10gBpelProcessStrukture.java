@@ -1,6 +1,6 @@
 package com.tomecode.soa.ora.suite10g.project;
 
-import com.tomecode.soa.bpel.activity.Activity;
+import com.tomecode.soa.activity.Activity;
 
 /**
  * 

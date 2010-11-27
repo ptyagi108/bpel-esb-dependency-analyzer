@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.dom4j.Element;
 
-import com.tomecode.soa.bpel.activity.Activity;
-import com.tomecode.soa.bpel.activity.ActivityType;
+import com.tomecode.soa.activity.Activity;
+import com.tomecode.soa.activity.ActivityType;
 import com.tomecode.soa.openesb.bpel.Import;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcessStructure;

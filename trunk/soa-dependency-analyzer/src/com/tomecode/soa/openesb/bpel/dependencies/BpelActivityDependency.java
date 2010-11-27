@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
-import com.tomecode.soa.bpel.activity.Activity;
+import com.tomecode.soa.activity.Activity;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.services.BpelProcess;

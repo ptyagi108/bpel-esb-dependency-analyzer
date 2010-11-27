@@ -6,9 +6,6 @@ import java.util.List;
 
 import org.dom4j.Element;
 
-import com.tomecode.soa.bpel.activity.Invoke;
-import com.tomecode.soa.bpel.activity.Receive;
-import com.tomecode.soa.bpel.activity.Reply;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.openesb.bpel.activity.OnMessage;
 import com.tomecode.soa.openesb.bpel.activity.PartnerLink;
@@ -16,6 +13,9 @@ import com.tomecode.soa.openesb.bpel.dependencies.BpelActivityDependency;
 import com.tomecode.soa.openesb.project.OpenEsbBpelProject;
 import com.tomecode.soa.openesb.workspace.OpenEsbMultiWorkspace;
 import com.tomecode.soa.openesb.workspace.OpenEsbWorkspace;
+import com.tomecode.soa.ora.suite10g.activity.Invoke;
+import com.tomecode.soa.ora.suite10g.activity.Receive;
+import com.tomecode.soa.ora.suite10g.activity.Reply;
 import com.tomecode.soa.parser.AbstractParser;
 import com.tomecode.soa.parser.ServiceParserException;
 import com.tomecode.soa.wsdl.Wsdl;

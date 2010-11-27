@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
-import com.tomecode.soa.bpel.activity.Activity;
+import com.tomecode.soa.activity.Activity;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.openesb.bpel.activity.PartnerLink;
 import com.tomecode.soa.openesb.bpel.dependencies.BpelActivityDependency;

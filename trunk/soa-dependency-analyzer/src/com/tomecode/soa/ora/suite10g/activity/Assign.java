@@ -1,10 +1,12 @@
-package com.tomecode.soa.bpel.activity;
+package com.tomecode.soa.ora.suite10g.activity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.activity.Activity;
+import com.tomecode.soa.activity.ActivityType;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**

@@ -1,31 +1,41 @@
-package com.tomecode.soa.bpel.activity;
+package com.tomecode.soa.ora.suite10g.activity;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.activity.Activity;
+import com.tomecode.soa.activity.ActivityType;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
- * onAlarm activity in BPEL process
+ * wait activity in BPEL process
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class OnAlarm extends Activity {
+public final class While extends Activity {
 
-	private static final long serialVersionUID = 8364805233236556426L;
+	private static final long serialVersionUID = 912793397218119096L;
 
 	private String variable;
+
+	private String condition;
 
 	/**
 	 * Constructor
 	 * 
+	 * @param name
 	 * @param variable
 	 */
-	public OnAlarm(String variable) {
-		super(ActivityType.ORACLE_10G_ONALARM, null);
+	public While(String name, String condition, String variable) {
+		super(ActivityType.ORACLE_10G_WHILE, name);
 		this.variable = variable;
+		this.condition = condition;
+	}
+
+	public final Image getImage() {
+		return ImageFactory.ORACLE_10G_WHILE;
 	}
 
 	/**
@@ -35,10 +45,13 @@ public final class OnAlarm extends Activity {
 		return variable;
 	}
 
-	public final Image getImage() {
-		return ImageFactory.ORACLE_10G_ONALARM;
+	/**
+	 * @return the condition
+	 */
+	public final String getCondition() {
+		return condition;
 	}
-	//
+
 	// /**
 	// * find variable in activity
 	// */
