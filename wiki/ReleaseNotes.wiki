@@ -1,6 +1,14 @@
 #summary Release notes
 #labels ReleaseNotes
 
+
+*Version 0.8 - Technical preview 1*
+        * is built as an Eclipse Rich Client Platform (RCP) for Windows, Linux and Mac OS X
+        * for displaying dependencies between services/processes is used Eclipse GEF/ZEST framework
+        * new parser and analyzer for BPEL processes from Oracle SOA Suite 10g
+        * the first version of the parser and analyzer for Business and Proxy Services from Oracle Service Bus 10g
+        * the first version of the parser and analyzer for BPEL processes from Open ESB
+
 *Version 0.7*
         * bug-fix:*
                 * reworking menu "File->Recent Files"
