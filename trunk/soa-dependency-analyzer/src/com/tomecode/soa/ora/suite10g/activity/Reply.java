@@ -7,6 +7,8 @@ import com.tomecode.soa.activity.ActivityType;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * reply activity in BPEL process
  * 
  * @author Tomas Frastia
@@ -72,5 +74,9 @@ public final class Reply extends Activity {
 			}
 		}
 		return false;
+	}
+
+	public final String getToolTip() {
+		return "Activity: Reply\nName: " + name + "\nPartnerLink: " + partnerLink + "\nOperation: " + operation + "\nVariable: " + variable;
 	}
 }

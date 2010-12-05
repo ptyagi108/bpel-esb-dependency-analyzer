@@ -106,4 +106,11 @@ public final class OpenEsbMultiWorkspace implements MultiWorkspace {
 	public final Image getImage() {
 		return ImageFactory.MULTI_WORKSPACE;
 	}
+
+	@Override
+	public final String getToolTip() {
+		return "MultiWorkspace: Open Esb" + name + "\n\n"
+				+ (file != null ? file.getPath() : "");
+	}
+
 }

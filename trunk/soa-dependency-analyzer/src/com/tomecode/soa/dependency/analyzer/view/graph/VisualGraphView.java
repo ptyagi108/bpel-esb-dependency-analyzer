@@ -79,7 +79,7 @@ import com.tomecode.soa.workspace.Workspace;
 import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 
 /**
- * 
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Visual graph for visualizing dependencies between servies/processes
  * 
@@ -629,7 +629,10 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	private final void createProjectAndProjectGraph(Project project, GraphNode existsSource) {
 		if (project.getType() == ProjectType.ORACLE10G_BPEL) {
 			Ora10gBpelProject bpelProject = (Ora10gBpelProject) project;
-			applyDependencies(bpelProject, bpelProject.getPartnerLinkBindings(), existsSource);
+			applyDependencies(bpelProject, existsSource);
+		} else if (project.getType() == ProjectType.ORACLE10G_ESB) {
+			Ora10gEsbProject esbProject = (Ora10gEsbProject) project;
+			applyDependencies(esbProject, existsSource);
 		} else if (project.getType() == ProjectType.OPEN_ESB_BPEL) {
 			OpenEsbBpelProject bpelProject = (OpenEsbBpelProject) project;
 			applyDependenciesOpenEsbBpel(bpelProject, bpelProject.getProcesses(), existsSource);
@@ -637,6 +640,15 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 			OraSB10gProject oraSB10gProject = (OraSB10gProject) project;
 			applyDependencies(oraSB10gProject, existsSource);
 		}
+	}
+
+	/**
+	 * 
+	 * @param project
+	 * @param existsSource
+	 */
+	private final void applyDependencies(Ora10gEsbProject project, GraphNode existsSource) {
+		GraphNode source = existsSource == null ? createNode(project.getName(), project.getImage(), project, ToolTipFactory.createToolTip(project)) : existsSource;
 	}
 
 	/**
@@ -675,19 +687,16 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	}
 
 	/**
-	 * create dependency graph where source object is {@link Ora10gBpelProject} and
-	 * destination is list of dependencies project
+	 * create dependency graph where source object is {@link Ora10gBpelProject}
+	 * and destination is list of dependencies project
 	 * 
 	 * @param bpelProject
-	 *            source {@link Ora10gBpelProject}
-	 * @param dependencyProjects
-	 *            list of dependency project
 	 * @param existsSource
 	 */
-	private final void applyDependencies(Ora10gBpelProject bpelProject, List<PartnerLinkBinding> partnerLinkBindings, GraphNode existsSource) {
+	private final void applyDependencies(Ora10gBpelProject bpelProject, GraphNode existsSource) {
 		int curveDepth = 30;
 		GraphNode source = existsSource == null ? createNode(bpelProject.getName(), bpelProject.getImage(), bpelProject, ToolTipFactory.createToolTip(bpelProject)) : existsSource;
-		for (PartnerLinkBinding partnerLinkBinding : partnerLinkBindings) {
+		for (PartnerLinkBinding partnerLinkBinding : bpelProject.getPartnerLinkBindings()) {
 			// BPEL dependency
 			if (partnerLinkBinding.getDependencyBpelProject() != null) {
 				Ora10gBpelProject project = partnerLinkBinding.getDependencyBpelProject();
@@ -700,7 +709,12 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 					if (existsSource != null) {
 						// create connection to exists object in graph
 						GraphNode existsDestination = findDataInNodes(project);
-						createConnection(source, existsDestination, partnerLinkBinding, ToolTipFactory.createToolTip(partnerLinkBinding), true);
+						if (existsDestination == null) {
+							GraphNode graphNode = createNode(project.toString(), project.getImage(), project, ToolTipFactory.createToolTip(project));
+							createConnection(source, graphNode, partnerLinkBinding, ToolTipFactory.createToolTip(partnerLinkBinding), true);
+						} else {
+							createConnection(source, existsDestination, partnerLinkBinding, ToolTipFactory.createToolTip(partnerLinkBinding), true);
+						}
 					} else {
 						// new object in graph
 						GraphNode destination = createNode(project.getName(), project.getImage(), project, ToolTipFactory.createToolTip(project));

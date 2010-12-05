@@ -6,9 +6,13 @@ import org.eclipse.jface.viewers.Viewer;
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.services.OraSB10gFolder;
+import com.tomecode.soa.ora.suite10g.esb.EsbGrp;
+import com.tomecode.soa.ora.suite10g.esb.EsbSys;
+import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Show all services in project
  * 
@@ -34,6 +38,14 @@ final class ProjectServicesContentProvider implements ITreeContentProvider {
 			return ((OraSB10gFolder) parent).getAll();
 		} else if (parent instanceof Ora10gBpelProject) {
 			return emptyData;
+		} else if (parent instanceof Ora10gEsbProject) {
+			return ((Ora10gEsbProject) parent).getBasicEsbNodes().toArray();
+		} else if (parent instanceof EsbSys) {
+			return ((EsbSys) parent).getBasicEsbNodes().toArray();
+		} else if (parent instanceof EsbGrp) {
+			return ((EsbGrp) parent).getBasicEsbNodes().toArray();
+		} else if (parent instanceof EsbSys) {
+			return ((EsbSys) parent).getBasicEsbNodes().toArray();
 		}
 		return emptyData;
 	}
@@ -48,6 +60,14 @@ final class ProjectServicesContentProvider implements ITreeContentProvider {
 			return ((OraSB10gFolder) element).getAll();
 		} else if (element instanceof Ora10gBpelProject) {
 			return emptyData;
+		} else if (element instanceof Ora10gEsbProject) {
+			return ((Ora10gEsbProject) element).getBasicEsbNodes().toArray();
+		} else if (element instanceof EsbSys) {
+			return ((EsbSys) element).getBasicEsbNodes().toArray();
+		} else if (element instanceof EsbGrp) {
+			return ((EsbGrp) element).getBasicEsbNodes().toArray();
+		} else if (element instanceof EsbSys) {
+			return ((EsbSys) element).getBasicEsbNodes().toArray();
 		}
 		return emptyData;
 	}
@@ -62,6 +82,14 @@ final class ProjectServicesContentProvider implements ITreeContentProvider {
 			return ((OraSB10gFolder) element).getAll().length != 0;
 		} else if (element instanceof Ora10gBpelProject) {
 			return false;
+		} else if (element instanceof Ora10gEsbProject) {
+			return !((Ora10gEsbProject) element).getBasicEsbNodes().isEmpty();
+		} else if (element instanceof EsbSys) {
+			return !((EsbSys) element).getBasicEsbNodes().isEmpty();
+		} else if (element instanceof EsbGrp) {
+			return !((EsbGrp) element).getBasicEsbNodes().isEmpty();
+		} else if (element instanceof EsbSys) {
+			return !((EsbSys) element).getBasicEsbNodes().isEmpty();
 		}
 		return false;
 	}

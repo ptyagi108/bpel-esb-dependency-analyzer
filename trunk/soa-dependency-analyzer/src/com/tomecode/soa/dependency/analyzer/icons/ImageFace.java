@@ -3,7 +3,7 @@ package com.tomecode.soa.dependency.analyzer.icons;
 import org.eclipse.swt.graphics.Image;
 
 /**
- * 
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
@@ -17,5 +17,12 @@ public interface ImageFace {
 	 * @return
 	 */
 	Image getImage();
+
+	/**
+	 * get tool tip for object
+	 * 
+	 * @return
+	 */
+	String getToolTip();
 
 }

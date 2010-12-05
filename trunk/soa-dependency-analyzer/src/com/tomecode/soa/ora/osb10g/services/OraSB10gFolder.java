@@ -11,6 +11,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Folder in OSB 10g
  * 
@@ -73,9 +74,7 @@ public class OraSB10gFolder implements ImageFace {
 		this.fileSystemPath = fileSystemPath;
 		this.path = path;
 		this.name = name;
-		if ("/Users/tomasfrastia/Downloads/OSB Project 5-dep/adapter".equals(path)) {
-			toString();
-		}
+
 	}
 
 	/**
@@ -221,5 +220,10 @@ public class OraSB10gFolder implements ImageFace {
 	@Override
 	public final Image getImage() {
 		return ImageFactory.OSB_10G_OSB_FOLDER;
+	}
+
+	@Override
+	public final String getToolTip() {
+		return name;
 	}
 }

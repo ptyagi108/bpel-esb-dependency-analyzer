@@ -7,6 +7,8 @@ import com.tomecode.soa.activity.ActivityType;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * partner link in BPEL process
  * 
  * @author Tomas Frastia
@@ -55,6 +57,11 @@ public final class PartnerLink extends Activity {
 
 	public final String getPartnerRole() {
 		return partnerRole;
+	}
+
+	@Override
+	public final String getToolTip() {
+		return "PartnerLink: " + name + "\nMyRole: " + (myRole != null ? myRole : "") + "\nPartnerRole: " + (partnerRole != null ? partnerLinkType : "");
 	}
 
 	public final String toString() {

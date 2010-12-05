@@ -11,6 +11,8 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Basic parser, for all parsers
  * 
  * @author Tomas Frastia

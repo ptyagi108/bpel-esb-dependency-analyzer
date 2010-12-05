@@ -13,6 +13,8 @@ import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * OSB 10g workspace
  * 
  * @author Tomas Frastia
@@ -93,4 +95,10 @@ public final class OraSB10gWorkspace implements Workspace {
 	public final Image getImage() {
 		return ImageFactory.WORKSPACE;
 	}
+
+	@Override
+	public final String getToolTip() {
+		return "Workspace: Oracle Service Bus 10g" + name + "\n\n" + (file != null ? file.getPath() : "");
+	}
+
 }

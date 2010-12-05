@@ -16,6 +16,8 @@ import com.tomecode.soa.project.ProjectType;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Contains esbsvc,esbgrp, esb files in project
  * 
  * @author Tomas Frastia
@@ -29,7 +31,7 @@ public final class Ora10gEsbProject implements Project {
 
 	private String name;
 
-	private File projectFolder;
+	private File file;
 	/**
 	 * if true then project is in *.jws
 	 */
@@ -57,7 +59,7 @@ public final class Ora10gEsbProject implements Project {
 	 */
 	public Ora10gEsbProject(String name, File projectFolder) {
 		this.name = name;
-		this.projectFolder = projectFolder;
+		this.file = projectFolder;
 		// super(name, projectFolder, ProjectType.ORACLE10G_ESB);
 		basicEsbNodes = new ArrayList<BasicEsbNode>();
 		projectDependecies = new Vector<Project>();
@@ -72,7 +74,7 @@ public final class Ora10gEsbProject implements Project {
 	}
 
 	public final String toString() {
-		return (projectFolder != null) ? projectFolder.getName() : name;
+		return (file != null) ? file.getName() : name;
 	}
 
 	public final List<Project> getProjectDependecies() {
@@ -196,7 +198,7 @@ public final class Ora10gEsbProject implements Project {
 
 	@Override
 	public final File getFile() {
-		return projectFolder;
+		return file;
 	}
 
 	@Override
@@ -221,6 +223,11 @@ public final class Ora10gEsbProject implements Project {
 	@Override
 	public Image getImage() {
 		return ImageFactory.ORACLE_10G_ESB;
+	}
+
+	@Override
+	public final String getToolTip() {
+		return name + "\n\n" + (file != null ? file.getPath() : "");
 	}
 
 }

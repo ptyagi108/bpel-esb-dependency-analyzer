@@ -8,6 +8,8 @@ import org.eclipse.jface.viewers.Viewer;
 import com.tomecode.soa.util.FileRootNode;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Tree content provider for {@link ProjectFilesNavigator}
  * 
  * @author Tomas Frastia

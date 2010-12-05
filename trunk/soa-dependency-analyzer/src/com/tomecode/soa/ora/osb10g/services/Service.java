@@ -11,6 +11,8 @@ import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.Servi
 import com.tomecode.soa.project.Project;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Service - basic interface for all services in OSB 10g project
  * 
  * @author Tomas Frastia
@@ -50,7 +52,7 @@ public abstract class Service implements ImageFace {
 	private final OsbActivityDependency activityDependency;
 
 	/**
-	 * type of dependency	
+	 * type of dependency
 	 */
 	protected ServiceDependencyType type;
 
@@ -114,5 +116,10 @@ public abstract class Service implements ImageFace {
 
 	public final String getOrginalName() {
 		return orginalName;
+	}
+
+	@Override
+	public String getToolTip() {
+		return name;
 	}
 }

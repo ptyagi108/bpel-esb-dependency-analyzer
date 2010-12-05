@@ -9,6 +9,8 @@ import com.tomecode.soa.ora.suite10g.project.PartnerLinkBinding;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Unknown project or service
  * 
  * @author Tomas Frastia
@@ -115,6 +117,11 @@ public final class UnknownProject implements Project {
 	@Override
 	public Image getImage() {
 		return ImageFactory.UNKNOWN;
+	}
+
+	@Override
+	public final String getToolTip() {
+		return "Unknown Project: " + name;
 	}
 
 }

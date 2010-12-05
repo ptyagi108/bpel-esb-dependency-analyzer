@@ -1,7 +1,9 @@
 package com.tomecode.soa.dependency.analyzer.tree;
 
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -18,11 +20,11 @@ import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.ora.suite10g.project.BpelOperations;
 import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
-import com.tomecode.soa.ora.suite10g.project.Operation;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Show the activities or services by dependencies
  * 
@@ -55,6 +57,7 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 		tree = new TreeViewer(parent, SWT.SIMPLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		tree.setContentProvider(contentProvider);
 		tree.setLabelProvider(labelProvider);
+		ColumnViewerToolTipSupport.enableFor(tree);
 	}
 
 	public void dispose() {
@@ -150,6 +153,8 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 	}
 
 	/**
+	 * (c) Copyright Tomecode.com, 2010. All rights reserved.
+	 * 
 	 * Label provider for {@link ServiceOperationsDepNavigator}
 	 * 
 	 * @author Tomas Frastia
@@ -157,19 +162,28 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
 	 * 
 	 */
-	final class ServiceOperationsDepLabelProvider extends LabelProvider {
+	final class ServiceOperationsDepLabelProvider extends CellLabelProvider {
 
 		public final Image getImage(Object element) {
-
 			if (element instanceof BpelOperations) {
 				return ImageFactory.ORACLE_10G_BPEL_PROCESS;
-			} else if (element instanceof Operation) {
-				Operation operation = (Operation) element;
-				return operation.getActivtyType().getImage();
 			} else if (element instanceof ImageFace) {
 				return ((ImageFace) element).getImage();
 			}
 			return null;
+		}
+
+		@Override
+		public final void update(ViewerCell cell) {
+			cell.setText(cell.getElement().toString());
+			cell.setImage(getImage(cell.getElement()));
+		}
+
+		public final String getToolTipText(Object element) {
+			if (element instanceof ImageFace) {
+				return ((ImageFace) element).getToolTip();
+			}
+			return element.toString();
 		}
 	}
 

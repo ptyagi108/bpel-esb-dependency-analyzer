@@ -73,4 +73,9 @@ public final class BpelActivityDependency implements ImageFace {
 		this.bpelProcesses.add(process);
 	}
 
+	@Override
+	public String getToolTip() {
+		return null;
+	}
+
 }

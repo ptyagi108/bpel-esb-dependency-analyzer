@@ -8,8 +8,8 @@ import java.util.List;
 import org.dom4j.Element;
 
 import com.tomecode.soa.ora.suite10g.esb.EsbOperation;
-import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.ora.suite10g.esb.EsbSvc;
+import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
 import com.tomecode.soa.ora.suite10g.project.PartnerLinkBinding;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gMultiWorkspace;
@@ -21,6 +21,7 @@ import com.tomecode.soa.project.ProjectType;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Parser for file with extension .jws
  * 

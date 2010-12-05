@@ -6,6 +6,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Basic interface for all BPEL/ESB projects
  * 

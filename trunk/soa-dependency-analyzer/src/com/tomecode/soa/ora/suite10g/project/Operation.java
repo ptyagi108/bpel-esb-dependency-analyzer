@@ -1,14 +1,13 @@
 package com.tomecode.soa.ora.suite10g.project;
 
-import java.util.List;
-
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.activity.Activity;
-import com.tomecode.soa.activity.ActivityType;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Partner link operation
  * 
  * @author Tomas Frastia
@@ -19,13 +18,14 @@ public final class Operation implements ImageFace {
 
 	private static final long serialVersionUID = -5643471889740129373L;
 
-	private final ActivityType activtyType;
-	private String activity;
+	// private final ActivityType activtyType;
+	// private String activity;
+	private Activity activity;
 
 	/**
 	 * operation name
 	 */
-	private String name;
+	// private String name;
 
 	/**
 	 * WSDL operation
@@ -34,7 +34,7 @@ public final class Operation implements ImageFace {
 
 	private PartnerLinkBinding partnerLinkBinding;
 
-	private List<Activity> activities;
+	// private List<Activity> activities;
 	/**
 	 * owner project
 	 */
@@ -54,31 +54,32 @@ public final class Operation implements ImageFace {
 	 * @param operation
 	 * @param partnerLinkBinding
 	 */
-	public Operation(String activity, String name, String operation, Ora10gBpelProject ownerBpelProject, PartnerLinkBinding partnerLinkBinding, List<Activity> activities) {
+	public Operation(Activity activity, String operation, Ora10gBpelProject ownerBpelProject, PartnerLinkBinding partnerLinkBinding) {
+		// , List<Activity> activities)
+		// this.activity = activity;
 		this.activity = activity;
-		this.activtyType = ActivityType.parseOra10gBpelActivityType(activity);
-		this.name = name;
+		// this.name = name;
 		this.operation = operation;
 		this.partnerLinkBinding = partnerLinkBinding;
-		this.activities = activities;
+		// this.activities = activities;
 		this.ownerBpelProject = ownerBpelProject;
 	}
 
-	public final List<Activity> getActivities() {
-		return activities;
-	}
+	// public final List<Activity> getActivities() {
+	// return activities;
+	// }
 
 	public final String getOperation() {
 		return operation;
 	}
 
-	public final String getActivity() {
+	public final Activity getActivity() {
 		return activity;
 	}
 
-	public final String getName() {
-		return name;
-	}
+	// public final String getName() {
+	// return name;
+	// }
 
 	public final PartnerLinkBinding getPartnerLinkBinding() {
 		return partnerLinkBinding;
@@ -179,15 +180,15 @@ public final class Operation implements ImageFace {
 		return partnerLinkBinding.getDependencyBpelProject();
 	}
 
-	public final ActivityType getActivtyType() {
-		return activtyType;
-	}
+	// public final ActivityType getActivtyType() {
+	// return activtyType;
+	// }
 
 	public final String toString() {
-		if (name == null) {
+		if (activity == null) {
 			return (operation == null ? "" : operation);
 		}
-		return name + (operation == null ? "" : " - " + operation);
+		return activity.getName() + (operation == null ? "" : " - " + operation);
 	}
 
 	// public ImageIcon getIcon() {
@@ -202,11 +203,21 @@ public final class Operation implements ImageFace {
 	// }
 
 	public final Operation clone() {
-		return new Operation(activity, name, operation, ownerBpelProject, partnerLinkBinding, activities);
+		return new Operation(activity, operation, ownerBpelProject, partnerLinkBinding);// ,
+																						// activities);
 	}
 
 	@Override
 	public final Image getImage() {
+		if (activity != null) {
+			return activity.getImage();
+		}
+		return null;
+	}
+
+	@Override
+	public String getToolTip() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }

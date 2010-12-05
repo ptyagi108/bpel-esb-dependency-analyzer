@@ -3,10 +3,15 @@ package com.tomecode.soa.ora.suite10g.project;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.node.DependencyNode;
 import com.tomecode.soa.project.Project;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * list of activities (invoke, receive, ...) which contains operations
  * 
@@ -15,7 +20,7 @@ import com.tomecode.soa.project.Project;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class BpelOperations implements DependencyNode {
+public final class BpelOperations implements DependencyNode, ImageFace {
 
 	private static final long serialVersionUID = 8366150968471755335L;
 
@@ -65,7 +70,14 @@ public final class BpelOperations implements DependencyNode {
 		return bpelProject;
 	}
 
-	// public ImageIcon getIcon() {
-	// return IconFactory.PROCESS;
-	// }
+	@Override
+	public final Image getImage() {
+		return ImageFactory.ORACLE_10G_BPEL_PROCESS;
+	}
+
+	@Override
+	public String getToolTip() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

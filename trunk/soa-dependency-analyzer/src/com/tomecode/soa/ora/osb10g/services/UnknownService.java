@@ -7,6 +7,8 @@ import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.Servi
 import com.tomecode.soa.project.Project;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Unknown service
  * 
  * @author Tomas Frastia
@@ -23,7 +25,7 @@ public final class UnknownService extends Service {
 	}
 
 	@Override
-	public Image getImage() {
+	public final Image getImage() {
 		return ImageFactory.UNKNOWN;
 	}
 

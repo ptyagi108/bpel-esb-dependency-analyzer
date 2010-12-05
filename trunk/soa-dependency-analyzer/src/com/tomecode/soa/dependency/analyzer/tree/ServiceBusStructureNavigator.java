@@ -1,7 +1,9 @@
 package com.tomecode.soa.dependency.analyzer.tree;
 
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -9,6 +11,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.tomecode.soa.dependency.analyzer.gui.utils.HideView;
 import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
+import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
 import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
@@ -21,6 +24,7 @@ import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Show structure of selected service bus
  * 
@@ -54,6 +58,7 @@ public final class ServiceBusStructureNavigator extends ViewPart implements Hide
 		tree = new TreeViewer(parent, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		tree.setContentProvider(contentProvider);
 		tree.setLabelProvider(labelProvider);
+		ColumnViewerToolTipSupport.enableFor(tree);
 	}
 
 	@Override
@@ -137,13 +142,17 @@ public final class ServiceBusStructureNavigator extends ViewPart implements Hide
 	}
 
 	/**
+	 * (c) Copyright Tomecode.com, 2010. All rights reserved.
 	 * 
 	 * Label provider for {@link ServiceBusStructureNavigator}
 	 * 
 	 * @author Tomas Frastia
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
+	 * 
 	 * 
 	 */
-	private static final class LabelProviderImpl extends LabelProvider {
+	private static final class LabelProviderImpl extends CellLabelProvider {
 
 		public final Image getImage(Object element) {
 			if (element instanceof OsbActivity) {
@@ -158,8 +167,23 @@ public final class ServiceBusStructureNavigator extends ViewPart implements Hide
 				return ((SplitJoinStructure) element).getImage();
 			} else if (element instanceof SplitJoin) {
 				return ((SplitJoin) element).getImage();
+			} else if (element instanceof ImageFace) {
+				return ((ImageFace) element).getImage();
 			}
 			return null;
+		}
+
+		@Override
+		public final void update(ViewerCell cell) {
+			cell.setText(cell.getElement().toString());
+			cell.setImage(getImage(cell.getElement()));
+		}
+
+		public final String getToolTipText(Object element) {
+			if (element instanceof ImageFace) {
+				return ((ImageFace) element).getToolTip();
+			}
+			return element.toString();
 		}
 	}
 

@@ -9,6 +9,8 @@ import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.ServiceDependencyType;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Business service
  * 
  * @author Tomas Frastia
@@ -17,7 +19,6 @@ import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.Servi
  * 
  */
 public final class BusinessService extends Service {
-
 
 	private EndpointConfig endpointConfig;
 
@@ -55,6 +56,9 @@ public final class BusinessService extends Service {
 		this.endpointConfig = endpointConfig;
 	}
 
-	
+	@Override
+	public String getToolTip() {
+		return null;
+	}
 
 }

@@ -8,7 +8,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.ServiceDependencyType;
 
 /**
- * 
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * SplitJoin service
  * 
@@ -44,4 +44,7 @@ public final class SplitJoin extends Service {
 		return ImageFactory.OSB_10G_SPLITJOIN;
 	}
 
+	public final String getToolTip() {
+		return "SplitJoin: " + name;
+	}
 }

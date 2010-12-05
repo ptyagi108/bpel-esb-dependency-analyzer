@@ -15,6 +15,7 @@ import com.tomecode.soa.openesb.project.OpenEsbBpelProject;
 import com.tomecode.soa.services.BpelProcess;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Open ESB - BPEL project
  * 
@@ -185,5 +186,10 @@ public final class OpenEsbBpelProcess implements BpelProcess {
 	@Override
 	public final File getFile() {
 		return file;
+	}
+
+	@Override
+	public final String getToolTip() {
+		return name + (file != null ? " - " + file.getPath() : null);
 	}
 }

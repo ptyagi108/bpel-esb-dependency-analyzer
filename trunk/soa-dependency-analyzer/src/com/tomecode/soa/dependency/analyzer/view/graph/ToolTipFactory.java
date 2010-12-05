@@ -28,6 +28,8 @@ import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * tool tip factory - helper class
  * 
  * @author Tomas Frastia
@@ -213,4 +215,5 @@ public final class ToolTipFactory {
 		tooltip.add(new org.eclipse.draw2d.Label(partnerLinkBinding.getWsdlLocation()));
 		return tooltip;
 	}
+
 }

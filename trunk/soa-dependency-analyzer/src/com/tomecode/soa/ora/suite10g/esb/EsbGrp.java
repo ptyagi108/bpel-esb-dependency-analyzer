@@ -10,6 +10,8 @@ import org.eclipse.swt.graphics.Image;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Oracle 10g - service group
  * 
  * @author Tomas Frastia
@@ -27,7 +29,7 @@ public final class EsbGrp implements BasicEsbNode {
 	/**
 	 * service group file
 	 */
-	private File esbGrpFile;
+	private File file;
 	/**
 	 * service group name
 	 */
@@ -53,13 +55,13 @@ public final class EsbGrp implements BasicEsbNode {
 	 */
 	public EsbGrp(File esbGrpFile, String name, String qname) {
 		this();
-		this.esbGrpFile = esbGrpFile;
+		this.file = esbGrpFile;
 		this.name = name;
 		this.qname = qname;
 	}
 
 	public final File getEsbGrpFile() {
-		return esbGrpFile;
+		return file;
 	}
 
 	public final String getName() {
@@ -164,8 +166,8 @@ public final class EsbGrp implements BasicEsbNode {
 		return ImageFactory.ORACLE_10G_SERVICE_GROUPE;
 	}
 
-	// public ImageIcon getIcon() {
-	// return IconFactory.SERVICE_GROUPE;
-	// }
-
+	@Override
+	public final String getToolTip() {
+		return name + (file != null ? " - " + file.getPath() : "");
+	}
 }

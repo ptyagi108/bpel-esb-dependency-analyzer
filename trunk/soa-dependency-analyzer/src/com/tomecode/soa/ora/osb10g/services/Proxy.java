@@ -9,6 +9,8 @@ import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.ServiceDependencyType;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * PROXY service file
  * 
  * @author Tomas Frastia
@@ -120,4 +122,9 @@ public final class Proxy extends Service {
 		this.endpointConfig = endpointConfig;
 	}
 
+	@Override
+	public final String getToolTip() {
+		return "Proxy Service: " + getName() + (getFolder() != null ? " - " + getFolder().toString() : "");
+
+	}
 }

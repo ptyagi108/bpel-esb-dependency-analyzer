@@ -12,6 +12,7 @@ import com.tomecode.soa.workspace.Workspace;
 import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Oracle Service Bus 10g MULTI workspace
  * 
@@ -101,6 +102,11 @@ public final class OraSB10gMultiWorkspace implements MultiWorkspace {
 	@Override
 	public final Image getImage() {
 		return ImageFactory.MULTI_WORKSPACE;
+	}
+
+	@Override
+	public final String getToolTip() {
+		return "MultiWorkspace: Oracle Service Bus 10g" + name + "\n\n" + (file != null ? file.getPath() : "");
 	}
 
 }

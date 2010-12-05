@@ -8,6 +8,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.ServiceDependencyType;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Resource file
  * 
@@ -35,4 +36,5 @@ public final class ResourceFile extends Service {
 		}
 		return null;
 	}
+
 }

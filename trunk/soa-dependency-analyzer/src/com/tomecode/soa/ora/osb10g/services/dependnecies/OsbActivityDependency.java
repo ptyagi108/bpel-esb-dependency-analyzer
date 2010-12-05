@@ -10,6 +10,8 @@ import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
 import com.tomecode.soa.ora.osb10g.services.Service;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Contains all dependencies for activity
  * 
  * 
@@ -104,6 +106,11 @@ public final class OsbActivityDependency implements ImageFace {
 
 	public final Image getImage() {
 		return activity.getImage();
+	}
+
+	@Override
+	public final String getToolTip() {
+		return null;
 	}
 
 }

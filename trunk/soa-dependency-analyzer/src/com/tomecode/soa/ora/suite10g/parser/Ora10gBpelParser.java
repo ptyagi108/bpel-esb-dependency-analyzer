@@ -12,12 +12,19 @@ import org.dom4j.Element;
 import com.tomecode.soa.activity.Activity;
 import com.tomecode.soa.activity.ActivityType;
 import com.tomecode.soa.ora.suite10g.activity.Assign;
+import com.tomecode.soa.ora.suite10g.activity.Assign.AssignOperation;
+import com.tomecode.soa.ora.suite10g.activity.Assign.OperationType;
 import com.tomecode.soa.ora.suite10g.activity.Case;
 import com.tomecode.soa.ora.suite10g.activity.CaseOtherwise;
 import com.tomecode.soa.ora.suite10g.activity.Catch;
+import com.tomecode.soa.ora.suite10g.activity.CatchAll;
+import com.tomecode.soa.ora.suite10g.activity.CompensationHandler;
 import com.tomecode.soa.ora.suite10g.activity.Email;
 import com.tomecode.soa.ora.suite10g.activity.Empty;
+import com.tomecode.soa.ora.suite10g.activity.EventHandlers;
+import com.tomecode.soa.ora.suite10g.activity.FaultHandlers;
 import com.tomecode.soa.ora.suite10g.activity.Fax;
+import com.tomecode.soa.ora.suite10g.activity.Flow;
 import com.tomecode.soa.ora.suite10g.activity.FlowN;
 import com.tomecode.soa.ora.suite10g.activity.HumanTask;
 import com.tomecode.soa.ora.suite10g.activity.Invoke;
@@ -25,21 +32,24 @@ import com.tomecode.soa.ora.suite10g.activity.OnAlarm;
 import com.tomecode.soa.ora.suite10g.activity.OnMessage;
 import com.tomecode.soa.ora.suite10g.activity.Pager;
 import com.tomecode.soa.ora.suite10g.activity.PartnerLink;
+import com.tomecode.soa.ora.suite10g.activity.PartnerLinks;
+import com.tomecode.soa.ora.suite10g.activity.Pick;
 import com.tomecode.soa.ora.suite10g.activity.Receive;
 import com.tomecode.soa.ora.suite10g.activity.Reply;
+import com.tomecode.soa.ora.suite10g.activity.Sequence;
 import com.tomecode.soa.ora.suite10g.activity.Sms;
+import com.tomecode.soa.ora.suite10g.activity.SwitchActivity;
 import com.tomecode.soa.ora.suite10g.activity.Throw;
 import com.tomecode.soa.ora.suite10g.activity.Transform;
 import com.tomecode.soa.ora.suite10g.activity.Variable;
+import com.tomecode.soa.ora.suite10g.activity.Variables;
 import com.tomecode.soa.ora.suite10g.activity.Voice;
 import com.tomecode.soa.ora.suite10g.activity.Wait;
 import com.tomecode.soa.ora.suite10g.activity.While;
-import com.tomecode.soa.ora.suite10g.activity.Assign.AssignOperation;
-import com.tomecode.soa.ora.suite10g.activity.Assign.OperationType;
 import com.tomecode.soa.ora.suite10g.project.BpelOperations;
-import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
 import com.tomecode.soa.ora.suite10g.project.Operation;
 import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProcessStrukture;
+import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
 import com.tomecode.soa.ora.suite10g.project.PartnerLinkBinding;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gWorkspace;
 import com.tomecode.soa.parser.AbstractParser;
@@ -48,6 +58,8 @@ import com.tomecode.soa.project.UnknownProject;
 import com.tomecode.soa.wsdl.parser.WsdlParser;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Parser for Oracle 10g BPEL process
  * 
  * @author Tomas Frastia
@@ -186,16 +198,47 @@ public final class Ora10gBpelParser extends AbstractParser {
 	private final void parseBpelProcessActivities(List<?> elements, Activity root, Ora10gBpelProcessStrukture strukture) {
 		for (Object e : elements) {
 			Element element = (Element) e;
-			if (element.getName().equals("sequence") || element.getName().equals("switch") || element.getName().equals("flow") || element.getName().equals("faultHandlers")
-					|| element.getName().equals("eventHandlers") || element.getName().equals("catchAll") || element.getName().equals("compensationHandler") || element.getName().equals("pick")
-					|| element.getName().equals("variables") || element.getName().equals("partnerLinks")) {
-				Activity activity = new Activity(ActivityType.parseOra10gBpelActivityType(element.getName()), element.attributeValue("name"));
-				try {
-					root.addActivity(activity);
-					parseBpelProcessActivities(element.elements(), activity, strukture);
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
+			if (element.getName().equals("compensationHandler")) {
+				CompensationHandler compensationHandler = new CompensationHandler(element.attributeValue("name"));
+				root.addActivity(compensationHandler);
+				parseBpelProcessActivities(element.elements(), compensationHandler, strukture);
+			} else if (element.getName().equals("eventHandlers")) {
+				EventHandlers eventHandlers = new EventHandlers(element.attributeValue("name"));
+				root.addActivity(eventHandlers);
+				parseBpelProcessActivities(element.elements(), eventHandlers, strukture);
+			} else if (element.getName().equals("pick")) {
+				Pick pick = new Pick(element.attributeValue("name"));
+				root.addActivity(pick);
+				parseBpelProcessActivities(element.elements(), pick, strukture);
+			} else if (element.getName().equals("faultHandlers")) {
+				FaultHandlers faultHandlers = new FaultHandlers();
+				root.addActivity(faultHandlers);
+				parseBpelProcessActivities(element.elements(), faultHandlers, strukture);
+			} else if (element.getName().equals("catchAll")) {
+				CatchAll catchAll = new CatchAll(element.attributeValue("name"));
+				root.addActivity(catchAll);
+				parseBpelProcessActivities(element.elements(), catchAll, strukture);
+			} else if (element.getName().equals("flow")) {
+				Flow flow = new Flow(element.attributeValue("name"));
+				root.addActivity(flow);
+				parseBpelProcessActivities(element.elements(), flow, strukture);
+			} else if (element.getName().equals("sequence")) {
+				Sequence sequence = new Sequence(element.attributeValue("name"));
+				root.addActivity(sequence);
+				parseBpelProcessActivities(element.elements(), sequence, strukture);
+			} else if (element.getName().equals("switch")) {
+				SwitchActivity switchActivity = new SwitchActivity();
+				root.addActivity(switchActivity);
+				parseBpelProcessActivities(element.elements(), switchActivity, strukture);
+			} else if (element.getName().equals("partnerLinks")) {
+				PartnerLinks partnerLinks = new PartnerLinks();
+				root.addActivity(partnerLinks);
+				parseBpelProcessActivities(element.elements(), partnerLinks, strukture);
+			} else if (element.getName().equals("variables")) {
+				Variables variables = new Variables();
+				root.addActivity(variables);
+				parseBpelProcessActivities(element.elements(), variables, strukture);
+
 			} else if (element.getName().equals("variable")) {
 				Variable variable = new Variable(element.attributeValue("name"), element.attributeValue("messageType"));
 				root.addActivity(variable);
@@ -600,8 +643,12 @@ public final class Ora10gBpelParser extends AbstractParser {
 					} else {
 						if (element.attributeValue("partnerLink").equals(partnerLinkName)) {
 							BpelOperations bpelOperations = bpelProject.getBpelOperations();
-							Operation operation = new Operation(element.getName(), element.attributeValue("name"), element.attributeValue("operation"), bpelProject, bpelOperations.getBpelProcess()
-									.findPartnerLinkBinding(element.attributeValue("partnerLink")), getOperationPath(element));
+
+							Activity activity = parseBpelActivity(element);
+
+							Operation operation = new Operation(activity, element.attributeValue("operation"), bpelProject, bpelOperations.getBpelProcess().findPartnerLinkBinding(
+									element.attributeValue("partnerLink")));// ,
+																			// getOperationPath(element));
 							bpelOperations.addOperation(operation);
 						}
 					}
@@ -683,7 +730,8 @@ public final class Ora10gBpelParser extends AbstractParser {
 	}
 
 	/**
-	 * find {@link Ora10gBpelProject} in list of {@link #parsedProcess} by bpel.xml
+	 * find {@link Ora10gBpelProject} in list of {@link #parsedProcess} by
+	 * bpel.xml
 	 * 
 	 * @param file
 	 * @return

@@ -1,6 +1,8 @@
 package com.tomecode.soa.project;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Project type is type of BPEL or ESB
  * 
  * 

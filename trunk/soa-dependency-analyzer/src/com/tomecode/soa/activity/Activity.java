@@ -8,6 +8,8 @@ import org.eclipse.swt.graphics.Image;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * 
  * BPEL Activities
  * 
@@ -170,8 +172,12 @@ public class Activity implements ImageFace {
 
 	@Override
 	public Image getImage() {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String getToolTip() {
+		return name;
 	}
 
 	// @Override

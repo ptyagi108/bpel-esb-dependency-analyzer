@@ -1,6 +1,10 @@
 package com.tomecode.soa.ora.suite10g.esb;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
+ * routing rule in ESB
+ * 
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com

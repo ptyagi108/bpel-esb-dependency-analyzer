@@ -7,6 +7,8 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -15,6 +17,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -37,7 +40,7 @@ import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
- * 
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Tree navigator for workspaces, contains all workspaces and show dependencies
  * between
@@ -72,7 +75,7 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 		tree.addDoubleClickListener(this);
 		tree.setLabelProvider(new WorkspacesLabelProvider());
 		tree.setContentProvider(new WorkspacesContentProvider());
-
+		ColumnViewerToolTipSupport.enableFor(tree);
 		hookContextMenu();
 
 		List<MultiWorkspace> multiWorkspaces = ApplicationManager.getInstance().getMultiWorkspaces();
@@ -217,6 +220,10 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 				if (visualGraphView != null) {
 					visualGraphView.showGraph(selection.getFirstElement());
 				}
+				ServiceBusStructureNavigator serviceBusStructureNavigator = GuiUtils.getServiceBusStructureNavigator();
+				if (serviceBusStructureNavigator != null) {
+					GuiUtils.getServiceBusStructureNavigator().show(selection.getFirstElement());
+				}
 
 				showServices(selection.getFirstElement());
 			}
@@ -268,13 +275,26 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
 	 * 
 	 */
-	final class WorkspacesLabelProvider extends LabelProvider {
+	final class WorkspacesLabelProvider extends CellLabelProvider {
 
 		public final Image getImage(Object element) {
 			if (element instanceof ImageFace) {
 				return ((ImageFace) element).getImage();
 			}
 			return null;
+		}
+
+		@Override
+		public final void update(ViewerCell cell) {
+			cell.setText(cell.getElement().toString());
+			cell.setImage(getImage(cell.getElement()));
+		}
+
+		public final String getToolTipText(Object element) {
+			if (element instanceof ImageFace) {
+				return ((ImageFace) element).getToolTip();
+			}
+			return element.toString();
 		}
 	}
 }

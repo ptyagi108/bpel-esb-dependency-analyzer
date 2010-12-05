@@ -15,6 +15,8 @@ import com.tomecode.soa.workspace.Workspace;
 import com.tomecode.soa.wsdl.Wsdl;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Open ESB - BPEL project
  * 
  * @author Tomas Frastia
@@ -121,6 +123,11 @@ public final class OpenEsbBpelProject implements Project {
 	@Override
 	public Image getImage() {
 		return ImageFactory.OPEN_ESB_BPEL_BPEL_MODULE;
+	}
+
+	@Override
+	public final String getToolTip() {
+		return name + "\n\n" + (file != null ? file.getPath() : "");
 	}
 
 }

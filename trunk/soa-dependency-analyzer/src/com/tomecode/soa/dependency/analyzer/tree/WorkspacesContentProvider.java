@@ -15,6 +15,7 @@ import com.tomecode.soa.ora.suite10g.workspace.Ora10gMultiWorkspace;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gWorkspace;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * {@link ITreeContentProvider} for {@link WorkspacesNavigator}
  * 

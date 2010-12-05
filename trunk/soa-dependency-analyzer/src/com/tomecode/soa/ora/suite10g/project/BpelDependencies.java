@@ -6,8 +6,9 @@ import java.util.List;
 import com.tomecode.soa.activity.Activity;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
- * object for show dependence tree without activity
+ * Object for show dependence tree without activity
  * 
  * 
  * @author Tomas Frastia

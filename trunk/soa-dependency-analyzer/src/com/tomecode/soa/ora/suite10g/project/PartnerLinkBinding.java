@@ -10,6 +10,8 @@ import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.project.UnknownProject;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Contains data for partnerlink
  * 
  * @author Tomas Frastia
@@ -126,5 +128,10 @@ public final class PartnerLinkBinding implements ImageFace, Serializable {
 	@Override
 	public final Image getImage() {
 		return ImageFactory.ORACLE_10G_PARTNERLINK;
+	}
+
+	@Override
+	public final String getToolTip() {
+		return "PartnerLink Name: " + name + "\nWSDL: " + (wsdlLocation != null ? wsdlLocation : "");
 	}
 }

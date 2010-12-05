@@ -93,4 +93,10 @@ public final class OpenEsbWorkspace implements Workspace {
 		return ImageFactory.WORKSPACE;
 	}
 
+	@Override
+	public final String getToolTip() {
+		return "Workspace: Open Esb" + name + "\n\n"
+				+ (file != null ? file.getPath() : "");
+	}
+
 }

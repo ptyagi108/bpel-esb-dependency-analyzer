@@ -4,11 +4,14 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -26,6 +29,7 @@ import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.project.Project;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Show all services in project
  * 
@@ -60,6 +64,7 @@ public final class ProjectServicesNavigator extends ViewPart implements HideView
 		tree.setLabelProvider(labelProvider);
 		tree.setContentProvider(contentProvider);
 		tree.addDoubleClickListener(this);
+		ColumnViewerToolTipSupport.enableFor(tree);
 		hookContextMenu();
 	}
 
@@ -131,6 +136,7 @@ public final class ProjectServicesNavigator extends ViewPart implements HideView
 	}
 
 	/**
+	 * (c) Copyright Tomecode.com, 2010. All rights reserved.
 	 * 
 	 * {@link LabelProvider} for {@link ProjectServicesNavigator}
 	 * 
@@ -139,13 +145,26 @@ public final class ProjectServicesNavigator extends ViewPart implements HideView
 	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
 	 * 
 	 */
-	final class ProjectServicesLabelProvider extends LabelProvider {
+	final class ProjectServicesLabelProvider extends CellLabelProvider {
 
 		public final Image getImage(Object element) {
 			if (element instanceof ImageFace) {
 				return ((ImageFace) element).getImage();
 			}
 			return null;
+		}
+
+		@Override
+		public final void update(ViewerCell cell) {
+			cell.setText(cell.getElement().toString());
+			cell.setImage(getImage(cell.getElement()));
+		}
+
+		public final String getToolTipText(Object element) {
+			if (element instanceof ImageFace) {
+				return ((ImageFace) element).getToolTip();
+			}
+			return element.toString();
 		}
 	}
 

@@ -10,6 +10,8 @@ import com.tomecode.soa.openesb.project.OpenEsbBpelProject;
 import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProcessStrukture;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Content provider for {@link BpelProcessStructureNavigator}
  * 
  * @author Tomas Frastia

@@ -1,6 +1,7 @@
 package com.tomecode.soa.parser;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * The basic exception, if something is not right in the parser for BPEL or ESB
  * 

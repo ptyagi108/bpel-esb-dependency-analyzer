@@ -9,6 +9,8 @@ import org.dom4j.Element;
 
 import com.tomecode.soa.ora.suite10g.esb.EsbGrp;
 import com.tomecode.soa.ora.suite10g.esb.EsbOperation;
+import com.tomecode.soa.ora.suite10g.esb.EsbSvc.ServiceSubType;
+import com.tomecode.soa.ora.suite10g.esb.EsbSvc.ServiceType;
 import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.ora.suite10g.esb.EsbRoutingRule;
 import com.tomecode.soa.ora.suite10g.esb.EsbSvc;
@@ -18,6 +20,7 @@ import com.tomecode.soa.parser.AbstractParser;
 import com.tomecode.soa.parser.ServiceParserException;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Parser for Oracle 10g ESB services
  * 
@@ -50,6 +53,8 @@ public final class EsbParser extends AbstractParser {
 		findEsbsvcFiles(projectFolder, findedFiles, ".esbsys");
 
 		for (File esbSysFile : findedFiles) {
+			EsbSys esbSys = parseEsbSys(esbSysFile);
+			esbSys.setOwnerEsbProject(esbProject);
 			esbProject.addBasicEsbNode(parseEsbSys(esbSysFile));
 		}
 
@@ -157,8 +162,17 @@ public final class EsbParser extends AbstractParser {
 	 */
 	public final void parseEsbsvc(File file, Ora10gEsbProject esbProject) throws ServiceParserException {
 		Element eService = parseXml(file);
+
+		if (file.getName().equals("DefaultSystem_JMSAdapterE.esbsvc")) {
+			file.toString();
+		}
+
 		EsbSvc esb = new EsbSvc(file, eService.attributeValue("name"), eService.attributeValue("qname"));
 		esb.setOwnerEsbProject(esbProject);
+
+		esb.setServiceType(ServiceType.parse(eService.attributeValue("serviceType")));
+		esb.setServiceSubType(ServiceSubType.parse(eService.attributeValue("serviceSubType")));
+		esb.setTypeDescription(eService.attributeValue("typeDescription"));
 
 		Element eServiceDefinition = eService.element("serviceDefinition");
 		if (eServiceDefinition != null) {
@@ -182,6 +196,7 @@ public final class EsbParser extends AbstractParser {
 				if (esbSys != null) {
 					esbSys.addBasicEsbNode(esb);
 				} else {
+					// TODO: doriesiet parsovanie systemu
 					EsbSys esbSysNew = new EsbSys(parent.attributeValue("qname"));
 					esbSysNew.addBasicEsbNode(esb);
 					esbProject.addBasicEsbNode(esbSysNew);

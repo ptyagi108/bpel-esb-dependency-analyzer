@@ -1,5 +1,6 @@
 package com.tomecode.soa.dependency.analyzer.tree;
 
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -18,6 +19,7 @@ import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Show all files and folders for selected project
  * 
@@ -53,6 +55,7 @@ public final class ProjectFilesNavigator extends ViewPart implements HideView {
 		tree = new TreeViewer(parent, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		tree.setContentProvider(contentProvider);
 		tree.setLabelProvider(labelProvider);
+		ColumnViewerToolTipSupport.enableFor(tree);
 	}
 
 	@Override
@@ -60,7 +63,7 @@ public final class ProjectFilesNavigator extends ViewPart implements HideView {
 
 	}
 
-	public void dispose() {
+	public final void dispose() {
 		WindowChangeListener.getInstance().hideFromView(ID);
 		super.dispose();
 	}

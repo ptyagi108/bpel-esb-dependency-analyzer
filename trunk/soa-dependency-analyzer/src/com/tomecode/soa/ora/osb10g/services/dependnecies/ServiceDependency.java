@@ -8,6 +8,8 @@ import com.tomecode.soa.ora.osb10g.services.Service;
 
 /**
  * 
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Simple object which contain {@link OsbActivity} has reference to
  * {@link #targetService}
  * 

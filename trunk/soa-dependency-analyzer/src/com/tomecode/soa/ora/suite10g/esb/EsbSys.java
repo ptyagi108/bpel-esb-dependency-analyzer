@@ -7,10 +7,11 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
-import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * service system for Oracle 10g
  * 
  * @author Tomas Frastia
@@ -22,7 +23,7 @@ public final class EsbSys implements BasicEsbNode {
 
 	private static final long serialVersionUID = -5469410851019923440L;
 	private Ora10gEsbProject ownerEsbProject;
-	private File esbSysFile;
+	private File file;
 	private String name;
 	private String qName;
 
@@ -44,7 +45,7 @@ public final class EsbSys implements BasicEsbNode {
 	 */
 	public EsbSys(File esbSysFile, String name, String qname) {
 		this();
-		this.esbSysFile = esbSysFile;
+		this.file = esbSysFile;
 		this.name = name;
 		this.qName = qname;
 	}
@@ -69,7 +70,7 @@ public final class EsbSys implements BasicEsbNode {
 	}
 
 	public final File getEsbSysFile() {
-		return esbSysFile;
+		return file;
 	}
 
 	public final String getName() {
@@ -191,8 +192,8 @@ public final class EsbSys implements BasicEsbNode {
 		return ImageFactory.ORACLE_10G_SYSTEM;
 	}
 
-	// public final ImageIcon getIcon() {
-	// return IconFactory.SYSTEM;
-	// }
-
+	@Override
+	public final String getToolTip() {
+		return getName() + (file != null ? " - " + file.getPath() : "");
+	}
 }

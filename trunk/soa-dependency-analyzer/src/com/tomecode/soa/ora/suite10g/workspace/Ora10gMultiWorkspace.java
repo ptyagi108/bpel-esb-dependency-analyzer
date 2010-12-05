@@ -12,6 +12,7 @@ import com.tomecode.soa.workspace.Workspace;
 import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Contains one or more {@link Ora10gWorkspace}
  * 
@@ -109,5 +110,10 @@ public final class Ora10gMultiWorkspace implements MultiWorkspace {
 	@Override
 	public final Image getImage() {
 		return ImageFactory.MULTI_WORKSPACE;
+	}
+
+	@Override
+	public final String getToolTip() {
+		return "MultiWorkspace: Oracle SOA Suite 10g: " + name + "\n\n" + (file != null ? file.getPath() : "");
 	}
 }

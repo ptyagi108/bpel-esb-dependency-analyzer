@@ -15,6 +15,8 @@ import com.tomecode.soa.workspace.Workspace;
 import com.tomecode.soa.wsdl.Wsdl;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Oracle 10g BPEL process
  * 
  * @author Tomas Frastia
@@ -178,6 +180,11 @@ public final class Ora10gBpelProject implements Project {
 	@Override
 	public final Image getImage() {
 		return ImageFactory.ORACLE_10G_BPEL_PROCESS;
+	}
+
+	@Override
+	public final String getToolTip() {
+		return getName() + "\n\n" + (file != null ? file.getPath() : "");
 	}
 
 }

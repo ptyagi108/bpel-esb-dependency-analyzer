@@ -6,9 +6,14 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * element: receive
  * 
  * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
+ * 
  * 
  */
 public final class Receive extends OsbActivity {
@@ -52,6 +57,11 @@ public final class Receive extends OsbActivity {
 	@Override
 	public final Image getImage() {
 		return ImageFactory.OSB_10G_SPLITJOIN_RECEIVE;
+	}
+
+	@Override
+	public final String getToolTip() {
+		return "Activity: Receive\nName: " + name + "\nPartnerLink: " + partnerLink + "\nOperation: " + operation + "\nVariable: " + variable;
 	}
 
 }

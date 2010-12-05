@@ -7,6 +7,8 @@ import com.tomecode.soa.activity.ActivityType;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Invoke BPEL activity
  * 
  * @author Tomas Frastia

@@ -10,6 +10,8 @@ import org.eclipse.swt.graphics.Image;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Oracle 10g ESB SVC service
  * 
  * @author Tomas Frastia
@@ -22,6 +24,12 @@ public final class EsbSvc implements BasicEsbNode {
 	private static final long serialVersionUID = -1114897174017288770L;
 
 	private final List<EsbOperation> childs;
+
+	private ServiceSubType serviceSubType;
+
+	private ServiceType serviceType;
+
+	private String typeDescription;
 	/**
 	 * ESB SVC file
 	 */
@@ -106,6 +114,30 @@ public final class EsbSvc implements BasicEsbNode {
 		this.soapEndpointURI = soapEndpointURI;
 	}
 
+	public final ServiceSubType getServiceSubType() {
+		return serviceSubType;
+	}
+
+	public final void setServiceSubType(ServiceSubType serviceSubType) {
+		this.serviceSubType = serviceSubType;
+	}
+
+	public final ServiceType getServiceType() {
+		return serviceType;
+	}
+
+	public final void setServiceType(ServiceType serviceType) {
+		this.serviceType = serviceType;
+	}
+
+	public final String getTypeDescription() {
+		return typeDescription;
+	}
+
+	public final void setTypeDescription(String typeDescription) {
+		this.typeDescription = typeDescription;
+	}
+
 	/**
 	 * add new {@link EsbOperation} and set parent {@link EsbSvc}
 	 * 
@@ -133,7 +165,7 @@ public final class EsbSvc implements BasicEsbNode {
 	}
 
 	@Override
-	public EsbNodeType getType() {
+	public final EsbNodeType getType() {
 		return EsbNodeType.ESBSVC;
 	}
 
@@ -162,17 +194,66 @@ public final class EsbSvc implements BasicEsbNode {
 
 	@Override
 	public final Image getImage() {
+		if (ServiceSubType.JMS == serviceSubType) {
+			return ImageFactory.ORACLE_10G_ESB_JMS_ADAPTER;
+		} else if (ServiceSubType.DB == serviceSubType) {
+			return ImageFactory.ORACLE_10G_ESB_DB_ADAPTER;
+		} else if (ServiceType.ExternalService == serviceType) {
+			return ImageFactory.ORACLE_10G_ESB_SOAP_SERVICE;
+		} else if (ServiceSubType.File == serviceSubType) {
+			return ImageFactory.ORACLE_10G_ESB_FILE;
+		} else if (ServiceType.RoutingService == serviceType) {
+			return ImageFactory.ORACLE_10G_ESB_ROUTING_SERVICE;
+		} else if (ServiceSubType.FTP == serviceSubType) {
+			return ImageFactory.ORACLE_10G_ESB_FTP;
+		}
+
 		return ImageFactory.ORACLE_10G_SERVICE;
 	}
 
-	// public ImageIcon getIcon() {
-	// return IconFactory.SERVICE;
-	// }
-	//
-	// public final void findUsage(FindUsageProjectResult usage) {
-	// for (EsbOperation esbOperation : childs) {
-	// esbOperation.findUsage(usage);
-	// }
-	// }
+	/**
+	 * @author Tomas Frastia
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
+	 * 
+	 */
+	public enum ServiceSubType {
+		DB, RoutingService, JMS, File, FTP, DEFAULT;
 
+		public static final ServiceSubType parse(String name) {
+			for (ServiceSubType type : values()) {
+				if (type.toString().equals(name)) {
+					return type;
+				}
+			}
+			return DEFAULT;
+		}
+	}
+
+	/**
+	 * (c) Copyright Tomecode.com, 2010. All rights reserved.
+	 * 
+	 * @author Tomas Frastia
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
+	 * 
+	 */
+	public enum ServiceType {
+		InboundAdapterService, RoutingService, OutboundAdapterService, ExternalService, DEFAULT;
+
+		public static final ServiceType parse(String name) {
+			for (ServiceType type : values()) {
+				if (type.toString().equals(name)) {
+					return type;
+				}
+			}
+			return DEFAULT;
+		}
+
+	}
+
+	@Override
+	public final String getToolTip() {
+		return (typeDescription != null ? typeDescription + ": " : "") + name + " - " + (file != null ? file.getPath() : "");
+	}
 }

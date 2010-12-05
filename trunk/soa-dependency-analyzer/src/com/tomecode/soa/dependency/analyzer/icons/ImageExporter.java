@@ -10,6 +10,7 @@ import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.zest.core.widgets.Graph;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Simple utilities class for export graph/chart to image
  * 

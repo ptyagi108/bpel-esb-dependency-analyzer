@@ -12,6 +12,8 @@ import com.tomecode.soa.ora.osb10g.services.SplitJoin;
 import com.tomecode.soa.ora.osb10g.services.SplitJoinStructure;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Content provider for {@link ServiceBusStructureNavigator}
  * 
  * @author Tomas Frastia

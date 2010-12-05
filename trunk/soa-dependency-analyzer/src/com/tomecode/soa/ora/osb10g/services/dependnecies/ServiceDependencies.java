@@ -9,6 +9,8 @@ import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.Servi
 import com.tomecode.soa.project.Project;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Main object. Contains all dependencies from {@link #parent} project
  * 
  * @author Tomas Frastia

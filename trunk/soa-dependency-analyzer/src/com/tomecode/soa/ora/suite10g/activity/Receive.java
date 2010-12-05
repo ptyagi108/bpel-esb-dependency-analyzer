@@ -7,6 +7,8 @@ import com.tomecode.soa.activity.ActivityType;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * 
  * Receive activity in BPEL process
  * 
@@ -55,6 +57,11 @@ public final class Receive extends Activity {
 
 	public final String getVariable() {
 		return variable;
+	}
+
+	@Override
+	public final String getToolTip() {
+		return "Activity: Receive\nName: " + name + "\nPartnerLink: " + partnerLink + "\nOperation: " + operation + "\nVariable: " + variable;
 	}
 
 	//

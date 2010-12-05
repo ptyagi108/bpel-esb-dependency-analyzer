@@ -12,8 +12,7 @@ import com.tomecode.soa.project.Project;
 import com.tomecode.soa.util.EsbServiceNode;
 
 /**
- * 
- * ESB operation
+ * (c) Copyright Tomecode.com, 2010. All rights reserved. ESB operation
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
@@ -121,8 +120,13 @@ public final class EsbOperation implements BasicEsbNode {
 	}
 
 	@Override
-	public Image getImage() {
+	public final Image getImage() {
 		return ImageFactory.ORACLE_10G_OPERATION;
+	}
+
+	@Override
+	public final String getToolTip() {
+		return "Operation: " + wsdlOperation;
 	}
 
 	// public final void findUsage(FindUsageProjectResult usage) {

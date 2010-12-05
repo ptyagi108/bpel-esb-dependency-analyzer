@@ -6,6 +6,7 @@ import org.eclipse.swt.graphics.Image;
 import com.tomecode.soa.dependency.analyzer.main.Activator;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Contains all icons in project
  * 
@@ -185,7 +186,7 @@ public final class ImageFactory {
 	public static final Image OSB_10G_CASE = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/case.gif").createImage();
 	public static final Image OSB_10G_DEFAULT = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/default.gif").createImage();
 	public static final Image OSB_10G_ALERT = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/alert.gif").createImage();;
-	public static final Image OSB_10G_LOG = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/log.gif").createImage();;
+	public static final Image OSB_10G_LOG = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/log.gif").createImage();
 	public static final Image OSB_10G_REPORT = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/report.gif").createImage();
 	public static final Image OSB_10G_RAISE_ERROR = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/raiseError.gif").createImage();
 	public static final Image OSB_10G_BRANCH_NODE_CONDITION = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/branchCondition.gif").createImage();
@@ -229,6 +230,12 @@ public final class ImageFactory {
 
 	public static final Image UNKNOWN = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/unknown.png").createImage();
 	public static final Image UNKNOWN_BIG = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/unknown_big.png").createImage();
+	public static final Image ORACLE_10G_ESB_JMS_ADAPTER = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbJmsAdapter.png").createImage();
+	public static Image ORACLE_10G_ESB_DB_ADAPTER = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbDBadapter.png").createImage();
+	public static Image ORACLE_10G_ESB_SOAP_SERVICE = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbSOAPservice.png").createImage();
+	public static Image ORACLE_10G_ESB_FILE = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbFileAdapter.png").createImage();
+	public static Image ORACLE_10G_ESB_ROUTING_SERVICE = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbRoutingService.png").createImage();
+	public static Image ORACLE_10G_ESB_FTP = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbFtpAdapter.png").createImage();
 
 	private ImageFactory() {
 	}

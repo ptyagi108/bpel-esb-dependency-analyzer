@@ -75,4 +75,8 @@ public abstract class OsbActivity implements ImageFace {
 		}
 		return null;
 	}
+
+	public String getToolTip() {
+		return null;
+	}
 }

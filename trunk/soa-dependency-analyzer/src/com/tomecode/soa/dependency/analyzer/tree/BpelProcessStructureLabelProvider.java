@@ -1,16 +1,16 @@
 package com.tomecode.soa.dependency.analyzer.tree;
 
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Image;
 
-import com.tomecode.soa.activity.Activity;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
-import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
 import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProcessStrukture;
 import com.tomecode.soa.services.BpelProcess;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Label provider for {@link BpelProcessStructureNavigator}
  * 
@@ -20,7 +20,7 @@ import com.tomecode.soa.services.BpelProcess;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-final class BpelProcessStructureLabelProvider extends LabelProvider {
+final class BpelProcessStructureLabelProvider extends CellLabelProvider {
 
 	public final Image getImage(Object element) {
 
@@ -28,22 +28,22 @@ final class BpelProcessStructureLabelProvider extends LabelProvider {
 			return ImageFactory.ORACLE_10G_BPEL_PROCESS;
 		} else if (element instanceof BpelProcess) {
 			return ((BpelProcess) element).getImage();
-		} else if (element instanceof Ora10gBpelProject) {
-			return ((Ora10gBpelProject) element).getImage();
-		} else if (element instanceof Activity) {
-			Activity activity = ((Activity) element);
-			if (activity.getActivtyType() != null) {
-				Image image = activity.getActivtyType().getImage();
-				if (image == null) {
-					if (element instanceof ImageFace) {
-						return ((ImageFace) element).getImage();
-					}
-				}
-
-				return image;
-
-			}
+		} else if (element instanceof ImageFace) {
+			return ((ImageFace) element).getImage();
 		}
 		return null;
+	}
+
+	@Override
+	public final void update(ViewerCell cell) {
+		cell.setText(cell.getElement().toString());
+		cell.setImage(getImage(cell.getElement()));
+	}
+
+	public final String getToolTipText(Object element) {
+		if (element instanceof ImageFace) {
+			return ((ImageFace) element).getToolTip();
+		}
+		return element.toString();
 	}
 }

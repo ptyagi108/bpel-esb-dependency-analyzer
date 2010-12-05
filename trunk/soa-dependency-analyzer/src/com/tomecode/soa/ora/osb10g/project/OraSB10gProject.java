@@ -126,4 +126,10 @@ public final class OraSB10gProject implements Project {
 	public final boolean isAsJar() {
 		return asJar;
 	}
+
+	@Override
+	public final String getToolTip() {
+		return (file != null ? file.getName() + "\n\n" + file.getPath() : null);
+	}
+
 }

@@ -12,6 +12,8 @@ import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.wsdl.Wsdl;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Partner link in Open ESB - BPEL Process
  * 
  * @author Tomas Frastia
@@ -104,6 +106,11 @@ public final class PartnerLink extends Activity {
 
 	public final String toString() {
 		return name == null ? partnerLinkType : name;
+	}
+
+	@Override
+	public final String getToolTip() {
+		return "PartnerLink: " + name + "\nWSDL: " + (wsdl != null ? wsdl.getName() : "");
 	}
 
 }

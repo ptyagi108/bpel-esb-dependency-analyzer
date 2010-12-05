@@ -5,6 +5,7 @@ import org.eclipse.swt.graphics.Image;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /***
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * activity types
  * 
@@ -18,14 +19,14 @@ public enum ActivityType {
 	PARTNERLINKS("partnerLinks", null), VARIABLES("variables", null),
 
 	// -----------ORACLE 10G SOA SUITE
-	ORACLE_10G_SCOPE("scope", ImageFactory.ORACLE_10G_SCOPE), ORACLE_10G_WAIT("wait"), ORACLE_10G_WHILE("while"), ORACLE_10G_SEQUENCE("sequence", ImageFactory.ORACLE_10G_SEQUENCE), ASSIGN("assign"), ORACLE_10G_EMPTY(
-			"empty"), ORACLE_10G_RECEIVE("receive", null, true), ORACLE_10G_INVOKE("invoke", null, true), ORACLE_10G_REPLY("reply", null, true), SWITCH("switch", ImageFactory.ORACLE_10G_SWITCH), ORACLE_10G_CATCH(
-			"catch", null, true), CATCHALL("catchAll", ImageFactory.ORACLE_10G_CATCHALL), ORACLE_10G_ONALARM("onAlarm"), ORACLE_10G_ONMESSAGE("onMessage", null, true), ORACLE_10G_COMPENSATIONHANDLER(
-			"compensationHandler", ImageFactory.ORACLE_10G_COMPENSATIONHANDLER), ORACLE_10G_JAVA_EMBEDDING("exec", ImageFactory.ORACLE_10G_BPELX_EXEC), ORACLE_10G_PICK("pick",
-			ImageFactory.ORACLE_10G_PICK), ORACLE_10G_FLOW("flow", ImageFactory.ORACLE_10G_FLOW), ORACLE_10G_FLOWN("flowN"), ORACLE_10G_COMPENSATE("compensate", ImageFactory.ORACLE_10G_COMPENSTATE), ORACLE_10G_TERMINATE(
-			"terminate", ImageFactory.ORACLE_10G_TERMINATE), ORACLE_10G_THROW("throw", null, true), ORACLE_10G_PARTNERLINK("partnerLink"), ORACLE_10G_VARIABLE("variable",
-			ImageFactory.ORACLE_10G_VARIABLE), ORACLE_10G_TRANSFORMATE("transformation", null, true), ORACLE_10G_EMAIL("email"), ORACLE_10G_PAGER("pager", ImageFactory.ORACLE_10G_PAGER), ORACLE_10G_FAX(
-			"fax"), ORACLE_10G_SMS("sms"), ORACLE_10G_VOICE("voice"), ORACLE_10G_CASE("case"), ORACLE_10G_OTHERWISE("otherwise"), ORACLE_10G_HUMANTASK("workflow"),
+	ORACLE_10G_SCOPE("scope", ImageFactory.ORACLE_10G_SCOPE), ORACLE_10G_WAIT("wait"), ORACLE_10G_WHILE("while"), ORACLE_10G_SEQUENCE("sequence"), ASSIGN("assign"), ORACLE_10G_EMPTY("empty"), ORACLE_10G_RECEIVE(
+			"receive", null, true), ORACLE_10G_INVOKE("invoke", null, true), ORACLE_10G_REPLY("reply", null, true), SWITCH("switch", ImageFactory.ORACLE_10G_SWITCH), ORACLE_10G_CATCH("catch", null,
+			true), CATCHALL("catchAll"), ORACLE_10G_ONALARM("onAlarm"), ORACLE_10G_ONMESSAGE("onMessage", null, true), ORACLE_10G_COMPENSATIONHANDLER("compensationHandler"), ORACLE_10G_JAVA_EMBEDDING(
+			"exec", ImageFactory.ORACLE_10G_BPELX_EXEC), ORACLE_10G_PICK("pick"), ORACLE_10G_FLOW("flow"), ORACLE_10G_FLOWN("flowN"), ORACLE_10G_COMPENSATE("compensate",
+			ImageFactory.ORACLE_10G_COMPENSTATE), ORACLE_10G_TERMINATE("terminate", ImageFactory.ORACLE_10G_TERMINATE), ORACLE_10G_THROW("throw", null, true), ORACLE_10G_PARTNERLINK("partnerLink"), ORACLE_10G_VARIABLE(
+			"variable", ImageFactory.ORACLE_10G_VARIABLE), ORACLE_10G_TRANSFORMATE("transformation", null, true), ORACLE_10G_EMAIL("email"), ORACLE_10G_PAGER("pager", ImageFactory.ORACLE_10G_PAGER), ORACLE_10G_FAX(
+			"fax"), ORACLE_10G_SMS("sms"), ORACLE_10G_VOICE("voice"), ORACLE_10G_CASE("case"), ORACLE_10G_OTHERWISE("otherwise"), ORACLE_10G_HUMANTASK("workflow"), ORACLE_10G_FAULTHANDLERS(
+			"faultHandlers"), ORACLE_10G_EVENTHANDLERS("eventHandlers"),
 	// ----------OPEN ESB BPEL
 	OPEN_ESB_BPEL_SEQUENCE("sequence", ImageFactory.OPEN_ESB_BPEL_SEQUENCE), OPEN_ESB_BPEL_VARIABLE("variable", ImageFactory.OPEN_ESB_BPEL_VARIABLE), OPEN_ESB_BPEL_FAULT_HANLDERS("faultHandlers",
 			ImageFactory.OPEN_ESB_BPEL_FAULT_HANDLERS), OPEN_ESB_BPEL_CATCHALL("catchAll", ImageFactory.OPEN_ESB_BPEL_CATCHALL), OPEN_ESB_BPEL_EVENT_HANLDERS("eventHandlers",

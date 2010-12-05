@@ -3,6 +3,7 @@ package com.tomecode.soa.openesb.bpel;
 import com.tomecode.soa.activity.Activity;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Process structure which contain all activities in Open ESB - BPEL process
  * 
