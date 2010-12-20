@@ -29,6 +29,6 @@ public interface BasicEsbNode extends ImageFace {
 	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
 	 */
 	public enum EsbNodeType {
-		ESBSRC, ESBSYS, ESBGRP, ESBOPERATION, ESBSVC;
+		ESBSRC, ESBSYS, ESBGRP, ESBOPERATION, ESBSVC, ROUTING;
 	}
 }

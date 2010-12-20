@@ -133,6 +133,30 @@ public final class Ora10gEsbProject implements Project {
 		return null;
 	}
 
+	public final EsbSvc findEsbSvcByQname(String qname) {
+		for (BasicEsbNode basicEsbNode : basicEsbNodes) {
+			if (basicEsbNode.getType() == EsbNodeType.ESBSVC) {
+				EsbSvc esbSvc = (EsbSvc) basicEsbNode.get();
+				if (esbSvc.getQname().equals(qname)) {
+					return esbSvc;
+				}
+			} else if (basicEsbNode.getType() == EsbNodeType.ESBSYS) {
+				EsbSys esbSys = (EsbSys) basicEsbNode;
+				EsbSvc esbSvc = esbSys.findEsbSvcByQname(qname);
+				if (esbSvc != null) {
+					return esbSvc;
+				}
+			} else if (basicEsbNode.getType() == EsbNodeType.ESBGRP) {
+				EsbGrp esbGrp = (EsbGrp) basicEsbNode;
+				EsbSvc esbSvc = esbGrp.findEsbSvcByQname(qname);
+				if (esbSvc != null) {
+					return esbSvc;
+				}
+			}
+		}
+		return null;
+	}
+
 	public final EsbGrp findEsbGrpByQname(String qname) {
 		for (BasicEsbNode basicEsbNode : basicEsbNodes) {
 			if (basicEsbNode.getType() == EsbNodeType.ESBGRP) {
@@ -227,7 +251,6 @@ public final class Ora10gEsbProject implements Project {
 
 	@Override
 	public final String getToolTip() {
-		return name + "\n\n" + (file != null ? file.getPath() : "");
+		return "Oracle SOA Suite 10g - ESB Project: " + getName() + "\nFile: " + (file != null ? file.getPath() : "");
 	}
-
 }

@@ -21,8 +21,11 @@ import com.tomecode.soa.ora.osb10g.services.config.EndpointJms;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointUNKNOWN;
 import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificJms;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.ServiceDependencyType;
+import com.tomecode.soa.ora.suite10g.esb.EsbSvc;
 import com.tomecode.soa.ora.suite10g.project.PartnerLinkBinding;
 import com.tomecode.soa.project.Project;
+import com.tomecode.soa.project.ProjectType;
+import com.tomecode.soa.project.UnknownProject;
 import com.tomecode.soa.services.BpelProcess;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
@@ -152,8 +155,20 @@ public final class ToolTipFactory {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(new org.eclipse.draw2d.Label(((ImageFace) project).getImage()));
 		tooltip.add(new org.eclipse.draw2d.Label(project.getName()));
-		tooltip.add(GuiUtils.createLabel2dBold("Path:"));
-		tooltip.add(new org.eclipse.draw2d.Label(project.getFile() != null ? project.getFile().toString() : ""));
+
+		if (project.getType() == ProjectType.UNKNOWN) {
+			UnknownProject unknownProject = (UnknownProject) project;
+			tooltip.add(GuiUtils.createLabel2dBold("Type:"));
+			tooltip.add(new org.eclipse.draw2d.Label(unknownProject.getTypeText()));
+			tooltip.add(GuiUtils.createLabel2dBold("WSDL Location:"));
+			tooltip.add(new org.eclipse.draw2d.Label(unknownProject.getPartnerLinkBinding().getWsdlLocation()));
+		}else{
+			tooltip.add(GuiUtils.createLabel2dBold("Type:"));
+			tooltip.add(new org.eclipse.draw2d.Label(project.getType().getTitle()));
+			tooltip.add(GuiUtils.createLabel2dBold("Path:"));
+			tooltip.add(new org.eclipse.draw2d.Label(project.getFile() != null ? project.getFile().toString() : ""));			
+		}
+
 		return tooltip;
 	}
 
@@ -213,6 +228,31 @@ public final class ToolTipFactory {
 		tooltip.add(new org.eclipse.draw2d.Label(partnerLinkBinding.toString()));
 		tooltip.add(GuiUtils.createLabel2dBold("WSDL Location:"));
 		tooltip.add(new org.eclipse.draw2d.Label(partnerLinkBinding.getWsdlLocation()));
+		return tooltip;
+	}
+
+	/**
+	 * create tool tip for {@link EsbSvc}
+	 * 
+	 * @param esbSvc
+	 * @return
+	 */
+	public final static IFigure createToolTip(EsbSvc esbSvc) {
+		IFigure tooltip = createDefaultToolTip();
+		tooltip.add(new org.eclipse.draw2d.Label(esbSvc.getImage()));
+		tooltip.add(new org.eclipse.draw2d.Label(esbSvc.getName()));
+
+		tooltip.add(GuiUtils.createLabel2dBold("Type: "));
+		tooltip.add(new org.eclipse.draw2d.Label(esbSvc.getTypeDescription()));
+
+		if (esbSvc.getConcreteWSDLURL() != null && esbSvc.getConcreteWSDLURL().trim().length() != 0) {
+			tooltip.add(GuiUtils.createLabel2dBold("Concrete WSDL URL: "));
+			tooltip.add(new org.eclipse.draw2d.Label(esbSvc.getConcreteWSDLURL()));
+		}
+		if (esbSvc.getSoapEndpointURI() != null && esbSvc.getSoapEndpointURI().trim().length() != 0) {
+			tooltip.add(GuiUtils.createLabel2dBold("SOAP Endpoint URI: "));
+			tooltip.add(new org.eclipse.draw2d.Label(esbSvc.getSoapEndpointURI()));
+		}
 		return tooltip;
 	}
 

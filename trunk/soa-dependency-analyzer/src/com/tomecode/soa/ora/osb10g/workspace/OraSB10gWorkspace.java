@@ -98,7 +98,7 @@ public final class OraSB10gWorkspace implements Workspace {
 
 	@Override
 	public final String getToolTip() {
-		return "Workspace: Oracle Service Bus 10g" + name + "\n\n" + (file != null ? file.getPath() : "");
+		return "Workspace: Oracle Service Bus 10g" + name + "\n\nPath:" + (file != null ? file.getPath() : "");
 	}
 
 }

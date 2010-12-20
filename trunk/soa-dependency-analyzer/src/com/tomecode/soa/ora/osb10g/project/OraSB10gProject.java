@@ -17,6 +17,8 @@ import com.tomecode.soa.project.ProjectType;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Oracle Service Bus 10g project
  * 
  * @author Tomas Frastia
@@ -129,7 +131,7 @@ public final class OraSB10gProject implements Project {
 
 	@Override
 	public final String getToolTip() {
-		return (file != null ? file.getName() + "\n\n" + file.getPath() : null);
+		return "Oracle Service Bus 10g Project: " + getName() + "\nFile: " + (file != null ? file.getPath() : "");
 	}
 
 }

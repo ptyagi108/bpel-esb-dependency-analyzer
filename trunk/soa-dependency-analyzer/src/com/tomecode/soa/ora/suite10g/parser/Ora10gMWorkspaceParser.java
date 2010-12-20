@@ -8,6 +8,7 @@ import java.util.List;
 import org.dom4j.Element;
 
 import com.tomecode.soa.ora.suite10g.esb.EsbOperation;
+import com.tomecode.soa.ora.suite10g.esb.EsbRoutingRule;
 import com.tomecode.soa.ora.suite10g.esb.EsbSvc;
 import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
@@ -18,7 +19,9 @@ import com.tomecode.soa.parser.AbstractParser;
 import com.tomecode.soa.parser.ServiceParserException;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.project.ProjectType;
+import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
+import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 
 /**
  * (c) Copyright Tomecode.com, 2010. All rights reserved.
@@ -160,6 +163,7 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 							if (urlWsdl != null) {
 								String qName = esbParser.convertWsdlToQname(urlWsdl);
 								if (qName != null) {
+									// TODO: parsovanie wsdl
 									Ora10gEsbProject qNameProject = findEsbProjectByQname(qName, urlWsdl, multiWorkspace);
 									if (qNameProject != null) {
 										partnerLinkBinding.setDependencyEsbProject(qNameProject);// .setDependencyProject(qNameProject);
@@ -202,7 +206,7 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 		for (EsbOperation esbOperation : esbSvc.getEsbOperations()) {
 			if (bpelProject.getWsdl() != null) {
 				if (bpelProject.getWsdl().existWsldOperation(esbOperation.getWsdlOperation())) {
-					esbSvc.getOwnerEsbProject().addDependency(bpelProject);
+					esbSvc.getProject().addDependency(bpelProject);
 					esbOperation.addDepdendencyProject(bpelProject);
 
 				}
@@ -377,19 +381,96 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 	 * @param sourceEsbProject
 	 */
 	private final void analyzeEsbDependencies(Ora10gMultiWorkspace multiWorkspace, Ora10gEsbProject sourceEsbProject) {
-		for (EsbSvc esbSvc : sourceEsbProject.getAllEsbSvc()) {
-			URL url = parseWsdlToUrl(esbSvc.getWsdlURL());
-			if (url != null) {
-				String qName = esbParser.convertWsdlToQname(url);
-				Ora10gEsbProject esbProject = findEsbProjectByQname(qName, url, multiWorkspace);
-				if (esbProject != null) {
-					esbSvc.getOwnerEsbProject().addDependency(esbProject);
-					// /esbSvc.get
-					esbSvc.getEsbOperations().get(0).addDepdendencyProject(esbProject);
+		List<EsbSvc> esbSvcs = sourceEsbProject.getAllEsbSvc();
+		for (EsbSvc esbSvc : esbSvcs) {
+
+			// if( esbSvc.getName().equals("LoggerReader_RS")){
+			// esbSvc.toString();
+			// }
+			//
+			// URL url = parseWsdlToUrl(esbSvc.getWsdlURL());
+			// if (url != null) {
+			// String qName = esbParser.convertWsdlToQname(url);
+			// Ora10gEsbProject esbProject = findEsbProjectByQname(qName, url,
+			// multiWorkspace);
+			// if (esbProject != null) {
+			// esbSvc.getOwnerEsbProject().addDependency(esbProject);
+			// // /esbSvc.get
+			// esbSvc.getEsbOperations().get(0).addDepdendencyProject(esbProject);
+			// }
+			// }
+
+			if (esbSvc.getTargetServiceQName() != null) {
+				EsbSvc depEsbSvc = findEsbSvcByQname(esbSvc.getTargetServiceQName(), sourceEsbProject);
+				if (depEsbSvc != null) {
+					for (EsbOperation esbOperation : esbSvc.getEsbOperations()) {
+						EsbOperation depEsbOperation = depEsbSvc.getOperation(esbOperation.getWsdlOperation());
+						if (depEsbOperation != null) {
+							esbOperation.addDependency(depEsbSvc);
+
+							for (Object o : esbOperation.getDependencies()) {
+								if (o instanceof EsbRoutingRule) {
+									EsbRoutingRule routingRule = (EsbRoutingRule) o;
+
+									EsbSvc routingDepSvc = findEsbSvcByQname(routingRule.getQname(), sourceEsbProject);
+									routingRule.addDependencySvc(routingDepSvc);
+								}
+							}
+						}
+					}
+
 				}
+
+			} else {
+				for (EsbOperation esbOperation : esbSvc.getEsbOperations()) {
+
+					for (Object o : esbOperation.getDependencies()) {
+						if (o instanceof EsbRoutingRule) {
+							EsbRoutingRule routingRule = (EsbRoutingRule) o;
+
+							EsbSvc routingDepSvc = findEsbSvcByQname(routingRule.getServiceQName(), sourceEsbProject);
+							routingRule.addDependencySvc(routingDepSvc);
+						}
+					}
+
+				}
+
 			}
 
 		}
+	}
+
+	/**
+	 * find {@link EsbSvc} by qName
+	 * 
+	 * @param qName
+	 * @param esbProject
+	 * @return
+	 */
+	private final EsbSvc findEsbSvcByQname(String qName, Ora10gEsbProject esbProject) {
+		EsbSvc esbSvc = esbProject.findEsbSvcByQname(qName);
+		if (esbSvc != null) {
+			return esbSvc;
+		}
+
+		MultiWorkspace multiWorkspace = esbProject.getWorkpsace().getMultiWorkspace();
+		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+			if (workspace.getType() == WorkspaceType.ORACLE_1OG) {
+				for (Project project : workspace.getProjects()) {
+
+					if (!project.equals(esbProject) && project.getType() == ProjectType.ORACLE10G_ESB) {
+						Ora10gEsbProject esbProjectNext = (Ora10gEsbProject) project;
+						EsbSvc svcNext = esbProjectNext.findEsbSvcByQname(qName);
+						if (svcNext != null) {
+							return svcNext;
+						}
+					}
+
+				}
+			}
+		}
+
+		return null;
 	}
 
 	/**

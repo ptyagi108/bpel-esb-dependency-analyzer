@@ -106,7 +106,7 @@ public final class OraSB10gMultiWorkspace implements MultiWorkspace {
 
 	@Override
 	public final String getToolTip() {
-		return "MultiWorkspace: Oracle Service Bus 10g" + name + "\n\n" + (file != null ? file.getPath() : "");
+		return "MultiWorkspace: Oracle Service Bus 10g" + name + "\n\nPath:" + (file != null ? file.getPath() : "");
 	}
 
 }

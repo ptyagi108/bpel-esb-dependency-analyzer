@@ -23,21 +23,22 @@ public final class EsbOperation implements BasicEsbNode {
 
 	private static final long serialVersionUID = 7634028314194386738L;
 
-	private final List<DependencyNode> childs;
+	private final List<Object> childs;
 
 	private String qname;
 
 	private String wsdlOperation;
 
 	private EsbSvc esbSvc;
-	private final List<EsbRoutingRule> esbRoutingRules;
+
+	private Mep mep;
 
 	/**
 	 * Constructor
 	 */
 	public EsbOperation() {
-		childs = new ArrayList<DependencyNode>();
-		esbRoutingRules = new ArrayList<EsbRoutingRule>();
+		this.childs = new ArrayList<Object>();
+		this.mep = Mep.REQUEST;
 	}
 
 	/**
@@ -46,10 +47,16 @@ public final class EsbOperation implements BasicEsbNode {
 	 * @param qname
 	 * @param wsdlOperation
 	 */
-	public EsbOperation(String qname, String wsdlOperation) {
+	public EsbOperation(String qname, String wsdlOperation, String mep) {
 		this();
 		this.qname = qname;
 		this.wsdlOperation = wsdlOperation;
+
+		if (Mep.REQUEST_RESPONSE.name.equals(mep)) {
+			this.mep = Mep.REQUEST_RESPONSE;
+		} else {
+			this.mep = Mep.REQUEST;
+		}
 	}
 
 	public final String getQname() {
@@ -65,7 +72,7 @@ public final class EsbOperation implements BasicEsbNode {
 	}
 
 	public final void addRoutingRule(EsbRoutingRule esbRoutingRule) {
-		esbRoutingRules.add(esbRoutingRule);
+		childs.add(esbRoutingRule);
 	}
 
 	public final String toString() {
@@ -77,8 +84,26 @@ public final class EsbOperation implements BasicEsbNode {
 		return this;
 	}
 
-	public final List<DependencyNode> getDependencyNodes() {
+	public final List<Object> getDependencies() {
 		return childs;
+	}
+
+	public final List<Object> makeListWithoutRountingRule() {
+		List<Object> list = new ArrayList<Object>();
+		for (Object o : childs) {
+			if (o instanceof EsbRoutingRule) {
+				List<EsbSvc> esbSvcs = ((EsbRoutingRule) o).getEsbSvcs();
+				for (EsbSvc esbSvc : esbSvcs) {
+					if (!list.contains(esbSvc)) {
+						list.add(esbSvc);
+					}
+				}
+			} else {
+				list.add(o);
+			}
+
+		}
+		return list;
 	}
 
 	@Override
@@ -98,11 +123,21 @@ public final class EsbOperation implements BasicEsbNode {
 		}
 	}
 
+	public final void addDependency(BasicEsbNode dependencyNode) {
+		if (!childs.contains(dependencyNode)) {
+			childs.add(dependencyNode);
+		}
+	}
+
 	private final boolean containsDependencyProject(Project project) {
-		for (DependencyNode dependencyNode : childs) {
-			if (dependencyNode.getProject().equals(project)) {
-				return true;
+		for (Object o : childs) {
+			if (o instanceof DependencyNode) {
+				DependencyNode dependencyNode = (DependencyNode) o;
+				if (dependencyNode.getProject().equals(project)) {
+					return true;
+				}
 			}
+
 		}
 		return false;
 	}
@@ -121,13 +156,20 @@ public final class EsbOperation implements BasicEsbNode {
 
 	@Override
 	public final Image getImage() {
-		return ImageFactory.ORACLE_10G_OPERATION;
+		if (mep == Mep.REQUEST) {
+			return ImageFactory.ORACLE_10G_OPERATION_REQUEST;
+		}
+		return ImageFactory.ORACLE_10G_OPERATION_REQUEST_RESPONSE;
 	}
 
 	@Override
 	public final String getToolTip() {
 		return "Operation: " + wsdlOperation;
 	}
+
+	// public final List<EsbRoutingRule> getEsbRoutingRules() {
+	// return esbRoutingRules;
+	// }
 
 	// public final void findUsage(FindUsageProjectResult usage) {
 	// for (DependencyNode dependencyNode : childs) {
@@ -136,5 +178,23 @@ public final class EsbOperation implements BasicEsbNode {
 	// }
 	// }
 	// }
+
+	/**
+	 * (c) Copyright Tomecode.com, 2010. All rights reserved. ESB operation
+	 * 
+	 * @author Tomas Frastia
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
+	 * 
+	 */
+	private enum Mep {
+		REQUEST("Request"), REQUEST_RESPONSE("RequestResponse");
+
+		private final String name;
+
+		Mep(String name) {
+			this.name = name;
+		}
+	}
 
 }

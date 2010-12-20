@@ -7,10 +7,10 @@ import java.util.List;
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.ora.suite10g.parser.Ora10gBpelParser;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gWorkspace;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.project.ProjectType;
-import com.tomecode.soa.project.UnknownProject;
 import com.tomecode.soa.workspace.Workspace;
 import com.tomecode.soa.wsdl.Wsdl;
 
@@ -153,7 +153,7 @@ public final class Ora10gBpelProject implements Project {
 					dependencyProjects.add(partnerLinkBinding.getDependencyEsbProject());
 				}
 			} else {
-				dependencyProjects.add(new UnknownProject(partnerLinkBinding));
+				dependencyProjects.add(Ora10gBpelParser.parseProjectFromWsdl(partnerLinkBinding));
 			}
 		}
 
@@ -184,7 +184,7 @@ public final class Ora10gBpelProject implements Project {
 
 	@Override
 	public final String getToolTip() {
-		return getName() + "\n\n" + (file != null ? file.getPath() : "");
+		return "Oracle SOA Suite 10g - BPEL Project: " + getName() + "\nFile: " + (file != null ? file.getPath() : "");
 	}
 
 }

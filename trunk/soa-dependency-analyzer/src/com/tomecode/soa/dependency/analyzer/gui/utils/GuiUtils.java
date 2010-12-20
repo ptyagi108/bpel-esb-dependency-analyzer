@@ -6,6 +6,7 @@ import java.util.List;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
@@ -35,6 +36,7 @@ import com.tomecode.soa.dependency.analyzer.view.graph.FlowGraphView;
 import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * GUI utilities - helper class for find views, editors etc.
  * 
@@ -45,6 +47,11 @@ import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
  * 
  */
 public final class GuiUtils {
+
+	public static final Color COLOR_BLACK = createColorRed(SWT.COLOR_BLACK);
+	public static final Color COLOR_RED = createColorRed(SWT.COLOR_RED);
+	public static final Font FONT_ITALIC_BOLD = createFont(SWT.ITALIC | SWT.BOLD);
+	public static final Font FONT_BOLD = createFont(SWT.BOLD);
 
 	/**
 	 * find reference for {@link WorkspacesNavigator} in application
@@ -361,21 +368,24 @@ public final class GuiUtils {
 	}
 
 	/**
-	 * create bold font
+	 * create new font
 	 * 
-	 * @param font
+	 * @param style
 	 * @return
 	 */
-	public final static Font createFont() {
+	private final static Font createFont(int style) {
 		Font font = Display.getCurrent().getSystemFont();
 		FontData fontData = font.getFontData()[0];
-		return new Font(Display.getCurrent(), new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD));
+		return new Font(Display.getCurrent(), new FontData(fontData.getName(), fontData.getHeight(), style));
+	}
 
+	public final static Color createColorRed(int color) {
+		return Display.getCurrent().getSystemColor(color);
 	}
 
 	public final static org.eclipse.draw2d.Label createLabel2dBold(String text) {
 		org.eclipse.draw2d.Label label = new org.eclipse.draw2d.Label(text);
-		label.setFont(createFont());
+		label.setFont(FONT_BOLD);
 		return label;
 	}
 }

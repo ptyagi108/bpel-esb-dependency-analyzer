@@ -25,7 +25,6 @@ import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
 import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
-import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.project.Project;
 
 /**
@@ -122,12 +121,12 @@ public final class ProjectServicesNavigator extends ViewPart implements HideView
 		try {
 			IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
 			if (!selection.isEmpty()) {
-				if (selection.getFirstElement() instanceof Service) {
+//				if (selection.getFirstElement() instanceof Service  ) {
 					VisualGraphView visualGraphView = GuiUtils.getVisualGraphView();
 					if (visualGraphView != null) {
 						visualGraphView.showGraph(selection.getFirstElement());
 					}
-				}
+//				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

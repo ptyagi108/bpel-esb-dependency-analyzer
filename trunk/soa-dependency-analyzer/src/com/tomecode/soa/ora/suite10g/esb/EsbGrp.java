@@ -136,7 +136,7 @@ public final class EsbGrp implements BasicEsbNode {
 				}
 			} else if (basicEsbNode.getType() == EsbNodeType.ESBSVC) {
 				if (basicEsbNode.getQname().equals(qName)) {
-					return ((EsbSvc) basicEsbNode.get()).getOwnerEsbProject();
+					return ((EsbSvc) basicEsbNode.get()).getProject();
 				}
 			}
 		}
@@ -169,5 +169,29 @@ public final class EsbGrp implements BasicEsbNode {
 	@Override
 	public final String getToolTip() {
 		return name + (file != null ? " - " + file.getPath() : "");
+	}
+
+	public final EsbSvc findEsbSvcByQname(String qname) {
+		for (BasicEsbNode basicEsbNode : childs) {
+			if (basicEsbNode.getType() == EsbNodeType.ESBSVC) {
+				EsbSvc esbSvc = (EsbSvc) basicEsbNode.get();
+				if (esbSvc.getQname().equals(qname)) {
+					return esbSvc;
+				}
+			} else if (basicEsbNode.getType() == EsbNodeType.ESBSYS) {
+				EsbSys esbSys = (EsbSys) basicEsbNode;
+				EsbSvc esbSvc = esbSys.findEsbSvcByQname(qname);
+				if (esbSvc != null) {
+					return null;
+				}
+			} else if (basicEsbNode.getType() == EsbNodeType.ESBGRP) {
+				EsbGrp esbGrp = (EsbGrp) basicEsbNode;
+				EsbSvc esbSvc = esbGrp.findEsbSvcByQname(qname);
+				if (esbSvc != null) {
+					return esbSvc;
+				}
+			}
+		}
+		return null;
 	}
 }

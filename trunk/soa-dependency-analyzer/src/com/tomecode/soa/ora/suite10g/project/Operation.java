@@ -54,8 +54,10 @@ public final class Operation implements ImageFace {
 	 * @param operation
 	 * @param partnerLinkBinding
 	 */
-	public Operation(Activity activity, String operation, Ora10gBpelProject ownerBpelProject, PartnerLinkBinding partnerLinkBinding) {
-		// , List<Activity> activities)
+	public Operation(Activity activity, String operation, Ora10gBpelProject ownerBpelProject, PartnerLinkBinding partnerLinkBinding) {// ,
+																																		// List<Activity>
+																																		// activities)
+																																		// {
 		// this.activity = activity;
 		this.activity = activity;
 		// this.name = name;

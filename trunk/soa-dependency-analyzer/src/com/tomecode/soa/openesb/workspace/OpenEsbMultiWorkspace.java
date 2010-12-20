@@ -12,7 +12,7 @@ import com.tomecode.soa.workspace.Workspace;
 import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 
 /**
- * 
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Multiple workspace contains all workspaces and projects
  * 
@@ -109,8 +109,7 @@ public final class OpenEsbMultiWorkspace implements MultiWorkspace {
 
 	@Override
 	public final String getToolTip() {
-		return "MultiWorkspace: Open Esb" + name + "\n\n"
-				+ (file != null ? file.getPath() : "");
+		return "MultiWorkspace: Open Esb" + name + "\n\nPath:" + (file != null ? file.getPath() : "");
 	}
 
 }

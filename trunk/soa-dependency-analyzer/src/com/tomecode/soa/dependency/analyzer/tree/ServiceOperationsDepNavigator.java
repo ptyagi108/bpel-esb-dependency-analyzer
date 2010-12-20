@@ -1,7 +1,13 @@
 package com.tomecode.soa.dependency.analyzer.tree;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
@@ -9,17 +15,24 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.gui.utils.HideView;
 import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
+import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.services.Service;
+import com.tomecode.soa.ora.suite10g.esb.EsbGrp;
+import com.tomecode.soa.ora.suite10g.esb.EsbSvc;
+import com.tomecode.soa.ora.suite10g.esb.EsbSys;
 import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.ora.suite10g.project.BpelOperations;
+import com.tomecode.soa.ora.suite10g.project.Operation;
 import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
+import com.tomecode.soa.project.Project;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
@@ -33,7 +46,7 @@ import com.tomecode.soa.workspace.Workspace;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class ServiceOperationsDepNavigator extends ViewPart implements HideView {
+public final class ServiceOperationsDepNavigator extends ViewPart implements HideView, IDoubleClickListener, ISelectionChangedListener {
 
 	public static final String ID = "view.serviceoperationsdepnavigator";
 
@@ -55,7 +68,9 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 	@Override
 	public final void createPartControl(Composite parent) {
 		tree = new TreeViewer(parent, SWT.SIMPLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		tree.addDoubleClickListener(this);
 		tree.setContentProvider(contentProvider);
+		tree.addSelectionChangedListener(this);
 		tree.setLabelProvider(labelProvider);
 		ColumnViewerToolTipSupport.enableFor(tree);
 	}
@@ -87,9 +102,12 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 			setDataToTree((OraSB10gProject) source);
 		} else if (source instanceof Ora10gEsbProject) {
 			setDataToTree((Ora10gEsbProject) source);
+		} else if (source instanceof EsbSvc) {
+			setDataToTree(((EsbSvc) source).getProject());
 		} else {
 			clearTree();
 		}
+
 	}
 
 	private final void setDataToTree(Object data) {
@@ -113,8 +131,8 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 	private final MultiWorkspace findMultiWorkspaceInTree() {
 		if (rootNode.hasChildren()) {
 			Object objectInTree = rootNode.getChildren()[0];
-			if (objectInTree instanceof Ora10gBpelProject) {
-				return ((Ora10gBpelProject) objectInTree).getWorkpsace().getMultiWorkspace();
+			if (objectInTree instanceof Project) {
+				return ((Project) objectInTree).getWorkpsace().getMultiWorkspace();
 			}
 		}
 		return null;
@@ -184,6 +202,50 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 				return ((ImageFace) element).getToolTip();
 			}
 			return element.toString();
+		}
+	}
+
+	@Override
+	public final void doubleClick(DoubleClickEvent event) {
+		try {
+			IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
+			if (!selection.isEmpty()) {
+
+				if (!(selection.getFirstElement() instanceof Operation)) {
+				} else if (!(selection.getFirstElement() instanceof EsbSys)) {
+				} else if (!(selection.getFirstElement() instanceof EsbGrp)) {
+				} else {
+
+					VisualGraphView visualGraphView = GuiUtils.getVisualGraphView();
+					if (visualGraphView != null) {
+						visualGraphView.showGraph(selection.getFirstElement());
+					}
+					BpelProcessStructureNavigator bpelStructureNavigator = GuiUtils.getBpelProcessStructureNavigator();
+					if (bpelStructureNavigator != null) {
+						bpelStructureNavigator.show(selection.getFirstElement());
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			MessageDialog.openError(null, "Error", "oops error:" + e.getMessage());
+		}
+
+	}
+
+	@Override
+	public final void selectionChanged(SelectionChangedEvent event) {
+		try {
+			IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
+			if (!selection.isEmpty()) {
+				BpelProcessStructureNavigator structureNavigator = GuiUtils.getBpelProcessStructureNavigator();
+				if (structureNavigator != null) {
+					structureNavigator.showActvityInTree(selection.getFirstElement());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			MessageDialog.openError(null, "Error", "oops error:" + e.getMessage());
 		}
 	}
 

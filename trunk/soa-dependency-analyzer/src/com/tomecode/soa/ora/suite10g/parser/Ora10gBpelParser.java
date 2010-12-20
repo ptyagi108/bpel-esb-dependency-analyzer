@@ -1,6 +1,7 @@
 package com.tomecode.soa.ora.suite10g.parser;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
 import com.tomecode.soa.activity.Activity;
 import com.tomecode.soa.activity.ActivityType;
@@ -46,7 +48,6 @@ import com.tomecode.soa.ora.suite10g.activity.Variables;
 import com.tomecode.soa.ora.suite10g.activity.Voice;
 import com.tomecode.soa.ora.suite10g.activity.Wait;
 import com.tomecode.soa.ora.suite10g.activity.While;
-import com.tomecode.soa.ora.suite10g.project.BpelOperations;
 import com.tomecode.soa.ora.suite10g.project.Operation;
 import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProcessStrukture;
 import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
@@ -55,6 +56,7 @@ import com.tomecode.soa.ora.suite10g.workspace.Ora10gWorkspace;
 import com.tomecode.soa.parser.AbstractParser;
 import com.tomecode.soa.parser.ServiceParserException;
 import com.tomecode.soa.project.UnknownProject;
+import com.tomecode.soa.project.UnknownProject.UnknownProjectType;
 import com.tomecode.soa.wsdl.parser.WsdlParser;
 
 /**
@@ -156,8 +158,9 @@ public final class Ora10gBpelParser extends AbstractParser {
 		}
 
 		Element bpelRootElement = parseXml(new File(bpelXmlFile.getParentFile() + File.separator + bpelProcess.getSrc()));
-		parseBpelOperations(bpelRootElement, bpelProcess);
 		parseBpelProcessStrukture(bpelRootElement, bpelProcess.getBpelProcessStrukture());
+		// parseBpelOperations(bpelRootElement, bpelProcess);
+
 		return bpelProcess;
 	}
 
@@ -247,18 +250,29 @@ public final class Ora10gBpelParser extends AbstractParser {
 						element.attributeValue("partnerRole"));
 				root.addActivity(partnerLink);
 			} else if (element.getName().equals("receive")) {
-				root.addActivity(new Receive(element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation")));
+				Receive receive = new Receive(element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"));
+				root.addActivity(receive);
+				paseOperations(element, receive, strukture.getProject());
+
 			} else if (element.getName().equals("invoke")) {
-				root.addActivity(new Invoke(element.attributeValue("name"), element.attributeValue("inputVariable"), element.attributeValue("outputVariable"), element.attributeValue("partnerLink"),
-						element.attributeValue("operation")));
+				Invoke invoke = new Invoke(element.attributeValue("name"), element.attributeValue("inputVariable"), element.attributeValue("outputVariable"), element.attributeValue("partnerLink"),
+						element.attributeValue("operation"));
+				root.addActivity(invoke);
+				paseOperations(element, invoke, strukture.getProject());
+
 			} else if (element.getName().equals("reply")) {
-				root.addActivity(new Reply(element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation")));
+				Reply reply = new Reply(element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"));
+				root.addActivity(reply);
+				paseOperations(element, reply, strukture.getProject());
+
 			} else if (element.getName().equals("throw")) {
 				root.addActivity(new Throw(element.attributeValue("name"), element.attributeValue("faultVariable")));
 			} else if (element.getName().equals("onMessage")) {
 				OnMessage onMessageActivity = new OnMessage(element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"),
 						element.attributeValue("headerVariable"));
 				root.addActivity(onMessageActivity);
+				paseOperations(element, onMessageActivity, strukture.getProject());
+
 				parseBpelProcessActivities(element.elements(), onMessageActivity, strukture);
 			} else if (element.getName().equals("catch")) {
 				Catch catchActivity = new Catch(element.attributeValue("faultName"), element.attributeValue("faultVariable"));
@@ -323,6 +337,13 @@ public final class Ora10gBpelParser extends AbstractParser {
 				root.addActivity(activity);
 			}
 		}
+	}
+
+	private final void paseOperations(Element element, Activity activity, Ora10gBpelProject bpelProject) {
+		Operation operation = new Operation(activity, element.attributeValue("operation"), bpelProject, bpelProject.getBpelOperations().getBpelProcess()
+				.findPartnerLinkBinding(element.attributeValue("partnerLink")));// ,
+																				// getOperationPath(element));
+		bpelProject.getBpelOperations().addOperation(operation);
 	}
 
 	/**
@@ -475,83 +496,101 @@ public final class Ora10gBpelParser extends AbstractParser {
 		return new AssignOperation(type, from, to, fromPartnerLink, toPartnerLink);
 	}
 
-	/**
-	 * parse BPEL activities by type
-	 * 
-	 * @param element
-	 * @return
-	 */
-	private final Activity parseBpelActivity(Element element) {
-
-		if (element.getName().equals("receive")) {
-			return new Receive(element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"));
-		} else if (element.getName().equals("invoke")) {
-			return new Invoke(element.attributeValue("name"), element.attributeValue("inputVariable"), element.attributeValue("outputVariable"), element.attributeValue("partnerLink"),
-					element.attributeValue("operation"));
-		} else if (element.getName().equals("reply")) {
-			return new Reply(element.attributeValue("name"), element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"));
-		} else if (element.getName().equals("throw")) {
-			return new Throw(element.attributeValue("name"), element.attributeValue("faultVariable"));
-		} else if (element.getName().equals("onMessage")) {
-			return new OnMessage(element.attributeValue("variable"), element.attributeValue("partnerLink"), element.attributeValue("operation"), element.attributeValue("headerVariable"));
-		} else if (element.getName().equals("catch")) {
-			return new Catch(element.attributeValue("faultName"), element.attributeValue("faultVariable"));
-		} else if (element.getName().equals("assign")) {
-			Element eAnnotation = element.element("annotation");
-			if (eAnnotation != null) {
-				Element ePattern = eAnnotation.element("pattern");
-				if (ePattern != null && "transformation".equals(ePattern.getText())) {
-					return new Transform(element.attributeValue("name"), null, null);
-				}
-			}
-			return new Assign(element.attributeValue("name"));
-		} else if (element.getName().equals("case")) {
-			Element eAnnotation = element.element("annotation");
-			if (eAnnotation != null) {
-				Element ePattern = eAnnotation.element("pattern");
-				if (ePattern != null) {
-					if (ePattern.attributeValue("patternName") != null && "case".equals(ePattern.attributeValue("patternName"))) {
-						return new Case(ePattern.getText(), getVariableFromExpression(element.attributeValue("condition")));
-					}
-				}
-			}
-		} else if (element.getName().equals("otherwise")) {
-			return new CaseOtherwise("otherwise");
-		} else if (element.getName().equals("scope")) {
-			Element eAnnotation = element.element("annotation");
-			if (eAnnotation != null) {
-				Element ePattern = eAnnotation.element("pattern");
-				if (ePattern != null) {
-					String patternName = ePattern.attributeValue("patternName");
-					if (patternName != null) {
-						if (patternName.endsWith(":email")) {
-							return new Email(element.attributeValue("name"));
-						} else if (patternName.endsWith(":fax")) {
-							return new Fax(element.attributeValue("name"));
-						} else if (patternName.endsWith(":sms")) {
-							return new Sms(element.attributeValue("name"));
-						} else if (patternName.endsWith(":voice")) {
-							return new Voice(element.attributeValue("name"));
-						} else if (patternName.endsWith(":pager")) {
-							return new Pager(element.attributeValue("name"));
-						} else if (patternName.endsWith(":workflow")) {
-							return new HumanTask(element.attributeValue("name"));
-						}
-					}
-				}
-			}
-		} else if (element.getName().equals("onAlarm")) {
-			return new OnAlarm(null);
-		} else if (element.getName().equals("wait")) {
-			return new Wait(element.attributeValue("name"), null);
-		} else if (element.getName().equals("while")) {
-			return new While(element.attributeValue("name"), null, null);
-		} else if (element.getName().equals("flowN")) {
-			return new FlowN(element.attributeValue("name"), null, null);
-		}
-
-		return new Activity(ActivityType.parseOra10gBpelActivityType(element.getName()), element.attributeValue("name"));
-	}
+	// /**
+	// * parse BPEL activities by type
+	// *
+	// * @param element
+	// * @return
+	// */
+	// private final Activity parseBpelActivity(Element element) {
+	//
+	// if (element.getName().equals("receive")) {
+	// return new Receive(element.attributeValue("name"),
+	// element.attributeValue("variable"),
+	// element.attributeValue("partnerLink"),
+	// element.attributeValue("operation"));
+	// } else if (element.getName().equals("invoke")) {
+	// return new Invoke(element.attributeValue("name"),
+	// element.attributeValue("inputVariable"),
+	// element.attributeValue("outputVariable"),
+	// element.attributeValue("partnerLink"),
+	// element.attributeValue("operation"));
+	// } else if (element.getName().equals("reply")) {
+	// return new Reply(element.attributeValue("name"),
+	// element.attributeValue("variable"),
+	// element.attributeValue("partnerLink"),
+	// element.attributeValue("operation"));
+	// } else if (element.getName().equals("throw")) {
+	// return new Throw(element.attributeValue("name"),
+	// element.attributeValue("faultVariable"));
+	// } else if (element.getName().equals("onMessage")) {
+	// return new OnMessage(element.attributeValue("variable"),
+	// element.attributeValue("partnerLink"),
+	// element.attributeValue("operation"),
+	// element.attributeValue("headerVariable"));
+	// } else if (element.getName().equals("catch")) {
+	// return new Catch(element.attributeValue("faultName"),
+	// element.attributeValue("faultVariable"));
+	// } else if (element.getName().equals("assign")) {
+	// Element eAnnotation = element.element("annotation");
+	// if (eAnnotation != null) {
+	// Element ePattern = eAnnotation.element("pattern");
+	// if (ePattern != null && "transformation".equals(ePattern.getText())) {
+	// return new Transform(element.attributeValue("name"), null, null);
+	// }
+	// }
+	// return new Assign(element.attributeValue("name"));
+	// } else if (element.getName().equals("case")) {
+	// Element eAnnotation = element.element("annotation");
+	// if (eAnnotation != null) {
+	// Element ePattern = eAnnotation.element("pattern");
+	// if (ePattern != null) {
+	// if (ePattern.attributeValue("patternName") != null &&
+	// "case".equals(ePattern.attributeValue("patternName"))) {
+	// return new Case(ePattern.getText(),
+	// getVariableFromExpression(element.attributeValue("condition")));
+	// }
+	// }
+	// }
+	// } else if (element.getName().equals("otherwise")) {
+	// return new CaseOtherwise("otherwise");
+	// } else if (element.getName().equals("scope")) {
+	// Element eAnnotation = element.element("annotation");
+	// if (eAnnotation != null) {
+	// Element ePattern = eAnnotation.element("pattern");
+	// if (ePattern != null) {
+	// String patternName = ePattern.attributeValue("patternName");
+	// if (patternName != null) {
+	// if (patternName.endsWith(":email")) {
+	// return new Email(element.attributeValue("name"));
+	// } else if (patternName.endsWith(":fax")) {
+	// return new Fax(element.attributeValue("name"));
+	// } else if (patternName.endsWith(":sms")) {
+	// return new Sms(element.attributeValue("name"));
+	// } else if (patternName.endsWith(":voice")) {
+	// return new Voice(element.attributeValue("name"));
+	// } else if (patternName.endsWith(":pager")) {
+	// return new Pager(element.attributeValue("name"));
+	// } else if (patternName.endsWith(":workflow")) {
+	// return new HumanTask(element.attributeValue("name"));
+	// }
+	// }
+	// }
+	// }
+	// } else if (element.getName().equals("onAlarm")) {
+	// return new OnAlarm(null);
+	// } else if (element.getName().equals("wait")) {
+	// return new Wait(element.attributeValue("name"), null);
+	// } else if (element.getName().equals("while")) {
+	// return new While(element.attributeValue("name"), null, null);
+	// } else if (element.getName().equals("flowN")) {
+	// return new FlowN(element.attributeValue("name"), null, null);
+	// }
+	//
+	// return new
+	// Activity(ActivityType.parseOra10gBpelActivityType(element.getName()),
+	// element.attributeValue("name"));
+	// }
 
 	/**
 	 * parse special scopes for example: email, sms, voice and fax
@@ -607,76 +646,108 @@ public final class Ora10gBpelParser extends AbstractParser {
 		parseBpelProcessActivities(element.elements(), activity, strukture);
 	}
 
-	/**
-	 * parse all partnerlinks in the BPEL process
-	 * 
-	 * @param element
-	 * @param bpelOperations
-	 * @throws ServiceParserException
-	 */
-	private void parseBpelOperations(Element element, Ora10gBpelProject bpelProject) throws ServiceParserException {
-		List<?> eList = element.element("partnerLinks").elements("partnerLink");
-		for (Object e : eList) {
-			Element ePartnerLink = (Element) e;
-			String partnerLinkName = ePartnerLink.attributeValue("name");
-			findUsageForPartnerLink(partnerLinkName, bpelProject, element);
-		}
-	}
+	// /**
+	// * parse all partnerlinks in the BPEL process
+	// *
+	// * @param element
+	// * @param bpelOperations
+	// * @throws ServiceParserException
+	// */
+	// private void parseBpelOperations(Element element, Ora10gBpelProject
+	// bpelProject) throws ServiceParserException {
+	// List<?> eList = element.element("partnerLinks").elements("partnerLink");
+	// for (Object e : eList) {
+	// Element ePartnerLink = (Element) e;
+	// String partnerLinkName = ePartnerLink.attributeValue("name");
+	// findUsageForPartnerLink(partnerLinkName, bpelProject, element);
+	// }
+	// }
 
-	/**
-	 * find usage for partner link
-	 * 
-	 * @param partnerLinkName
-	 * @param bpelOperations
-	 * @param root
-	 */
-	private final void findUsageForPartnerLink(String partnerLinkName, Ora10gBpelProject bpelProject, Element root) {
-		List<?> listOfElements = root.elements();
-		if (listOfElements != null) {
-			for (Object e : listOfElements) {
-				Element element = (Element) e;
-				if (element.getName().equals("receive") || element.getName().equals("invoke") || element.getName().equals("reply") || element.getName().equals("onMessage")) {
+	// /**
+	// * find usage for partner link
+	// *
+	// * @param partnerLinkName
+	// * @param bpelOperations
+	// * @param root
+	// */
+	// private final void findUsageForPartnerLink(String partnerLinkName,
+	// Ora10gBpelProject bpelProject, Element root) {
+	// List<?> listOfElements = root.elements();
+	// if (listOfElements != null) {
+	// for (Object e : listOfElements) {
+	// Element element = (Element) e;
+	// if (element.getName().equals("receive") ||
+	// element.getName().equals("invoke") || element.getName().equals("reply")
+	// || element.getName().equals("onMessage")) {
+	//
+	// if (element.attributeValue("partnerLink") == null) {
+	// // TODO: if partnerlink is null then what?
+	// new NullPointerException("").printStackTrace();
+	// } else {
+	// if (element.attributeValue("partnerLink").equals(partnerLinkName)) {
+	// BpelOperations bpelOperations = bpelProject.getBpelOperations();
+	//
+	// Activity activity = parseBpelActivity(element);
+	//
+	// // activity =
+	// //
+	// findRefenceForActivity(bpelProject.getBpelProcessStrukture().getActivities(),
+	// // getOperationPath(element));
+	//
+	// Operation operation = new Operation(activity,
+	// element.attributeValue("operation"), bpelProject,
+	// bpelOperations.getBpelProcess().findPartnerLinkBinding(
+	// element.attributeValue("partnerLink")), getOperationPath(element));
+	// bpelOperations.addOperation(operation);
+	// }
+	// }
+	// }
+	// findUsageForPartnerLink(partnerLinkName, bpelProject, element);
+	// }
+	// }
+	// }
 
-					if (element.attributeValue("partnerLink") == null) {
-						// TODO: if partnerlink is null then what?
-						new NullPointerException("").printStackTrace();
-					} else {
-						if (element.attributeValue("partnerLink").equals(partnerLinkName)) {
-							BpelOperations bpelOperations = bpelProject.getBpelOperations();
+	// private final Activity findRefenceForActivity(List<Activity>
+	// struktureActivities, List<Activity> activities) {
+	// Activity realActivity = null;
+	// for (Activity activity : activities) {
+	// realActivity = findRefenceForActivity(activity,
+	// struktureActivities.get(0).getActivities());
+	// }
+	//
+	// return realActivity;
+	// }
+	//
+	// private final Activity findRefenceForActivity(Activity activity,
+	// List<Activity> struktureActivities) {
+	// for (Activity structureActivty : struktureActivities) {
+	// if (activity.getName().equals(structureActivty.getName()) &&
+	// activity.getActivtyType() == structureActivty.getActivtyType()) {
+	// return structureActivty;
+	// }
+	// }
+	// return null;
+	// }
 
-							Activity activity = parseBpelActivity(element);
-
-							Operation operation = new Operation(activity, element.attributeValue("operation"), bpelProject, bpelOperations.getBpelProcess().findPartnerLinkBinding(
-									element.attributeValue("partnerLink")));// ,
-																			// getOperationPath(element));
-							bpelOperations.addOperation(operation);
-						}
-					}
-				}
-				findUsageForPartnerLink(partnerLinkName, bpelProject, element);
-			}
-		}
-	}
-
-	/**
-	 * 
-	 * find operation path
-	 * 
-	 * 
-	 * @param element
-	 * @return
-	 */
-	private final List<Activity> getOperationPath(Element element) {
-		List<Activity> activities = new ArrayList<Activity>();
-		while (element.getParent() != null) {
-
-			Activity activity = parseBpelActivity(element);
-			activities.add(activity);
-			element = element.getParent();
-
-		}
-		return activities;
-	}
+	// /**
+	// *
+	// * find operation path
+	// *
+	// *
+	// * @param element
+	// * @return
+	// */
+	// private final List<Activity> getOperationPath(Element element) {
+	// List<Activity> activities = new ArrayList<Activity>();
+	// while (element.getParent() != null) {
+	//
+	// Activity activity = parseBpelActivity(element);
+	// activities.add(activity);
+	// element = element.getParent();
+	//
+	// }
+	// return activities;
+	// }
 
 	/**
 	 * parse BPEL in by WSDL
@@ -695,7 +766,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 
 				Ora10gBpelProject bpelProject = findParsedProcess(processName, partnerLinkBinding.getParent().getBpelXmlFile());
 				if (bpelProject == null) {
-					partnerLinkBinding.setUnknownProject(new UnknownProject(partnerLinkBinding));
+					partnerLinkBinding.setUnknownProject(parseProjectFromWsdl(partnerLinkBinding));
 				} else {
 					partnerLinkBinding.setDependencyBpelProject(bpelProject);
 				}
@@ -721,12 +792,94 @@ public final class Ora10gBpelParser extends AbstractParser {
 				if (findBpelProject != null) {
 					partnerLinkBinding.setDependencyBpelProject(findBpelProject);
 				} else {
-					partnerLinkBinding.setUnknownProject(new UnknownProject(partnerLinkBinding));
+					partnerLinkBinding.setUnknownProject(parseProjectFromWsdl(partnerLinkBinding));
 				}
 			} else {
-				partnerLinkBinding.setUnknownProject(new UnknownProject(partnerLinkBinding));
+				partnerLinkBinding.setUnknownProject(parseProjectFromWsdl(partnerLinkBinding));
 			}
 		}
+	}
+
+	/**
+	 * 
+	 * parse the type of project {@link UnknownProjectType} from WSDL
+	 * 
+	 * @param wsdlFile
+	 * @param partnerLinkBinding
+	 * @return
+	 */
+	public static final UnknownProject parseProjectFromWsdl(PartnerLinkBinding partnerLinkBinding) {
+		try {
+
+			// parse unknown WSDL type
+
+			UnknownProject unknownProject = parseProjectFromWsdlURL(partnerLinkBinding);
+			if (unknownProject != null) {
+				return unknownProject;
+			}
+
+			File wsdlFile = new File(partnerLinkBinding.getWsdlLocation());
+			if (wsdlFile.exists()) {
+				Element element = new SAXReader().read(new FileInputStream(wsdlFile)).getRootElement();
+				return parseUnknowProjetType(element.attributeValue("targetNamespace"), partnerLinkBinding);
+
+			} else {
+
+				wsdlFile = new File(partnerLinkBinding.getParent().getFile() + File.separator + "bpel" + File.separator + partnerLinkBinding.getWsdlLocation());
+				if (wsdlFile.exists()) {
+					Element element = new SAXReader().read(new FileInputStream(wsdlFile)).getRootElement();
+					return parseUnknowProjetType(element.attributeValue("targetNamespace"), partnerLinkBinding);
+				}
+
+			}
+
+		} catch (Exception e) {
+		}
+		return new UnknownProject(partnerLinkBinding);
+	}
+
+	private static final UnknownProject parseProjectFromWsdlURL(PartnerLinkBinding partnerLinkBinding) {
+		try {
+			URL url = new URL(partnerLinkBinding.getWsdlLocation());
+			File wsdlFile = new File(url.getPath());
+			if (wsdlFile.exists()) {
+				Element element = new SAXReader().read(new FileInputStream(wsdlFile)).getRootElement();
+				return parseUnknowProjetType(element.attributeValue("targetNamespace"), partnerLinkBinding);
+			}
+		} catch (Exception e) {
+
+		}
+
+		return null;
+	}
+
+	/**
+	 * 
+	 * find the type of project {@link UnknownProjectType}, according to
+	 * namespace
+	 * 
+	 * @param namespace
+	 * @param partnerLinkBinding
+	 * @return
+	 */
+	private static final UnknownProject parseUnknowProjetType(String namespace, PartnerLinkBinding partnerLinkBinding) {
+		if (namespace == null) {
+			return new UnknownProject(partnerLinkBinding);
+		} else if (namespace.contains("pcbpel/adapter/ftp")) {
+			return new UnknownProject(partnerLinkBinding, UnknownProjectType.FTP);
+		} else if (namespace.contains("pcbpel/adapter/jms")) {
+			return new UnknownProject(partnerLinkBinding, UnknownProjectType.JMS);
+		} else if (namespace.contains("pcbpel/adapter/file")) {
+			return new UnknownProject(partnerLinkBinding, UnknownProjectType.FILE);
+		} else if (namespace.contains("pcbpel/adapter/db")) {
+			return new UnknownProject(partnerLinkBinding, UnknownProjectType.DB);
+		} else if (namespace.contains("pcbpel/adapter/aq")) {
+			return new UnknownProject(partnerLinkBinding, UnknownProjectType.AQ);
+		} else if (namespace.contains("pcbpel/adapter/mq")) {
+			return new UnknownProject(partnerLinkBinding, UnknownProjectType.MQ);
+		}
+
+		return new UnknownProject(partnerLinkBinding);
 	}
 
 	/**

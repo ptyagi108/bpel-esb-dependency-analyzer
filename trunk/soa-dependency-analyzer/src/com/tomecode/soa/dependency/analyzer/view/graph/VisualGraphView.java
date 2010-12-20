@@ -65,7 +65,11 @@ import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependencies;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gMultiWorkspace;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gWorkspace;
+import com.tomecode.soa.ora.suite10g.esb.EsbOperation;
+import com.tomecode.soa.ora.suite10g.esb.EsbRoutingRule;
+import com.tomecode.soa.ora.suite10g.esb.EsbSvc;
 import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
+import com.tomecode.soa.ora.suite10g.project.BpelOperations;
 import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
 import com.tomecode.soa.ora.suite10g.project.PartnerLinkBinding;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gMultiWorkspace;
@@ -81,7 +85,7 @@ import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 /**
  * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
- * Visual graph for visualizing dependencies between servies/processes
+ * Visual graph for visualizing dependencies between services/processes
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
@@ -238,6 +242,10 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 				Service service = (Service) selectedGraphNode.getData();
 				clearGraph();
 				createProxyAndService(service, existsSource);
+			} else if (selectedGraphNode.getData() instanceof EsbSvc) {
+				EsbSvc esbSvc = (EsbSvc) selectedGraphNode.getData();
+				clearGraph();
+				createEsbSvcGraph(esbSvc, existsSource);
 			}
 		}
 	}
@@ -385,7 +393,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 			}
 			BpelProcessStructureNavigator bpelProcessStructureNavigator = GuiUtils.getBpelProcessStructureNavigator();
 			if (bpelProcessStructureNavigator != null) {
-				bpelProcessStructureNavigator.showProcessStructure(graphNode.getData());
+				bpelProcessStructureNavigator.show(graphNode.getData());
 			}
 			ServiceBusStructureNavigator serviceBusStructureNavigator = GuiUtils.getServiceBusStructureNavigator();
 			if (serviceBusStructureNavigator != null) {
@@ -457,6 +465,11 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 		// if (addToBrowser) {
 		// browserManager.add(source);
 		// }
+
+		if (source instanceof BpelOperations) {
+			source = ((BpelOperations) source).getBpelProcess();
+		}
+
 		if (source instanceof MultiWorkspace) {
 			MultiWorkspace multiWorkspace = (MultiWorkspace) source;
 			createMultiWorkspaceAndWorkspaceGraph(multiWorkspace);
@@ -469,6 +482,10 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 		} else if (source instanceof BpelProcess) {
 			BpelProcess bpelProcess = (BpelProcess) source;
 			createProcessAndProcessGraph(bpelProcess, null);
+		} else if (source instanceof EsbSvc) {
+			EsbSvc esbSvc = (EsbSvc) source;
+			// createProjectAndProjectGraph(esbSvc.getOwnerEsbProject(), null);
+			createEsbSvcGraph(esbSvc, null);
 		} else if (source instanceof Service) {
 			applyDependencies((Service) source, null);
 		}
@@ -477,6 +494,87 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 		isExpandInGraph = backup;
 	}
 
+	/**
+	 * show ESB service and him parent project
+	 * 
+	 * @param sourceEsbSvc
+	 * @param existsSource
+	 */
+	private final void createEsbSvcGraph(EsbSvc sourceEsbSvc, GraphNode existsSource) {
+		GraphNode source = existsSource == null ? createNode(sourceEsbSvc.getName(), sourceEsbSvc.getImage(), sourceEsbSvc, ToolTipFactory.createToolTip(sourceEsbSvc)) : existsSource;
+
+		Ora10gEsbProject rootEsbProject = sourceEsbSvc.getProject();
+		GraphNode project = findDataInNodes(rootEsbProject);
+		if (project == null) {
+			GraphNode nodeEsbProject = createNode(rootEsbProject.getName(), rootEsbProject.getImage(), rootEsbProject, ToolTipFactory.createToolTip(rootEsbProject));
+			createConnection(nodeEsbProject, source, null, null, false);
+		}
+
+		for (EsbOperation esbOperation : sourceEsbSvc.getEsbOperations()) {
+			for (Object dep : esbOperation.getDependencies()) {
+				GraphNode destination = findDataInNodes(dep);
+				if (destination != null) {
+					if (findConnection(source, destination) == null) {
+						createConnection(source, destination, esbOperation, null, false);
+					}
+				} else {
+					if (dep instanceof Ora10gBpelProject) {
+						GraphNode depDestination = findDataInNodes(dep);
+						if (depDestination == null) {
+							Ora10gBpelProject bpelProject = (Ora10gBpelProject) dep;
+							depDestination = createNode(bpelProject.getName(), bpelProject.getImage(), bpelProject, ToolTipFactory.createToolTip(bpelProject));
+							createConnection(source, depDestination, esbOperation, null, false);
+						} else {
+							if (findConnection(source, depDestination) != null) {
+								createConnection(source, depDestination, esbOperation, null, false);
+							}
+						}
+
+					} else if (dep instanceof Ora10gEsbProject) {
+						GraphNode depDestination = findDataInNodes(dep);
+						if (depDestination == null) {
+							Ora10gEsbProject esbProject = (Ora10gEsbProject) dep;
+							depDestination = createNode(esbProject.getName(), esbProject.getImage(), esbProject, ToolTipFactory.createToolTip(esbProject));
+							createConnection(source, depDestination, esbOperation, null, false);
+						} else {
+							createConnection(source, depDestination, esbOperation, null, false);
+						}
+					} else if (dep instanceof EsbRoutingRule) {
+						EsbRoutingRule esbRoutingRule = (EsbRoutingRule) dep;
+						for (EsbSvc rsEsbSvc : esbRoutingRule.getEsbSvcs()) {
+							GraphNode depDestination = findDataInNodes(rsEsbSvc);
+							if (depDestination == null) {
+								depDestination = createNode(rsEsbSvc.getName(), rsEsbSvc.getImage(), rsEsbSvc, ToolTipFactory.createToolTip(rsEsbSvc));
+								createConnection(source, depDestination, esbOperation, null, false);
+							} else {
+								createConnection(source, depDestination, esbOperation, null, false);
+							}
+
+						}
+
+					} else if (dep instanceof EsbSvc) {
+						GraphNode depDestination = findDataInNodes(dep);
+						if (depDestination == null) {
+							EsbSvc esbSvc = (EsbSvc) dep;
+							depDestination = createNode(esbSvc.getName(), esbSvc.getImage(), esbSvc, ToolTipFactory.createToolTip(esbSvc));
+							createConnection(source, depDestination, esbOperation, null, false);
+						} else {
+							createConnection(source, depDestination, esbOperation, null, false);
+						}
+
+					}
+
+				}
+			}
+		}
+	}
+
+	/**
+	 * show dependencies for OSB 10g Service (proxy, businesses)
+	 * 
+	 * @param sourceService
+	 * @param existsSource
+	 */
 	private final void applyDependencies(Service sourceService, GraphNode existsSource) {
 
 		GraphNode source = existsSource == null ? createNode(sourceService.getName(), sourceService.getImage(), sourceService, ToolTipFactory.createToolTip(sourceService)) : existsSource;
@@ -639,6 +737,10 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 		} else if (project.getType() == ProjectType.ORACLE_SERVICE_BUS_1OG) {
 			OraSB10gProject oraSB10gProject = (OraSB10gProject) project;
 			applyDependencies(oraSB10gProject, existsSource);
+		} else if (project.getType() == ProjectType.UNKNOWN) {
+			if (findDataInNodes(project) == null) {
+				createNode(project.getName(), project.getImage(), project, ToolTipFactory.createToolTip(project));
+			}
 		}
 	}
 
@@ -649,6 +751,28 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	 */
 	private final void applyDependencies(Ora10gEsbProject project, GraphNode existsSource) {
 		GraphNode source = existsSource == null ? createNode(project.getName(), project.getImage(), project, ToolTipFactory.createToolTip(project)) : existsSource;
+
+		for (Project depProject : project.getProjectDependecies()) {
+			GraphNode destination = findDataInNodes(depProject);
+			if (destination != null && !(depProject instanceof UnknownProject)) {
+				destination = createNode(project.getName(), project.getImage(), project, ToolTipFactory.createToolTip(project));
+				createConnection(source, destination, null, null, false);
+			}
+		}
+
+		for (EsbSvc esbSvc : project.getAllEsbSvc()) {
+			GraphNode destination = findDataInNodes(esbSvc);
+			if (destination == null) {
+				destination = createNode(esbSvc.getName(), esbSvc.getImage(), esbSvc, ToolTipFactory.createToolTip(esbSvc));
+				createConnection(source, destination, esbSvc, null, false);
+			} else {
+				GraphConnection connection = findConnection(source, destination);
+				if (connection == null) {
+					createConnection(source, destination, esbSvc, null, false);
+				}
+			}
+		}
+
 	}
 
 	/**

@@ -13,11 +13,13 @@ import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * this object contains all projects(BPEL, ESB) in workspace
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
- *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
 public final class OpenEsbWorkspace implements Workspace {
 
@@ -95,8 +97,7 @@ public final class OpenEsbWorkspace implements Workspace {
 
 	@Override
 	public final String getToolTip() {
-		return "Workspace: Open Esb" + name + "\n\n"
-				+ (file != null ? file.getPath() : "");
+		return "Workspace: Open Esb" + name + "\n\nPath:" + (file != null ? file.getPath() : "");
 	}
 
 }

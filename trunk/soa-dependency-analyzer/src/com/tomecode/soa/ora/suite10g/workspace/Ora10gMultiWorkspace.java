@@ -114,6 +114,6 @@ public final class Ora10gMultiWorkspace implements MultiWorkspace {
 
 	@Override
 	public final String getToolTip() {
-		return "MultiWorkspace: Oracle SOA Suite 10g: " + name + "\n\n" + (file != null ? file.getPath() : "");
+		return "MultiWorkspace: Oracle SOA Suite 10g: " + name + "\n\nPath:" + (file != null ? file.getPath() : "");
 	}
 }

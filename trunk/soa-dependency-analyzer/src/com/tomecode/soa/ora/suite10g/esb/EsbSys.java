@@ -196,4 +196,28 @@ public final class EsbSys implements BasicEsbNode {
 	public final String getToolTip() {
 		return getName() + (file != null ? " - " + file.getPath() : "");
 	}
+
+	public final EsbSvc findEsbSvcByQname(String qname) {
+		for (BasicEsbNode basicEsbNode : childs) {
+			if (basicEsbNode.getType() == EsbNodeType.ESBSVC) {
+				EsbSvc esbSvc = (EsbSvc) basicEsbNode.get();
+				if (esbSvc.getQname().equals(qname)) {
+					return esbSvc;
+				}
+			} else if (basicEsbNode.getType() == EsbNodeType.ESBSYS) {
+				EsbSys esbSys = (EsbSys) basicEsbNode;
+				EsbSvc esbSvc = esbSys.findEsbSvcByQname(qname);
+				if (esbSvc != null) {
+					return null;
+				}
+			} else if (basicEsbNode.getType() == EsbNodeType.ESBGRP) {
+				EsbGrp esbGrp = (EsbGrp) basicEsbNode;
+				EsbSvc esbSvc = esbGrp.findEsbSvcByQname(qname);
+				if (esbSvc != null) {
+					return esbSvc;
+				}
+			}
+		}
+		return null;
+	}
 }

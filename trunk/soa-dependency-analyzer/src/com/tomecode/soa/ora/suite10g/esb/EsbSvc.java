@@ -48,6 +48,9 @@ public final class EsbSvc implements BasicEsbNode {
 	 */
 	private Ora10gEsbProject ownerEsbProject;
 
+	private String targetServiceQName;
+	private EsbSvc targetService;
+
 	/**
 	 * Constructor
 	 */
@@ -70,11 +73,21 @@ public final class EsbSvc implements BasicEsbNode {
 		this.qName = qName;
 	}
 
-	public final Ora10gEsbProject getOwnerEsbProject() {
+	/**
+	 * parent project
+	 * 
+	 * @return
+	 */
+	public final Ora10gEsbProject getProject() {
 		return ownerEsbProject;
 	}
 
-	public final void setOwnerEsbProject(Ora10gEsbProject esbProject) {
+	/**
+	 * set parent project
+	 * 
+	 * @param esbProject
+	 */
+	public final void setProject(Ora10gEsbProject esbProject) {
 		this.ownerEsbProject = esbProject;
 	}
 
@@ -170,7 +183,7 @@ public final class EsbSvc implements BasicEsbNode {
 	}
 
 	/**
-	 * find {@link Ora10gEsbProject} by qname
+	 * find {@link Ora10gEsbProject} by qName
 	 * 
 	 * @param qName
 	 * @param sericeURL
@@ -201,17 +214,24 @@ public final class EsbSvc implements BasicEsbNode {
 		} else if (ServiceType.ExternalService == serviceType) {
 			return ImageFactory.ORACLE_10G_ESB_SOAP_SERVICE;
 		} else if (ServiceSubType.File == serviceSubType) {
-			return ImageFactory.ORACLE_10G_ESB_FILE;
+			return ImageFactory.ORACLE_10G_ESB_FILE_ADAPTER;
 		} else if (ServiceType.RoutingService == serviceType) {
 			return ImageFactory.ORACLE_10G_ESB_ROUTING_SERVICE;
 		} else if (ServiceSubType.FTP == serviceSubType) {
-			return ImageFactory.ORACLE_10G_ESB_FTP;
+			return ImageFactory.ORACLE_10G_ESB_FTP_ADAPTER;
 		}
 
 		return ImageFactory.ORACLE_10G_SERVICE;
 	}
 
 	/**
+	 * 
+	 * type of sub ESB service
+	 * 
+	 * (c) Copyright Tomecode.com, 2010. All rights reserved.
+	 * 
+	 * Oracle 10g ESB SVC service
+	 * 
 	 * @author Tomas Frastia
 	 * @see http://www.tomecode.com
 	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
@@ -232,6 +252,8 @@ public final class EsbSvc implements BasicEsbNode {
 
 	/**
 	 * (c) Copyright Tomecode.com, 2010. All rights reserved.
+	 * 
+	 * type of ESB service
 	 * 
 	 * @author Tomas Frastia
 	 * @see http://www.tomecode.com
@@ -256,4 +278,30 @@ public final class EsbSvc implements BasicEsbNode {
 	public final String getToolTip() {
 		return (typeDescription != null ? typeDescription + ": " : "") + name + " - " + (file != null ? file.getPath() : "");
 	}
+
+	public final String getTargetServiceQName() {
+		return targetServiceQName;
+	}
+
+	public final void setTargetServiceQName(String targetServiceQName) {
+		this.targetServiceQName = targetServiceQName;
+	}
+
+	public final EsbSvc getTargetService() {
+		return targetService;
+	}
+
+	public final void setTargetService(EsbSvc targetService) {
+		this.targetService = targetService;
+	}
+
+	public final EsbOperation getOperation(String wsdlOperation) {
+		for (EsbOperation esbOperation : childs) {
+			if (esbOperation.getWsdlOperation().equals(wsdlOperation)) {
+				return esbOperation;
+			}
+		}
+		return null;
+	}
+
 }

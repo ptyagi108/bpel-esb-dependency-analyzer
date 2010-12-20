@@ -210,7 +210,7 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 			if (!selection.isEmpty()) {
 				BpelProcessStructureNavigator bpelProcessStructureNavigator = GuiUtils.getBpelProcessStructureNavigator();
 				if (bpelProcessStructureNavigator != null) {
-					bpelProcessStructureNavigator.showProcessStructure(selection.getFirstElement());
+					bpelProcessStructureNavigator.show(selection.getFirstElement());
 				}
 				ServiceOperationsDepNavigator serviceOperationsDepNavigator = GuiUtils.getServiceOperationsDepNavigator();
 				if (serviceOperationsDepNavigator != null) {
@@ -229,7 +229,7 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			MessageDialog.openError(null, "Error", "oops2 error:" + e.getMessage());
+			MessageDialog.openError(null, "Error", "oops error:" + e.getMessage());
 		}
 	}
 
@@ -242,7 +242,7 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			MessageDialog.openError(null, "Error", "oops2 error:" + e.getMessage());
+			MessageDialog.openError(null, "Error", "oops error:" + e.getMessage());
 		}
 	}
 
@@ -268,6 +268,9 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 	}
 
 	/**
+	 * (c) Copyright Tomecode.com, 2010. All rights reserved.
+	 * 
+	 * 
 	 * {@link LabelProvider} for {@link WorkspacesNavigator}
 	 * 
 	 * @author Tomas Frastia

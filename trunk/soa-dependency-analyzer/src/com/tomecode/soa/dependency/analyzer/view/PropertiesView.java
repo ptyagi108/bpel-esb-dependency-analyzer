@@ -96,6 +96,9 @@ public final class PropertiesView extends ViewPart implements HideView {
 	private Text txtProcessProjectMultiWorkspaceName;
 	private Text txtProcessProjectMultiWorkspacePath;
 
+	/**
+	 * Constructor
+	 */
 	public PropertiesView() {
 		setTitleImage(ImageFactory.PROPERTIES);
 	}

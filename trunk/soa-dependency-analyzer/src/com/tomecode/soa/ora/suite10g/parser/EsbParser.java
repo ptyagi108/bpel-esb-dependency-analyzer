@@ -9,12 +9,12 @@ import org.dom4j.Element;
 
 import com.tomecode.soa.ora.suite10g.esb.EsbGrp;
 import com.tomecode.soa.ora.suite10g.esb.EsbOperation;
-import com.tomecode.soa.ora.suite10g.esb.EsbSvc.ServiceSubType;
-import com.tomecode.soa.ora.suite10g.esb.EsbSvc.ServiceType;
-import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.ora.suite10g.esb.EsbRoutingRule;
 import com.tomecode.soa.ora.suite10g.esb.EsbSvc;
+import com.tomecode.soa.ora.suite10g.esb.EsbSvc.ServiceSubType;
+import com.tomecode.soa.ora.suite10g.esb.EsbSvc.ServiceType;
 import com.tomecode.soa.ora.suite10g.esb.EsbSys;
+import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.ora.suite10g.project.PartnerLinkBinding;
 import com.tomecode.soa.parser.AbstractParser;
 import com.tomecode.soa.parser.ServiceParserException;
@@ -163,12 +163,12 @@ public final class EsbParser extends AbstractParser {
 	public final void parseEsbsvc(File file, Ora10gEsbProject esbProject) throws ServiceParserException {
 		Element eService = parseXml(file);
 
-		if (file.getName().equals("DefaultSystem_JMSAdapterE.esbsvc")) {
+		if (file.getName().equals("Infrastructure_Logging_LoggerReader_RS.esbsvc")) {
 			file.toString();
 		}
 
 		EsbSvc esb = new EsbSvc(file, eService.attributeValue("name"), eService.attributeValue("qname"));
-		esb.setOwnerEsbProject(esbProject);
+		esb.setProject(esbProject);
 
 		esb.setServiceType(ServiceType.parse(eService.attributeValue("serviceType")));
 		esb.setServiceSubType(ServiceSubType.parse(eService.attributeValue("serviceSubType")));
@@ -204,6 +204,20 @@ public final class EsbParser extends AbstractParser {
 			}
 		}
 
+		Element eInvocation = eService.element("invocation");
+		if (eInvocation != null) {
+			Element eInterface = eService.element("interface");
+			if (eInterface != null) {
+
+			}
+
+			Element eTargetService = eInvocation.element("targetService");
+			if (eTargetService != null) {
+				esb.setTargetServiceQName(eTargetService.attributeValue("qname"));
+			}
+		}
+
+		esb.toString();
 	}
 
 	/**
@@ -219,7 +233,7 @@ public final class EsbParser extends AbstractParser {
 			List<Element> operations = eOperations.elements("operationInfo");
 			if (operations != null) {
 				for (Element operation : operations) {
-					EsbOperation esbOperation = new EsbOperation(operation.attributeValue("qname"), operation.attributeValue("wsdlOperation"));
+					EsbOperation esbOperation = new EsbOperation(operation.attributeValue("qname"), operation.attributeValue("wsdlOperation"), operation.attributeValue("mep"));
 					esb.addEsbOperation(esbOperation);
 					parseRoutingRule(esbOperation, operation);
 				}

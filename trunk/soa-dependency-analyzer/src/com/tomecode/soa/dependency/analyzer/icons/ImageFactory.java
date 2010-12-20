@@ -112,7 +112,10 @@ public final class ImageFactory {
 	public static final Image ORACLE_10G_WAIT = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/wait.png").createImage();
 	public static final Image ORACLE_10G_WHILE = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/while.png").createImage();
 	public static final Image ORACLE_10G_PAGER = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/pager.png").createImage();
-	public static final Image ORACLE_10G_OPERATION = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/operation.gif").createImage();
+	public static final Image ORACLE_10G_OPERATION_REQUEST = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/operationRequest.png").createImage();
+	public static final Image ORACLE_10G_OPERATION_REQUEST_RESPONSE = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/operationRequestResponse.png").createImage();
+	public static final Image ORACLE_10G_ROUTING_RULES = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/routingRules.png").createImage();
+
 	public static final Image ORACLE_10G_SEARCH = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/search.png").createImage();
 	public static final Image ORACLE_10G_ERROR = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/error.png").createImage();
 	public static final Image ORACLE_10G_ISSUES = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/issues.png").createImage();
@@ -233,9 +236,11 @@ public final class ImageFactory {
 	public static final Image ORACLE_10G_ESB_JMS_ADAPTER = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbJmsAdapter.png").createImage();
 	public static Image ORACLE_10G_ESB_DB_ADAPTER = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbDBadapter.png").createImage();
 	public static Image ORACLE_10G_ESB_SOAP_SERVICE = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbSOAPservice.png").createImage();
-	public static Image ORACLE_10G_ESB_FILE = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbFileAdapter.png").createImage();
+	public static Image ORACLE_10G_ESB_FILE_ADAPTER = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbFileAdapter.png").createImage();
 	public static Image ORACLE_10G_ESB_ROUTING_SERVICE = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbRoutingService.png").createImage();
-	public static Image ORACLE_10G_ESB_FTP = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbFtpAdapter.png").createImage();
+	public static Image ORACLE_10G_ESB_FTP_ADAPTER = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbFtpAdapter.png").createImage();
+	public static Image ORACLE_10G_ESB_AQ_ADAPTER = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbAQAdapter.png").createImage();
+	public static Image ORACLE_10G_ESB_MQ_ADAPTER = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbMQadapter.png").createImage();
 
 	private ImageFactory() {
 	}
