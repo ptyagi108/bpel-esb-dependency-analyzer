@@ -10,6 +10,7 @@ import org.eclipse.zest.core.widgets.Graph;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Better zoom contribution for graph:)
  * 
@@ -17,6 +18,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
+@SuppressWarnings("restriction")
 public final class ZoomHelper {
 
 	private final ZoomManager zoomManager;
@@ -95,10 +97,13 @@ public final class ZoomHelper {
 	}
 
 	/**
-	 * Zoom in
+	 * (c) Copyright Tomecode.com, 2010. All rights reserved.
 	 * 
-	 * @author Tomas Fratia
+	 * Zoom in action
 	 * 
+	 * @author Tomas Frastia
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
 	 */
 	public final class ZoomInAction extends Action {
 
@@ -116,11 +121,13 @@ public final class ZoomHelper {
 	}
 
 	/**
+	 * (c) Copyright Tomecode.com, 2010. All rights reserved.
 	 * 
-	 * Zoom out
+	 * Zoom out action
 	 * 
 	 * @author Tomas Frastia
-	 * 
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
 	 */
 	public final class ZoomOutAction extends Action {
 
@@ -138,11 +145,13 @@ public final class ZoomHelper {
 	}
 
 	/**
+	 * (c) Copyright Tomecode.com, 2010. All rights reserved.
 	 * 
 	 * Zoom action
 	 * 
 	 * @author Tomas Frastia
-	 * 
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
 	 */
 	public final class ZoomAction extends Action {
 

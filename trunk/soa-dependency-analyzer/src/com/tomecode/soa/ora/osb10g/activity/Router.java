@@ -5,10 +5,13 @@ import org.eclipse.swt.graphics.Image;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * element: router
  * 
  * @author Tomas Frastia
- * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
 public final class Router extends OsbActivity {
 
@@ -17,7 +20,11 @@ public final class Router extends OsbActivity {
 	}
 
 	@Override
-	public Image getImage() {
+	public final Image getImage() {
 		return ImageFactory.OSB_10G_ROUTER;
+	}
+
+	public final String getToolTip() {
+		return "Type: Router";
 	}
 }

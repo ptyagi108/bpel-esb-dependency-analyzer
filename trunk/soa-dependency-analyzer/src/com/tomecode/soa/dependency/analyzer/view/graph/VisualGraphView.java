@@ -47,6 +47,7 @@ import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.tree.BpelProcessStructureNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ProjectFilesNavigator;
+import com.tomecode.soa.dependency.analyzer.tree.ProjectServicesNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceBusStructureNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceOperationsDepNavigator;
 import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
@@ -65,9 +66,11 @@ import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependencies;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gMultiWorkspace;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gWorkspace;
+import com.tomecode.soa.ora.suite10g.esb.EsbGrp;
 import com.tomecode.soa.ora.suite10g.esb.EsbOperation;
 import com.tomecode.soa.ora.suite10g.esb.EsbRoutingRule;
 import com.tomecode.soa.ora.suite10g.esb.EsbSvc;
+import com.tomecode.soa.ora.suite10g.esb.EsbSys;
 import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.ora.suite10g.project.BpelOperations;
 import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
@@ -98,6 +101,8 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	public static final String ID = "view.visualgraph";
 
 	private GraphViewer graphViewer;
+
+	private GraphNode lastSelectedNode;
 
 	/**
 	 * if {@link #isExpandInGraph} is true then this objects contains all
@@ -387,30 +392,35 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 
 			setDataForGraphActions(graphNode);
 
+			Object selectedData = graphNode.getData();
 			PropertiesView propertiesView = GuiUtils.getPropertiesView();
 			if (propertiesView != null) {
-				propertiesView.show(graphNode.getData());
+				propertiesView.show(selectedData);
 			}
 			BpelProcessStructureNavigator bpelProcessStructureNavigator = GuiUtils.getBpelProcessStructureNavigator();
 			if (bpelProcessStructureNavigator != null) {
-				bpelProcessStructureNavigator.show(graphNode.getData());
+				bpelProcessStructureNavigator.show(selectedData);
 			}
 			ServiceBusStructureNavigator serviceBusStructureNavigator = GuiUtils.getServiceBusStructureNavigator();
 			if (serviceBusStructureNavigator != null) {
-				serviceBusStructureNavigator.show(graphNode.getData());
+				serviceBusStructureNavigator.show(selectedData);
 			}
 			ServiceOperationsDepNavigator serviceOperationsDepNavigator = GuiUtils.getServiceOperationsDepNavigator();
 			if (serviceOperationsDepNavigator != null) {
-				serviceOperationsDepNavigator.show(graphNode.getData());
+				serviceOperationsDepNavigator.show(selectedData);
+				serviceBusStructureNavigator.showInTree(selectedData);
 			}
 			ProjectFilesNavigator projectStructureNavigator = GuiUtils.getProjectStructureNavigator();
 			if (projectStructureNavigator != null) {
-				projectStructureNavigator.showProjectFiles(graphNode.getData());
+				projectStructureNavigator.showProjectFiles(selectedData);
 			}
-
 			PropertiesViewOsbAdapter propertiesViewOsbAdapter = GuiUtils.getPropertiesViewOsbAdapter();
 			if (propertiesViewOsbAdapter != null) {
-				propertiesViewOsbAdapter.show(graphNode.getData());
+				propertiesViewOsbAdapter.show(selectedData);
+			}
+			ProjectServicesNavigator projectServicesNavigator = GuiUtils.getProjectServicesNavigator();
+			if (projectServicesNavigator != null) {
+				projectServicesNavigator.selectInTree(selectedData);
 			}
 		}
 
@@ -456,42 +466,78 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	 */
 
 	public final void showGraph(Object source) {
+		clearLastSelectedNode();
+		if (!ignore(source)) {
 
-		boolean backup = isExpandInGraph;
-		isExpandInGraph = false;
-		expandedInGraphObjects.clear();
-		clearGraph();
+			boolean backup = isExpandInGraph;
+			isExpandInGraph = false;
+			expandedInGraphObjects.clear();
+			clearGraph();
 
-		// if (addToBrowser) {
-		// browserManager.add(source);
-		// }
+			// if (addToBrowser) {
+			// browserManager.add(source);
+			// }
 
-		if (source instanceof BpelOperations) {
-			source = ((BpelOperations) source).getBpelProcess();
+			if (source instanceof BpelOperations) {
+				source = ((BpelOperations) source).getBpelProcess();
+			}
+
+			if (source instanceof MultiWorkspace) {
+				MultiWorkspace multiWorkspace = (MultiWorkspace) source;
+				createMultiWorkspaceAndWorkspaceGraph(multiWorkspace);
+			} else if (source instanceof Workspace) {
+				Workspace workspace = (Workspace) source;
+				createWorkspaceAndProjectsGraph(workspace, null);
+			} else if (source instanceof Project) {
+				Project project = (Project) source;
+				createProjectAndProjectGraph(project, null);
+			} else if (source instanceof BpelProcess) {
+				BpelProcess bpelProcess = (BpelProcess) source;
+				createProcessAndProcessGraph(bpelProcess, null);
+			} else if (source instanceof EsbSvc) {
+				EsbSvc esbSvc = (EsbSvc) source;
+				// createProjectAndProjectGraph(esbSvc.getOwnerEsbProject(),
+				// null);
+				createEsbSvcGraph(esbSvc, null);
+			} else if (source instanceof Service) {
+				applyDependencies((Service) source, null);
+			}
+
+			graphViewer.getGraphControl().applyLayout();
+			isExpandInGraph = backup;
+
+			selectInGraph(source);
 		}
+	}
 
-		if (source instanceof MultiWorkspace) {
-			MultiWorkspace multiWorkspace = (MultiWorkspace) source;
-			createMultiWorkspaceAndWorkspaceGraph(multiWorkspace);
-		} else if (source instanceof Workspace) {
-			Workspace workspace = (Workspace) source;
-			createWorkspaceAndProjectsGraph(workspace, null);
-		} else if (source instanceof Project) {
-			Project project = (Project) source;
-			createProjectAndProjectGraph(project, null);
-		} else if (source instanceof BpelProcess) {
-			BpelProcess bpelProcess = (BpelProcess) source;
-			createProcessAndProcessGraph(bpelProcess, null);
-		} else if (source instanceof EsbSvc) {
-			EsbSvc esbSvc = (EsbSvc) source;
-			// createProjectAndProjectGraph(esbSvc.getOwnerEsbProject(), null);
-			createEsbSvcGraph(esbSvc, null);
-		} else if (source instanceof Service) {
-			applyDependencies((Service) source, null);
+	/**
+	 * select node in graph
+	 * 
+	 * @param source
+	 */
+	public final void selectInGraph(Object source) {
+		clearLastSelectedNode();
+		for (GraphNode graphNode : graphNodes) {
+			if (graphNode.getData().equals(source)) {
+				graphNode.highlight();
+			}
 		}
+	}
 
-		graphViewer.getGraphControl().applyLayout();
-		isExpandInGraph = backup;
+	private final void clearLastSelectedNode() {
+		if (lastSelectedNode != null) {
+			lastSelectedNode.unhighlight();
+		}
+		lastSelectedNode = null;
+	}
+
+	private final boolean ignore(Object source) {
+		if (source instanceof EsbGrp) {
+			return true;
+		} else if (source instanceof EsbSys) {
+			return true;
+		}
+		return false;
 	}
 
 	/**

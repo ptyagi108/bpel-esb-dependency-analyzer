@@ -194,7 +194,7 @@ public final class EsbSys implements BasicEsbNode {
 
 	@Override
 	public final String getToolTip() {
-		return getName() + (file != null ? " - " + file.getPath() : "");
+		return "Type: System\nName: " + getName() + "\nFile: " + (file != null ? file.getPath() : "");
 	}
 
 	public final EsbSvc findEsbSvcByQname(String qname) {

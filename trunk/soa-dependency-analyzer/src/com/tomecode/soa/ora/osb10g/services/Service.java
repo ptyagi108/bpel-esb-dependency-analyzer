@@ -120,6 +120,6 @@ public abstract class Service implements ImageFace {
 
 	@Override
 	public String getToolTip() {
-		return name;
+		return "Type: " + type.toString() + "\nName" + name + "\nFile: " + file;
 	}
 }

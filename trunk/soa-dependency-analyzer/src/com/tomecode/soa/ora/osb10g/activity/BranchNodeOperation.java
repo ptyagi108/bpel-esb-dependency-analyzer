@@ -5,13 +5,22 @@ import org.eclipse.swt.graphics.Image;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * element: branch-node type: operation
  * 
  * @author Tomas Frastia
  * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
 public final class BranchNodeOperation extends OsbActivity {
 
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 */
 	public BranchNodeOperation(String name) {
 		super(name);
 	}
@@ -24,4 +33,9 @@ public final class BranchNodeOperation extends OsbActivity {
 	public final Image getImage() {
 		return ImageFactory.OSB_10G_BRANCH_OPERATION;
 	}
+
+	public final String getToolTip() {
+		return "Type: Branch Operation\nName: " + (name != null ? name : "");
+	}
+
 }

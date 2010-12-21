@@ -7,8 +7,10 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.part.ViewPart;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.gui.utils.HideView;
 import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
@@ -20,6 +22,7 @@ import com.tomecode.soa.ora.osb10g.services.Proxy;
 import com.tomecode.soa.ora.osb10g.services.ProxyStructure;
 import com.tomecode.soa.ora.osb10g.services.SplitJoin;
 import com.tomecode.soa.ora.osb10g.services.SplitJoinStructure;
+import com.tomecode.soa.ora.osb10g.services.dependnecies.OsbActivityDependency;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
@@ -36,6 +39,11 @@ import com.tomecode.soa.workspace.Workspace;
 public final class ServiceBusStructureNavigator extends ViewPart implements HideView {
 
 	public static final String ID = "view.servicebusstructurenavigator";
+
+	/***
+	 * selected object/tree item in tree
+	 */
+	private TreeItem selectedItem;
 
 	private final ServiceBusStructureContentProvider contentProvider;
 
@@ -190,5 +198,48 @@ public final class ServiceBusStructureNavigator extends ViewPart implements Hide
 	@Override
 	public final void hideMe() {
 		getSite().getPage().hideView(this);
+	}
+
+	/**
+	 * show in tree
+	 * 
+	 * @param object
+	 */
+	public final void showInTree(Object object) {
+		clearSelectedItem();
+
+		if (object instanceof OsbActivityDependency) {
+			OsbActivityDependency activityDependency = (OsbActivityDependency) object;
+			selectItemInTree(tree.getTree().getItems(), activityDependency.getActivity());
+		}
+
+	}
+
+	private final void selectItemInTree(TreeItem[] items, OsbActivity activity) {
+		for (TreeItem item : items) {
+			if (activity.equals(item.getData())) {
+				OsbActivity activityInTree = (OsbActivity) item.getData();
+				if (activity.getParent().equals(activityInTree.getParent())) {
+					item.setFont(GuiUtils.FONT_ITALIC_BOLD);
+					item.setForeground(GuiUtils.COLOR_RED);
+					selectedItem = item;
+					tree.getTree().showItem(item);
+					return;
+				}
+			} else {
+				selectItemInTree(item.getItems(), activity);
+			}
+		}
+	}
+
+	private final void clearSelectedItem() {
+		if (selectedItem != null) {
+			if (selectedItem.isDisposed()) {
+				selectedItem = null;
+			} else {
+				selectedItem.setFont(null);
+				selectedItem.setForeground(GuiUtils.COLOR_BLACK);
+			}
+		}
 	}
 }

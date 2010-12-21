@@ -177,7 +177,11 @@ public class Activity implements ImageFace {
 
 	@Override
 	public String getToolTip() {
-		return name;
+
+		if (activtyType != null) {
+			return "Type: " + activtyType.getName() + "\nName: " + name;
+		}
+		return "Name: " + name == null ? "" : name;
 	}
 
 	// @Override

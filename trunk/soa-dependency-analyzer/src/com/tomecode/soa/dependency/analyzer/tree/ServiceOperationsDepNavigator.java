@@ -25,6 +25,7 @@ import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.services.Service;
+import com.tomecode.soa.ora.osb10g.services.dependnecies.OsbActivityDependency;
 import com.tomecode.soa.ora.suite10g.esb.EsbGrp;
 import com.tomecode.soa.ora.suite10g.esb.EsbSvc;
 import com.tomecode.soa.ora.suite10g.esb.EsbSys;
@@ -50,13 +51,29 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 
 	public static final String ID = "view.serviceoperationsdepnavigator";
 
+	/**
+	 * content provide for {@link #tree}
+	 * 
+	 */
 	private ServiceOperationsDepLabelProvider labelProvider;
 
+	/**
+	 * content provider for {@link #tree}
+	 */
 	private ServiceOperationsDepContentProvider contentProvider;
 
+	/**
+	 * root node
+	 */
 	public final EmptyNode rootNode;
+	/**
+	 * tree in view
+	 */
 	private TreeViewer tree;
 
+	/**
+	 * Constructor
+	 */
 	public ServiceOperationsDepNavigator() {
 		setTitleImage(ImageFactory.DEPENDNECY_BY_OPERATION_TREE);
 		setTitleToolTip("Dependencies by operations");
@@ -91,23 +108,33 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 	 * @param source
 	 */
 	public final void show(Object source) {
-		if (source instanceof Ora10gBpelProject) {
-			Ora10gBpelProject bpelProject = (Ora10gBpelProject) source;
-			setDataToTree(bpelProject.getBpelOperations());
-		} else if (source instanceof Service) {
-			setDataToTree((Service) source);
-		} else if (source instanceof OpenEsbBpelProcess) {
-			setDataToTree((OpenEsbBpelProcess) source);
-		} else if (source instanceof OraSB10gProject) {
-			setDataToTree((OraSB10gProject) source);
-		} else if (source instanceof Ora10gEsbProject) {
-			setDataToTree((Ora10gEsbProject) source);
-		} else if (source instanceof EsbSvc) {
-			setDataToTree(((EsbSvc) source).getProject());
-		} else {
-			clearTree();
+		if (!ignore(source)) {
+			if (source instanceof Ora10gBpelProject) {
+				Ora10gBpelProject bpelProject = (Ora10gBpelProject) source;
+				setDataToTree(bpelProject.getBpelOperations());
+			} else if (source instanceof Service) {
+				setDataToTree((Service) source);
+			} else if (source instanceof OpenEsbBpelProcess) {
+				setDataToTree((OpenEsbBpelProcess) source);
+			} else if (source instanceof OraSB10gProject) {
+				setDataToTree((OraSB10gProject) source);
+			} else if (source instanceof Ora10gEsbProject) {
+				setDataToTree((Ora10gEsbProject) source);
+			} else if (source instanceof EsbSvc) {
+				setDataToTree(((EsbSvc) source).getProject());
+			} else {
+				clearTree();
+			}
 		}
+	}
 
+	private final boolean ignore(Object source) {
+		if (source instanceof EsbGrp) {
+			return true;
+		} else if (source instanceof EsbSys) {
+			return true;
+		}
+		return false;
 	}
 
 	private final void setDataToTree(Object data) {
@@ -211,26 +238,42 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 			IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
 			if (!selection.isEmpty()) {
 
-				if (!(selection.getFirstElement() instanceof Operation)) {
-				} else if (!(selection.getFirstElement() instanceof EsbSys)) {
-				} else if (!(selection.getFirstElement() instanceof EsbGrp)) {
-				} else {
+				Object selectedData = selection.getFirstElement();
+				if (canShow(selectedData)) {
 
 					VisualGraphView visualGraphView = GuiUtils.getVisualGraphView();
 					if (visualGraphView != null) {
-						visualGraphView.showGraph(selection.getFirstElement());
+						visualGraphView.showGraph(selectedData);
 					}
 					BpelProcessStructureNavigator bpelStructureNavigator = GuiUtils.getBpelProcessStructureNavigator();
 					if (bpelStructureNavigator != null) {
-						bpelStructureNavigator.show(selection.getFirstElement());
+						bpelStructureNavigator.show(selectedData);
 					}
+
+					ServiceBusStructureNavigator serviceBusStructureNavigator = GuiUtils.getServiceBusStructureNavigator();
+					if (serviceBusStructureNavigator != null) {
+						serviceBusStructureNavigator.show(selectedData);
+					}
+
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(null, "Error", "oops error:" + e.getMessage());
 		}
+	}
 
+	private boolean canShow(Object object) {
+		if (object instanceof EsbGrp) {
+			return false;
+		} else if (object instanceof EsbSys) {
+			return false;
+		} else if (object instanceof Operation) {
+			return false;
+		} else if (object instanceof OsbActivityDependency) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -238,10 +281,21 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 		try {
 			IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
 			if (!selection.isEmpty()) {
+				Object selectedData = selection.getFirstElement();
+
 				BpelProcessStructureNavigator structureNavigator = GuiUtils.getBpelProcessStructureNavigator();
 				if (structureNavigator != null) {
-					structureNavigator.showActvityInTree(selection.getFirstElement());
+					structureNavigator.selectInTree(selectedData);
 				}
+				ProjectServicesNavigator projectServicesNavigator = GuiUtils.getProjectServicesNavigator();
+				if (projectServicesNavigator != null) {
+					projectServicesNavigator.selectInTree(selectedData);
+				}
+				ServiceBusStructureNavigator serviceBusStructureNavigator = GuiUtils.getServiceBusStructureNavigator();
+				if (serviceBusStructureNavigator != null) {
+					serviceBusStructureNavigator.showInTree(selectedData);
+				}
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

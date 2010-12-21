@@ -168,7 +168,7 @@ public final class EsbGrp implements BasicEsbNode {
 
 	@Override
 	public final String getToolTip() {
-		return name + (file != null ? " - " + file.getPath() : "");
+		return "Type: Group\nName: " + name + "\nFile: " + (file != null ? file.getPath() : "");
 	}
 
 	public final EsbSvc findEsbSvcByQname(String qname) {

@@ -276,7 +276,7 @@ public final class EsbSvc implements BasicEsbNode {
 
 	@Override
 	public final String getToolTip() {
-		return (typeDescription != null ? typeDescription + ": " : "") + name + " - " + (file != null ? file.getPath() : "");
+		return "Type: " + (typeDescription != null ? typeDescription + ": " : "") + "\nName: " + (name != null ? name : "") + "\nFile: " + (file != null ? file.getPath() : "");
 	}
 
 	public final String getTargetServiceQName() {

@@ -9,10 +9,13 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.ora.osb10g.activity.splitjoin.ErrorHandlers;
 
 /**
- * Basic activity
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
+ * Basic OSB 10g activity
  * 
  * @author Tomas Frastia
- * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
 public abstract class OsbActivity implements ImageFace {
 
@@ -77,6 +80,9 @@ public abstract class OsbActivity implements ImageFace {
 	}
 
 	public String getToolTip() {
+		if (name != null) {
+			return "Name: " + name;
+		}
 		return null;
 	}
 }

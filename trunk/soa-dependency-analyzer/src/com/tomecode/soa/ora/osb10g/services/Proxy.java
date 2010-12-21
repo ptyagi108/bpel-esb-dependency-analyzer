@@ -1,11 +1,14 @@
 package com.tomecode.soa.ora.osb10g.services;
 
 import java.io.File;
+import java.util.Iterator;
 
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig;
+import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig.ProviderProtocol;
+import com.tomecode.soa.ora.osb10g.services.config.EndpointUNKNOWN;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.ServiceDependencyType;
 
 /**
@@ -124,7 +127,24 @@ public final class Proxy extends Service {
 
 	@Override
 	public final String getToolTip() {
-		return "Proxy Service: " + getName() + (getFolder() != null ? " - " + getFolder().toString() : "");
+		String toolTip = "Type: OSB 10g Proxy Service\nName: " + getName() + "\nFolder: " + (getFolder() != null ? getFolder().toString() : "") + "\nEndpoint Type: ";
 
+		if (endpointConfig.getProtocol() == ProviderProtocol.UNKNOWN) {
+			toolTip += ((EndpointUNKNOWN) endpointConfig).getProviderId();
+		} else {
+			toolTip += endpointConfig.getProtocol().toString();
+			if (!endpointConfig.getUris().isEmpty()) {
+				toolTip += "\nURIs: ";
+
+				Iterator<String> i = endpointConfig.getUris().iterator();
+				while (i.hasNext()) {
+					toolTip += i.next();
+					if (i.hasNext()) {
+						toolTip += ",\n";
+					}
+				}
+			}
+		}
+		return toolTip;
 	}
 }

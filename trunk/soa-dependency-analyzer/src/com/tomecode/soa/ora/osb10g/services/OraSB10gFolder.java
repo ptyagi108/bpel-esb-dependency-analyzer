@@ -224,6 +224,6 @@ public class OraSB10gFolder implements ImageFace {
 
 	@Override
 	public final String getToolTip() {
-		return name;
+		return "Folder: " + name;
 	}
 }

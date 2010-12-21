@@ -16,6 +16,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.part.ViewPart;
 
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
@@ -24,7 +25,10 @@ import com.tomecode.soa.dependency.analyzer.gui.utils.PopupMenuUtils;
 import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
+import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
 import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
+import com.tomecode.soa.ora.osb10g.services.OraSB10gFolder;
+import com.tomecode.soa.ora.osb10g.services.OraSB10gFolders;
 import com.tomecode.soa.project.Project;
 
 /**
@@ -40,6 +44,11 @@ import com.tomecode.soa.project.Project;
 public final class ProjectServicesNavigator extends ViewPart implements HideView, IDoubleClickListener {
 
 	public static final String ID = "view.projectServiceNavigator";
+
+	/***
+	 * selected object/tree item in tree
+	 */
+	private TreeItem selectedItem;
 
 	private TreeViewer tree;
 
@@ -118,20 +127,51 @@ public final class ProjectServicesNavigator extends ViewPart implements HideView
 
 	@Override
 	public final void doubleClick(DoubleClickEvent event) {
+		clearSelectedItem();
 		try {
 			IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
 			if (!selection.isEmpty()) {
-//				if (selection.getFirstElement() instanceof Service  ) {
+				Object selectedData = selection.getFirstElement();
+				if (canShow(selectedData)) {
 					VisualGraphView visualGraphView = GuiUtils.getVisualGraphView();
 					if (visualGraphView != null) {
-						visualGraphView.showGraph(selection.getFirstElement());
+						visualGraphView.showGraph(selectedData);
+						visualGraphView.selectInGraph(selectedData);
 					}
-//				}
+					ServiceOperationsDepNavigator serviceOperationsDepNavigator = GuiUtils.getServiceOperationsDepNavigator();
+					if (serviceOperationsDepNavigator != null) {
+						serviceOperationsDepNavigator.show(selectedData);
+					}
+					ServiceBusStructureNavigator serviceBusStructureNavigator = GuiUtils.getServiceBusStructureNavigator();
+					if (serviceBusStructureNavigator != null) {
+						serviceBusStructureNavigator.show(selectedData);
+					}
+
+					BpelProcessStructureNavigator bpelProcessStructureNavigator = GuiUtils.getBpelProcessStructureNavigator();
+					if (bpelProcessStructureNavigator != null) {
+						bpelProcessStructureNavigator.show(selectedData);
+					}
+					PropertiesView propertiesView = GuiUtils.getPropertiesView();
+					if (propertiesView != null) {
+						propertiesView.show(selectedData);
+					}
+				}
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(null, "Error", "oops2 error:" + e.getMessage());
 		}
+	}
+
+	private final boolean canShow(Object object) {
+		if (object instanceof OraSB10gFolder) {
+			return false;
+		} else if (object instanceof OraSB10gFolders) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -164,6 +204,51 @@ public final class ProjectServicesNavigator extends ViewPart implements HideView
 				return ((ImageFace) element).getToolTip();
 			}
 			return element.toString();
+		}
+	}
+
+	/**
+	 * select object in tree
+	 * 
+	 * @param object
+	 */
+	public final void selectInTree(Object object) {
+		clearSelectedItem();
+		TreeItem[] items = tree.getTree().getItems();
+		selectItemInTree(items, object);
+	}
+
+	private final void selectItemInTree(TreeItem[] items, Object object) {
+		for (TreeItem item : items) {
+			if (object.equals(item.getData())) {
+				item.setFont(GuiUtils.FONT_ITALIC_BOLD);
+				item.setForeground(GuiUtils.COLOR_RED);
+				item.setExpanded(true);
+				tree.update(item, null);
+				selectedItem = item;
+
+				TreeItem i = item;
+				while (i.getParentItem() != null) {
+					i = i.getParentItem();
+					i.setExpanded(true);
+					tree.update(i, null);
+				}
+
+				return;
+			} else {
+				selectItemInTree(item.getItems(), object);
+			}
+		}
+	}
+
+	private final void clearSelectedItem() {
+		if (selectedItem != null) {
+			if (selectedItem.isDisposed()) {
+				selectedItem = null;
+			} else {
+				selectedItem.setFont(null);
+				selectedItem.setForeground(GuiUtils.COLOR_BLACK);
+			}
 		}
 	}
 

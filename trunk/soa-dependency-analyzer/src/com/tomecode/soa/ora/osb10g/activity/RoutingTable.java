@@ -5,10 +5,13 @@ import org.eclipse.swt.graphics.Image;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * element: routingTable
  * 
  * @author Tomas Frastia
- * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
 public final class RoutingTable extends OsbActivity {
 
@@ -21,4 +24,7 @@ public final class RoutingTable extends OsbActivity {
 		return ImageFactory.OSB_10G_ROUTING_TABLE;
 	}
 
+	public final String getToolTip() {
+		return "Type: Routing Table";
+	}
 }

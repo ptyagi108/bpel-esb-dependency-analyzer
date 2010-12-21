@@ -162,11 +162,11 @@ public final class ToolTipFactory {
 			tooltip.add(new org.eclipse.draw2d.Label(unknownProject.getTypeText()));
 			tooltip.add(GuiUtils.createLabel2dBold("WSDL Location:"));
 			tooltip.add(new org.eclipse.draw2d.Label(unknownProject.getPartnerLinkBinding().getWsdlLocation()));
-		}else{
+		} else {
 			tooltip.add(GuiUtils.createLabel2dBold("Type:"));
 			tooltip.add(new org.eclipse.draw2d.Label(project.getType().getTitle()));
 			tooltip.add(GuiUtils.createLabel2dBold("Path:"));
-			tooltip.add(new org.eclipse.draw2d.Label(project.getFile() != null ? project.getFile().toString() : ""));			
+			tooltip.add(new org.eclipse.draw2d.Label(project.getFile() != null ? project.getFile().toString() : ""));
 		}
 
 		return tooltip;

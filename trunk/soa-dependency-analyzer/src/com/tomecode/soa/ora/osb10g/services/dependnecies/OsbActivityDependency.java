@@ -90,7 +90,18 @@ public final class OsbActivityDependency implements ImageFace {
 	}
 
 	public final void addDependecy(OsbActivity targetActivity, Service targetService) {
-		this.activityDependencies.add(new OsbActivityDependency(targetActivity, targetService));
+		if (!exists(targetActivity, targetService)) {
+			this.activityDependencies.add(new OsbActivityDependency(targetActivity, targetService));
+		}
+	}
+
+	private final boolean exists(OsbActivity targetActivity, Service targetService) {
+		for (OsbActivityDependency dependency : activityDependencies) {
+			if (dependency.getActivity().equals(targetActivity) && services.contains(targetService)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**

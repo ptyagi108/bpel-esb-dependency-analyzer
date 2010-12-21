@@ -41,7 +41,10 @@ public final class BpelProcessStructureNavigator extends ViewPart implements Hid
 
 	public static final String ID = "view.bpelprocessstructurenavigator";
 
-	private TreeItem selectedFont;
+	/***
+	 * selected object/tree item in tree
+	 */
+	private TreeItem selectedItem;
 
 	private final BpelProcessStructureContentProvider contentProvider;
 
@@ -175,9 +178,14 @@ public final class BpelProcessStructureNavigator extends ViewPart implements Hid
 		getSite().getPage().hideView(this);
 	}
 
-	public final void showActvityInTree(Object object) {
+	/**
+	 * select object in tree
+	 * 
+	 * @param object
+	 */
+	public final void selectInTree(Object object) {
 		clearSelectedItem();
-		selectedFont = null;
+		selectedItem = null;
 		if (object instanceof Operation) {
 			Operation operation = (Operation) object;
 			List<Activity> activities = findParentActivity(operation.getActivity());
@@ -196,21 +204,25 @@ public final class BpelProcessStructureNavigator extends ViewPart implements Hid
 					if (item != null) {
 						item.setFont(GuiUtils.FONT_ITALIC_BOLD);
 						item.setForeground(GuiUtils.COLOR_RED);
+						tree.getTree().showItem(item);
 					}
-					selectedFont = item;
+					selectedItem = item;
 				}
 			}
 
 		}
 	}
 
+	/**
+	 * clear selected item
+	 */
 	private final void clearSelectedItem() {
-		if (selectedFont != null) {
-			if (selectedFont.isDisposed()) {
-				selectedFont = null;
+		if (selectedItem != null) {
+			if (selectedItem.isDisposed()) {
+				selectedItem = null;
 			} else {
-				selectedFont.setFont(null);
-				selectedFont.setForeground(GuiUtils.COLOR_BLACK);
+				selectedItem.setFont(null);
+				selectedItem.setForeground(GuiUtils.COLOR_BLACK);
 			}
 		}
 	}
