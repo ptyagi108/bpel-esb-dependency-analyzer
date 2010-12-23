@@ -104,7 +104,7 @@ public final class ApplicationManager {
 	/**
 	 * write all loaded workspaces to workspace.xml
 	 */
-	private final void writeWorkspaces() {
+	private final void writeAppData() {
 		XMLWriter output = null;
 		try {
 			File file = getWorkspaceFile();
@@ -324,7 +324,7 @@ public final class ApplicationManager {
 			OpenEsbMultiWorkspace multiWorkspace = parser.parse(config.getMultiWorkspaceName(), config.getWorkspaceDir());
 			this.multiWorkspaces.add(multiWorkspace);
 
-			writeWorkspaces();
+			writeAppData();
 			return multiWorkspace;
 		}
 
@@ -334,7 +334,7 @@ public final class ApplicationManager {
 					// /TODO: merger workspace... analyze dependencies between
 					// exist projects
 
-					writeWorkspaces();
+					writeAppData();
 					return (OpenEsbMultiWorkspace) multiWorkspace;
 				}
 			}
@@ -358,7 +358,7 @@ public final class ApplicationManager {
 			Ora10gMultiWorkspace ora10gMultiWorkspace = parser.parse(config.getMultiWorkspaceName(), config.getWorkspaceDir());
 			this.multiWorkspaces.add(ora10gMultiWorkspace);
 
-			writeWorkspaces();
+			writeAppData();
 			return ora10gMultiWorkspace;
 		}
 		for (MultiWorkspace multiWorkspace : multiWorkspaces) {
@@ -368,7 +368,7 @@ public final class ApplicationManager {
 					Ora10gWorkspace newWorkspace = parser.parseWorkspace(config.getWorkspaceDir());
 					ora10gMultiWorkspace.addWorkspace(newWorkspace);
 					parser.analyseDependnecies(ora10gMultiWorkspace);
-					writeWorkspaces();
+					writeAppData();
 					return ora10gMultiWorkspace;
 				}
 			}
@@ -380,7 +380,7 @@ public final class ApplicationManager {
 		if (config.isNewMultiWorkspace()) {
 			OraSB10gMultiWorkspace multiWorkspace = oraSB10gMWorkspaceParser.parse(config.getMultiWorkspaceName(), config.getWorkspaceDir());
 			this.multiWorkspaces.add(multiWorkspace);
-			writeWorkspaces();
+			writeAppData();
 			return multiWorkspace;
 		}
 		for (MultiWorkspace multiWorkspace : multiWorkspaces) {
@@ -388,7 +388,7 @@ public final class ApplicationManager {
 				if (multiWorkspace.getName().equalsIgnoreCase(config.getMultiWorkspaceName())) {
 					// /TODO: merger workspace... analyze dependencies between
 					// exist projects
-					writeWorkspaces();
+					writeAppData();
 					return (OraSB10gMultiWorkspace) multiWorkspace;
 				}
 			}
@@ -428,11 +428,12 @@ public final class ApplicationManager {
 				MultiWorkspace rmMultiWorkspace = multiWorkspaces.get(i);
 				multiWorkspaces.remove(i);
 				// writeWorkspaces();
+
+				writeAppData();
 				return rmMultiWorkspace;
 			}
 
 		}
-
 		return null;
 	}
 
@@ -443,25 +444,29 @@ public final class ApplicationManager {
 	 * @return
 	 */
 	public final Workspace removeWorkspace(Object removeWorkspace) {
-		for (MultiWorkspace multiWorkspace : multiWorkspaces) {
-			if (multiWorkspace instanceof Ora10gMultiWorkspace) {
-				Workspace workspace = ((Ora10gMultiWorkspace) multiWorkspace).removeWorkspace((Workspace) removeWorkspace);
-				if (workspace != null) {
-					return workspace;
-				}
-			} else if (multiWorkspace instanceof OpenEsbMultiWorkspace) {
-				Workspace workspace = ((OpenEsbMultiWorkspace) multiWorkspace).removeWorkspace((Workspace) removeWorkspace);
-				if (workspace != null) {
-					return workspace;
-				}
-			} else if (multiWorkspace instanceof OraSB10gMultiWorkspace) {
-				Workspace workspace = ((OraSB10gMultiWorkspace) multiWorkspace).removeWorkspace((Workspace) removeWorkspace);
-				if (workspace != null) {
-					return workspace;
+		try {
+			for (MultiWorkspace multiWorkspace : multiWorkspaces) {
+				if (multiWorkspace instanceof Ora10gMultiWorkspace) {
+					Workspace workspace = ((Ora10gMultiWorkspace) multiWorkspace).removeWorkspace((Workspace) removeWorkspace);
+					if (workspace != null) {
+						return workspace;
+					}
+				} else if (multiWorkspace instanceof OpenEsbMultiWorkspace) {
+					Workspace workspace = ((OpenEsbMultiWorkspace) multiWorkspace).removeWorkspace((Workspace) removeWorkspace);
+					if (workspace != null) {
+						return workspace;
+					}
+				} else if (multiWorkspace instanceof OraSB10gMultiWorkspace) {
+					Workspace workspace = ((OraSB10gMultiWorkspace) multiWorkspace).removeWorkspace((Workspace) removeWorkspace);
+					if (workspace != null) {
+						return workspace;
+					}
 				}
 			}
+			return null;
+		} finally {
+			writeAppData();
 		}
-		return null;
 	}
 
 	/**
@@ -476,7 +481,7 @@ public final class ApplicationManager {
 			OraSB10gWorkspace workspace = (OraSB10gWorkspace) config.getSelectedWorkspace();
 			workspace.addProject(project);
 		}
-		writeWorkspaces();
+		writeAppData();
 	}
 
 }
