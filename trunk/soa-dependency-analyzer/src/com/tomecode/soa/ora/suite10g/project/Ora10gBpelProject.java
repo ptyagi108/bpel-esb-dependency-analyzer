@@ -187,7 +187,7 @@ public final class Ora10gBpelProject implements Project {
 				}
 			} else if (partnerLinkBinding.getDependencyEsbProject() != null) {
 				if (!dependencyProjects.contains(partnerLinkBinding.getDependencyEsbProject())) {
-					dependencyProjects.add(partnerLinkBinding.getDependencyEsbProject());
+					dependencyProjects.add(partnerLinkBinding.getDependencyEsbProject().getEsbProject());
 				}
 			} else {
 				dependencyProjects.add(Ora10gBpelParser.parseProjectFromWsdl(partnerLinkBinding));

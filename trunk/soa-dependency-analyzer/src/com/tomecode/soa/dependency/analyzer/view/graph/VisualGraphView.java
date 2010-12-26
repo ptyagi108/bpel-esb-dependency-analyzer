@@ -899,16 +899,31 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 			}
 			// ESB project dependency
 			else if (partnerLinkBinding.getDependencyEsbProject() != null) {
-				Ora10gEsbProject esbProject = partnerLinkBinding.getDependencyEsbProject();
 
-				if (existsSource != null) {
-					// create connection to exists object in graph
-					GraphNode existsDestination = findDataInNodes(esbProject);
-					createConnection(source, existsDestination, partnerLinkBinding, ToolTipFactory.createToolTip(partnerLinkBinding), true);
+				EsbSvc esbSvc = partnerLinkBinding.getDependencyEsbProject().getEsbSvc();
+				if (esbSvc != null) {
+					GraphNode existsDestination = findDataInNodes(esbSvc);
+					if (existsDestination != null) {
+						if (findConnection(source, existsDestination) != null) {
+							createConnection(source, existsDestination, partnerLinkBinding, ToolTipFactory.createToolTip(partnerLinkBinding), true);
+						}
+					} else {
+						GraphNode destination = createNode(esbSvc.getName(), esbSvc.getImage(), esbSvc, ToolTipFactory.createToolTip(esbSvc));
+						createConnection(source, destination, partnerLinkBinding, ToolTipFactory.createToolTip(partnerLinkBinding), true);
+					}
+
 				} else {
-					// new object in graph
-					GraphNode destination = createNode(esbProject.getName(), esbProject.getImage(), esbProject, ToolTipFactory.createToolTip(esbProject));
-					createConnection(source, destination, partnerLinkBinding, ToolTipFactory.createToolTip(partnerLinkBinding), true);
+					Ora10gEsbProject esbProject = partnerLinkBinding.getDependencyEsbProject().getEsbProject();
+
+					if (existsSource != null) {
+						// create connection to exists object in graph
+						GraphNode existsDestination = findDataInNodes(esbProject);
+						createConnection(source, existsDestination, partnerLinkBinding, ToolTipFactory.createToolTip(partnerLinkBinding), true);
+					} else {
+						// new object in graph
+						GraphNode destination = createNode(esbProject.getName(), esbProject.getImage(), esbProject, ToolTipFactory.createToolTip(esbProject));
+						createConnection(source, destination, partnerLinkBinding, ToolTipFactory.createToolTip(partnerLinkBinding), true);
+					}
 				}
 			}
 			// Unknown project dependency

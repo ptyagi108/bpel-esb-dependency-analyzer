@@ -6,7 +6,6 @@ import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
-import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.project.UnknownProject;
 
 /**
@@ -33,7 +32,7 @@ public final class PartnerLinkBinding implements ImageFace, Serializable {
 	/**
 	 * dependency ESB project
 	 */
-	private final Ora10gEsbProject[] dependencyEsbProject;
+	private final BpelEsbDependency[] dependencyEsbProject;
 	/**
 	 * dependency BPEL project
 	 */
@@ -53,7 +52,7 @@ public final class PartnerLinkBinding implements ImageFace, Serializable {
 	 */
 	public PartnerLinkBinding(String name, String wsdlLocation) {
 		dependencyBpelProject = new Ora10gBpelProject[1];
-		dependencyEsbProject = new Ora10gEsbProject[1];
+		dependencyEsbProject = new BpelEsbDependency[1];
 		unknownProject = new UnknownProject[1];
 		this.name = name;
 		this.wsdlLocation = wsdlLocation;
@@ -67,7 +66,7 @@ public final class PartnerLinkBinding implements ImageFace, Serializable {
 		return wsdlLocation;
 	}
 
-	public final Ora10gEsbProject getDependencyEsbProject() {
+	public final BpelEsbDependency getDependencyEsbProject() {
 		return dependencyEsbProject[0];
 	}
 
@@ -75,7 +74,7 @@ public final class PartnerLinkBinding implements ImageFace, Serializable {
 		return dependencyBpelProject[0];
 	}
 
-	public final void setDependencyEsbProject(Ora10gEsbProject dependencyEsbProject) {
+	public final void setDependencyEsbProject(BpelEsbDependency dependencyEsbProject) {
 		this.dependencyEsbProject[0] = dependencyEsbProject;
 		if (this.dependencyEsbProject[0] != null) {
 			unknownProject[0] = null;
@@ -117,7 +116,7 @@ public final class PartnerLinkBinding implements ImageFace, Serializable {
 		if (dependencyBpelProject[0] != null) {
 			return dependencyBpelProject;// .getBpelOperations().getOperations().toArray();
 		} else if (dependencyEsbProject[0] != null) {
-			return dependencyEsbProject;
+			return dependencyEsbProject[0].getEsbProjectAsList();
 		} else if (unknownProject[0] != null) {
 			return unknownProject;
 		}

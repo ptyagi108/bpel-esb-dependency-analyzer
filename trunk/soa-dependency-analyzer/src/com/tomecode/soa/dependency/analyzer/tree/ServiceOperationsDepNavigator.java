@@ -13,7 +13,6 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.part.ViewPart;
 
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
@@ -52,10 +51,10 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 
 	public static final String ID = "view.serviceoperationsdepnavigator";
 
-	/***
-	 * selected object/tree item in tree
-	 */
-	private TreeItem selectedItem;
+	// /***
+	// * selected object/tree item in tree
+	// */
+	// private TreeItem selectedItem;
 
 	/**
 	 * content provide for {@link #tree}
@@ -313,45 +312,45 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 		}
 	}
 
-//	public final void selectInTree(Object object) {
-//		clearSelectedItem();
-//		selectedItem = null;
-//		
-//		tree.getTree().get
-//
-//			TreeItem[] items = tree.getTree().getItems();
-//			Iterator<Activity> iterator = activities.iterator();
-//			while (iterator.hasNext()) {
-//
-//				Activity activity = iterator.next();
-//				TreeItem item = findActivityInItem(activity, items);
-//				if (item != null) {
-//					items = item.getItems();
-//				}
-//
-//				if (!iterator.hasNext()) {
-//					if (item != null) {
-//						item.setFont(GuiUtils.FONT_ITALIC_BOLD);
-//						item.setForeground(GuiUtils.COLOR_RED);
-//						tree.getTree().showItem(item);
-//					}
-//					selectedItem = item;
-//				}
-//			}
-//
-//		}
-//	}
-//	/**
-//	 * clear selected item
-//	 */
-//	private final void clearSelectedItem() {
-//		if (selectedItem != null) {
-//			if (selectedItem.isDisposed()) {
-//				selectedItem = null;
-//			} else {
-//				selectedItem.setFont(null);
-//				selectedItem.setForeground(GuiUtils.COLOR_BLACK);
-//			}
-//		}
-//	}
+	// public final void selectInTree(Object object) {
+	// clearSelectedItem();
+	// selectedItem = null;
+	//
+	// tree.getTree().get
+	//
+	// TreeItem[] items = tree.getTree().getItems();
+	// Iterator<Activity> iterator = activities.iterator();
+	// while (iterator.hasNext()) {
+	//
+	// Activity activity = iterator.next();
+	// TreeItem item = findActivityInItem(activity, items);
+	// if (item != null) {
+	// items = item.getItems();
+	// }
+	//
+	// if (!iterator.hasNext()) {
+	// if (item != null) {
+	// item.setFont(GuiUtils.FONT_ITALIC_BOLD);
+	// item.setForeground(GuiUtils.COLOR_RED);
+	// tree.getTree().showItem(item);
+	// }
+	// selectedItem = item;
+	// }
+	// }
+	//
+	// }
+	// }
+	// /**
+	// * clear selected item
+	// */
+	// private final void clearSelectedItem() {
+	// if (selectedItem != null) {
+	// if (selectedItem.isDisposed()) {
+	// selectedItem = null;
+	// } else {
+	// selectedItem.setFont(null);
+	// selectedItem.setForeground(GuiUtils.COLOR_BLACK);
+	// }
+	// }
+	// }
 }

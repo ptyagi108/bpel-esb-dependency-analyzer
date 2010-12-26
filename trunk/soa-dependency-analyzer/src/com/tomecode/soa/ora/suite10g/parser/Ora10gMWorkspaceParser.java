@@ -11,6 +11,7 @@ import com.tomecode.soa.ora.suite10g.esb.EsbOperation;
 import com.tomecode.soa.ora.suite10g.esb.EsbRoutingRule;
 import com.tomecode.soa.ora.suite10g.esb.EsbSvc;
 import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
+import com.tomecode.soa.ora.suite10g.project.BpelEsbDependency;
 import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
 import com.tomecode.soa.ora.suite10g.project.PartnerLinkBinding;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gMultiWorkspace;
@@ -245,9 +246,12 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 								String qName = esbParser.convertWsdlToQname(urlWsdl);
 								if (qName != null) {
 									// TODO: parsovanie wsdl
-									Ora10gEsbProject qNameProject = findEsbProjectByQname(qName, urlWsdl, multiWorkspace);
-									if (qNameProject != null) {
-										partnerLinkBinding.setDependencyEsbProject(qNameProject);// .setDependencyProject(qNameProject);
+									Ora10gEsbProject esbDepProject = findEsbProjectByQname(qName, urlWsdl, multiWorkspace);
+									if (esbDepProject != null) {
+										EsbSvc esbSvc = esbDepProject.findEsbSvcByQname(qName);
+										partnerLinkBinding.setDependencyEsbProject(new BpelEsbDependency(esbDepProject, esbSvc, urlWsdl));
+									} else {
+										toString();
 									}
 								}
 
