@@ -43,14 +43,14 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 	/**
 	 * ESB parser
 	 */
-	private final EsbParser esbParser;
+	private final Ora10gEsbParser esbParser;
 
 	/**
 	 * Constructor
 	 */
 	public Ora10gMWorkspaceParser() {
 		bpelParser = new Ora10gBpelParser();
-		esbParser = new EsbParser();
+		esbParser = new Ora10gEsbParser();
 	}
 
 	/**

@@ -6,6 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -37,7 +40,7 @@ import com.tomecode.soa.workspace.Workspace;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class BpelProcessStructureNavigator extends ViewPart implements HideView {
+public final class BpelProcessStructureNavigator extends ViewPart implements HideView, ISelectionChangedListener {
 
 	public static final String ID = "view.bpelprocessstructurenavigator";
 
@@ -70,6 +73,7 @@ public final class BpelProcessStructureNavigator extends ViewPart implements Hid
 		tree = new TreeViewer(parent, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		tree.setLabelProvider(labelProvider);
 		tree.setContentProvider(contentProvider);
+		tree.addSelectionChangedListener(this);
 		ColumnViewerToolTipSupport.enableFor(tree);
 	}
 
@@ -253,4 +257,19 @@ public final class BpelProcessStructureNavigator extends ViewPart implements Hid
 		return activities;
 	}
 
+	@Override
+	public final void selectionChanged(SelectionChangedEvent event) {
+		// TODO: dorobit selectovaie v dalsich stromoch
+		// IStructuredSelection selection = (IStructuredSelection)
+		// event.getSelection();
+		// if (!selection.isEmpty()) {
+		//
+		// ServiceOperationsDepNavigator serviceOperationsDepNavigator =
+		// GuiUtils.getServiceOperationsDepNavigator();
+		// if (serviceOperationsDepNavigator != null) {
+		// Object o = selection.getFirstElement();
+		//
+		// }
+		// }
+	}
 }

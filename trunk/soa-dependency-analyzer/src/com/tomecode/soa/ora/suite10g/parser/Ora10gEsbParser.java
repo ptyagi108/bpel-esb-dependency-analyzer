@@ -29,12 +29,12 @@ import com.tomecode.soa.parser.ServiceParserException;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class EsbParser extends AbstractParser {
+public final class Ora10gEsbParser extends AbstractParser {
 
 	/**
 	 * Constructor
 	 */
-	public EsbParser() {
+	public Ora10gEsbParser() {
 
 	}
 
