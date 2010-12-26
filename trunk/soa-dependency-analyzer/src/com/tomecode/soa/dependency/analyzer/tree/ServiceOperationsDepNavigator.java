@@ -168,8 +168,12 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 	private final Workspace findWorkspaceInTree() {
 		if (rootNode.hasChildren()) {
 			Object objectInTree = rootNode.getChildren()[0];
-			if (objectInTree instanceof Ora10gBpelProject) {
-				return ((Ora10gBpelProject) objectInTree).getWorkpsace();
+			if (objectInTree instanceof Project) {
+				return ((Project) objectInTree).getWorkpsace();
+			} else if (objectInTree instanceof Service) {
+				return ((Service) objectInTree).getProject().getWorkpsace();
+			} else if (objectInTree instanceof BpelOperations) {
+				return ((BpelOperations) objectInTree).getProject().getWorkpsace();
 			}
 		}
 		return null;

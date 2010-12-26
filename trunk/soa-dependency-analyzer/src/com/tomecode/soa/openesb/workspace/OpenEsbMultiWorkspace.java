@@ -61,7 +61,7 @@ public final class OpenEsbMultiWorkspace implements MultiWorkspace {
 	}
 
 	@Override
-	public final File getFile() {
+	public final File getPath() {
 		return file;
 	}
 
@@ -83,13 +83,14 @@ public final class OpenEsbMultiWorkspace implements MultiWorkspace {
 		return WorkspaceType.OPEN_ESB;
 	}
 
-	public final OpenEsbWorkspace removeWorkspace(Workspace workspace) {
+	public final boolean removeWorkspace(Workspace workspace) {
 		for (int i = 0; i <= workspaces.size() - 1; i++) {
 			if (workspaces.get(i).equals(workspace)) {
-				return (OpenEsbWorkspace) workspaces.remove(i);
+				workspaces.remove(i);
+				return true;
 			}
 		}
-		return null;
+		return false;
 	}
 
 	@Override
@@ -109,7 +110,7 @@ public final class OpenEsbMultiWorkspace implements MultiWorkspace {
 
 	@Override
 	public final String getToolTip() {
-		return "MultiWorkspace: Open Esb" + name + "\n\nPath:" + (file != null ? file.getPath() : "");
+		return "Multi-Workspace: Open Esb\nName: " + name + "\nPath:" + (file != null ? file.getPath() : "");
 	}
 
 }

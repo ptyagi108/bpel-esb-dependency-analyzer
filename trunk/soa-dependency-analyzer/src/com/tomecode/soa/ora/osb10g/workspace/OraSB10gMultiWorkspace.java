@@ -57,7 +57,7 @@ public final class OraSB10gMultiWorkspace implements MultiWorkspace {
 	}
 
 	@Override
-	public File getFile() {
+	public File getPath() {
 		return file;
 	}
 
@@ -80,13 +80,14 @@ public final class OraSB10gMultiWorkspace implements MultiWorkspace {
 		return name;
 	}
 
-	public final OraSB10gWorkspace removeWorkspace(Workspace workspace) {
+	public final boolean removeWorkspace(Workspace workspace) {
 		for (int i = 0; i <= workspaces.size() - 1; i++) {
 			if (workspaces.get(i).equals(workspace)) {
-				return (OraSB10gWorkspace) workspaces.remove(i);
+				workspaces.remove(i);
+				return true;
 			}
 		}
-		return null;
+		return false;
 	}
 
 	@Override
@@ -106,7 +107,7 @@ public final class OraSB10gMultiWorkspace implements MultiWorkspace {
 
 	@Override
 	public final String getToolTip() {
-		return "MultiWorkspace: Oracle Service Bus 10g" + name + "\n\nPath:" + (file != null ? file.getPath() : "");
+		return "Multi-Workspace: Oracle Service Bus 10g\nName: " + name + "\nPath:" + (file != null ? file.getPath() : "");
 	}
 
 }

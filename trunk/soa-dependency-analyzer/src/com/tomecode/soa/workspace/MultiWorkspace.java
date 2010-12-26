@@ -30,7 +30,7 @@ public interface MultiWorkspace extends ImageFace {
 	 * 
 	 * @return
 	 */
-	File getFile();
+	File getPath();
 
 	/**
 	 * multi workspace type
@@ -45,4 +45,13 @@ public interface MultiWorkspace extends ImageFace {
 	 * @return
 	 */
 	List<Workspace> getWorkspaces();
+
+	/**
+	 * remove workspace
+	 * 
+	 * @param removeWorkspace
+	 * @return
+	 */
+	boolean removeWorkspace(Workspace removeWorkspace);
+
 }

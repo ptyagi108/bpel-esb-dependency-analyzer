@@ -110,6 +110,6 @@ public final class Ora10gWorkspace implements Workspace {
 
 	@Override
 	public final String getToolTip() {
-		return "Workspace: Oracle SOA Suite 10g: " + name + "\n\nPath:" + (file != null ? file.getPath() : "");
+		return "Workspace: Oracle SOA Suite 10g\nName: " + name + "\nPath:" + (file != null ? file.getPath() : "");
 	}
 }

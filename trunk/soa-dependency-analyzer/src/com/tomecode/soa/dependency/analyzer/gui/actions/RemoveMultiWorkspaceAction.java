@@ -62,6 +62,7 @@ public final class RemoveMultiWorkspaceAction extends Action {
 			List<VisualGraphView> visualGraphViews = GuiUtils.getVisualGraphViews();
 			for (VisualGraphView visualGraphView : visualGraphViews) {
 				visualGraphView.removeMultiWorkspace(multiWorkspace);
+				visualGraphView.dispose();
 			}
 			List<FlowGraphView> flowGraphViews = GuiUtils.getFlowGraphViews();
 			for (FlowGraphView flowGraphView : flowGraphViews) {

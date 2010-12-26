@@ -22,6 +22,7 @@ import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Info about selected items in {@link VisualGraphView}
  * 
@@ -162,31 +163,31 @@ public final class PropertiesView extends ViewPart implements HideView {
 
 		Group groupProcess = GuiUtils.createGroupWithGrid(composite, "Bpel Process...");
 		GuiUtils.createLabelWithGrid(groupProcess, "Type ");
-		txtProcessType = GuiUtils.createTextWithGrid(groupProcess);
+		txtProcessType = GuiUtils.createTextReadOnlyWithGrid(groupProcess);
 		GuiUtils.createLabelWithGrid(groupProcess, "Name ");
-		txtProcessName = GuiUtils.createTextWithGrid(groupProcess);
+		txtProcessName = GuiUtils.createTextReadOnlyWithGrid(groupProcess);
 		GuiUtils.createLabelWithGrid(groupProcess, "Path ");
-		txtProcessPath = GuiUtils.createTextWithGrid(groupProcess);
+		txtProcessPath = GuiUtils.createTextReadOnlyWithGrid(groupProcess);
 
 		Group groupProject = GuiUtils.createGroupWithGrid(composite, "Project...");
 		GuiUtils.createLabelWithGrid(groupProject, "Type ");
-		txtProcessProjectType = GuiUtils.createTextWithGrid(groupProject);
+		txtProcessProjectType = GuiUtils.createTextReadOnlyWithGrid(groupProject);
 		GuiUtils.createLabelWithGrid(groupProject, "Name ");
-		txtProcessProjectName = GuiUtils.createTextWithGrid(groupProject);
+		txtProcessProjectName = GuiUtils.createTextReadOnlyWithGrid(groupProject);
 		GuiUtils.createLabelWithGrid(groupProject, "Path:");
-		txtProcessProjectPath = GuiUtils.createTextWithGrid(groupProject);
+		txtProcessProjectPath = GuiUtils.createTextReadOnlyWithGrid(groupProject);
 
 		Group groupWorkspace = GuiUtils.createGroupWithGrid(composite, "Workspace...");
 		GuiUtils.createLabelWithGrid(groupWorkspace, "Name ");
-		txtProcessProjectWorkspace = GuiUtils.createTextWithGrid(groupWorkspace);
+		txtProcessProjectWorkspace = GuiUtils.createTextReadOnlyWithGrid(groupWorkspace);
 		GuiUtils.createLabelWithGrid(groupWorkspace, "Path ");
-		txtProcessProjectWorkspacePath = GuiUtils.createTextWithGrid(groupWorkspace);
+		txtProcessProjectWorkspacePath = GuiUtils.createTextReadOnlyWithGrid(groupWorkspace);
 
-		Group groupMultiWorkspace = GuiUtils.createGroupWithGrid(composite, "Multi Workspace...");
+		Group groupMultiWorkspace = GuiUtils.createGroupWithGrid(composite, "Multi-Workspace...");
 		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Name ");
-		txtProcessProjectMultiWorkspaceName = GuiUtils.createTextWithGrid(groupMultiWorkspace);
+		txtProcessProjectMultiWorkspaceName = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
 		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Path ");
-		txtProcessProjectMultiWorkspacePath = GuiUtils.createTextWithGrid(groupMultiWorkspace);
+		txtProcessProjectMultiWorkspacePath = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
 
 		finishPage(composite, sc);
 	}
@@ -205,33 +206,33 @@ public final class PropertiesView extends ViewPart implements HideView {
 
 		Group groupService = GuiUtils.createGroupWithGrid(composite, "Service...");
 		GuiUtils.createLabelWithGrid(groupService, "Type ");
-		txtServiceType = GuiUtils.createTextWithGrid(groupService);
+		txtServiceType = GuiUtils.createTextReadOnlyWithGrid(groupService);
 		GuiUtils.createLabelWithGrid(groupService, "Name ");
-		txtServiceName = GuiUtils.createTextWithGrid(groupService);
+		txtServiceName = GuiUtils.createTextReadOnlyWithGrid(groupService);
 		GuiUtils.createLabelWithGrid(groupService, "Folder ");
-		txtServiceFolder = GuiUtils.createTextWithGrid(groupService);
+		txtServiceFolder = GuiUtils.createTextReadOnlyWithGrid(groupService);
 		GuiUtils.createLabelWithGrid(groupService, "Path ");
-		txtServicePath = GuiUtils.createTextWithGrid(groupService);
+		txtServicePath = GuiUtils.createTextReadOnlyWithGrid(groupService);
 
 		Group groupProject = GuiUtils.createGroupWithGrid(composite, "Project...");
 		GuiUtils.createLabelWithGrid(groupProject, "Type ");
-		txtServiceProjectType = GuiUtils.createTextWithGrid(groupProject);
+		txtServiceProjectType = GuiUtils.createTextReadOnlyWithGrid(groupProject);
 		GuiUtils.createLabelWithGrid(groupProject, "Name ");
-		txtServiceProjectName = GuiUtils.createTextWithGrid(groupProject);
+		txtServiceProjectName = GuiUtils.createTextReadOnlyWithGrid(groupProject);
 		GuiUtils.createLabelWithGrid(groupProject, "Path:");
-		txtServiceProjectPath = GuiUtils.createTextWithGrid(groupProject);
+		txtServiceProjectPath = GuiUtils.createTextReadOnlyWithGrid(groupProject);
 
 		Group groupWorkspace = GuiUtils.createGroupWithGrid(composite, "Workspace...");
 		GuiUtils.createLabelWithGrid(groupWorkspace, "Name ");
-		txtServiceProjectWorkspace = GuiUtils.createTextWithGrid(groupWorkspace);
+		txtServiceProjectWorkspace = GuiUtils.createTextReadOnlyWithGrid(groupWorkspace);
 		GuiUtils.createLabelWithGrid(groupWorkspace, "Path ");
-		txtServiceProjectWorkspacePath = GuiUtils.createTextWithGrid(groupWorkspace);
+		txtServiceProjectWorkspacePath = GuiUtils.createTextReadOnlyWithGrid(groupWorkspace);
 
-		Group groupMultiWorkspace = GuiUtils.createGroupWithGrid(composite, "Multi Workspace...");
+		Group groupMultiWorkspace = GuiUtils.createGroupWithGrid(composite, "Multi-Workspace...");
 		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Name ");
-		txtServiceProjectMultiWorkspaceName = GuiUtils.createTextWithGrid(groupMultiWorkspace);
+		txtServiceProjectMultiWorkspaceName = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
 		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Path ");
-		txtServiceProjectMultiWorkspacePath = GuiUtils.createTextWithGrid(groupMultiWorkspace);
+		txtServiceProjectMultiWorkspacePath = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
 
 		finishPage(composite, sc);
 
@@ -246,13 +247,13 @@ public final class PropertiesView extends ViewPart implements HideView {
 
 		Group groupService = GuiUtils.createGroupWithGrid(composite, "Unknown Service...");
 		GuiUtils.createLabelWithGrid(groupService, "Name ");
-		txtServiceDepName = GuiUtils.createTextWithGrid(groupService);
+		txtServiceDepName = GuiUtils.createTextReadOnlyWithGrid(groupService);
 		GuiUtils.createLabelWithGrid(groupService, "Type ");
-		txtServiceDepOsbType = GuiUtils.createTextWithGrid(groupService);
+		txtServiceDepOsbType = GuiUtils.createTextReadOnlyWithGrid(groupService);
 		GuiUtils.createLabelWithGrid(groupService, "In Activity ");
-		txtServiceDepOsbActivity = GuiUtils.createTextWithGrid(groupService);
+		txtServiceDepOsbActivity = GuiUtils.createTextReadOnlyWithGrid(groupService);
 		GuiUtils.createLabelWithGrid(groupService, "Project ");
-		txtServiceDepProjectName = GuiUtils.createTextWithGrid(groupService);
+		txtServiceDepProjectName = GuiUtils.createTextReadOnlyWithGrid(groupService);
 
 		finishPage(composite, sc);
 	}
@@ -271,23 +272,23 @@ public final class PropertiesView extends ViewPart implements HideView {
 
 		Group groupProject = GuiUtils.createGroupWithGrid(composite, "Project...");
 		GuiUtils.createLabelWithGrid(groupProject, "Type ");
-		txtProjectType = GuiUtils.createTextWithGrid(groupProject);
+		txtProjectType = GuiUtils.createTextReadOnlyWithGrid(groupProject);
 		GuiUtils.createLabelWithGrid(groupProject, "Name ");
-		txtProjectName = GuiUtils.createTextWithGrid(groupProject);
+		txtProjectName = GuiUtils.createTextReadOnlyWithGrid(groupProject);
 		GuiUtils.createLabelWithGrid(groupProject, "Path:");
-		txtProjectPath = GuiUtils.createTextWithGrid(groupProject);
+		txtProjectPath = GuiUtils.createTextReadOnlyWithGrid(groupProject);
 
 		Group groupWorkspace = GuiUtils.createGroupWithGrid(composite, "Workspace...");
 		GuiUtils.createLabelWithGrid(groupWorkspace, "Name ");
-		txtProjectWorkspace = GuiUtils.createTextWithGrid(groupWorkspace);
+		txtProjectWorkspace = GuiUtils.createTextReadOnlyWithGrid(groupWorkspace);
 		GuiUtils.createLabelWithGrid(groupWorkspace, "Path ");
-		txtProjectWorkspacePath = GuiUtils.createTextWithGrid(groupWorkspace);
+		txtProjectWorkspacePath = GuiUtils.createTextReadOnlyWithGrid(groupWorkspace);
 
-		Group groupMultiWorkspace = GuiUtils.createGroupWithGrid(composite, "Multi Workspace...");
+		Group groupMultiWorkspace = GuiUtils.createGroupWithGrid(composite, "Multi-Workspace...");
 		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Name ");
-		txtProjectMultiWorkspaceName = GuiUtils.createTextWithGrid(groupMultiWorkspace);
+		txtProjectMultiWorkspaceName = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
 		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Path ");
-		txtProjectMultiWorkspacePath = GuiUtils.createTextWithGrid(groupMultiWorkspace);
+		txtProjectMultiWorkspacePath = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
 
 		finishPage(composite, sc);
 	}
@@ -314,17 +315,17 @@ public final class PropertiesView extends ViewPart implements HideView {
 
 		Group groupWorkspace = GuiUtils.createGroupWithGrid(composite, "Workspace...");
 		GuiUtils.createLabelWithGrid(groupWorkspace, "Type ");
-		txtWorkspaceParentType = GuiUtils.createTextWithGrid(groupWorkspace);
+		txtWorkspaceParentType = GuiUtils.createTextReadOnlyWithGrid(groupWorkspace);
 		GuiUtils.createLabelWithGrid(groupWorkspace, "Name ");
-		txtWorkspaceName = GuiUtils.createTextWithGrid(groupWorkspace);
+		txtWorkspaceName = GuiUtils.createTextReadOnlyWithGrid(groupWorkspace);
 		GuiUtils.createLabelWithGrid(groupWorkspace, "Path ");
-		txtWorkspacePath = GuiUtils.createTextWithGrid(groupWorkspace);
+		txtWorkspacePath = GuiUtils.createTextReadOnlyWithGrid(groupWorkspace);
 
-		Group groupMultiWorkspace = GuiUtils.createGroupWithGrid(composite, "Multi Workspace...");
+		Group groupMultiWorkspace = GuiUtils.createGroupWithGrid(composite, "Multi-Workspace...");
 		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Name ");
-		txtWorkspaceParent = GuiUtils.createTextWithGrid(groupMultiWorkspace);
+		txtWorkspaceParent = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
 		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Path ");
-		txtWorkspaceParentPath = GuiUtils.createTextWithGrid(groupMultiWorkspace);
+		txtWorkspaceParentPath = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
 
 		finishPage(composite, sc);
 	}
@@ -341,13 +342,13 @@ public final class PropertiesView extends ViewPart implements HideView {
 		ScrolledComposite sc = new ScrolledComposite(multiWokrspacePage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
 		Composite composite = GuiUtils.createCompositeWithGrid(sc);
 
-		Group groupMultiWorkspace = GuiUtils.createGroupWithGrid(composite, "Multi Workspace...");
+		Group groupMultiWorkspace = GuiUtils.createGroupWithGrid(composite, "Multi-Workspace...");
 		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Type ");
-		txtMultiWorkspaceType = GuiUtils.createTextWithGrid(groupMultiWorkspace);
+		txtMultiWorkspaceType = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
 		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Name ");
-		txtMultiWorkspaceName = GuiUtils.createTextWithGrid(groupMultiWorkspace);
+		txtMultiWorkspaceName = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
 		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Path ");
-		txtMultiWorkspacePath = GuiUtils.createTextWithGrid(groupMultiWorkspace);
+		txtMultiWorkspacePath = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
 
 		finishPage(composite, sc);
 	}
@@ -381,13 +382,13 @@ public final class PropertiesView extends ViewPart implements HideView {
 			MultiWorkspace multiWorkspace = (MultiWorkspace) dataForProperties;
 			txtMultiWorkspaceType.setText(multiWorkspace.getType().toString());
 			txtMultiWorkspaceName.setText(multiWorkspace.getName());
-			txtMultiWorkspacePath.setText(multiWorkspace.getFile().toString());
+			txtMultiWorkspacePath.setText(multiWorkspace.getPath().toString());
 			showContent(multiWokrspacePage);
 		} else if (dataForProperties instanceof Workspace) {
 			Workspace workspace = (Workspace) dataForProperties;
 			txtWorkspaceParentType.setText(workspace.getMultiWorkspace().getType().toString());
 			txtWorkspaceParent.setText(workspace.getMultiWorkspace().getName());
-			txtWorkspaceParentPath.setText(workspace.getMultiWorkspace().getFile().toString());
+			txtWorkspaceParentPath.setText(workspace.getMultiWorkspace().getPath().toString());
 			txtWorkspaceName.setText(workspace.getName());
 			txtWorkspacePath.setText(workspace.getFile().toString());
 			showContent(workspacePage);
@@ -405,7 +406,7 @@ public final class PropertiesView extends ViewPart implements HideView {
 			} else {
 				txtProjectWorkspace.setText(project.getWorkpsace().getName());
 				txtProjectWorkspacePath.setText(project.getWorkpsace().getFile().toString());
-				txtProjectMultiWorkspacePath.setText(project.getWorkpsace().getMultiWorkspace().getFile().toString());
+				txtProjectMultiWorkspacePath.setText(project.getWorkpsace().getMultiWorkspace().getPath().toString());
 				txtProjectMultiWorkspaceName.setText(project.getWorkpsace().getMultiWorkspace().getName());
 			}
 			showContent(projectPage);
@@ -422,7 +423,7 @@ public final class PropertiesView extends ViewPart implements HideView {
 			txtServiceProjectPath.setText(project.getFile().toString());
 			txtServiceProjectWorkspace.setText(project.getWorkpsace().getName());
 			txtServiceProjectWorkspacePath.setText(project.getWorkpsace().getFile().toString());
-			txtServiceProjectMultiWorkspacePath.setText(project.getWorkpsace().getMultiWorkspace().getFile().toString());
+			txtServiceProjectMultiWorkspacePath.setText(project.getWorkpsace().getMultiWorkspace().getPath().toString());
 			txtServiceProjectMultiWorkspaceName.setText(project.getWorkpsace().getMultiWorkspace().getName());
 			showContent(servicePage);
 		} else if (dataForProperties instanceof ServiceDependency) {
@@ -445,7 +446,7 @@ public final class PropertiesView extends ViewPart implements HideView {
 			txtProcessProjectPath.setText(project.getFile().toString());
 			txtProcessProjectWorkspace.setText(project.getWorkpsace().getName());
 			txtProcessProjectWorkspacePath.setText(project.getWorkpsace().getFile().toString());
-			txtProcessProjectMultiWorkspacePath.setText(project.getWorkpsace().getMultiWorkspace().getFile().toString());
+			txtProcessProjectMultiWorkspacePath.setText(project.getWorkpsace().getMultiWorkspace().getPath().toString());
 			txtProcessProjectMultiWorkspaceName.setText(project.getWorkpsace().getMultiWorkspace().getName());
 			showContent(processPage);
 		} else {

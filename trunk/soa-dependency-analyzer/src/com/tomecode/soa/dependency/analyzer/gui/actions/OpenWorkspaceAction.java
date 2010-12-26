@@ -9,7 +9,9 @@ import com.tomecode.soa.dependency.analyzer.gui.wizards.OpenNewWorkspaceWizard;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
- * Open form for "Open new workspace"
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
+ * Open form for "Open a new Workspace"
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
@@ -22,18 +24,25 @@ public final class OpenWorkspaceAction extends Action {
 
 	// private int instanceNum = 0;
 
+	/**
+	 * Constructor for context menu
+	 */
 	public OpenWorkspaceAction() {
 		setImageDescriptor(ImageFactory.open);
-		setText("Open new workspace");
+		setText("Open a new Workspace");
 	}
 
+	/**
+	 * Constructor for menu
+	 * 
+	 * @param window
+	 */
 	public OpenWorkspaceAction(IWorkbenchWindow window) {
 		this();
 		this.window = window;
 	}
 
 	public final void run() {
-
 		OpenNewWorkspaceWizard wizard = new OpenNewWorkspaceWizard();
 		WizardDialog dialog = null;
 		if (window != null) {

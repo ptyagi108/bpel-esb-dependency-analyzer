@@ -112,14 +112,22 @@ public final class Ora10gBpelParser extends AbstractParser {
 	 * @return
 	 * @throws ServiceParserException
 	 */
-	public final Ora10gBpelProject parseBpelXml(File file) throws ServiceParserException {
-		File bpelXmlFile = file;
+	public final Ora10gBpelProject parseBpelXml(Ora10gBpelProject bpelProject, File file) throws ServiceParserException {
+		File bpelXmlFile = getBpelFileXml(file);
 
-		if (file.isDirectory() && file.getName().endsWith(File.separator + "bpel")) {
-			bpelXmlFile = new File(file + File.separator + "bpel.xml");
-		} else if (file.isDirectory()) {
-			bpelXmlFile = new File(file + File.separator + "bpel" + File.separator + "bpel.xml");
-		}
+		bpelProject.setBpelXmlFile(bpelXmlFile);
+		Element bpelXml = parseXml(bpelXmlFile);
+
+		// Ora10gBpelProject bpelProject =
+		parseBpelXml(bpelXml, bpelXmlFile, bpelProject);
+
+		File wsdl = new File(bpelXmlFile.getParent() + File.separator + bpelProject.toString() + ".wsdl");
+		bpelProject.setWsdl(wsdlParser.parseWsdl(wsdl));
+		return bpelProject;
+	}
+
+	public final Ora10gBpelProject parseBpelXml(File file) throws ServiceParserException {
+		File bpelXmlFile = getBpelFileXml(file);
 
 		Element bpelXml = parseXml(bpelXmlFile);
 		Ora10gBpelProject bpelProject = parseBpelXml(bpelXml, bpelXmlFile);
@@ -127,6 +135,54 @@ public final class Ora10gBpelParser extends AbstractParser {
 		File wsdl = new File(bpelXmlFile.getParent() + File.separator + bpelProject.toString() + ".wsdl");
 		bpelProject.setWsdl(wsdlParser.parseWsdl(wsdl));
 		return bpelProject;
+	}
+
+	private final File getBpelFileXml(File file) {
+		if (file.isDirectory() && file.getName().endsWith(File.separator + "bpel")) {
+			return new File(file + File.separator + "bpel.xml");
+		} else if (file.isDirectory()) {
+			return new File(file + File.separator + "bpel" + File.separator + "bpel.xml");
+		}
+		return file;
+	}
+
+	/**
+	 * parsed bpel.xml
+	 * 
+	 * @param eBpelXml
+	 * @param bpelXmlFile
+	 * @param bpelProcess
+	 * @return
+	 * @throws ServiceParserException
+	 */
+	private final Ora10gBpelProject parseBpelXml(Element eBpelXml, File bpelXmlFile, Ora10gBpelProject bpelProcess) throws ServiceParserException {
+		Element eBPELProcess = eBpelXml.element("BPELProcess");
+		// File f = bpelXmlFile.getParentFile().getParentFile();
+		// Ora10gBpelProject bpelProcess = new
+		// Ora10gBpelProject(eBPELProcess.attributeValue("id"),
+		// eBPELProcess.attributeValue("src"), bpelXmlFile, f);
+
+		bpelProcess.setId(eBPELProcess.attributeValue("id"));
+		bpelProcess.setSrc(eBPELProcess.attributeValue("src"));
+
+		if (!isParsedProcess(bpelProcess)) {
+			parsedProcess.add(bpelProcess);
+		}
+
+		List<?> eListOfPartnerLinkBindinds = eBPELProcess.element("partnerLinkBindings").elements("partnerLinkBinding");
+		for (Object e : eListOfPartnerLinkBindinds) {
+			Element ePartnerLink = (Element) e;
+			PartnerLinkBinding partnerLinkBinding = new PartnerLinkBinding(ePartnerLink.attributeValue("name"), parseWsdlLocation(ePartnerLink));
+
+			bpelProcess.addPartnerLinkBinding(partnerLinkBinding);
+			parseBpelByWsdl(partnerLinkBinding);
+		}
+
+		Element bpelRootElement = parseXml(new File(bpelXmlFile.getParentFile() + File.separator + bpelProcess.getSrc()));
+		parseBpelProcessStrukture(bpelRootElement, bpelProcess.getBpelProcessStrukture());
+		// parseBpelOperations(bpelRootElement, bpelProcess);
+
+		return bpelProcess;
 	}
 
 	/**
@@ -779,8 +835,10 @@ public final class Ora10gBpelParser extends AbstractParser {
 				if (parseBpelProcess != null) {
 					partnerLinkBinding.setDependencyBpelProject(parseBpelProcess);// setDependencyProject(parseBpelProcess);
 				} else {
-					parseBpelXml(file.getParentFile());
-					System.err.println("parse unused bpel process");
+
+					// TODO: dokoncit
+					// parseBpelXml(file.getParentFile());
+					// System.err.println("parse unused bpel process");
 				}
 			}
 

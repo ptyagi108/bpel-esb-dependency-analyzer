@@ -58,7 +58,7 @@ public final class Ora10gMultiWorkspace implements MultiWorkspace {
 	}
 
 	@Override
-	public final File getFile() {
+	public final File getPath() {
 		return this.file;
 	}
 
@@ -88,13 +88,14 @@ public final class Ora10gMultiWorkspace implements MultiWorkspace {
 		return WorkspaceType.ORACLE_1OG;
 	}
 
-	public final Ora10gWorkspace removeWorkspace(Workspace workspace) {
+	public final boolean removeWorkspace(Workspace workspace) {
 		for (int i = 0; i <= workspaces.size() - 1; i++) {
 			if (workspaces.get(i).equals(workspace)) {
-				return (Ora10gWorkspace) workspaces.remove(i);
+				workspaces.remove(i);
+				return true;
 			}
 		}
-		return null;
+		return false;
 	}
 
 	@Override
@@ -114,6 +115,6 @@ public final class Ora10gMultiWorkspace implements MultiWorkspace {
 
 	@Override
 	public final String getToolTip() {
-		return "MultiWorkspace: Oracle SOA Suite 10g: " + name + "\n\nPath:" + (file != null ? file.getPath() : "");
+		return "Multi-Workspace: Oracle SOA Suite 10g\nName: " + name + "\nPath:" + (file != null ? file.getPath() : "");
 	}
 }

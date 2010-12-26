@@ -48,21 +48,20 @@ public final class Ora10gEsbProject implements Project {
 	 */
 	private Ora10gWorkspace workspace;
 
-	/**
-	 * 
-	 * Constructor
-	 * 
-	 * @param name
-	 *            project name
-	 * @param projectFolder
-	 *            project folder
-	 */
-	public Ora10gEsbProject(String name, File projectFolder) {
-		this.name = name;
-		this.file = projectFolder;
-		// super(name, projectFolder, ProjectType.ORACLE10G_ESB);
+	private Ora10gEsbProject() {
+
 		basicEsbNodes = new ArrayList<BasicEsbNode>();
 		projectDependecies = new Vector<Project>();
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param projectFolder
+	 */
+	public Ora10gEsbProject(File projectFolder) {
+		this();
+		this.file = projectFolder;
 	}
 
 	public final List<BasicEsbNode> getBasicEsbNodes() {
@@ -79,6 +78,14 @@ public final class Ora10gEsbProject implements Project {
 
 	public final List<Project> getProjectDependecies() {
 		return projectDependecies;
+	}
+
+	/**
+	 * @param name
+	 *            the name to set
+	 */
+	public final void setName(String name) {
+		this.name = name;
 	}
 
 	/**
@@ -251,6 +258,6 @@ public final class Ora10gEsbProject implements Project {
 
 	@Override
 	public final String getToolTip() {
-		return "Oracle SOA Suite 10g - ESB Project: " + getName() + "\nFile: " + (file != null ? file.getPath() : "");
+		return "Oracle SOA Suite 10g - ESB Project\nName: " + getName() + "\nFile: " + (file != null ? file.getPath() : "");
 	}
 }

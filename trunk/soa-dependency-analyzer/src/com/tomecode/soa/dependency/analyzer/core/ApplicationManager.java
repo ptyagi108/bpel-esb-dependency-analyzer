@@ -23,7 +23,9 @@ import com.tomecode.soa.ora.osb10g.parser.OraSB10gMWorkspaceParser;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gMultiWorkspace;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gWorkspace;
+import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.ora.suite10g.parser.Ora10gMWorkspaceParser;
+import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gMultiWorkspace;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gWorkspace;
 import com.tomecode.soa.parser.ServiceParserException;
@@ -34,7 +36,7 @@ import com.tomecode.soa.workspace.Workspace;
 import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 
 /**
- * 
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Singleton object - contains all parsed {@link MultiWorkspace}
  * 
@@ -87,6 +89,9 @@ public final class ApplicationManager {
 		return new File(url.getFile());
 	}
 
+	/**
+	 * Initialize data
+	 */
 	private final void init() {
 		try {
 			File file = getWorkspaceFile();
@@ -157,7 +162,7 @@ public final class ApplicationManager {
 			// multi-workspace path
 			Element ePath = DocumentHelper.createElement("path");
 			eRoot.add(ePath);
-			ePath.addText(multiWorkspace.getFile().toString());
+			ePath.addText(multiWorkspace.getPath().toString());
 
 			writeWorkspace(eRoot, multiWorkspace.getWorkspaces());
 		}
@@ -205,6 +210,10 @@ public final class ApplicationManager {
 			if (project.getType() == ProjectType.ORACLE_SERVICE_BUS_1OG) {
 				OraSB10gProject oraSB10gProject = (OraSB10gProject) project;
 				eProject.addAttribute("isJar", String.valueOf(oraSB10gProject.isAsJar()));
+			} else if (project.getType() == ProjectType.ORACLE10G_ESB) {
+				eProject.addAttribute("type", "esb");
+			} else if (project.getType() == ProjectType.ORACLE10G_BPEL) {
+				eProject.addAttribute("type", "bpel");
 			}
 
 			Element ePath = DocumentHelper.createElement("path");
@@ -231,8 +240,10 @@ public final class ApplicationManager {
 
 				if ("oracle-10g".equalsIgnoreCase(type)) {
 					Ora10gMWorkspaceParser ora10gParser = new Ora10gMWorkspaceParser();
-					MultiWorkspace multiWorkspace = ora10gParser.parse(name, new File(path));
-					multiWorkspaces.add(multiWorkspace);
+					Ora10gMultiWorkspace ora10gMultiWorkspace = restoreOra10g(eMultiWorkspace.element("workspaces"), name, path);
+
+					ora10gParser.parse(ora10gMultiWorkspace);
+					multiWorkspaces.add(ora10gMultiWorkspace);
 				} else if ("oracle-10g-osb".equalsIgnoreCase(type)) {
 					MultiWorkspace multiWorkspace = restoreOSB10g(eMultiWorkspace.element("workspaces"), name, path);
 
@@ -249,7 +260,47 @@ public final class ApplicationManager {
 	}
 
 	/**
-	 * {@link OraSB10gMultiWorkspace}
+	 * load all workspaces and projects for {@link Ora10gMultiWorkspace}
+	 * 
+	 * @param eWorkspaces
+	 * @param name
+	 * @param path
+	 * @return
+	 */
+	private final Ora10gMultiWorkspace restoreOra10g(Element eWorkspaces, String name, String path) {
+		Ora10gMultiWorkspace mw = new Ora10gMultiWorkspace(name, new File(path));
+		if (eWorkspaces != null) {
+			List<?> eWorkspace = eWorkspaces.elements("workspace");
+			for (Object o : eWorkspace) {
+				Element element = (Element) o;
+
+				Ora10gWorkspace workspace = new Ora10gWorkspace(element.elementTextTrim("name"), new File(element.elementTextTrim("path")));
+				mw.addWorkspace(workspace);
+
+				Element eProjects = element.element("projects");
+				if (eProjects != null) {
+					List<?> list = eProjects.elements("project");
+					for (Object op : list) {
+						Element ee = (Element) op;
+
+						String type = ee.attributeValue("type");
+						if ("esb".equalsIgnoreCase(type)) {
+							Ora10gEsbProject esbProject = new Ora10gEsbProject(new File(ee.elementTextTrim("path")));
+							workspace.addProject(esbProject);
+						} else if ("bpel".equalsIgnoreCase(type)) {
+							Ora10gBpelProject bpelProject = new Ora10gBpelProject(new File(ee.elementTextTrim("path")));
+							workspace.addProject(bpelProject);
+						}
+
+					}
+				}
+			}
+		}
+		return mw;
+	}
+
+	/**
+	 * load all workspaces and projects to {@link OraSB10gMultiWorkspace}
 	 * 
 	 * @param eWorkspaces
 	 * @param name
@@ -321,11 +372,13 @@ public final class ApplicationManager {
 	public final OpenEsbMultiWorkspace parseEsbMultiWorkspace(WorkspaceConfig config) throws ServiceParserException {
 		if (config.isNewMultiWorkspace()) {
 			OpenEsbMWorkspaceParser parser = new OpenEsbMWorkspaceParser();
-			OpenEsbMultiWorkspace multiWorkspace = parser.parse(config.getMultiWorkspaceName(), config.getWorkspaceDir());
-			this.multiWorkspaces.add(multiWorkspace);
+			// OpenEsbMultiWorkspace multiWorkspace =
+			// parser.parse(config.getMultiWorkspaceName(),
+			// config.getWorkspaceDir());
+			// this.multiWorkspaces.add(multiWorkspace);
 
 			writeAppData();
-			return multiWorkspace;
+			// return multiWorkspace;
 		}
 
 		for (MultiWorkspace multiWorkspace : multiWorkspaces) {
@@ -355,19 +408,18 @@ public final class ApplicationManager {
 	public final Ora10gMultiWorkspace parseOra10gMultiWorkspace(WorkspaceConfig config) throws ServiceParserException {
 		Ora10gMWorkspaceParser parser = new Ora10gMWorkspaceParser();
 		if (config.isNewMultiWorkspace()) {
-			Ora10gMultiWorkspace ora10gMultiWorkspace = parser.parse(config.getMultiWorkspaceName(), config.getWorkspaceDir());
-			this.multiWorkspaces.add(ora10gMultiWorkspace);
-
+			Ora10gMultiWorkspace multiWorkspace = new Ora10gMultiWorkspace(config.getMultiWorkspaceName(), new File(config.getMultiWorkspacePath()));
+			multiWorkspaces.add(multiWorkspace);
+			parser.parseNewMultiWorkspace(multiWorkspace, config.getWorkspacePaths());
 			writeAppData();
-			return ora10gMultiWorkspace;
+			return multiWorkspace;
 		}
 		for (MultiWorkspace multiWorkspace : multiWorkspaces) {
 			if (multiWorkspace.getType() == config.getWorkspaceType()) {
 				if (multiWorkspace.getName().equalsIgnoreCase(config.getMultiWorkspaceName())) {
 					Ora10gMultiWorkspace ora10gMultiWorkspace = (Ora10gMultiWorkspace) multiWorkspace;
-					Ora10gWorkspace newWorkspace = parser.parseWorkspace(config.getWorkspaceDir());
-					ora10gMultiWorkspace.addWorkspace(newWorkspace);
-					parser.analyseDependnecies(ora10gMultiWorkspace);
+					multiWorkspace.getWorkspaces().clear();
+					parser.parseNewMultiWorkspace((Ora10gMultiWorkspace) multiWorkspace, config.getWorkspacePaths());
 					writeAppData();
 					return ora10gMultiWorkspace;
 				}
@@ -378,10 +430,12 @@ public final class ApplicationManager {
 
 	public final MultiWorkspace parseOraSB10gMultiWorkspace(WorkspaceConfig config) throws ServiceParserException {
 		if (config.isNewMultiWorkspace()) {
-			OraSB10gMultiWorkspace multiWorkspace = oraSB10gMWorkspaceParser.parse(config.getMultiWorkspaceName(), config.getWorkspaceDir());
-			this.multiWorkspaces.add(multiWorkspace);
-			writeAppData();
-			return multiWorkspace;
+			// OraSB10gMultiWorkspace multiWorkspace =
+			// oraSB10gMWorkspaceParser.parse(config.getMultiWorkspaceName(),
+			// config.getWorkspaceDir());
+			// this.multiWorkspaces.add(multiWorkspace);
+			// writeAppData();
+			// return multiWorkspace;
 		}
 		for (MultiWorkspace multiWorkspace : multiWorkspaces) {
 			if (multiWorkspace.getType() == config.getWorkspaceType()) {
@@ -397,20 +451,37 @@ public final class ApplicationManager {
 	}
 
 	public final MultiWorkspace refreshMultiWorkspace(MultiWorkspace multiWorkspace) {
-		if (multiWorkspace.getType() == WorkspaceType.ORACLE_1OG) {
+		MultiWorkspace mw = findMultiWorkspace(multiWorkspace);
+
+		if (mw.getType() == WorkspaceType.ORACLE_1OG) {
 			return refreshOra10gMultiWorkspace((Ora10gMultiWorkspace) multiWorkspace);
 		}
 
 		return null;
 	}
 
+	/**
+	 * refresh oracle 10g {@link MultiWorkspace}
+	 * 
+	 * @param multiWorkspace
+	 * @return
+	 */
 	public final Ora10gMultiWorkspace refreshOra10gMultiWorkspace(MultiWorkspace multiWorkspace) {
 		for (int i = 0; i <= multiWorkspaces.size() - 1; i++) {
 			if (multiWorkspaces.get(i).equals(multiWorkspace)) {
 				Ora10gMWorkspaceParser parser = new Ora10gMWorkspaceParser();
 				Ora10gMultiWorkspace ora10gMultiWorkspace = (Ora10gMultiWorkspace) multiWorkspaces.get(i);
-				parser.analyseDependnecies(ora10gMultiWorkspace);
+				parser.analyseDependencies(ora10gMultiWorkspace);
 				return ora10gMultiWorkspace;
+			}
+		}
+		return null;
+	}
+
+	private final MultiWorkspace findMultiWorkspace(MultiWorkspace multiWorkspace) {
+		for (MultiWorkspace mw : multiWorkspaces) {
+			if (mw.equals(multiWorkspace)) {
+				return mw;
 			}
 		}
 		return null;
@@ -443,30 +514,14 @@ public final class ApplicationManager {
 	 * @param removeWorkspace
 	 * @return
 	 */
-	public final Workspace removeWorkspace(Object removeWorkspace) {
-		try {
-			for (MultiWorkspace multiWorkspace : multiWorkspaces) {
-				if (multiWorkspace instanceof Ora10gMultiWorkspace) {
-					Workspace workspace = ((Ora10gMultiWorkspace) multiWorkspace).removeWorkspace((Workspace) removeWorkspace);
-					if (workspace != null) {
-						return workspace;
-					}
-				} else if (multiWorkspace instanceof OpenEsbMultiWorkspace) {
-					Workspace workspace = ((OpenEsbMultiWorkspace) multiWorkspace).removeWorkspace((Workspace) removeWorkspace);
-					if (workspace != null) {
-						return workspace;
-					}
-				} else if (multiWorkspace instanceof OraSB10gMultiWorkspace) {
-					Workspace workspace = ((OraSB10gMultiWorkspace) multiWorkspace).removeWorkspace((Workspace) removeWorkspace);
-					if (workspace != null) {
-						return workspace;
-					}
-				}
+	public final boolean removeWorkspace(Workspace removeWorkspace) {
+		for (MultiWorkspace multiWorkspace : multiWorkspaces) {
+			if (multiWorkspace.removeWorkspace(removeWorkspace)) {
+				writeAppData();
+				return true;
 			}
-			return null;
-		} finally {
-			writeAppData();
 		}
+		return false;
 	}
 
 	/**

@@ -97,7 +97,7 @@ public final class OpenEsbWorkspace implements Workspace {
 
 	@Override
 	public final String getToolTip() {
-		return "Workspace: Open Esb" + name + "\n\nPath:" + (file != null ? file.getPath() : "");
+		return "Workspace: Open Esb\nName: " + name + "\nPath:" + (file != null ? file.getPath() : "");
 	}
 
 }

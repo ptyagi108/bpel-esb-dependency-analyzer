@@ -131,7 +131,7 @@ public final class OraSB10gProject implements Project {
 
 	@Override
 	public final String getToolTip() {
-		return "Oracle Service Bus 10g Project: " + getName() + "\nFile: " + (file != null ? file.getPath() : "");
+		return "Oracle Service Bus 10g Project\nName: " + getName() + "\nFile: " + (file != null ? file.getPath() : "");
 	}
 
 }

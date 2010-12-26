@@ -124,12 +124,12 @@ public final class PropertiesViewOsbAdapter extends ViewPart implements HideView
 
 		Group groupBasic = GuiUtils.createGroupWithGrid(composite, "Business Service");
 		GuiUtils.createLabelWithGrid(groupBasic, "Name ");
-		textBSName = GuiUtils.createTextWithGrid(groupBasic);
+		textBSName = GuiUtils.createTextReadOnlyWithGrid(groupBasic);
 
 		Group groupEndpoint = GuiUtils.createGroupWithGrid(composite, "Endpoint Config", 1);
 		Composite csEndpoint = GuiUtils.createCompositeWithGrid(groupEndpoint, 2);
 		GuiUtils.createLabelWithGrid(csEndpoint, "Trasport Provider ");
-		textBSTrasportProvider = GuiUtils.createTextWithGrid(csEndpoint);
+		textBSTrasportProvider = GuiUtils.createTextReadOnlyWithGrid(csEndpoint);
 		Composite compositeURI = GuiUtils.createCompositeWithGrid(groupEndpoint, 1);
 		groupBSUri = GuiUtils.createGroupWithGrid(compositeURI, "URIs", 1);
 		finishPage(composite, sc);
@@ -147,20 +147,20 @@ public final class PropertiesViewOsbAdapter extends ViewPart implements HideView
 		Group groupBasic = GuiUtils.createGroupWithGrid(composite, "Business Service", 1);
 		Composite csBasic = GuiUtils.createCompositeWithGrid(groupBasic, 2);
 		GuiUtils.createLabelWithGrid(csBasic, "Name ");
-		textBSNameJMS = GuiUtils.createTextWithGrid(csBasic);
+		textBSNameJMS = GuiUtils.createTextReadOnlyWithGrid(csBasic);
 
 		Group groupEndpoint = GuiUtils.createGroupWithGrid(composite, "Endpoint Config", 1);
 		Composite csEndpoint = GuiUtils.createCompositeWithGrid(groupEndpoint, 2);
 		GuiUtils.createLabelWithGrid(csEndpoint, "Trasport Provider ");
-		textBSTrasportProviderJMS = GuiUtils.createTextWithGrid(csEndpoint);
+		textBSTrasportProviderJMS = GuiUtils.createTextReadOnlyWithGrid(csEndpoint);
 		GuiUtils.createLabelWithGrid(csEndpoint, "Is Queue");
-		textBSIsQueueJMS = GuiUtils.createTextWithGrid(csEndpoint);
+		textBSIsQueueJMS = GuiUtils.createTextReadOnlyWithGrid(csEndpoint);
 		Composite compositeURI = GuiUtils.createCompositeWithGrid(groupEndpoint, 1);
 		groupBSUriJMS = GuiUtils.createGroupWithGrid(compositeURI, "URIs", 1);
 
 		Composite compositeURIResponse = GuiUtils.createCompositeWithGrid(groupEndpoint, 1);
 		Group groupBSResponseJMS = GuiUtils.createGroupWithGrid(compositeURIResponse, "Response URI", 1);
-		textBSResponseJMS = GuiUtils.createTextWithGrid(groupBSResponseJMS);
+		textBSResponseJMS = GuiUtils.createTextReadOnlyWithGrid(groupBSResponseJMS);
 		finishPage(composite, sc);
 	}
 
@@ -176,16 +176,16 @@ public final class PropertiesViewOsbAdapter extends ViewPart implements HideView
 		Group groupBasic = GuiUtils.createGroupWithGrid(composite, "Business Service", 1);
 		Composite csBasic = GuiUtils.createCompositeWithGrid(groupBasic, 2);
 		GuiUtils.createLabelWithGrid(csBasic, "Name ");
-		textBSNameEJB = GuiUtils.createTextWithGrid(csBasic);
+		textBSNameEJB = GuiUtils.createTextReadOnlyWithGrid(csBasic);
 
 		Group groupEndpoint = GuiUtils.createGroupWithGrid(composite, "EJB", 1);
 		Composite csEndpoint = GuiUtils.createCompositeWithGrid(groupEndpoint, 2);
 		GuiUtils.createLabelWithGrid(csEndpoint, "Client JAR ");
-		textBSclientJar = GuiUtils.createTextWithGrid(csEndpoint);
+		textBSclientJar = GuiUtils.createTextReadOnlyWithGrid(csEndpoint);
 		GuiUtils.createLabelWithGrid(csEndpoint, "EJB Home ");
-		textBSejbHome = GuiUtils.createTextWithGrid(csEndpoint);
+		textBSejbHome = GuiUtils.createTextReadOnlyWithGrid(csEndpoint);
 		GuiUtils.createLabelWithGrid(csEndpoint, "EJB Object ");
-		textBSejbObject = GuiUtils.createTextWithGrid(csEndpoint);
+		textBSejbObject = GuiUtils.createTextReadOnlyWithGrid(csEndpoint);
 		finishPage(composite, sc);
 	}
 
@@ -200,11 +200,11 @@ public final class PropertiesViewOsbAdapter extends ViewPart implements HideView
 
 		Group groupBasic = GuiUtils.createGroupWithGrid(composite, "Proxy Service");
 		GuiUtils.createLabelWithGrid(groupBasic, "Name ");
-		textProxyName = GuiUtils.createTextWithGrid(groupBasic);
+		textProxyName = GuiUtils.createTextReadOnlyWithGrid(groupBasic);
 		Group groupEndpoint = GuiUtils.createGroupWithGrid(composite, "Endpoint Config", 1);
 		Composite csEndpoint = GuiUtils.createCompositeWithGrid(groupEndpoint, 2);
 		GuiUtils.createLabelWithGrid(csEndpoint, "Trasport Provider ");
-		textProxyTrasportProvider = GuiUtils.createTextWithGrid(csEndpoint);
+		textProxyTrasportProvider = GuiUtils.createTextReadOnlyWithGrid(csEndpoint);
 		Composite compositeURI = GuiUtils.createCompositeWithGrid(groupEndpoint, 1);
 		groupProxyUri = GuiUtils.createGroupWithGrid(compositeURI, "URIs", 1);
 		finishPage(composite, sc);
@@ -222,7 +222,7 @@ public final class PropertiesViewOsbAdapter extends ViewPart implements HideView
 
 		Group groupBasic = GuiUtils.createGroupWithGrid(composite, "SPlit Join");
 		GuiUtils.createLabelWithGrid(groupBasic, "Name ");
-		textSJName = GuiUtils.createTextWithGrid(groupBasic);
+		textSJName = GuiUtils.createTextReadOnlyWithGrid(groupBasic);
 
 		finishPage(composite, sc);
 	}

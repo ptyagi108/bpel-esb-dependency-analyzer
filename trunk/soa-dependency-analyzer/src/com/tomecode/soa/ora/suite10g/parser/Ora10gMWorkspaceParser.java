@@ -54,43 +54,124 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 	}
 
 	/**
-	 * parse {@link Ora10gMultiWorkspace}
+	 * parse all workspaces and projects in {@link MultiWorkspace}
 	 * 
-	 * @param name
-	 * @param path
-	 * @return
+	 * @param ora10gMultiWorkspace
 	 * @throws ServiceParserException
 	 */
-	public final Ora10gMultiWorkspace parse(String name, File path) throws ServiceParserException {
-		List<File> jwsFiles = new ArrayList<File>();
-		findAllJws(path, jwsFiles);
+	public final void parse(Ora10gMultiWorkspace ora10gMultiWorkspace) throws ServiceParserException {
 
-		Ora10gMultiWorkspace multiWorkspace = new Ora10gMultiWorkspace(name, path);
+		for (Workspace w : ora10gMultiWorkspace.getWorkspaces()) {
+			Ora10gWorkspace workspace = (Ora10gWorkspace) w;
 
-		for (File jwsFile : jwsFiles) {
+			for (Project p : workspace.getProjects()) {
+				if (p.getType() == ProjectType.ORACLE10G_BPEL) {
+					Ora10gBpelProject bpelProject = (Ora10gBpelProject) p;
+					bpelProject.setWorkspace(workspace);
+					parseBpelProject(bpelProject);
+				} else if (p.getType() == ProjectType.ORACLE10G_ESB) {
+					Ora10gEsbProject esbProject = (Ora10gEsbProject) p;
+					esbProject.setWorkspace(workspace);
+					esbParser.parse(esbProject);
+				}
+			}
+		}
 
-			// create new workspace
-			Ora10gWorkspace workspace = new Ora10gWorkspace(getNameWithouExtension(jwsFile.getName()), jwsFile);
-			multiWorkspace.addWorkspace(workspace);
-			try {
-				// load list of projects from jws
+		// List<File> jwsFiles = new ArrayList<File>();
+		// findAllJws(path, jwsFiles);
+		//
+		// Ora10gMultiWorkspace multiWorkspace = new Ora10gMultiWorkspace(name,
+		// path);
+		//
+		// for (File jwsFile : jwsFiles) {
+		//
+		// // create new workspace
+		// Ora10gWorkspace workspace = new
+		// Ora10gWorkspace(getNameWithouExtension(jwsFile.getName()), jwsFile);
+		// multiWorkspace.addWorkspace(workspace);
+		// try {
+		// // load list of projects from jws
+		// List<File> jwsProjectFiles =
+		// parseListOfProjectsFromJWS(parseXml(jwsFile),
+		// jwsFile.getParentFile());
+		//
+		// // parse all projects from jws and return list this process
+		// List<File> listOfParsedBpelEsb =
+		// parseBpelEsbProjects(jwsProjectFiles, workspace, true);
+		//
+		// // parse all projects from file system wiche not are in jws
+		// List<File> fsProjects = new ArrayList<File>();
+		// findBpelEsbProjectFromFS(listOfParsedBpelEsb, fsProjects,
+		// jwsFile.getParentFile());
+		// parseBpelEsbProjects(fsProjects, workspace, false);
+		// } catch (ServiceParserException e) {
+		// e.printStackTrace();
+		// }
+		//
+		// }
+		//
+		analyseDependencies(ora10gMultiWorkspace);
+		// return multiWorkspace;
+	}
+
+	/**
+	 * parse new multi-workspace
+	 * 
+	 * @param multiWorkspace
+	 * @throws ServiceParserException
+	 */
+	public final void parseNewMultiWorkspace(Ora10gMultiWorkspace multiWorkspace, List<String> workspacesPaths) throws ServiceParserException {
+
+		for (String workspacePath : workspacesPaths) {
+			File jwsFile = findAllProjectsInWorkspace(new File(workspacePath));
+			if (jwsFile != null) {
+
+				int index = jwsFile.getName().lastIndexOf(".");
+				String name = jwsFile.getName().substring(0, index);
+				Ora10gWorkspace workspace = new Ora10gWorkspace(name, jwsFile);
+				multiWorkspace.addWorkspace(workspace);
 				List<File> jwsProjectFiles = parseListOfProjectsFromJWS(parseXml(jwsFile), jwsFile.getParentFile());
-
-				// parse all projects from jws and return list this process
-				List<File> listOfParsedBpelEsb = parseBpelEsbProjects(jwsProjectFiles, workspace, true);
-
-				// parse all projects from file system wiche not are in jws
-				List<File> fsProjects = new ArrayList<File>();
-				findBpelEsbProjectFromFS(listOfParsedBpelEsb, fsProjects, jwsFile.getParentFile());
-				parseBpelEsbProjects(fsProjects, workspace, false);
-			} catch (ServiceParserException e) {
-				e.printStackTrace();
+				parseBpelEsbProjects(jwsProjectFiles, (Ora10gWorkspace) workspace, true);
 			}
 
 		}
 
-		analyseDependnecies(multiWorkspace);
-		return multiWorkspace;
+		analyseDependencies(multiWorkspace);
+	}
+
+	/**
+	 * find jws file in workspace dir
+	 * 
+	 * @param workspaceFolder
+	 * @return
+	 */
+	private final File findAllProjectsInWorkspace(File workspaceFolder) {
+		File[] files = workspaceFolder.listFiles();
+		if (files != null) {
+			for (File file : files) {
+				if (file.isDirectory()) {
+					File jwsFile = findAllProjectsInWorkspace(file);
+					if (jwsFile != null) {
+						return jwsFile;
+					}
+				}
+				if (file.isFile() && file.getName().endsWith(".jws")) {
+					return file;
+				}
+			}
+		}
+		return null;
+	}
+
+	private final void parseBpelProject(Ora10gBpelProject project) {
+		File bpelFile = findBpelXmlFile(project.getFile());
+		if (bpelFile != null) {
+			try {
+				bpelParser.parseBpelXml(project, bpelFile);
+			} catch (ServiceParserException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public final Ora10gWorkspace parseWorkspace(File workspaceFolder) throws ServiceParserException {
@@ -120,7 +201,7 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 		return workspace;
 	}
 
-	public final void analyseDependnecies(Ora10gMultiWorkspace multiWorkspace) {
+	public final void analyseDependencies(Ora10gMultiWorkspace multiWorkspace) {
 		analysesBpelDependencies(multiWorkspace);
 		analysesEsbDependencies(multiWorkspace);
 		analysesDepBetweenBpelEsb(multiWorkspace);
@@ -277,6 +358,9 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 				try {
 
 					parsedBpelEsbFiles.add(bpelFile);
+
+					// TODO: dokonicit
+
 					Ora10gBpelProject bpelProject = bpelParser.parseBpelXml(bpelFile);
 					bpelProject.setInJws(isInJws);
 					bpelProject.setWorkspace(workspace);

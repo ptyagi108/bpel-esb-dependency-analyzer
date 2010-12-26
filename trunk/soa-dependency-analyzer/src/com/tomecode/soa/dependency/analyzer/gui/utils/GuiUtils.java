@@ -332,13 +332,28 @@ public final class GuiUtils {
 	}
 
 	/**
-	 * create text for grid
+	 * create (read only) text for grid
 	 * 
 	 * @param parent
 	 * @return
 	 */
-	public static final Text createTextWithGrid(Composite parent) {
-		return createTextWithGrid(parent, "");
+	public static final Text createTextReadOnlyWithGrid(Composite parent) {
+		return createTextReadOnlyWithGrid(parent, "");
+	}
+
+	/**
+	 * * create (read only)text for grid
+	 * 
+	 * @param parent
+	 * @param text
+	 * @return
+	 */
+	public static final Text createTextReadOnlyWithGrid(Composite parent, String text) {
+		Text textComponent = new Text(parent, SWT.BORDER | SWT.READ_ONLY);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		textComponent.setLayoutData(gridData);
+		textComponent.setText(text);
+		return textComponent;
 	}
 
 	/**
@@ -349,7 +364,7 @@ public final class GuiUtils {
 	 * @return
 	 */
 	public static final Text createTextWithGrid(Composite parent, String text) {
-		Text textComponent = new Text(parent, SWT.BORDER | SWT.READ_ONLY);
+		Text textComponent = new Text(parent, SWT.BORDER);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		textComponent.setLayoutData(gridData);
 		textComponent.setText(text);

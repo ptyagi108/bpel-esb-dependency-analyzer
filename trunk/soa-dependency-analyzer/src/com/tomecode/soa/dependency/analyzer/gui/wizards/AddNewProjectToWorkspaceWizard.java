@@ -30,6 +30,8 @@ import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Wizard to open a new {@link Project}
  * 
  * @author Tomas Frastia
@@ -61,6 +63,9 @@ public final class AddNewProjectToWorkspaceWizard extends Wizard {
 	}
 
 	/**
+	 * (c) Copyright Tomecode.com, 2010. All rights reserved.
+	 * 
+	 * 
 	 * Project page
 	 * 
 	 * @author Tomas Frastia
@@ -335,6 +340,8 @@ public final class AddNewProjectToWorkspaceWizard extends Wizard {
 	}
 
 	/**
+	 * (c) Copyright Tomecode.com, 2010. All rights reserved.
+	 * 
 	 * The resulting configuration
 	 * 
 	 * @author Tomas Frastia

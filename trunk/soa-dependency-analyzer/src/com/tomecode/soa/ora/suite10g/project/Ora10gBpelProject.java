@@ -7,6 +7,7 @@ import java.util.List;
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.openesb.bpel.activity.PartnerLink;
 import com.tomecode.soa.ora.suite10g.parser.Ora10gBpelParser;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gWorkspace;
 import com.tomecode.soa.project.Project;
@@ -39,18 +40,45 @@ public final class Ora10gBpelProject implements Project {
 	 */
 	private File bpelXmlFile;
 
+	/**
+	 * project folder
+	 */
 	private File file;
 
+	/**
+	 * bpel project WSDL
+	 */
 	private Wsdl wsdl;
 
 	private final BpelOperations bpelOperations;
 
+	/**
+	 * bpel process structure
+	 */
 	private final Ora10gBpelProcessStrukture bpelProcessStrukture;
-
+	/**
+	 * list of {@link PartnerLink}
+	 */
 	private final List<PartnerLinkBinding> partnerLinkBindings;
+	/**
+	 * list of dependency projects
+	 */
 	private final List<Project> dependencyProjects;
 
+	/**
+	 * parent workspace
+	 */
 	private Ora10gWorkspace workspace;
+
+	/**
+	 * Constructor
+	 */
+	private Ora10gBpelProject() {
+		this.partnerLinkBindings = new ArrayList<PartnerLinkBinding>();
+		this.dependencyProjects = new ArrayList<Project>();
+		this.bpelOperations = new BpelOperations(this);
+		this.bpelProcessStrukture = new Ora10gBpelProcessStrukture(this);
+	}
 
 	/**
 	 * Constructor
@@ -58,15 +86,24 @@ public final class Ora10gBpelProject implements Project {
 	 * @param id
 	 * @param src
 	 * @param bpelXmlFile
+	 * @param file
 	 */
 	public Ora10gBpelProject(String id, String src, File bpelXmlFile, File file) {
-		this.partnerLinkBindings = new ArrayList<PartnerLinkBinding>();
-		this.dependencyProjects = new ArrayList<Project>();
-		this.bpelOperations = new BpelOperations(this);
-		this.bpelProcessStrukture = new Ora10gBpelProcessStrukture(this);
+		this();
 		this.id = id;
 		this.src = src;
 		this.bpelXmlFile = bpelXmlFile;
+		this.file = file;
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param file
+	 *            project folder
+	 */
+	public Ora10gBpelProject(File file) {
+		this();
 		this.file = file;
 	}
 
@@ -168,7 +205,7 @@ public final class Ora10gBpelProject implements Project {
 	}
 
 	@Override
-	public String getName() {
+	public final String getName() {
 		return getId();
 	}
 
@@ -184,7 +221,19 @@ public final class Ora10gBpelProject implements Project {
 
 	@Override
 	public final String getToolTip() {
-		return "Oracle SOA Suite 10g - BPEL Project: " + getName() + "\nFile: " + (file != null ? file.getPath() : "");
+		return "Oracle SOA Suite 10g - BPEL Project\nName: " + getName() + "\nFile: " + (file != null ? file.getPath() : "");
+	}
+
+	public final void setId(String id) {
+		this.id = id;
+	}
+
+	public final void setSrc(String src) {
+		this.src = src;
+	}
+
+	public final void setBpelXmlFile(File bpelXmlFile) {
+		this.bpelXmlFile = bpelXmlFile;
 	}
 
 }

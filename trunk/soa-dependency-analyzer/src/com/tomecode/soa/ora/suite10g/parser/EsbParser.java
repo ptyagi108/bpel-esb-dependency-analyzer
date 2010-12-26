@@ -41,16 +41,29 @@ public final class EsbParser extends AbstractParser {
 	/**
 	 * parse {@link Ora10gEsbProject}
 	 * 
-	 * @param file
-	 *            project folder
+	 * @param projectFolder
 	 * @return
 	 * @throws ServiceParserException
 	 */
 	public final Ora10gEsbProject parse(File projectFolder) throws ServiceParserException {
-		Ora10gEsbProject esbProject = new Ora10gEsbProject(findProjectName(projectFolder), projectFolder);
+		Ora10gEsbProject esbProject = new Ora10gEsbProject(projectFolder);
+		return parse(esbProject);
+	}
+
+	/**
+	 * parse {@link Ora10gEsbProject}
+	 * 
+	 * @param esbProject
+	 * @return
+	 * @throws ServiceParserException
+	 */
+	public final Ora10gEsbProject parse(Ora10gEsbProject esbProject) throws ServiceParserException {
+		// Ora10gEsbProject esbProject = new
+		// Ora10gEsbProject(findProjectName(projectFolder), projectFolder);
+		esbProject.setName(findProjectName(esbProject.getFile()));
 
 		List<File> findedFiles = new ArrayList<File>();
-		findEsbsvcFiles(projectFolder, findedFiles, ".esbsys");
+		findEsbsvcFiles(esbProject.getFile(), findedFiles, ".esbsys");
 
 		for (File esbSysFile : findedFiles) {
 			EsbSys esbSys = parseEsbSys(esbSysFile);
@@ -59,13 +72,13 @@ public final class EsbParser extends AbstractParser {
 		}
 
 		findedFiles.clear();
-		findEsbsvcFiles(projectFolder, findedFiles, ".esbgrp");
+		findEsbsvcFiles(esbProject.getFile(), findedFiles, ".esbgrp");
 
 		for (File esbGrpFile : findedFiles) {
 			parseEsbGrp(esbGrpFile, esbProject);
 		}
 		findedFiles.clear();
-		findEsbsvcFiles(projectFolder, findedFiles, ".esbsvc");
+		findEsbsvcFiles(esbProject.getFile(), findedFiles, ".esbsvc");
 
 		for (File esbSvcFile : findedFiles) {
 			parseEsbsvc(esbSvcFile, esbProject);
@@ -74,6 +87,13 @@ public final class EsbParser extends AbstractParser {
 		return esbProject;
 	}
 
+	/**
+	 * parse {@link EsbGrp}
+	 * 
+	 * @param esbGrpFile
+	 * @param esbProject
+	 * @throws ServiceParserException
+	 */
 	private final void parseEsbGrp(File esbGrpFile, Ora10gEsbProject esbProject) throws ServiceParserException {
 		Element eService = parseXml(esbGrpFile);
 
@@ -163,10 +183,6 @@ public final class EsbParser extends AbstractParser {
 	public final void parseEsbsvc(File file, Ora10gEsbProject esbProject) throws ServiceParserException {
 		Element eService = parseXml(file);
 
-		if (file.getName().equals("Infrastructure_Logging_LoggerReader_RS.esbsvc")) {
-			file.toString();
-		}
-
 		EsbSvc esb = new EsbSvc(file, eService.attributeValue("name"), eService.attributeValue("qname"));
 		esb.setProject(esbProject);
 
@@ -217,7 +233,6 @@ public final class EsbParser extends AbstractParser {
 			}
 		}
 
-		esb.toString();
 	}
 
 	/**

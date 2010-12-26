@@ -182,6 +182,8 @@ public final class ToolTipFactory {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(new org.eclipse.draw2d.Label(((ImageFace) workspace).getImage()));
 		tooltip.add(new org.eclipse.draw2d.Label(workspace.getName()));
+		tooltip.add(GuiUtils.createLabel2dBold("Type:"));
+		tooltip.add(new org.eclipse.draw2d.Label("Workspace " + workspace.getType().toString()));
 		tooltip.add(GuiUtils.createLabel2dBold("Path:"));
 		tooltip.add(new org.eclipse.draw2d.Label(workspace.getFile() != null ? workspace.getFile().toString() : ""));
 		return tooltip;
@@ -197,8 +199,10 @@ public final class ToolTipFactory {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(new org.eclipse.draw2d.Label(((ImageFace) multiWorkspace).getImage()));
 		tooltip.add(new org.eclipse.draw2d.Label(multiWorkspace.getName()));
+		tooltip.add(GuiUtils.createLabel2dBold("Type:"));
+		tooltip.add(new org.eclipse.draw2d.Label("Multi-Workspace " + multiWorkspace.getType().toString()));
 		tooltip.add(GuiUtils.createLabel2dBold("Path:"));
-		tooltip.add(new org.eclipse.draw2d.Label(multiWorkspace.getFile() != null ? multiWorkspace.getFile().toString() : ""));
+		tooltip.add(new org.eclipse.draw2d.Label(multiWorkspace.getPath() != null ? multiWorkspace.getPath().toString() : ""));
 		return tooltip;
 	}
 

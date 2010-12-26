@@ -173,6 +173,8 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 
 			@Override
 			public final void widgetSelected(SelectionEvent event) {
+				clearLastSelectedNode();
+
 				List<?> list = ((Graph) event.widget).getSelection();
 				if (!list.isEmpty()) {
 					showPropertiesAboutSelectedNode(list.get(0));
@@ -188,6 +190,8 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 
 		graph.addMouseListener(new MouseAdapter() {
 			public final void mouseDoubleClick(MouseEvent e) {
+				clearLastSelectedNode();
+
 				List<?> list = graphViewer.getGraphControl().getSelection();
 				if (!list.isEmpty()) {
 					if (isExpandInGraph) {
@@ -519,7 +523,8 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 		clearLastSelectedNode();
 		for (GraphNode graphNode : graphNodes) {
 			if (graphNode.getData().equals(source)) {
-				graphNode.highlight();
+				lastSelectedNode = graphNode;
+				lastSelectedNode.highlight();
 			}
 		}
 	}
