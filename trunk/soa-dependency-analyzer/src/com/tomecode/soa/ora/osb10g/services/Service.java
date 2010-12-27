@@ -22,6 +22,8 @@ import com.tomecode.soa.project.Project;
  */
 public abstract class Service implements ImageFace {
 
+	protected String description;
+
 	/**
 	 * PROXY service file
 	 */
@@ -118,8 +120,23 @@ public abstract class Service implements ImageFace {
 		return orginalName;
 	}
 
+	/**
+	 * @return the description
+	 */
+	public final String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description
+	 *            the description to set
+	 */
+	public final void setDescription(String description) {
+		this.description = description;
+	}
+
 	@Override
 	public String getToolTip() {
-		return "Type: " + type.toString() + "\nName: " + name + "\nFile: " + file;
+		return "Type: " + type.toString() + "\nName: " + name + (description != null ? ("\nDescription: " + description) : "") + "\nFile: " + file;
 	}
 }

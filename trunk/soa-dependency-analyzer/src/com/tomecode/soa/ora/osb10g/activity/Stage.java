@@ -15,8 +15,14 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  */
 public final class Stage extends OsbActivity {
 
-	public Stage(String name) {
-		super(name);
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 * @param errorHandler
+	 */
+	public Stage(String name, String errorHandler) {
+		super(name, errorHandler);
 	}
 
 	public final Image getImage() {

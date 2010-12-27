@@ -10,6 +10,8 @@ import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
  * 
  * @author Tomas Frastia
  * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
 public final class PartnerLink extends OsbActivity {
 
@@ -19,8 +21,16 @@ public final class PartnerLink extends OsbActivity {
 
 	private String partnerRole;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 * @param partnerLinkType
+	 * @param myRole
+	 * @param partnerRole
+	 */
 	public PartnerLink(String name, String partnerLinkType, String myRole, String partnerRole) {
-		super(name);
+		super(name, null);
 		this.partnerLinkType = partnerLinkType;
 		this.myRole = myRole;
 		this.partnerRole = partnerRole;

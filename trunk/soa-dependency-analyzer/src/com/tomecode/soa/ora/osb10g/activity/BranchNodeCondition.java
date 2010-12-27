@@ -20,9 +20,10 @@ public final class BranchNodeCondition extends OsbActivity {
 	 * Constructor
 	 * 
 	 * @param name
+	 * @param errorHandler
 	 */
-	public BranchNodeCondition(String name) {
-		super(name);
+	public BranchNodeCondition(String name, String errorHandler) {
+		super(name, errorHandler);
 	}
 
 	public final String toString() {

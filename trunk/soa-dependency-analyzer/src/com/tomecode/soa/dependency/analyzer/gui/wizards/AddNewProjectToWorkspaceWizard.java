@@ -28,6 +28,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
+import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 
 /**
  * (c) Copyright Tomecode.com, 2010. All rights reserved.
@@ -40,7 +41,7 @@ import com.tomecode.soa.workspace.Workspace;
  */
 public final class AddNewProjectToWorkspaceWizard extends Wizard {
 
-	private final static String TITLE = "Add new Project to Workspace";
+	private final static String TITLE = "Add new Project to Workspace (Only for OSB)";
 
 	/**
 	 * The resulting configuration
@@ -96,7 +97,7 @@ public final class AddNewProjectToWorkspaceWizard extends Wizard {
 			super("Add new Project", TITLE, ImageFactory.openBig);
 			setTitle("Add new Project...");
 
-			multiWorkspaces = ApplicationManager.getInstance().getMultiWorkspaces();
+			multiWorkspaces = ApplicationManager.getInstance().getMultiWorkspaces(WorkspaceType.ORACLE_SERVICE_BUS_10G);
 			multiWorkspacesItems = new String[multiWorkspaces.size()];
 			for (int i = 0; i <= multiWorkspaces.size() - 1; i++) {
 				multiWorkspacesItems[i] = multiWorkspaces.get(i).getName();

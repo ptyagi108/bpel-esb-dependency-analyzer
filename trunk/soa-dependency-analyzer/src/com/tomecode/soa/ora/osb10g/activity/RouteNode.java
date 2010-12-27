@@ -19,9 +19,10 @@ public final class RouteNode extends OsbActivity {
 	 * Constructor
 	 * 
 	 * @param name
+	 * @param errorHandler
 	 */
-	public RouteNode(String name) {
-		super(name);
+	public RouteNode(String name, String errorHandler) {
+		super(name, errorHandler);
 	}
 
 	public final String toString() {

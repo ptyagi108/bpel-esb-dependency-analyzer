@@ -15,8 +15,14 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  */
 public final class PipelinePairNode extends OsbActivity {
 
-	public PipelinePairNode(String name) {
-		super(name);
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 * @param errorHandler
+	 */
+	public PipelinePairNode(String name, String errorHandler) {
+		super(name, errorHandler);
 	}
 
 	public final String toString() {

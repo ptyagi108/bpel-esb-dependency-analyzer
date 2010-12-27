@@ -28,7 +28,7 @@ public final class SplitJoinStructure extends OsbActivity {
 	 * @param project
 	 */
 	public SplitJoinStructure(SplitJoin splitJoin) {
-		super(splitJoin.getName());
+		super(splitJoin.getName(), null);
 		this.splitJoin = splitJoin;
 	}
 

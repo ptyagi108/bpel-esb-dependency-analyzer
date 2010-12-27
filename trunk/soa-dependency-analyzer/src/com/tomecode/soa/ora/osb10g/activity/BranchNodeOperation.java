@@ -20,9 +20,10 @@ public final class BranchNodeOperation extends OsbActivity {
 	 * Constructor
 	 * 
 	 * @param name
+	 * @param errorHandler
 	 */
-	public BranchNodeOperation(String name) {
-		super(name);
+	public BranchNodeOperation(String name, String errorHandler) {
+		super(name, errorHandler);
 	}
 
 	public final String toString() {

@@ -58,9 +58,12 @@ public final class ServiceDependencies {
 			for (Service service : serviceDependency.getServices()) {
 				if (service.getType() == ServiceDependencyType.UNKNOWN) {
 					UnknownService unknownService = (UnknownService) service;
-					if (unknownService.getProject().equals(depProject) && unknownService.getName().equals(serviceName)) {
-						return unknownService;
+					if (unknownService.getProject() != null) {
+						if (unknownService.getProject().equals(depProject) && unknownService.getName().equals(serviceName)) {
+							return unknownService;
+						}
 					}
+
 				}
 			}
 		}

@@ -15,6 +15,15 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  */
 public final class Router extends OsbActivity {
 
+	/**
+	 * Constructor
+	 * 
+	 * @param errorHandler
+	 */
+	public Router(String errorHandler) {
+		super(null, errorHandler);
+	}
+
 	public final String toString() {
 		return "router";
 	}

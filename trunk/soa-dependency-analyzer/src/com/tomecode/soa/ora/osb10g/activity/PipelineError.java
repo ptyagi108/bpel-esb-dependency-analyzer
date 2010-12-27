@@ -1,5 +1,7 @@
 package com.tomecode.soa.ora.osb10g.activity;
 
+import java.util.List;
+
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
@@ -7,41 +9,41 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 /**
  * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
- * element: pipeline type="request"
+ * element: pipeline type="error"
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
-public final class PipelineRequest extends OsbActivity {
+public final class PipelineError extends OsbActivity {
 
 	/**
 	 * Constructor
 	 * 
 	 * @param name
 	 */
-	public PipelineRequest(String name, String errorHandler) {
-		super(name, errorHandler);
+	public PipelineError(String name) {
+		super(name, null);
 	}
 
-	public final void merge(PipelineRequest request) {
-		this.errorHandler = request.getErrorHandlerName();
-		for (OsbActivity copyActivity : request.activities) {
+	public final void merge(List<OsbActivity> activities) {
+
+		for (OsbActivity copyActivity : activities) {
 			copyActivity.setParent(this);
 			this.activities.add(copyActivity);
 		}
 	}
 
 	public final String toString() {
-		return name == null ? "Pipeline Request" : "Pipeline Request - " + name;
+		return "Error Handler";
 	}
 
 	@Override
 	public final Image getImage() {
-		return ImageFactory.OSB_10G_PIPELINE_REQUEST;
+		return ImageFactory.OSB_10G_PIPELINE_ERROR;
 	}
 
 	public final String getToolTip() {
-		return "Type: Pipeline Request\nName: " + (name != null ? name : "");
+		return "Type: Error Handler";
 	}
 }

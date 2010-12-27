@@ -9,7 +9,8 @@ import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
  * element: while in SplitJoin flow
  * 
  * @author Tomas Frastia
- * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
 public final class While extends OsbActivity {
 

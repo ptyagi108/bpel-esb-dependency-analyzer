@@ -7,6 +7,7 @@ import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
+import com.tomecode.soa.ora.osb10g.activity.WsCallout;
 import com.tomecode.soa.ora.osb10g.services.Service;
 
 /**
@@ -90,6 +91,10 @@ public final class OsbActivityDependency implements ImageFace {
 	}
 
 	public final void addDependecy(OsbActivity targetActivity, Service targetService) {
+		if (targetActivity instanceof WsCallout) {
+			String.class.toString();
+		}
+
 		if (!exists(targetActivity, targetService)) {
 			this.activityDependencies.add(new OsbActivityDependency(targetActivity, targetService));
 		}

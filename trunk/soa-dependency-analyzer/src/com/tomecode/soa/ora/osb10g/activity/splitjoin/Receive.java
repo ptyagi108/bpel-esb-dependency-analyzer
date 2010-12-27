@@ -13,8 +13,6 @@ import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
- * 
- * 
  */
 public final class Receive extends OsbActivity {
 
@@ -23,6 +21,13 @@ public final class Receive extends OsbActivity {
 	private String variable;
 	private String operation;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param partnerLink
+	 * @param operation
+	 * @param variable
+	 */
 	public Receive(String partnerLink, String operation, String variable) {
 		this.partnerLink = partnerLink;
 		this.variable = variable;

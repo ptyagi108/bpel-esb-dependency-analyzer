@@ -27,11 +27,6 @@ public final class Proxy extends Service {
 
 	private boolean isAutoPublish;
 
-	/**
-	 * description
-	 */
-	private String description;
-
 	private Binding binding;
 
 	/**
@@ -86,14 +81,6 @@ public final class Proxy extends Service {
 		this.isAutoPublish = isAutoPublish;
 	}
 
-	public final String getDescription() {
-		return description;
-	}
-
-	public final void setDescription(String description) {
-		this.description = description;
-	}
-
 	public final Binding getBinding() {
 		return binding;
 	}
@@ -127,7 +114,8 @@ public final class Proxy extends Service {
 
 	@Override
 	public final String getToolTip() {
-		String toolTip = "Type: OSB 10g Proxy Service\nName: " + getName() + "\nFolder: " + (getFolder() != null ? getFolder().toString() : "") + "\nEndpoint Type: ";
+		String toolTip = "Type: OSB 10g Proxy Service\nName: " + getName() + (description != null && description.trim().length() != 0 ? ("\nDescription: " + description) : "") + "\n\nFolder: "
+				+ (getFolder() != null ? getFolder().toString() : "") + "\nEndpoint Type: ";
 
 		if (endpointConfig.getProtocol() == ProviderProtocol.UNKNOWN) {
 			toolTip += ((EndpointUNKNOWN) endpointConfig).getProviderId();

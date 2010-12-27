@@ -10,6 +10,9 @@ import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
  * 
  * @author Tomas Frastia
  * 
+ * @author Tomas Frastia
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
 public final class Invoke extends OsbActivity {
 
@@ -18,8 +21,17 @@ public final class Invoke extends OsbActivity {
 	private String inputVariable;
 	private String outputVariable;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 * @param operation
+	 * @param partnerLink
+	 * @param inputVariable
+	 * @param outputVariable
+	 */
 	public Invoke(String name, String operation, String partnerLink, String inputVariable, String outputVariable) {
-		super(name);
+		super(name, null);
 		this.operation = operation;
 		this.partnerLink = partnerLink;
 		this.inputVariable = inputVariable;

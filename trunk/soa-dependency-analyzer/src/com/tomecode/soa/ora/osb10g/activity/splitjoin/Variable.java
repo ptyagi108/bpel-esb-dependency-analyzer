@@ -9,7 +9,8 @@ import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
  * element: variable
  * 
  * @author Tomas Frastia
- * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/*
  */
 public final class Variable extends OsbActivity {
 
@@ -17,8 +18,15 @@ public final class Variable extends OsbActivity {
 
 	private boolean isPrivate;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 * @param messageType
+	 * @param isPrivate
+	 */
 	public Variable(String name, String messageType, boolean isPrivate) {
-		super(name);
+		super(name, null);
 		this.messageType = messageType;
 		this.isPrivate = isPrivate;
 	}

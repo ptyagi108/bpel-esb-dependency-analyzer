@@ -164,6 +164,8 @@ public final class ImageFactory {
 	public static final Image OSB_10G_PROXY_SERVICE = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/proxyService.gif").createImage();
 	public static final Image OSB_10G_BUSINESS_SERVICE = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/businessService.gif").createImage();
 	public static final Image OSB_10G_PIPELINE_PARI_NODE = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/pipelinePair.gif").createImage();
+	public static final Image OSB_10G_LOGIC_FLYOUT = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/logicFlyout.gif").createImage();
+	public static final Image OSB_10G_PIPELINE_ERROR = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/pipelineErrorHandler.gif").createImage();
 	public static final Image OSB_10G_PIPELINE_REQUEST = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/pipelinePairRequest.gif").createImage();
 	public static final Image OSB_10G_PIPELINE_RESPONSE = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/pipelinePairResponse.gif").createImage();
 	public static final Image OSB_10G_ROUTER = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/router.gif").createImage();

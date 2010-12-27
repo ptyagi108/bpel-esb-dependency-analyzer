@@ -61,7 +61,8 @@ public final class BusinessService extends Service {
 
 	@Override
 	public final String getToolTip() {
-		String toolTip = "Type: OSB 10g Business Service\nName: " + name + "\nFolder: " + (getFolder() != null ? getFolder().toString() : "") + "\nEndpoint Type: ";
+		String toolTip = "Type: OSB 10g Business Service\nName: " + name + (description != null && description.trim().length() != 0 ? ("\nDescription: " + description) : "") + "\n\nFolder: "
+				+ (getFolder() != null ? getFolder().toString() : "") + "\nEndpoint Type: ";
 		if (endpointConfig.getProtocol() == ProviderProtocol.UNKNOWN) {
 			toolTip += ((EndpointUNKNOWN) endpointConfig).getProviderId();
 		} else {

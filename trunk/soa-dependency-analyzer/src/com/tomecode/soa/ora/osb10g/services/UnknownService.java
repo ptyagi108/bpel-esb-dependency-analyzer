@@ -17,6 +17,12 @@ import com.tomecode.soa.project.Project;
  */
 public final class UnknownService extends Service {
 
+	/**
+	 * Constructor
+	 * 
+	 * @param project
+	 * @param name
+	 */
 	public UnknownService(Project project, String name) {
 		super(null, ServiceDependencyType.UNKNOWN);
 		this.project = project;

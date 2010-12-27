@@ -1,7 +1,5 @@
 package com.tomecode.soa.ora.osb10g.activity;
 
-import java.util.List;
-
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
@@ -21,13 +19,15 @@ public final class PipelineResponse extends OsbActivity {
 	 * Constructor
 	 * 
 	 * @param name
+	 * @param errorHandler
 	 */
-	public PipelineResponse(String name) {
-		super(name);
+	public PipelineResponse(String name, String errorHandler) {
+		super(name, errorHandler);
 	}
 
-	public void merge(List<OsbActivity> activities) {
-		for (OsbActivity copyActivity : activities) {
+	public final void merge(PipelineResponse response) {
+		this.errorHandler = response.getErrorHandlerName();
+		for (OsbActivity copyActivity : response.activities) {
 			copyActivity.setParent(this);
 			this.activities.add(copyActivity);
 		}

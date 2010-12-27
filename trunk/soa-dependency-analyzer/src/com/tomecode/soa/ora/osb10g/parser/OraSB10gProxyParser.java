@@ -26,6 +26,7 @@ import com.tomecode.soa.ora.osb10g.activity.JavaCallout;
 import com.tomecode.soa.ora.osb10g.activity.Log;
 import com.tomecode.soa.ora.osb10g.activity.MflTransform;
 import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
+import com.tomecode.soa.ora.osb10g.activity.PipelineError;
 import com.tomecode.soa.ora.osb10g.activity.PipelinePairNode;
 import com.tomecode.soa.ora.osb10g.activity.PipelineRequest;
 import com.tomecode.soa.ora.osb10g.activity.PipelineResponse;
@@ -65,7 +66,6 @@ import com.tomecode.soa.parser.ServiceParserException;
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
- * 
  */
 public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 
@@ -107,6 +107,10 @@ public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 	 * @throws ServiceParserException
 	 */
 	public final Proxy parseProxy(File file, InputStream inputStream) throws ServiceParserException {
+
+		if ("Proxy Service 1.proxy".equals(file.getName())) {
+			toString();
+		}
 		return parseProxy(file, parseXml(inputStream));
 	}
 
@@ -134,7 +138,6 @@ public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 		proxy.setIsEnabled(Boolean.parseBoolean(eCoreEntry.attributeValue("isEnabled")));
 		proxy.setIsAutoPublish(Boolean.parseBoolean(eCoreEntry.attributeValue("isAutoPublish")));
 		proxy.setDescription(eCoreEntry.elementText("description"));
-
 		parseBinding(eCoreEntry.element("binding"), proxy);
 	}
 
@@ -145,7 +148,7 @@ public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 	 * @param proxy
 	 */
 	private final void parseFlow(Element eRouter, Proxy proxy) {
-		Router router = new Router();
+		Router router = new Router(eRouter.attributeValue("errorHandler"));
 		proxy.getStructure().addActivity(router);
 		// parseActivities(eRouter.elements(), router);
 
@@ -155,11 +158,50 @@ public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 				parseFlowStructure(proxy.getServiceDependencies(), eFlow.elements(), router);
 				List<OsbActivity> pipelines = parsePipelines(proxy.getServiceDependencies(), eRouter.elements("pipeline"));
 				linkingPipeLines(pipelines, router);
+				linkingErrorHandlers(pipelines, router);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+	}
+
+	private final void linkingErrorHandlers(List<OsbActivity> pipelines, Router router) {
+		List<OsbActivity> activities = new ArrayList<OsbActivity>();
+		findAllActivityWithError(activities, router);
+
+		for (OsbActivity activity : activities) {
+			PipelineError error = findPipelineError(activity.getErrorHandlerName(), pipelines);
+			if (error != null) {
+				if (activity.getParent() == null) {
+					activity.setErrorHandler(error);
+				} else {
+					activity.getParent().setErrorHandler(error);
+				}
+			}
+		}
+	}
+
+	private final PipelineError findPipelineError(String name, List<OsbActivity> pipelines) {
+		for (OsbActivity osbActivity : pipelines) {
+			if (osbActivity instanceof PipelineError) {
+				if (((PipelineError) osbActivity).getName().equals(name)) {
+					return (PipelineError) osbActivity;
+				}
+			}
+		}
+		return null;
+	}
+
+	private final void findAllActivityWithError(List<OsbActivity> activitiesWithError, OsbActivity parentActivity) {
+		if (parentActivity.getErrorHandlerName() != null) {
+			if (!activitiesWithError.contains(activitiesWithError)) {
+				activitiesWithError.add(parentActivity);
+			}
+		}
+		for (OsbActivity osbActivity : parentActivity.getActivities()) {
+			findAllActivityWithError(activitiesWithError, osbActivity);
+		}
 	}
 
 	/**
@@ -188,7 +230,7 @@ public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 	private final void replacePipelineResponse(PipelineResponse pipelineResponse, List<OsbActivity> activities) {
 		PipelineResponse response = findPipelineResponse(pipelineResponse.getName(), activities);
 		if (response != null) {
-			response.merge(pipelineResponse.getActivities());
+			response.merge(pipelineResponse);
 		}
 	}
 
@@ -200,20 +242,30 @@ public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 	private final void replacePipelineRequest(PipelineRequest pipelineRequest, List<OsbActivity> activities) {
 		PipelineRequest request = findPipelineRequest(pipelineRequest.getName(), activities);
 		if (request != null) {
-			request.merge(pipelineRequest.getActivities());
+			request.merge(pipelineRequest);
 		}
 	}
 
+	/**
+	 * find {@link PipelineResponse} in list of {@link OsbActivity}
+	 * 
+	 * @param name
+	 * @param activities
+	 * @return
+	 */
 	private final PipelineResponse findPipelineResponse(String name, List<OsbActivity> activities) {
 		try {
 			for (OsbActivity osbActivity : activities) {
 				if (osbActivity instanceof PipelineResponse && osbActivity.getActivities().isEmpty()) {
-					return (PipelineResponse) osbActivity;
-				}
-
-				else {
-					// return findPipelineResponse(name,
-					// osbActivity.getActivities());
+					PipelineResponse response = (PipelineResponse) osbActivity;
+					if (response.getName().equals(name)) {
+						return response;
+					}
+				} else {
+					PipelineResponse response = findPipelineResponse(name, osbActivity.getActivities());
+					if (response != null) {
+						return response;
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -233,11 +285,15 @@ public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 	private final PipelineRequest findPipelineRequest(String name, List<OsbActivity> activities) {
 		for (OsbActivity osbActivity : activities) {
 			if (osbActivity instanceof PipelineRequest && osbActivity.getActivities().isEmpty()) {
-				return (PipelineRequest) osbActivity;
-			}
-
-			else {
-				return findPipelineRequest(name, osbActivity.getActivities());
+				PipelineRequest request = (PipelineRequest) osbActivity;
+				if (request.getName().equals(name)) {
+					return request;
+				}
+			} else {
+				PipelineRequest request = findPipelineRequest(name, osbActivity.getActivities());
+				if (request != null) {
+					return request;
+				}
 			}
 		}
 		return null;
@@ -275,13 +331,17 @@ public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 			for (Object o : ePipelines) {
 				Element element = (Element) o;
 				if ("request".equals(element.attributeValue("type"))) {
-					PipelineRequest pipelineRequest = new PipelineRequest(element.attributeValue("name"));
+					PipelineRequest pipelineRequest = new PipelineRequest(element.attributeValue("name"), element.attributeValue("errorHandler"));
 					parseActivities(serviceDependencies, element.elements(), pipelineRequest);
 					osbActivities.add(pipelineRequest);
 				} else if ("response".equals(element.attributeValue("type"))) {
-					PipelineResponse pipelineResponse = new PipelineResponse(element.attributeValue("name"));
+					PipelineResponse pipelineResponse = new PipelineResponse(element.attributeValue("name"), element.attributeValue("errorHandler"));
 					parseActivities(serviceDependencies, element.elements(), pipelineResponse);
 					osbActivities.add(pipelineResponse);
+				} else if ("error".equals(element.attributeValue("type"))) {
+					PipelineError pipelineError = new PipelineError(element.attributeValue("name"));
+					parseActivities(serviceDependencies, element.elements(), pipelineError);
+					osbActivities.add(pipelineError);
 				}
 			}
 		}
@@ -303,7 +363,7 @@ public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 		for (Object o : elements) {
 			Element e = (Element) o;
 			if ("stage".equals(e.getName())) {
-				Stage stage = new Stage(e.attributeValue("name"));
+				Stage stage = new Stage(e.attributeValue("name"), e.attributeValue("errorHandler"));
 				root.addActivity(stage);
 				Element eActions = e.element("actions");
 				if (eActions != null) {
@@ -462,7 +522,7 @@ public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 	 *            parent {@link OsbActivity}
 	 */
 	private final void parseRouteNode(ServiceDependencies serviceDependencies, Element eRouteNode, OsbActivity root) {
-		RouteNode routeNode = new RouteNode(eRouteNode.attributeValue("name"));
+		RouteNode routeNode = new RouteNode(eRouteNode.attributeValue("name"), eRouteNode.attributeValue("errorHandler"));
 		root.addActivity(routeNode);
 		Element eActions = eRouteNode.element("actions");
 		if (eActions != null) {
@@ -591,7 +651,7 @@ public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 	 */
 	private final void parseBranchNodeFlow(ServiceDependencies serviceDependencies, Element eBranchNode, OsbActivity root) {
 		if ("condition".equals(eBranchNode.attributeValue("type"))) {
-			BranchNodeCondition branchNodeCondition = new BranchNodeCondition(eBranchNode.attributeValue("name"));
+			BranchNodeCondition branchNodeCondition = new BranchNodeCondition(eBranchNode.attributeValue("name"), eBranchNode.attributeValue("errorHandler"));
 			root.addActivity(branchNodeCondition);
 			Element eBranchTable = eBranchNode.element("branch-table");
 			if (eBranchTable != null) {
@@ -599,7 +659,7 @@ public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 				for (Object o : eBranchs) {
 					Element eBranch = (Element) o;
 					if ("branch".equals(eBranch.getName())) {
-						Branch branch = new Branch(eBranch.attributeValue("name"));
+						Branch branch = new Branch(eBranch.attributeValue("name"), eBranch.attributeValue("errorHandler"));
 						branchNodeCondition.addActivity(branch);
 						parseFlowContent(serviceDependencies, eBranch.element("flow"), branch);
 					} else if ("default-branch".equals(eBranch.getName())) {
@@ -612,7 +672,7 @@ public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 			}
 
 		} else if ("operation".equals(eBranchNode.attributeValue("type"))) {
-			BranchNodeOperation branchNodeOperation = new BranchNodeOperation(eBranchNode.attributeValue("name"));
+			BranchNodeOperation branchNodeOperation = new BranchNodeOperation(eBranchNode.attributeValue("name"), eBranchNode.attributeValue("errorHandler"));
 			root.addActivity(branchNodeOperation);
 			Element eBranchTable = eBranchNode.element("branch-table");
 			if (eBranchTable != null) {
@@ -620,7 +680,7 @@ public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 				for (Object o : eBranchs) {
 					Element eBranch = (Element) o;
 					if ("branch".equals(eBranch.getName())) {
-						Branch branch = new Branch(eBranch.attributeValue("name"));
+						Branch branch = new Branch(eBranch.attributeValue("name"), eBranch.attributeValue("errorHandler"));
 						branchNodeOperation.addActivity(branch);
 						parseFlowContent(serviceDependencies, eBranch.element("flow"), branch);
 					} else if ("default-branch".equals(eBranch.getName())) {
@@ -644,15 +704,15 @@ public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 	 *            parent {@link OsbActivity}
 	 */
 	private final void parsePipeLineNodeFlow(Element ePipelineNode, OsbActivity root) {
-		PipelinePairNode pipelinePairNode = new PipelinePairNode(ePipelineNode.attributeValue("name"));
+		PipelinePairNode pipelinePairNode = new PipelinePairNode(ePipelineNode.attributeValue("name"), ePipelineNode.attributeValue("errorHandler"));
 		root.addActivity(pipelinePairNode);
 		List<?> elements = ePipelineNode.elements();
 		for (Object o : elements) {
 			Element element = (Element) o;
 			if ("request".equals(element.getName())) {
-				pipelinePairNode.addActivity(new PipelineRequest(element.getTextTrim()));
+				pipelinePairNode.addActivity(new PipelineRequest(element.getTextTrim(), element.attributeValue("errorHandler")));
 			} else if ("response".equals(element.getName())) {
-				pipelinePairNode.addActivity(new PipelineResponse(element.getTextTrim()));
+				pipelinePairNode.addActivity(new PipelineResponse(element.getTextTrim(), element.attributeValue("errorHandler")));
 			}
 		}
 	}

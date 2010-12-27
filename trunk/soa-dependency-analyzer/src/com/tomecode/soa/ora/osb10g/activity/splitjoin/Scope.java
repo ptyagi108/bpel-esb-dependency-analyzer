@@ -9,12 +9,18 @@ import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
  * element: scope in SplitJoin flow
  * 
  * @author Tomas Frastia
- * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
 public final class Scope extends OsbActivity {
 
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 */
 	public Scope(String name) {
-		super(name);
+		super(name, null);
 	}
 
 	public final String toString() {

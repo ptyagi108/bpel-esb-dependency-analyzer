@@ -16,8 +16,14 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  */
 public class Branch extends OsbActivity {
 
-	public Branch(String name) {
-		super(name);
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 * @param errorHandler
+	 */
+	public Branch(String name, String errorHandler) {
+		super(name, errorHandler);
 	}
 
 	public final String toString() {

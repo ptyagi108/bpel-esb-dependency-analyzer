@@ -9,7 +9,8 @@ import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
  * element: reply in SplitJoin flow
  * 
  * @author Tomas Frastia
- * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
 public final class Reply extends OsbActivity {
 
@@ -17,6 +18,13 @@ public final class Reply extends OsbActivity {
 	private String operation;
 	private String variable;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param partnerLink
+	 * @param operation
+	 * @param variable
+	 */
 	public Reply(String partnerLink, String operation, String variable) {
 		super();
 		this.partnerLink = partnerLink;

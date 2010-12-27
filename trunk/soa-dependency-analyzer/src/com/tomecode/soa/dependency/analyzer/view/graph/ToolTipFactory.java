@@ -73,6 +73,11 @@ public final class ToolTipFactory {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(GuiUtils.createLabel2dBold("Name: "));
 		tooltip.add(createLabel(service.getName(), service.getImage()));
+
+		if (service.getDescription() != null && service.getDescription().length() != 0) {
+			tooltip.add(GuiUtils.createLabel2dBold("Description: "));
+			tooltip.add(new org.eclipse.draw2d.Label(service.getDescription()));
+		}
 		tooltip.add(GuiUtils.createLabel2dBold("Path: "));
 		tooltip.add(new org.eclipse.draw2d.Label(service.getFile() != null ? service.getFile().toString() : ""));
 

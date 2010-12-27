@@ -9,7 +9,8 @@ import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
  * element: javaCallout in SplitJoin
  * 
  * @author Tomas Frastia
- * 
+ * @see http://www.tomecode.com
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
 public final class JavaCallout extends OsbActivity {
 
