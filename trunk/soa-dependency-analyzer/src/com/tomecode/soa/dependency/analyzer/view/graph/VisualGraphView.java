@@ -555,10 +555,18 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 		GraphNode source = existsSource == null ? createNode(sourceEsbSvc.getName(), sourceEsbSvc.getImage(), sourceEsbSvc, ToolTipFactory.createToolTip(sourceEsbSvc)) : existsSource;
 
 		Ora10gEsbProject rootEsbProject = sourceEsbSvc.getProject();
-		GraphNode project = findDataInNodes(rootEsbProject);
-		if (project == null) {
-			GraphNode nodeEsbProject = createNode(rootEsbProject.getName(), rootEsbProject.getImage(), rootEsbProject, ToolTipFactory.createToolTip(rootEsbProject));
-			createConnection(nodeEsbProject, source, null, null, false);
+		GraphNode esbProjectNode = findDataInNodes(rootEsbProject);
+		if (esbProjectNode == null) {
+			esbProjectNode = createNode(rootEsbProject.getName(), rootEsbProject.getImage(), rootEsbProject, ToolTipFactory.createToolTip(rootEsbProject));
+			createConnection(esbProjectNode, source, null, null, false);
+		} else {
+
+			GraphNode exitsSourceNode = findDataInNodes(sourceEsbSvc);
+			if (exitsSourceNode != null) {
+				if (findConnection(esbProjectNode, exitsSourceNode) == null) {
+					createConnection(esbProjectNode, source, null, null, false);
+				}
+			}
 		}
 
 		for (EsbOperation esbOperation : sourceEsbSvc.getEsbOperations()) {
@@ -568,6 +576,9 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 					if (findConnection(source, destination) == null) {
 						createConnection(source, destination, esbOperation, null, false);
 					}
+					if (findConnection(esbProjectNode, destination) == null) {
+						createConnection(esbProjectNode, destination, null, null, false);
+					}
 				} else {
 					if (dep instanceof Ora10gBpelProject) {
 						GraphNode depDestination = findDataInNodes(dep);
@@ -576,7 +587,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 							depDestination = createNode(bpelProject.getName(), bpelProject.getImage(), bpelProject, ToolTipFactory.createToolTip(bpelProject));
 							createConnection(source, depDestination, esbOperation, null, false);
 						} else {
-							if (findConnection(source, depDestination) != null) {
+							if (findConnection(source, depDestination) == null) {
 								createConnection(source, depDestination, esbOperation, null, false);
 							}
 						}
@@ -590,6 +601,11 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 						} else {
 							createConnection(source, depDestination, esbOperation, null, false);
 						}
+
+						if (findConnection(esbProjectNode, depDestination) == null) {
+							createConnection(esbProjectNode, depDestination, null, null, false);
+						}
+
 					} else if (dep instanceof EsbRoutingRule) {
 						EsbRoutingRule esbRoutingRule = (EsbRoutingRule) dep;
 						for (EsbSvc rsEsbSvc : esbRoutingRule.getEsbSvcs()) {
@@ -613,6 +629,9 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 							createConnection(source, depDestination, esbOperation, null, false);
 						}
 
+						if (findConnection(esbProjectNode, depDestination) == null) {
+							createConnection(esbProjectNode, depDestination, null, null, false);
+						}
 					}
 
 				}
@@ -904,7 +923,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 				if (esbSvc != null) {
 					GraphNode existsDestination = findDataInNodes(esbSvc);
 					if (existsDestination != null) {
-						if (findConnection(source, existsDestination) != null) {
+						if (findConnection(source, existsDestination) == null) {
 							createConnection(source, existsDestination, partnerLinkBinding, ToolTipFactory.createToolTip(partnerLinkBinding), true);
 						}
 					} else {
