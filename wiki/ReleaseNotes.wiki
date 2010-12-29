@@ -1,8 +1,21 @@
 #summary Release notes
 #labels ReleaseNotes
 
+*Version 0.8 - Technical preview/Beta 2*
+        * fixed errors in the parser and analyzer for the Oracle Service Bus 10g (Proxy and Business service)
+        * fixed errors in the parser and analyzer for the Oracle SOA Suite 10g(BPEL process and ESB Services)
+        * parsing of dependencies from the exported jar files from OSB 10g
+        * display dependencies between the BPEL processes and  the ESB Services
+        * identified types of adapters for Oracle Service Bus 10g (http, jms, sb, dsp, ejb, etc.)
+        * identified types of adapters for Oracle ESB 10g
+        * the new panel, which shows all services within the project
+        * the new panel, which shows detailed information about selected service from Oracle Service Bus 10g
+        * reworking the "open new workspace" wizard
+        * delete the selected node in the visual graph
+        * detailed tooltip about services and processes in all windows
+        * displaying dependencies of Multi-window
 
-*Version 0.8 - Technical preview 1*
+*Version 0.8 - Technical preview/Beta 1*
         * is built as an Eclipse Rich Client Platform (RCP) for Windows, Linux and Mac OS X
         * for displaying dependencies between services/processes is used Eclipse GEF/ZEST framework
         * new parser and analyzer for BPEL processes from Oracle SOA Suite 10g
