@@ -182,7 +182,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 					if (serviceBusStructureNavigator != null) {
 						GuiUtils.getServiceBusStructureNavigator().show(null);
 					}
-					// setDataForGraphActions(null);
+					setDataForGraphActions(null);
 				}
 			}
 		});
@@ -281,7 +281,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 		graphNodes.remove(graphNode);
 		graphNode.dispose();
 
-		// setDataForGraphActions(null);
+		setDataForGraphActions(null);
 		// graphViewer.refresh();
 	}
 
@@ -393,7 +393,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 		} else if (object instanceof GraphNode) {
 			GraphNode graphNode = (GraphNode) object;
 
-			// setDataForGraphActions(graphNode);
+			setDataForGraphActions(graphNode);
 
 			Object selectedData = graphNode.getData();
 			PropertiesView propertiesView = GuiUtils.getPropertiesView();
@@ -434,18 +434,18 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	 * 
 	 * @param graphNode
 	 */
-	// TODO: disabled
-	// private final void setDataForGraphActions(GraphNode graphNode) {
-	// if (graphNode == null) {
-	// openVisualGraphAction.setData(null);
-	// openFlowGraphAction.setData(null);
-	// } else {
-	// openVisualGraphAction.setData(graphNode.getData());
-	// openFlowGraphAction.setData(graphNode.getData());
-	// }
-	//
-	// deleteSelectedNodeInGraph.setData(graphNode);
-	// }
+	// TODO: disabled flow graph action
+	private final void setDataForGraphActions(GraphNode graphNode) {
+		if (graphNode == null) {
+			openVisualGraphAction.setData(null);
+			// openFlowGraphAction.setData(null);
+		} else {
+			openVisualGraphAction.setData(graphNode.getData());
+			// openFlowGraphAction.setData(graphNode.getData());
+		}
+
+		deleteSelectedNodeInGraph.setData(graphNode);
+	}
 
 	@Override
 	public final void setFocus() {
