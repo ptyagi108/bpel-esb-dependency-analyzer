@@ -1,6 +1,7 @@
 package com.tomecode.soa.ora.osb10g.parser;
 
 import java.io.File;
+import java.util.List;
 
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.services.Service;
@@ -34,19 +35,22 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 	}
 
 	/**
-	 * parse OSB 10G multi workspace
+	 * parse new multi-workspace
 	 * 
-	 * @param name
-	 *            multi workspace name
-	 * @param file
-	 *            workspace path
-	 * @return
+	 * @param multiWorkspace
+	 * @param workspacePaths
 	 */
-	public final OraSB10gMultiWorkspace parse(String name, File file) {
-		OraSB10gMultiWorkspace multiWorkspace = new OraSB10gMultiWorkspace(name, file);
-		OraSB10gWorkspace workspace = new OraSB10gWorkspace(name, file);
+	public final void parse(OraSB10gMultiWorkspace multiWorkspace, List<String> workspacePaths) {
+		for (String path : workspacePaths) {
+			File f = new File(path);
+			multiWorkspace.addWorkspace(parse2(f));
+		}
 
-		multiWorkspace.addWorkspace(workspace);
+		analyzeDependnecies(multiWorkspace);
+	}
+
+	private final OraSB10gWorkspace parse2(File file) {
+		OraSB10gWorkspace workspace = new OraSB10gWorkspace(file.getName(), file);
 
 		if (containsProjectFiles(file)) {
 			OraSB10gProject project = projectParser.parse(file);
@@ -64,8 +68,7 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 			}
 		}
 
-		analyzeDependnecies(multiWorkspace);
-		return multiWorkspace;
+		return workspace;
 	}
 
 	/**
@@ -110,13 +113,14 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 	 * 
 	 * @param multiWorkspace
 	 */
-	private final void analyzeDependnecies(OraSB10gMultiWorkspace multiWorkspace) {
+	public final void analyzeDependnecies(OraSB10gMultiWorkspace multiWorkspace) {
 		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
 			OraSB10gWorkspace oraSB10gWorkspace = (OraSB10gWorkspace) workspace;
 
 			for (Project project : oraSB10gWorkspace.getProjects()) {
 				OraSB10gProject oraSB10gProject = (OraSB10gProject) project;
 
+				// analyze dependencies in jar project
 				if (oraSB10gProject.isAsJar()) {
 
 					for (Service service : oraSB10gProject.getServices()) {
@@ -131,7 +135,8 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 							} else {
 
 								// find dependency in others projects
-								targetService = findServiceInOtherJarProject(multiWorkspace, oraSB10gProject, serviceDependency);
+
+								targetService = findServiceByPath(multiWorkspace, serviceDependency);
 								if (targetService != null) {
 									serviceDependency.addService(targetService);
 									service.getActivityDependency().addDependecy(serviceDependency.getActivity(), targetService);
@@ -162,7 +167,14 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 										service.getActivityDependency().addDependecy(serviceDependency.getActivity(), targetService);
 									}
 								} else {
-									addUnknowService(serviceDependencies, depProject, serviceDependency, service);
+									Service targetService = findServiceByPath(multiWorkspace, serviceDependency);
+									if (targetService == null) {
+										addUnknowService(serviceDependencies, depProject, serviceDependency, service);
+									} else {
+										serviceDependency.addService(targetService);
+										service.getActivityDependency().addDependecy(serviceDependency.getActivity(), targetService);
+									}
+
 								}
 							}
 						}
@@ -177,32 +189,36 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 	}
 
 	/**
-	 * find dependencies in other jar projects
+	 * find service by name in all projects
 	 * 
 	 * @param multiWorkspace
-	 * @param ingnoreProject
 	 * @param serviceDependency
 	 * @return
 	 */
-	private final Service findServiceInOtherJarProject(OraSB10gMultiWorkspace multiWorkspace, OraSB10gProject ingnoreProject, ServiceDependency serviceDependency) {
+	private final Service findServiceByPath(OraSB10gMultiWorkspace multiWorkspace, ServiceDependency serviceDependency) {
+
+		String[] paths = serviceDependency.toString().split("/");
+		String serviceName = paths[paths.length - 1];
+		String serviceName2 = serviceName.replaceAll(" ", "_");
+
 		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
 			for (Project project : workspace.getProjects()) {
-				OraSB10gProject sb10gProject = (OraSB10gProject) project;
+				OraSB10gProject oraSB10gProject = (OraSB10gProject) project;
+				for (Service service : oraSB10gProject.getServices()) {
 
-				// only in jar project
-				if (sb10gProject.isAsJar()) {
+					if (service.getType().equals(serviceDependency.getType())) {
 
-					if (!ingnoreProject.equals(project)) {
-
-						Service target = findServiceInJarProject(sb10gProject, serviceDependency);
-						if (target != null) {
-							return target;
+						if (service.getName().equals(serviceName) || service.getName().replaceAll(" ", "_").equals(serviceName2)) {
+							if (service.getFolder().getPath().equals(serviceDependency.getRefPathWithoutServiceName())) {
+								return service;
+							}
 						}
+
 					}
 
 				}
-
 			}
+
 		}
 		return null;
 	}
@@ -216,9 +232,17 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 	 */
 	private final Service findServiceInJarProject(OraSB10gProject project, ServiceDependency serviceDependency) {
 
+		// String serviceDependencyName = serviceDependency.getServiceName();
+		// String sserviceDependencyName2 =
+		// serviceDependencyName.replaceAll(" ", "_");
+
 		for (Service service : project.getServices()) {
 			if (service.getType() == serviceDependency.getType()) {
-				if (service.getName().equals(serviceDependency.getServiceName())) {
+
+				// String serviceName = service.getName().replace(" ", "_");
+
+				String serviceDepName = serviceDependency.getServiceName();
+				if (service.getName().equals(serviceDepName) || service.getName().replaceAll(" ", "_").equals(serviceDepName.replaceAll(" ", "_"))) {
 					String refPath = serviceDependency.getRefPath();
 					if (refPath == null) {
 						return service;
@@ -253,10 +277,12 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 	 * @return
 	 */
 	private final Service findService(OraSB10gProject project, String serviceName, String realPath, ServiceDependencyType type) {
+
+		String serviceName2 = serviceName.replaceAll(" ", "_");
 		for (Service service : project.getServices()) {
 			if (service.getType() == type) {
 
-				if (service.getOrginalName().equals(serviceName)) {
+				if (service.getOrginalName().equals(serviceName) || service.getOrginalName().replaceAll(" ", "_").equals(serviceName2)) {
 					if (realPath == null) {
 						return service;
 					} else {

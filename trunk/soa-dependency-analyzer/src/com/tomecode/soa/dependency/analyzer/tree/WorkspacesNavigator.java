@@ -134,7 +134,7 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 	}
 
 	/**
-	 * refresh multi workspace nodes
+	 * replace old {@link MultiWorkspace} node
 	 * 
 	 * @param multiWorkspace
 	 */
@@ -142,8 +142,14 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 		rootNode.refreshMultiWorkspaceNode(oldMultiWorkspace, newMultiWorkspace);
 	}
 
+	/**
+	 * update exists {@link MultiWorkspace}
+	 * 
+	 * @param multiWorkspace
+	 */
 	public final void updateMultiWorkspace(MultiWorkspace multiWorkspace) {
 		rootNode.refreshMultiWorkspaceNode(multiWorkspace);
+		tree.refresh();
 	}
 
 	/**

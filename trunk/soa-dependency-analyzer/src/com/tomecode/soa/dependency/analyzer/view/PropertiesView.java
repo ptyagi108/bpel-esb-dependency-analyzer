@@ -418,13 +418,18 @@ public final class PropertiesView extends ViewPart implements HideView {
 			txtServicePath.setText(service.getFile() == null ? "" : service.getFile().toString());
 			txtServiceType.setText(service.getType().toString());
 			Project project = (Project) service.getProject();
-			txtServiceProjectName.setText(project.getName());
-			txtServiceProjectType.setText(project.getType().toString());
-			txtServiceProjectPath.setText(project.getFile().toString());
-			txtServiceProjectWorkspace.setText(project.getWorkpsace().getName());
-			txtServiceProjectWorkspacePath.setText(project.getWorkpsace().getFile().toString());
-			txtServiceProjectMultiWorkspacePath.setText(project.getWorkpsace().getMultiWorkspace().getPath().toString());
-			txtServiceProjectMultiWorkspaceName.setText(project.getWorkpsace().getMultiWorkspace().getName());
+			try {
+				txtServiceProjectName.setText(project.getName());
+				txtServiceProjectType.setText(project.getType().toString());
+				txtServiceProjectPath.setText(project.getFile().toString());
+				txtServiceProjectWorkspace.setText(project.getWorkpsace().getName());
+				txtServiceProjectWorkspacePath.setText(project.getWorkpsace().getFile().toString());
+				txtServiceProjectMultiWorkspacePath.setText(project.getWorkpsace().getMultiWorkspace().getPath().toString());
+				txtServiceProjectMultiWorkspaceName.setText(project.getWorkpsace().getMultiWorkspace().getName());
+
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+			}
 			showContent(servicePage);
 		} else if (dataForProperties instanceof ServiceDependency) {
 			ServiceDependency dependency = (ServiceDependency) dataForProperties;
