@@ -1,0 +1,10 @@
+#summary Getting Started with SOA Dependency-Analyzer (version 0.8-Beta2).
+#labels Phase-Requirements,Phase-Design,Phase-Implementation,Phase-Deploy,Getting-Started-Guide-for-version-0.8-beta2
+
+
+= Getting Started with SOA Dependency Analyzer 0.8-Beta2 =
+
+Requirements: Java 1.6
+
+===What is the Multi-workspace and the Workspace===
+
