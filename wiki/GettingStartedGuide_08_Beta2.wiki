@@ -1,11 +1,36 @@
-#summary Getting Started with SOA Dependency-Analyzer (version 0.8-Beta2).
-#labels Phase-Requirements,Phase-Design,Phase-Implementation,Phase-Deploy,Getting-Started-Guide-for-version-0.8-beta2
+#summary Getting Started with SOA Dependency-Analyzer (version 0.8-Beta2 - Build: 0.8.209).
 
 
 = Getting Started with SOA Dependency Analyzer 0.8-Beta2 =
 
 Requirements: Java 1.6
 
-===What is the Multi-workspace and the Workspace===
+===What is the Multi-workspace and the Workspace?===
 
-	      http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/v0-8-beta2/Workspace.png
+Workspace may be either [http://www.oracle.com/technetwork/middleware/soasuite/downloads/downloads-085394.html#10g Oracle SOA Suite 10g] 
+(contains [http://en.wikipedia.org/wiki/Business_Process_Execution_Language BPEL processes] and [http://en.wikipedia.org/wiki/Enterprise_service_bus Enterprise Service Bus] - ESB services) or
+[http://download.oracle.com/docs/cd/E13159_01/osb/docs10gr3/ Oracle Service Bus 10g -OSB] (contains Proxy and Business services). 
+Depending on the type of workspace, the analyzer, will analyze the dependencies between projects.
+
+
+http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/v0-8-beta2/Workspace.png
+
+
+===How to run the application?===
+
+*MAC OS X:*
+.../soaDependencyAnalyzer/SoaDependencyAnalyzer.app
+
+*WIN:*
+.../soaDependencyAnalyzer/SoaDependencyAnalyzer.exe
+
+*Linux:*
+.../soaDependencyAnalyzer/SoaDependencyAnalyzer
+
+
+===What's what===
+
+http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/v0-8-beta2/SoaDependencyAnalyzer08Desc.png
+
+===Open New Multi-Workspace or Workspace Wizard===
+
