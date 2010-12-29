@@ -40,7 +40,6 @@ import com.tomecode.soa.dependency.analyzer.gui.actions.graph.GraphExpanderActio
 import com.tomecode.soa.dependency.analyzer.gui.actions.graph.GraphExpanderAction.ExpandChangeListener;
 import com.tomecode.soa.dependency.analyzer.gui.actions.graph.GraphLayoutAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.graph.GraphLayoutAction.LayoutActionType;
-import com.tomecode.soa.dependency.analyzer.gui.actions.graph.OpenFlowGraphAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.graph.OpenVisualGraphAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.graph.RefreshGraphLayout;
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
@@ -135,7 +134,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	/**
 	 * open new {@link FlowGraphView} from selected node in graph
 	 */
-	private final OpenFlowGraphAction openFlowGraphAction;
+	// private final OpenFlowGraphAction openFlowGraphAction;
 
 	/**
 	 * delete selected node in graph
@@ -154,8 +153,8 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 		this.isExpandInGraph = true;
 		this.openVisualGraphAction = new OpenVisualGraphAction();
 		this.openVisualGraphAction.setEnabled(false);
-		this.openFlowGraphAction = new OpenFlowGraphAction();
-		this.openFlowGraphAction.setEnabled(false);
+		// this.openFlowGraphAction = new OpenFlowGraphAction();
+		// this.openFlowGraphAction.setEnabled(false);
 		this.deleteSelectedNodeInGraph = new DeleteSelectedNodeInGraph();
 		this.deleteSelectedNodeInGraph.setEnabled(false);
 	}
@@ -183,7 +182,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 					if (serviceBusStructureNavigator != null) {
 						GuiUtils.getServiceBusStructureNavigator().show(null);
 					}
-					setDataForGraphActions(null);
+					// setDataForGraphActions(null);
 				}
 			}
 		});
@@ -282,7 +281,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 		graphNodes.remove(graphNode);
 		graphNode.dispose();
 
-		setDataForGraphActions(null);
+		// setDataForGraphActions(null);
 		// graphViewer.refresh();
 	}
 
@@ -296,7 +295,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 		popupMenuManager.createContextMenu(graph);
 
 		popupMenuManager.add(openVisualGraphAction);
-		popupMenuManager.add(openFlowGraphAction);
+		// popupMenuManager.add(openFlowGraphAction);
 		popupMenuManager.add(separator);
 		popupMenuManager.add(deleteSelectedNodeInGraph);
 		popupMenuManager.add(separator);
@@ -394,7 +393,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 		} else if (object instanceof GraphNode) {
 			GraphNode graphNode = (GraphNode) object;
 
-			setDataForGraphActions(graphNode);
+			// setDataForGraphActions(graphNode);
 
 			Object selectedData = graphNode.getData();
 			PropertiesView propertiesView = GuiUtils.getPropertiesView();
@@ -435,17 +434,18 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	 * 
 	 * @param graphNode
 	 */
-	private final void setDataForGraphActions(GraphNode graphNode) {
-		if (graphNode == null) {
-			openVisualGraphAction.setData(null);
-			openFlowGraphAction.setData(null);
-		} else {
-			openVisualGraphAction.setData(graphNode.getData());
-			openFlowGraphAction.setData(graphNode.getData());
-		}
-
-		deleteSelectedNodeInGraph.setData(graphNode);
-	}
+	// TODO: disabled
+	// private final void setDataForGraphActions(GraphNode graphNode) {
+	// if (graphNode == null) {
+	// openVisualGraphAction.setData(null);
+	// openFlowGraphAction.setData(null);
+	// } else {
+	// openVisualGraphAction.setData(graphNode.getData());
+	// openFlowGraphAction.setData(graphNode.getData());
+	// }
+	//
+	// deleteSelectedNodeInGraph.setData(graphNode);
+	// }
 
 	@Override
 	public final void setFocus() {

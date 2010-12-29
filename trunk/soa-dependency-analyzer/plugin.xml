@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="splashExtension" name="Splash Extensions" schema="schema/splashExtension.exsd"/>
    <extension
          id="application"
          point="org.eclipse.core.runtime.applications">
@@ -120,6 +121,49 @@
                value="icons/com/tomecode/soa/product/soaDependencyAnalyzerAbout16.png,icons/com/tomecode/soa/product/soaDependencyAnalyzerAbout32.png,icons/com/tomecode/soa/product/soaDependencyAnalyzerAbout48.png,icons/com/tomecode/soa/product/soaDependencyAnalyzerAbout64.png,icons/com/tomecode/soa/product/soaDependencyAnalyzerAbout.png">
          </property>
       </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.splashHandlers">
+      <splashHandler
+            class="com.tomecode.soa.dependency.analyzer.splashHandlers.BrowserSplashHandler"
+            id="com.tomecode.soa.dependency.analyzer.splashHandlers.browser">
+      </splashHandler>
+      <splashHandler
+            class="com.tomecode.soa.dependency.analyzer.splashHandlers.InteractiveSplashHandler"
+            id="com.tomecode.soa.dependency.analyzer.splashHandlers.interactive">
+      </splashHandler>
+      <splashHandler
+            class="com.tomecode.soa.dependency.analyzer.splashHandlers.ExtensibleSplashHandler"
+            id="com.tomecode.soa.dependency.analyzer.splashHandlers.extensible">
+      </splashHandler>
+   </extension>
+   <extension
+         point="com.tomecode.soa.dependency.analyzer.splashExtension">
+      <splashExtension
+            icon="icons/af.png"
+            id="af"
+            tooltip="Application Framework">
+      </splashExtension>
+      <splashExtension
+            icon="icons/embedded.png"
+            id="embedded"
+            tooltip="Embedded">
+      </splashExtension>
+      <splashExtension
+            icon="icons/enterprise.png"
+            id="enterprise"
+            tooltip="Enterprise">
+      </splashExtension>
+      <splashExtension
+            icon="icons/languages.png"
+            id="languages"
+            tooltip="Languages">
+      </splashExtension>
+      <splashExtension
+            icon="icons/rcp.png"
+            id="rcp"
+            tooltip="RCP">
+      </splashExtension>
    </extension>
 
 </plugin>

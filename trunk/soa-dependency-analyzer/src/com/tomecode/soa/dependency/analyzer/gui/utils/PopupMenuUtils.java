@@ -7,7 +7,6 @@ import com.tomecode.soa.dependency.analyzer.gui.actions.AddNewProjectToWorkspace
 import com.tomecode.soa.dependency.analyzer.gui.actions.OpenWorkspaceAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.RemoveMultiWorkspaceAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.RemoveWorkspaceAction;
-import com.tomecode.soa.dependency.analyzer.gui.actions.graph.OpenFlowGraphAction;
 import com.tomecode.soa.dependency.analyzer.gui.actions.graph.OpenVisualGraphAction;
 import com.tomecode.soa.dependency.analyzer.tree.ProjectServicesNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.WorkspacesNavigator;
@@ -42,7 +41,8 @@ public final class PopupMenuUtils {
 	/**
 	 * open new {@link FlowGraphView}
 	 */
-	private static final OpenFlowGraphAction OPEN_FLOW_GRAPH_ACTION = new OpenFlowGraphAction();
+	// private static final OpenFlowGraphAction OPEN_FLOW_GRAPH_ACTION = new
+	// OpenFlowGraphAction();
 
 	private static final AddNewProjectToWorkspaceAction ADD_NEW_PROJECT_TO_WORKSPACE = new AddNewProjectToWorkspaceAction();
 
@@ -61,8 +61,8 @@ public final class PopupMenuUtils {
 	public static final void fillWorksapceNavigator(Object selectedNode, IMenuManager manager) {
 		OPEN_VISAUL_GRAPH_ACTION.setData(selectedNode);
 		manager.add(OPEN_VISAUL_GRAPH_ACTION);
-		OPEN_FLOW_GRAPH_ACTION.setData(selectedNode);
-		manager.add(OPEN_FLOW_GRAPH_ACTION);
+		// OPEN_FLOW_GRAPH_ACTION.setData(selectedNode);
+		// manager.add(OPEN_FLOW_GRAPH_ACTION);
 		manager.add(SEPARATOR);
 		manager.add(OPEN_WORKSPACE_ACTION);
 		manager.add(SEPARATOR);
@@ -95,7 +95,7 @@ public final class PopupMenuUtils {
 	public static final void fillServicesNavigator(Object selectedNode, IMenuManager manager) {
 		OPEN_VISAUL_GRAPH_ACTION.setData(selectedNode);
 		manager.add(OPEN_VISAUL_GRAPH_ACTION);
-		OPEN_FLOW_GRAPH_ACTION.setData(selectedNode);
-		manager.add(OPEN_FLOW_GRAPH_ACTION);
+		// OPEN_FLOW_GRAPH_ACTION.setData(selectedNode);
+		// manager.add(OPEN_FLOW_GRAPH_ACTION);
 	}
 }
