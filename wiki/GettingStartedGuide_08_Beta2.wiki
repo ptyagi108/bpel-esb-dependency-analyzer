@@ -8,3 +8,4 @@ Requirements: Java 1.6
 
 ===What is the Multi-workspace and the Workspace===
 
+	      http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/v0-8-beta2/Workspace.png
