@@ -34,3 +34,26 @@ http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/v0-8-
 
 ===Open New Multi-Workspace or Workspace Wizard===
 
+Click the left mouse button somewhere in the 'Workspaces View' and choose 'Open a new Workspace, or click the menu "File-> Open a new Workspace".
+
+http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/v0-8-beta2/OpenNewWorkspaceWizard.png
+
+
+Allows you to select the type of the Mutli-workspace a Workspace: 
+|| Type || Description ||
+||Oracle SOA Suite 10g (only from Workspace) || Analyzes the dependencies between the (BPEL Project - BPEL process and ESB Project -ESB Services.  Analyzer works only with projects in the workspace and not with jar(BPEL Process) or zip(ESB Services) exported from server. ||
+||Oracle Service Bus 10g || Analyzes the dependencies between the Proxy Services and Business Services ||
+||Open ESB || is demo ||
+
+
+Next page in the wizard lets you choose: either add a new the Workspace into a new the Mutli-Workspace or add a new Workspace in an existing the Mutli-Workspace.
+
+http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/v0-8-beta2/OpenNewWorkspaceWizardSelectMultiWorkspace.png
+
+Select an option and click Next.
+
+This page allows you to add the paths to all workspaces, for that you want to analyze dependencies and visualize.
+
+http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/v0-8-beta2/OpenNewWorkspaceWizardWorkspacePaths.png
+
+The last page it is really a summary page when you click the Finish button.
