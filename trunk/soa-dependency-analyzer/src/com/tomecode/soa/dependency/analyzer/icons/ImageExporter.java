@@ -61,6 +61,6 @@ public final class ImageExporter {
 			parentDirs.mkdirs();
 		}
 
-		parentDirs.createNewFile();
+		imageFile.createNewFile();
 	}
 }

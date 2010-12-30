@@ -195,8 +195,14 @@ public final class ExportGraphToImageWizard extends Wizard {
 						imageFile = null;
 						setPageComplete(false);
 					} else {
-						textFile.setText(file);
-						imageFile = new File(file);
+
+						if (file.contains("." + fileExtension)) {
+							imageFile = new File(file);
+						} else {
+							imageFile = new File(file + "." + fileExtension);
+						}
+
+						textFile.setText(imageFile.getPath());
 						setPageComplete(true);
 					}
 
