@@ -57,3 +57,14 @@ This page allows you to add the paths to all workspaces, for that you want to an
 http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/v0-8-beta2/OpenNewWorkspaceWizardWorkspacePaths.png
 
 The last page it is really a summary page when you click the Finish button.
+
+
+
+===Visual graph?===
+
+http://bpel-esb-dependency-analyzer.googlecode.com/svn/wiki/GettingStarted/v0-8-beta2/VisualGraph.png
+
+|| Action || Description ||
+|| One click on the node (selection) || displays a detailed overview of the selected node, and activities that have dependencies on other services ||
+|| Double click on the node || Displays all used the nodes (projects, services etc.) ||
+|| Right click - context menu || Display popup menu with options such: zoom, change layout, export to image etc.||
