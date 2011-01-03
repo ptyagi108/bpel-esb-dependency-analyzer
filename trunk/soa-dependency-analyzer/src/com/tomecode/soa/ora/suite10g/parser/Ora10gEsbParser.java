@@ -1,9 +1,14 @@
 package com.tomecode.soa.ora.suite10g.parser;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import org.dom4j.Element;
 
@@ -18,6 +23,7 @@ import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.ora.suite10g.project.PartnerLinkBinding;
 import com.tomecode.soa.parser.AbstractParser;
 import com.tomecode.soa.parser.ServiceParserException;
+import com.tomecode.soa.project.Project;
 
 /**
  * (c) Copyright Tomecode.com, 2010. All rights reserved.
@@ -46,8 +52,71 @@ public final class Ora10gEsbParser extends AbstractParser {
 	 * @throws ServiceParserException
 	 */
 	public final Ora10gEsbProject parse(File projectFolder) throws ServiceParserException {
-		Ora10gEsbProject esbProject = new Ora10gEsbProject(projectFolder);
+		Ora10gEsbProject esbProject = new Ora10gEsbProject(projectFolder, true);
 		return parse(esbProject);
+	}
+
+	/**
+	 * parse {@link Ora10gEsbProject} as ZIP file
+	 * 
+	 * @param projectZip
+	 * @return
+	 * @throws ServiceParserException
+	 */
+	public final Ora10gEsbProject parseZip(File projectZip) throws ServiceParserException {
+		Ora10gEsbProject esbProject = new Ora10gEsbProject(projectZip, false);
+		parseZip2(projectZip, esbProject);
+		return esbProject;
+	}
+
+	/**
+	 * parse {@link Ora10gEsbProject} as ZIP file
+	 * 
+	 * @param projectZip
+	 * @param esbProject
+	 * @throws ServiceParserException
+	 */
+	private final void parseZip2(File projectZip, Ora10gEsbProject esbProject) throws ServiceParserException {
+		int index = projectZip.getName().lastIndexOf(".");
+		if (index != -1) {
+			esbProject.setName(projectZip.getName().substring(0, index));
+		} else {
+			esbProject.setName(projectZip.getName());
+		}
+
+		ZipFile zipFile = null;
+		try {
+			zipFile = new ZipFile(projectZip);
+			Enumeration<? extends ZipEntry> e = zipFile.entries();
+
+			while (e.hasMoreElements()) {
+				ZipEntry zipEntry = e.nextElement();
+
+				if (!zipEntry.isDirectory()) {
+					if (zipEntry.getName().endsWith(".esbsys")) {
+						EsbSys esbSys = parseEsbSysZip(new File(projectZip.getPath() + File.separator + zipEntry.toString()), zipFile.getInputStream(zipEntry));
+						esbSys.setOwnerEsbProject(esbProject);
+						esbProject.addBasicEsbNode(esbSys);
+					} else if (zipEntry.getName().endsWith(".esbgrp")) {
+						parseEsbGrpZip(new File(projectZip.getPath() + File.separator + zipEntry.toString()), zipFile.getInputStream(zipEntry), esbProject);
+					} else if (zipEntry.getName().endsWith(".esbsvc")) {
+						parseEsbSvcZip(new File(projectZip.getPath() + File.separator + zipEntry.toString()), zipFile.getInputStream(zipEntry), esbProject);
+					}
+				}
+
+			}
+
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} finally {
+			if (zipFile != null) {
+				try {
+					zipFile.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	/**
@@ -58,45 +127,71 @@ public final class Ora10gEsbParser extends AbstractParser {
 	 * @throws ServiceParserException
 	 */
 	public final Ora10gEsbProject parse(Ora10gEsbProject esbProject) throws ServiceParserException {
-		// Ora10gEsbProject esbProject = new
-		// Ora10gEsbProject(findProjectName(projectFolder), projectFolder);
-		esbProject.setName(findProjectName(esbProject.getFile()));
+		if (esbProject.isFolder()) {
+			// Ora10gEsbProject esbProject = new
+			// Ora10gEsbProject(findProjectName(projectFolder), projectFolder);
+			esbProject.setName(findProjectName(esbProject.getFile()));
 
-		List<File> findedFiles = new ArrayList<File>();
-		findEsbsvcFiles(esbProject.getFile(), findedFiles, ".esbsys");
+			List<File> findedFiles = new ArrayList<File>();
+			findEsbsvcFiles(esbProject.getFile(), findedFiles, ".esbsys");
 
-		for (File esbSysFile : findedFiles) {
-			EsbSys esbSys = parseEsbSys(esbSysFile);
-			esbSys.setOwnerEsbProject(esbProject);
-			esbProject.addBasicEsbNode(parseEsbSys(esbSysFile));
-		}
+			for (File esbSysFile : findedFiles) {
+				EsbSys esbSys = parseEsbSysProject(esbSysFile);
+				esbSys.setOwnerEsbProject(esbProject);
+				esbProject.addBasicEsbNode(esbSys);
+			}
 
-		findedFiles.clear();
-		findEsbsvcFiles(esbProject.getFile(), findedFiles, ".esbgrp");
+			findedFiles.clear();
+			findEsbsvcFiles(esbProject.getFile(), findedFiles, ".esbgrp");
 
-		for (File esbGrpFile : findedFiles) {
-			parseEsbGrp(esbGrpFile, esbProject);
-		}
-		findedFiles.clear();
-		findEsbsvcFiles(esbProject.getFile(), findedFiles, ".esbsvc");
+			for (File esbGrpFile : findedFiles) {
+				parseEsbGrpProject(esbGrpFile, esbProject);
+			}
+			findedFiles.clear();
+			findEsbsvcFiles(esbProject.getFile(), findedFiles, ".esbsvc");
 
-		for (File esbSvcFile : findedFiles) {
-			parseEsbsvc(esbSvcFile, esbProject);
+			for (File esbSvcFile : findedFiles) {
+				parseEsbSvcProject(esbSvcFile, esbProject);
+			}
+
+		} else {
+			parseZip2(esbProject.getFile(), esbProject);
 		}
 
 		return esbProject;
 	}
 
 	/**
-	 * parse {@link EsbGrp}
+	 * parse {@link EsbGrp} from project folder
 	 * 
 	 * @param esbGrpFile
 	 * @param esbProject
 	 * @throws ServiceParserException
 	 */
-	private final void parseEsbGrp(File esbGrpFile, Ora10gEsbProject esbProject) throws ServiceParserException {
-		Element eService = parseXml(esbGrpFile);
+	private final void parseEsbGrpProject(File esbGrpFile, Ora10gEsbProject esbProject) throws ServiceParserException {
+		parseEsbGrp(esbGrpFile, parseXml(esbGrpFile), esbProject);
+	}
 
+	/**
+	 * parse {@link EsbGrp} from zip
+	 * 
+	 * @param esbGrpFile
+	 * @param zipStream
+	 * @param esbProject
+	 * @throws ServiceParserException
+	 */
+	private final void parseEsbGrpZip(File esbGrpFile, InputStream zipStream, Ora10gEsbProject esbProject) throws ServiceParserException {
+		parseEsbGrp(esbGrpFile, parseXml(zipStream), esbProject);
+	}
+
+	/**
+	 * parse {@link EsbGrp}
+	 * 
+	 * @param esbGrpFile
+	 * @param eService
+	 * @param esbProject
+	 */
+	private final void parseEsbGrp(File esbGrpFile, Element eService, Ora10gEsbProject esbProject) {
 		EsbGrp esbGrp = new EsbGrp(esbGrpFile, eService.attributeValue("name"), eService.attributeValue("qname"));
 		Element parent = eService.element("parent");
 		if (parent != null) {
@@ -129,9 +224,22 @@ public final class Ora10gEsbParser extends AbstractParser {
 	 * @return
 	 * @throws ServiceParserException
 	 */
-	private final EsbSys parseEsbSys(File esbSysFile) throws ServiceParserException {
+	private final EsbSys parseEsbSysProject(File esbSysFile) throws ServiceParserException {
 		Element eService = parseXml(esbSysFile);
 		return new EsbSys(esbSysFile, eService.attributeValue("name"), eService.attributeValue("qname"));
+	}
+
+	/**
+	 * parse {@link EsbSys} from zip
+	 * 
+	 * @param file
+	 * @param zipStream
+	 * @return
+	 * @throws ServiceParserException
+	 */
+	private final EsbSys parseEsbSysZip(File file, InputStream zipStream) throws ServiceParserException {
+		Element eService = parseXml(zipStream);
+		return new EsbSys(file, eService.attributeValue("name"), eService.attributeValue("qname"));
 	}
 
 	/**
@@ -175,14 +283,35 @@ public final class Ora10gEsbParser extends AbstractParser {
 	}
 
 	/**
+	 * parse {@link EsbSvc} from {@link Project}
+	 * 
+	 * @param file
+	 * @param esbProject
+	 * @throws ServiceParserException
+	 */
+	private final void parseEsbSvcProject(File file, Ora10gEsbProject esbProject) throws ServiceParserException {
+		parseEsbSvc(file, parseXml(file), esbProject);
+	}
+
+	/**
+	 * parse {@link EsbSvc} from zip
+	 * 
+	 * @param file
+	 * @param zipStream
+	 * @param esbProject
+	 * @throws ServiceParserException
+	 */
+	private final void parseEsbSvcZip(File file, InputStream zipStream, Ora10gEsbProject esbProject) throws ServiceParserException {
+		parseEsbSvc(file, parseXml(zipStream), esbProject);
+	}
+
+	/**
 	 * parse {@link EsbSvc}
 	 * 
 	 * @param file
 	 * @throws ServiceParserException
 	 */
-	public final void parseEsbsvc(File file, Ora10gEsbProject esbProject) throws ServiceParserException {
-		Element eService = parseXml(file);
-
+	private final void parseEsbSvc(File file, Element eService, Ora10gEsbProject esbProject) throws ServiceParserException {
 		EsbSvc esb = new EsbSvc(file, eService.attributeValue("name"), eService.attributeValue("qname"));
 		esb.setProject(esbProject);
 

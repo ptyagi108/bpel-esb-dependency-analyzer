@@ -24,6 +24,8 @@ import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gMultiWorkspace;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gWorkspace;
 import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
+import com.tomecode.soa.ora.suite10g.parser.Ora10gBpelParser;
+import com.tomecode.soa.ora.suite10g.parser.Ora10gEsbParser;
 import com.tomecode.soa.ora.suite10g.parser.Ora10gMWorkspaceParser;
 import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gMultiWorkspace;
@@ -210,9 +212,8 @@ public final class ApplicationManager {
 		for (Project project : projects) {
 			Element eProject = DocumentHelper.createElement("project");
 			eProjects.add(eProject);
+			eProject.addAttribute("isFolder", String.valueOf(project.isFolder()));
 			if (project.getType() == ProjectType.ORACLE_SERVICE_BUS_1OG) {
-				OraSB10gProject oraSB10gProject = (OraSB10gProject) project;
-				eProject.addAttribute("isJar", String.valueOf(oraSB10gProject.isAsJar()));
 			} else if (project.getType() == ProjectType.ORACLE10G_ESB) {
 				eProject.addAttribute("type", "esb");
 			} else if (project.getType() == ProjectType.ORACLE10G_BPEL) {
@@ -288,10 +289,10 @@ public final class ApplicationManager {
 
 						String type = ee.attributeValue("type");
 						if ("esb".equalsIgnoreCase(type)) {
-							Ora10gEsbProject esbProject = new Ora10gEsbProject(new File(ee.elementTextTrim("path")));
+							Ora10gEsbProject esbProject = new Ora10gEsbProject(new File(ee.elementTextTrim("path")), Boolean.parseBoolean(ee.attributeValue("isFolder")));
 							workspace.addProject(esbProject);
 						} else if ("bpel".equalsIgnoreCase(type)) {
-							Ora10gBpelProject bpelProject = new Ora10gBpelProject(new File(ee.elementTextTrim("path")));
+							Ora10gBpelProject bpelProject = new Ora10gBpelProject(new File(ee.elementTextTrim("path")), Boolean.parseBoolean(ee.attributeValue("isFolder")));
 							workspace.addProject(bpelProject);
 						}
 
@@ -325,8 +326,7 @@ public final class ApplicationManager {
 					List<?> list = eProjects.elements("project");
 					for (Object op : list) {
 						Element ee = (Element) op;
-						boolean isJar = Boolean.parseBoolean(ee.attributeValue("isJar"));
-						OraSB10gProject project = new OraSB10gProject(new File(ee.elementTextTrim("path")), isJar);
+						OraSB10gProject project = new OraSB10gProject(new File(ee.elementTextTrim("path")), Boolean.parseBoolean(ee.attributeValue("isFolder")));
 						workspace.addProject(project);
 					}
 				}
@@ -537,15 +537,42 @@ public final class ApplicationManager {
 	 * add new project to workspace
 	 * 
 	 * @param config
+	 * @throws ServiceParserException
 	 */
-	public final void addProject(AddNewProjectToWorkspaceConfig config) {
+	public final void addProject(AddNewProjectToWorkspaceConfig config) throws ServiceParserException {
 		WorkspaceType type = config.getSelectedWorkspace().getType();
 		if (type == WorkspaceType.ORACLE_SERVICE_BUS_10G) {
 			OraSB10gProject project = oraSB10gParser.addNewProject(config.isAsFolder(), config.getPath());
 			OraSB10gWorkspace workspace = (OraSB10gWorkspace) config.getSelectedWorkspace();
 			workspace.addProject(project);
+		} else if (type == WorkspaceType.ORACLE_1OG) {
+			Ora10gWorkspace workspace = (Ora10gWorkspace) config.getSelectedWorkspace();
+			if (config.getProjectType() == ProjectType.ORACLE10G_BPEL) {
+				Ora10gBpelParser bpelParser = new Ora10gBpelParser();
+				Ora10gBpelProject bpelProject = null;
+				if (config.isAsFolder()) {
+					bpelProject = bpelParser.parseBpelXml(config.getPath());
+				} else {
+					// TODO: parse bpel as jar
+				}
+				bpelProject.setWorkspace(workspace);
+				workspace.addProject(bpelProject);
+			} else if (config.getProjectType() == ProjectType.ORACLE10G_ESB) {
+				Ora10gEsbParser esbParser = new Ora10gEsbParser();
+				Ora10gEsbProject esbProject = null;
+				if (config.isAsFolder()) {
+					esbProject = esbParser.parse(config.getPath());
+				} else {
+					esbProject = esbParser.parseZip(config.getPath());
+				}
+
+				esbProject.setWorkspace(workspace);
+				workspace.addProject(esbProject);
+			}
+
+			Ora10gMWorkspaceParser parser = new Ora10gMWorkspaceParser();
+			parser.analyseDependencies((Ora10gMultiWorkspace) workspace.getMultiWorkspace());
 		}
 		writeAppData();
 	}
-
 }

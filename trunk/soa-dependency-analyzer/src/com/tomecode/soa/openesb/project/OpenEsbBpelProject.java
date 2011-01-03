@@ -130,4 +130,9 @@ public final class OpenEsbBpelProject implements Project {
 		return name + "\n\n" + (file != null ? file.getPath() : "");
 	}
 
+	@Override
+	public boolean isFolder() {
+		return false;
+	}
+
 }

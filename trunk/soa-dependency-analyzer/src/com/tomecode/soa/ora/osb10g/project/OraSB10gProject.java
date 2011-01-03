@@ -31,7 +31,7 @@ public final class OraSB10gProject implements Project {
 	/**
 	 * if is true then this project is JAR file
 	 */
-	private boolean asJar;
+	private boolean folder;
 	/**
 	 * project file or folder
 	 */
@@ -52,11 +52,11 @@ public final class OraSB10gProject implements Project {
 	 * 
 	 * @param file
 	 *            project file or folder
-	 * @param asJar
+	 * @param isFolder
 	 */
-	public OraSB10gProject(File file, boolean asJar) {
+	public OraSB10gProject(File file, boolean isFolder) {
 		this.file = file;
-		this.asJar = asJar;
+		this.folder = isFolder;
 		this.services = new ArrayList<Service>();
 		this.servicesWithFlow = new ArrayList<Service>();
 		this.folders = new OraSB10gFolders(this, file, null, null);
@@ -125,8 +125,8 @@ public final class OraSB10gProject implements Project {
 		return ImageFactory.OSB_10G_PROJECT;
 	}
 
-	public final boolean isAsJar() {
-		return asJar;
+	public final boolean isFolder() {
+		return folder;
 	}
 
 	@Override

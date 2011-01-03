@@ -198,7 +198,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 	private final Ora10gBpelProject parseBpelXml(Element eBpelXml, File bpelXmlFile) throws ServiceParserException {
 		Element eBPELProcess = eBpelXml.element("BPELProcess");
 		File f = bpelXmlFile.getParentFile().getParentFile();
-		Ora10gBpelProject bpelProcess = new Ora10gBpelProject(eBPELProcess.attributeValue("id"), eBPELProcess.attributeValue("src"), bpelXmlFile, f);
+		Ora10gBpelProject bpelProcess = new Ora10gBpelProject(eBPELProcess.attributeValue("id"), eBPELProcess.attributeValue("src"), bpelXmlFile, f, false);
 
 		if (!isParsedProcess(bpelProcess)) {
 			parsedProcess.add(bpelProcess);

@@ -121,7 +121,7 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 				OraSB10gProject oraSB10gProject = (OraSB10gProject) project;
 
 				// analyze dependencies in jar project
-				if (oraSB10gProject.isAsJar()) {
+				if (!oraSB10gProject.isFolder()) {
 
 					for (Service service : oraSB10gProject.getServices()) {
 
@@ -209,9 +209,15 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 					if (service.getType().equals(serviceDependency.getType())) {
 
 						if (service.getName().equals(serviceName) || service.getName().replaceAll(" ", "_").equals(serviceName2)) {
-							if (service.getFolder().getPath().equals(serviceDependency.getRefPathWithoutServiceName())) {
-								return service;
+
+							try {
+								if (service.getFolder().getPath().equals(serviceDependency.getRefPathWithoutServiceName())) {
+									return service;
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
 							}
+
 						}
 
 					}

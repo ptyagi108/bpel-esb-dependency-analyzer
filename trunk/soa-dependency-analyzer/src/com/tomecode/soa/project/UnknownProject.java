@@ -181,6 +181,11 @@ public final class UnknownProject implements Project {
 		return "Unknown Service";
 	}
 
+	@Override
+	public final boolean isFolder() {
+		return false;
+	}
+
 	/**
 	 * (c) Copyright Tomecode.com, 2010. All rights reserved.
 	 * 
@@ -194,4 +199,5 @@ public final class UnknownProject implements Project {
 	public enum UnknownProjectType {
 		JMS, DB, UNKNOWN, FTP, FILE, AQ, MQ;
 	}
+
 }

@@ -48,10 +48,10 @@ public final class OraSB10gProjectParser {
 	}
 
 	public final void parse(OraSB10gProject project) {
-		if (project.isAsJar()) {
-			executeParserJar(project.getFile(), project);
-		} else {
+		if (project.isFolder()) {
 			executeParse(project.getFile(), project);
+		} else {
+			executeParserJar(project.getFile(), project);
 		}
 	}
 
@@ -62,7 +62,7 @@ public final class OraSB10gProjectParser {
 	 * @return
 	 */
 	public final OraSB10gProject parseJar(File jar) {
-		OraSB10gProject project = new OraSB10gProject(jar, true);
+		OraSB10gProject project = new OraSB10gProject(jar, false);
 		executeParserJar(jar, project);
 		return project;
 	}
@@ -125,7 +125,7 @@ public final class OraSB10gProjectParser {
 	 * @return
 	 */
 	public final OraSB10gProject parse(File projectFolder) {
-		OraSB10gProject project = new OraSB10gProject(projectFolder, false);
+		OraSB10gProject project = new OraSB10gProject(projectFolder, true);
 		executeParse(projectFolder, project);
 		return project;
 	}

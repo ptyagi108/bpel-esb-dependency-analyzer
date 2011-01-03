@@ -14,6 +14,7 @@ import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.gui.wizards.AddNewProjectToWorkspaceWizard.AddNewProjectToWorkspaceConfig;
 import com.tomecode.soa.dependency.analyzer.gui.wizards.OpenNewWorkspaceWizard.WorkspaceConfig;
 import com.tomecode.soa.dependency.analyzer.tree.WorkspacesNavigator;
+import com.tomecode.soa.parser.ServiceParserException;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace.WorkspaceType;
 
@@ -42,7 +43,12 @@ public final class LoadingDialogs {
 					monitor.subTask("Parsing project	...");
 					monitor.worked(40);
 
-					ApplicationManager.getInstance().addProject(config);
+					try {
+						ApplicationManager.getInstance().addProject(config);
+					} catch (ServiceParserException e) {
+
+						e.printStackTrace();
+					}
 
 					monitor.subTask("Refresh Workspace Navigator...");
 					monitor.worked(40);

@@ -27,6 +27,7 @@ import com.tomecode.soa.wsdl.Wsdl;
  */
 public final class Ora10gBpelProject implements Project {
 
+	private boolean folder;
 	/**
 	 * if true then project is in *.jws
 	 */
@@ -73,11 +74,12 @@ public final class Ora10gBpelProject implements Project {
 	/**
 	 * Constructor
 	 */
-	private Ora10gBpelProject() {
+	private Ora10gBpelProject(boolean folder) {
 		this.partnerLinkBindings = new ArrayList<PartnerLinkBinding>();
 		this.dependencyProjects = new ArrayList<Project>();
 		this.bpelOperations = new BpelOperations(this);
 		this.bpelProcessStrukture = new Ora10gBpelProcessStrukture(this);
+		this.folder = folder;
 	}
 
 	/**
@@ -87,9 +89,10 @@ public final class Ora10gBpelProject implements Project {
 	 * @param src
 	 * @param bpelXmlFile
 	 * @param file
+	 * @param folder
 	 */
-	public Ora10gBpelProject(String id, String src, File bpelXmlFile, File file) {
-		this();
+	public Ora10gBpelProject(String id, String src, File bpelXmlFile, File file, boolean folder) {
+		this(folder);
 		this.id = id;
 		this.src = src;
 		this.bpelXmlFile = bpelXmlFile;
@@ -102,8 +105,8 @@ public final class Ora10gBpelProject implements Project {
 	 * @param file
 	 *            project folder
 	 */
-	public Ora10gBpelProject(File file) {
-		this();
+	public Ora10gBpelProject(File file, boolean folder) {
+		this(folder);
 		this.file = file;
 	}
 
@@ -234,6 +237,11 @@ public final class Ora10gBpelProject implements Project {
 
 	public final void setBpelXmlFile(File bpelXmlFile) {
 		this.bpelXmlFile = bpelXmlFile;
+	}
+
+	@Override
+	public final boolean isFolder() {
+		return folder;
 	}
 
 }

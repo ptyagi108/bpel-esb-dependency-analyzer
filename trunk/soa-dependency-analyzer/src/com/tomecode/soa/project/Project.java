@@ -46,4 +46,5 @@ public interface Project extends ImageFace {
 	 */
 	Workspace getWorkpsace();
 
+	boolean isFolder();
 }

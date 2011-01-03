@@ -29,6 +29,7 @@ public final class Ora10gEsbProject implements Project {
 
 	private static final long serialVersionUID = 1517251079778988223L;
 
+	private boolean folder;
 	private String name;
 
 	private File file;
@@ -57,11 +58,13 @@ public final class Ora10gEsbProject implements Project {
 	/**
 	 * Constructor
 	 * 
-	 * @param projectFolder
+	 * @param projectFile
+	 * @param isFolder
 	 */
-	public Ora10gEsbProject(File projectFolder) {
+	public Ora10gEsbProject(File projectFile, boolean isFolder) {
 		this();
-		this.file = projectFolder;
+		this.file = projectFile;
+		this.folder = isFolder;
 	}
 
 	public final List<BasicEsbNode> getBasicEsbNodes() {
@@ -215,10 +218,6 @@ public final class Ora10gEsbProject implements Project {
 
 	}
 
-	// public final ImageIcon getIcon() {
-	// return IconFactory.ESB;
-	// }
-
 	public final boolean isInJws() {
 		return isInJws;
 	}
@@ -242,7 +241,7 @@ public final class Ora10gEsbProject implements Project {
 	}
 
 	@Override
-	public String getName() {
+	public final String getName() {
 		return name;
 	}
 
@@ -252,8 +251,23 @@ public final class Ora10gEsbProject implements Project {
 	}
 
 	@Override
-	public Image getImage() {
+	public final Image getImage() {
 		return ImageFactory.ORACLE_10G_ESB;
+	}
+
+	/**
+	 * @return the folder
+	 */
+	public final boolean isFolder() {
+		return folder;
+	}
+
+	/**
+	 * @param folder
+	 *            the folder to set
+	 */
+	public final void setFolder(boolean folder) {
+		this.folder = folder;
 	}
 
 	@Override
