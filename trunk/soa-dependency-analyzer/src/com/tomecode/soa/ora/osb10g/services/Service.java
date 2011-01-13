@@ -5,6 +5,7 @@ import java.io.File;
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
+import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.OsbActivityDependency;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependencies;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.ServiceDependencyType;
@@ -21,6 +22,11 @@ import com.tomecode.soa.project.Project;
  * 
  */
 public abstract class Service implements ImageFace {
+
+	/**
+	 * service binding
+	 */
+	private Binding binding;
 
 	protected String description;
 
@@ -57,6 +63,11 @@ public abstract class Service implements ImageFace {
 	 * type of dependency
 	 */
 	protected ServiceDependencyType type;
+
+	/**
+	 * service endpoint config
+	 */
+	protected EndpointConfig endpointConfig;
 
 	/**
 	 * Constructor
@@ -133,6 +144,30 @@ public abstract class Service implements ImageFace {
 	 */
 	public final void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * @return the endpointConfig
+	 */
+	public final EndpointConfig getEndpointConfig() {
+		return endpointConfig;
+	}
+
+	/**
+	 * set new endpoint config
+	 * 
+	 * @param endpointConfig
+	 */
+	public final void setEndpointConfig(EndpointConfig endpointConfig) {
+		this.endpointConfig = endpointConfig;
+	}
+
+	public final Binding getBinding() {
+		return binding;
+	}
+
+	public final void setBinding(Binding binding) {
+		this.binding = binding;
 	}
 
 	@Override

@@ -18,6 +18,12 @@ import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.Servi
  */
 public final class ResourceFile extends Service {
 
+	/**
+	 * Constructor
+	 * 
+	 * @param file
+	 * @param type
+	 */
 	public ResourceFile(File file, ServiceDependencyType type) {
 		super(file, type);
 		name = file.getName();
@@ -29,10 +35,14 @@ public final class ResourceFile extends Service {
 			return ImageFactory.OSB_10G_ARCHIVE;
 		} else if (type == ServiceDependencyType.WSDL) {
 			return ImageFactory.OSB_10G_WSDL_TRANSFORMATION;
-		} else if (type == ServiceDependencyType.XMLSCHEMA) {
+		} else if (type == ServiceDependencyType.XML_SCHEMA) {
 			return ImageFactory.OSB_10G_XML_SCHEMA;
 		} else if (type == ServiceDependencyType.XQUERY) {
 			return ImageFactory.OSB_10G_XQ_TRANSFORMATION;
+		} else if (type == ServiceDependencyType.XQUERY) {
+			return ImageFactory.OSB_10G_XQ_TRANSFORMATION;
+		} else if (type == ServiceDependencyType.SERVICE_ACCOUNT) {
+			return ImageFactory.OSB_10G_SERVICE_ACCOUNT;
 		}
 		return null;
 	}

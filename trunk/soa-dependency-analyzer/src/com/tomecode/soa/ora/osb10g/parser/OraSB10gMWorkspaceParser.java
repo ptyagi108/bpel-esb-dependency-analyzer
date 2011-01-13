@@ -150,6 +150,7 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 
 				} else {
 
+					// analyze dependencies in project as folder (workspace)
 					for (Service service : oraSB10gProject.getServices()) {
 
 						ServiceDependencies serviceDependencies = service.getServiceDependencies();

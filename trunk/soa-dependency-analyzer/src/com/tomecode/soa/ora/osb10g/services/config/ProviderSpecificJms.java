@@ -1,5 +1,11 @@
 package com.tomecode.soa.ora.osb10g.services.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.tomecode.soa.jms.JMSServer;
+import com.tomecode.soa.ora.osb10g.parser.OraSB10gBasicServiceParser;
+
 /**
  * element: provider-specific for JMS
  * 
@@ -14,12 +20,15 @@ public final class ProviderSpecificJms {
 
 	private boolean responseRequired;
 
+	private final List<JMSServer> jmsServers;
+
 	/**
 	 * response URI
 	 */
 	private String responseURI;
 
 	public ProviderSpecificJms() {
+		jmsServers = new ArrayList<JMSServer>();
 	}
 
 	/**
@@ -65,6 +74,11 @@ public final class ProviderSpecificJms {
 	 */
 	public final void setResponseURI(String responseURI) {
 		this.responseURI = responseURI;
+		OraSB10gBasicServiceParser.parseJMSServerUris(responseURI, jmsServers);
+	}
+
+	public final List<JMSServer> getJmsServers() {
+		return jmsServers;
 	}
 
 }

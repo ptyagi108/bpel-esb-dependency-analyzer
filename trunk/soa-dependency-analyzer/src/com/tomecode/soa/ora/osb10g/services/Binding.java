@@ -2,6 +2,8 @@ package com.tomecode.soa.ora.osb10g.services;
 
 /**
  * 
+ * Service binding
+ * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
@@ -10,6 +12,10 @@ package com.tomecode.soa.ora.osb10g.services;
 public final class Binding {
 
 	private final BindingType type;
+
+	private String request;
+
+	private String response;
 
 	private boolean isSoap12;
 
@@ -56,6 +62,45 @@ public final class Binding {
 		this.wsdlOperation = wsdlOperation;
 	}
 
+	/**
+	 * @return the request
+	 */
+	public final String getRequest() {
+		return request;
+	}
+
+	/**
+	 * @param request
+	 *            the request to set
+	 */
+	public final void setRequest(String request) {
+		this.request = request;
+	}
+
+	/**
+	 * @return the response
+	 */
+	public final String getResponse() {
+		return response;
+	}
+
+	/**
+	 * @param response
+	 *            the response to set
+	 */
+	public final void setResponse(String response) {
+		this.response = response;
+	}
+
+	/**
+	 * 
+	 * Service binding type
+	 * 
+	 * @author Tomas Frastia
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
+	 * 
+	 */
 	public enum BindingType {
 		UNKNOWN(""), SOAP_SERVICES("SOAP"), MESSAGING_SERVICE("Mixed"), ANY_SOAP_SERVICES("abstract SOAP"), ANY_XML_SERVICES("abstract XML");
 
@@ -77,6 +122,16 @@ public final class Binding {
 		}
 	}
 
+	/**
+	 * 
+	 * WSDL service binding
+	 * 
+	 * @author Tomas Frastia
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
+	 * 
+	 * 
+	 */
 	public static class WsdlServiceBinding {
 		private WsldServiceBindingType type;
 		private String name;
@@ -102,6 +157,15 @@ public final class Binding {
 
 	}
 
+	/**
+	 * 
+	 * wsdl service binding type
+	 * 
+	 * @author Tomas Frastia
+	 * @see http://www.tomecode.com
+	 *      http://code.google.com/p/bpel-esb-dependency-analyzer/
+	 * 
+	 */
 	public static enum WsldServiceBindingType {
 		PORT, BINDING
 	}

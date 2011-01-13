@@ -8,18 +8,20 @@ import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.openesb.bpel.dependencies.BpelActivityDependency;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.services.Service;
+import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig;
+import com.tomecode.soa.ora.osb10g.services.config.EndpointJms;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.OsbActivityDependency;
 import com.tomecode.soa.ora.suite10g.esb.BasicEsbNode;
 import com.tomecode.soa.ora.suite10g.esb.BasicEsbNode.EsbNodeType;
 import com.tomecode.soa.ora.suite10g.esb.EsbGrp;
 import com.tomecode.soa.ora.suite10g.esb.EsbOperation;
 import com.tomecode.soa.ora.suite10g.esb.EsbRoutingRule;
-import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.ora.suite10g.esb.EsbSvc;
 import com.tomecode.soa.ora.suite10g.esb.EsbSys;
+import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.ora.suite10g.project.BpelOperations;
-import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
 import com.tomecode.soa.ora.suite10g.project.Operation;
+import com.tomecode.soa.ora.suite10g.project.Ora10gBpelProject;
 
 /**
  * (c) Copyright Tomecode.com, 2010. All rights reserved.
@@ -61,8 +63,8 @@ final class ServiceOperationsDepContentProvider implements ITreeContentProvider 
 			return ((Ora10gEsbProject) parent).getBasicEsbNodes().toArray();
 		} else if (parent instanceof EsbOperation) {
 			return ((EsbOperation) parent).makeListWithoutRountingRule().toArray();
-		}else if( parent instanceof EsbRoutingRule){
-			return ((EsbRoutingRule)parent).getEsbSvcs().toArray();
+		} else if (parent instanceof EsbRoutingRule) {
+			return ((EsbRoutingRule) parent).getEsbSvcs().toArray();
 		} else if (parent instanceof BasicEsbNode) {
 			return getEsbServices((BasicEsbNode) parent);
 		} else if (parent instanceof OsbActivityDependency) {
@@ -94,7 +96,7 @@ final class ServiceOperationsDepContentProvider implements ITreeContentProvider 
 			return !((Ora10gBpelProject) element).getBpelOperations().getOperations().isEmpty();
 		} else if (element instanceof Ora10gEsbProject) {
 			return !((Ora10gEsbProject) element).getBasicEsbNodes().isEmpty();
-		}else if( element instanceof EsbRoutingRule){
+		} else if (element instanceof EsbRoutingRule) {
 			return !((EsbRoutingRule) element).getEsbSvcs().isEmpty();
 		} else if (element instanceof EsbOperation) {
 			return !((EsbOperation) element).getDependencies().isEmpty();
@@ -126,8 +128,8 @@ final class ServiceOperationsDepContentProvider implements ITreeContentProvider 
 			return ((Ora10gBpelProject) element).getBpelOperations().getOperations().toArray();
 		} else if (element instanceof Ora10gEsbProject) {
 			return ((Ora10gEsbProject) element).getBasicEsbNodes().toArray();
-		}else if( element instanceof EsbRoutingRule){
-			return ((EsbRoutingRule)element).getEsbSvcs().toArray();
+		} else if (element instanceof EsbRoutingRule) {
+			return ((EsbRoutingRule) element).getEsbSvcs().toArray();
 		} else if (element instanceof EsbOperation) {
 			return ((EsbOperation) element).makeListWithoutRountingRule().toArray();
 		} else if (element instanceof BasicEsbNode) {
@@ -160,8 +162,7 @@ final class ServiceOperationsDepContentProvider implements ITreeContentProvider 
 	}
 
 	@Override
-	public final void inputChanged(Viewer paramViewer, Object paramObject1,
-			Object paramObject2) {
+	public final void inputChanged(Viewer paramViewer, Object paramObject1, Object paramObject2) {
 
 	}
 

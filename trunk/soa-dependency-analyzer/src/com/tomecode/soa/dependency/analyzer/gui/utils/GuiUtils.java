@@ -298,7 +298,6 @@ public final class GuiUtils {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(numColumns, false));
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_VERTICAL | GridData.GRAB_HORIZONTAL));
-
 		return composite;
 	}
 
@@ -364,7 +363,7 @@ public final class GuiUtils {
 	 * @return
 	 */
 	public static final Text createTextWithGrid(Composite parent, String text) {
-		Text textComponent = new Text(parent, SWT.BORDER);
+		Text textComponent = new Text(parent, SWT.BORDER | SWT.READ_ONLY);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		textComponent.setLayoutData(gridData);
 		textComponent.setText(text);
@@ -391,11 +390,24 @@ public final class GuiUtils {
 	private final static Font createFont(int style) {
 		Font font = Display.getCurrent().getSystemFont();
 		FontData fontData = font.getFontData()[0];
-		return new Font(Display.getCurrent(), new FontData(fontData.getName(), fontData.getHeight(), style));
+		return new Font(getDisplay(), new FontData(fontData.getName(), fontData.getHeight(), style));
 	}
 
 	public final static Color createColorRed(int color) {
-		return Display.getCurrent().getSystemColor(color);
+		return getDisplay().getSystemColor(color);
+	}
+
+	/**
+	 * get current {@link Display}
+	 * 
+	 * @return
+	 */
+	public final static Display getDisplay() {
+		Display display = Display.getCurrent();
+		if (display == null) {
+			return Display.getDefault();
+		}
+		return display;
 	}
 
 	public final static org.eclipse.draw2d.Label createLabel2dBold(String text) {

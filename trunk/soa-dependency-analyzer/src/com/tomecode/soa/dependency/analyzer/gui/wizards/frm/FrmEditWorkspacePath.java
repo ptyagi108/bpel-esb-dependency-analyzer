@@ -58,6 +58,7 @@ public final class FrmEditWorkspacePath extends Dialog {
 	public final String open(String exitsPath) {
 		createContent(exitsPath);
 		frmShell.layout();
+		frmShell.setText("Path to workspace...");
 		frmShell.open();
 		Display display = getParent().getDisplay();
 		while (!frmShell.isDisposed()) {

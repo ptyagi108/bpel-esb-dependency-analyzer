@@ -50,10 +50,6 @@ import com.tomecode.soa.ora.osb10g.activity.Validate;
 import com.tomecode.soa.ora.osb10g.activity.WsCallout;
 import com.tomecode.soa.ora.osb10g.activity.WsCalloutRequestTransform;
 import com.tomecode.soa.ora.osb10g.activity.WsCalloutResponseTransform;
-import com.tomecode.soa.ora.osb10g.services.Binding;
-import com.tomecode.soa.ora.osb10g.services.Binding.BindingType;
-import com.tomecode.soa.ora.osb10g.services.Binding.WsdlServiceBinding;
-import com.tomecode.soa.ora.osb10g.services.Binding.WsldServiceBindingType;
 import com.tomecode.soa.ora.osb10g.services.Proxy;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependencies;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency;
@@ -138,7 +134,7 @@ public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 		proxy.setIsEnabled(Boolean.parseBoolean(eCoreEntry.attributeValue("isEnabled")));
 		proxy.setIsAutoPublish(Boolean.parseBoolean(eCoreEntry.attributeValue("isAutoPublish")));
 		proxy.setDescription(eCoreEntry.elementText("description"));
-		parseBinding(eCoreEntry.element("binding"), proxy);
+		proxy.setBinding(parseBinding(eCoreEntry.element("binding")));
 	}
 
 	/**
@@ -717,45 +713,4 @@ public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 		}
 	}
 
-	/**
-	 * parse element binding
-	 * 
-	 * @param eBinding
-	 * @param proxy
-	 */
-	private final void parseBinding(Element eBinding, Proxy proxy) {
-		if (eBinding != null) {
-			BindingType bindingType = BindingType.parse(eBinding.attributeValue("type"));
-			Binding binding = new Binding(bindingType, Boolean.parseBoolean(eBinding.attributeValue("isSoap12")));
-			proxy.setBinding(binding);
-			if (bindingType == BindingType.SOAP_SERVICES) {
-				Element eWsdl = eBinding.element("wsdl");
-				binding.setWsdlRef(eWsdl.attributeValue("ref"));
-
-				Element eWsdlBinding = eBinding.element("binding");
-				if (eWsdlBinding != null) {
-					String name = eWsdlBinding.elementTextTrim("name");
-					String namespace = eWsdlBinding.elementTextTrim("namespace");
-					WsdlServiceBinding wsdlServiceBinding = new WsdlServiceBinding(WsldServiceBindingType.BINDING, name, namespace);
-					binding.setWsdlServiceBinding(wsdlServiceBinding);
-				}
-
-				Element eWsdlPort = eBinding.element("port");
-				if (eWsdlPort != null) {
-					String name = eWsdlPort.elementTextTrim("name");
-					String namespace = eWsdlPort.elementTextTrim("namespace");
-					WsdlServiceBinding wsdlServiceBinding = new WsdlServiceBinding(WsldServiceBindingType.PORT, name, namespace);
-					binding.setWsdlServiceBinding(wsdlServiceBinding);
-				}
-
-				Element eSelector = eBinding.element("selector");
-				if (eSelector != null) {
-					Element eMapping = eSelector.element("mapping");
-					if (eMapping != null) {
-						binding.setWsdlOperation(eMapping.attributeValue("operation"));
-					}
-				}
-			}
-		}
-	}
 }

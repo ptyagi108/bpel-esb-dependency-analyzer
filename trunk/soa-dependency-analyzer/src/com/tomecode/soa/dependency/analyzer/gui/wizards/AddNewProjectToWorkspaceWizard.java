@@ -228,7 +228,7 @@ public final class AddNewProjectToWorkspaceWizard extends Wizard {
 			Group groupSwithProject = createGroupDataEnter(composite, "Add new OSB project:");
 			Composite compositeSwithProject = createOneColumnGrid(groupSwithProject);
 			buttonAsProjectFolder = new Button(compositeSwithProject, SWT.RADIO);
-			createRadioButton2(buttonAsProjectFolder, "as OSB folder/project", this);
+			createRadioButton2(buttonAsProjectFolder, "OSB folder/project", this);
 			Composite compositeAsJarFolder = createTwoColumnGrid(compositeSwithProject);
 			textFileAsFolder = createText(compositeAsJarFolder, new ModifyListener() {
 				@Override
@@ -253,7 +253,7 @@ public final class AddNewProjectToWorkspaceWizard extends Wizard {
 			buttonAsProjectJar = new Button(compositeSwithProject, SWT.RADIO);// createRadioButton(compositeSwithProject,
 																				// "as OSB JAR",
 																				// this);
-			createRadioButton2(buttonAsProjectFolder, "as OSB JAR", this);
+			createRadioButton2(buttonAsProjectJar, "OSB jar", this);
 			Composite compositeAsJarText = createTwoColumnGrid(compositeSwithProject);
 			textFileAsJar = createText(compositeAsJarText, new ModifyListener() {
 				@Override
@@ -265,7 +265,7 @@ public final class AddNewProjectToWorkspaceWizard extends Wizard {
 
 				@Override
 				public final void widgetSelected(SelectionEvent event) {
-					FileDialog dialog = createFileDialog(getShell(), textFileAsJar.getText(), "Select OSB Project as JAR...", "jar");
+					FileDialog dialog = createFileDialog(getShell(), textFileAsJar.getText(), "Select OSB Project as JAR...", "*.jar");
 					String jar = dialog.open();
 					if (jar != null) {
 						textFileAsJar.setText(jar);
@@ -408,7 +408,7 @@ public final class AddNewProjectToWorkspaceWizard extends Wizard {
 			bDirdialogBPEL10gJar = createDialogButton(cBPEL10gJar, new SelectionAdapter() {
 				@Override
 				public final void widgetSelected(SelectionEvent event) {
-					FileDialog dialog = createFileDialog(getShell(), textFileBPEL10gJar.getText(), "Select BPEL Project as JAR...", "jar");
+					FileDialog dialog = createFileDialog(getShell(), textFileBPEL10gJar.getText(), "Select BPEL Project as JAR...", "*.jar");
 					String jar = dialog.open();
 					if (jar != null) {
 						textFileBPEL10gJar.setText(jar);
@@ -448,7 +448,7 @@ public final class AddNewProjectToWorkspaceWizard extends Wizard {
 			bDirdialogESB10gZip = createDialogButton(cESB10gZip, new SelectionAdapter() {
 				@Override
 				public final void widgetSelected(SelectionEvent event) {
-					FileDialog dialog = createFileDialog(getShell(), textFileESB10gZip.getText(), "Select ESB Project as Zip...", "zip");
+					FileDialog dialog = createFileDialog(getShell(), textFileESB10gZip.getText(), "Select ESB Project as Zip...", "*.zip");
 					String jar = dialog.open();
 					if (jar != null) {
 						textFileESB10gZip.setText(jar);

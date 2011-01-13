@@ -5,6 +5,12 @@ import java.util.List;
 
 import org.dom4j.Element;
 
+import com.tomecode.soa.jms.JMSConnectionFactory;
+import com.tomecode.soa.jms.JMSServer;
+import com.tomecode.soa.ora.osb10g.services.Binding;
+import com.tomecode.soa.ora.osb10g.services.Binding.BindingType;
+import com.tomecode.soa.ora.osb10g.services.Binding.WsdlServiceBinding;
+import com.tomecode.soa.ora.osb10g.services.Binding.WsldServiceBindingType;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointBPEL10g;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig.ProviderProtocol;
@@ -47,42 +53,52 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	 * @return
 	 */
 	protected final EndpointConfig parseEndpointConfig(Element eXml) {
+		EndpointConfig endpoint = null;
+
 		Element eEndpointConfig = eXml.element("endpointConfig");
+
 		if (eEndpointConfig != null) {
 			String providerId = eEndpointConfig.elementText("provider-id");
 			if (ProviderProtocol.LOCAL.name().equalsIgnoreCase(providerId)) {
-				return new EndpointLocal();
+				endpoint = new EndpointLocal();
 			} else if (ProviderProtocol.EJB.name().equalsIgnoreCase(providerId)) {
-				return parseEJBtransport(eEndpointConfig);
+				endpoint = parseEJBtransport(eEndpointConfig);
 			} else if (ProviderProtocol.HTTP.name().equalsIgnoreCase(providerId)) {
-				return parseHttpTransport(eEndpointConfig);
+				endpoint = parseHttpTransport(eEndpointConfig);
 			} else if (ProviderProtocol.JCA.name().equalsIgnoreCase(providerId)) {
-				return parseJCAtransport(eEndpointConfig);
+				endpoint = parseJCAtransport(eEndpointConfig);
 			} else if (ProviderProtocol.SB.name().equalsIgnoreCase(providerId)) {
-				return parseSBtransport(eEndpointConfig);
+				endpoint = parseSBtransport(eEndpointConfig);
 			} else if (ProviderProtocol.WS.name().equalsIgnoreCase(providerId)) {
-				return parseWStransport(eEndpointConfig);
+				endpoint = parseWStransport(eEndpointConfig);
 			} else if (ProviderProtocol.FILE.name().equalsIgnoreCase(providerId)) {
-				return parseFILEtransport(eEndpointConfig);
+				endpoint = parseFILEtransport(eEndpointConfig);
 			} else if (ProviderProtocol.DSP.name().equalsIgnoreCase(providerId)) {
-				return parseDSPtransport(eEndpointConfig);
+				endpoint = parseDSPtransport(eEndpointConfig);
 			} else if (ProviderProtocol.FTP.name().equalsIgnoreCase(providerId)) {
-				return parseFTPtransport(eEndpointConfig);
+				endpoint = parseFTPtransport(eEndpointConfig);
 			} else if (ProviderProtocol.JPD.name().equalsIgnoreCase(providerId)) {
-				return parseJPDtransport(eEndpointConfig);
+				endpoint = parseJPDtransport(eEndpointConfig);
 			} else if (ProviderProtocol.JMS.name().equalsIgnoreCase(providerId)) {
-				return parseJMStransport(eEndpointConfig);
+				endpoint = parseJMStransport(eEndpointConfig);
 			} else if (ProviderProtocol.MAIL.name().equalsIgnoreCase(providerId)) {
-				return parseMAILtransport(eEndpointConfig);
+				endpoint = parseMAILtransport(eEndpointConfig);
 			} else if (ProviderProtocol.MQ.name().equalsIgnoreCase(providerId)) {
-				return parseMQtransport(eEndpointConfig);
+				endpoint = parseMQtransport(eEndpointConfig);
 			} else if (ProviderProtocol.SFTP.name().equalsIgnoreCase(providerId)) {
-				return parseSFTPtransport(eEndpointConfig);
+				endpoint = parseSFTPtransport(eEndpointConfig);
 			} else if (ProviderProtocol.BPEL_10G.name().equalsIgnoreCase(providerId)) {
-				return parseBPEL10Gtransport(eEndpointConfig);
+				endpoint = parseBPEL10Gtransport(eEndpointConfig);
+			} else {
+				endpoint = parseUnknownEndpoint(eEndpointConfig);
 			}
+
+			endpoint.setInbound(Boolean.parseBoolean(eEndpointConfig.elementText("inbound")));
+		} else {
+			endpoint = parseUnknownEndpoint(eEndpointConfig);
 		}
-		return parseUnknownEndpoint(eEndpointConfig);
+
+		return endpoint;
 	}
 
 	/**
@@ -372,4 +388,124 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 		}
 		return providerSpecificJms;
 	}
+
+	/**
+	 * parse list of URIs to {@link JMSServer}
+	 * 
+	 * @param jmsUris
+	 */
+	public static final void parseJMSServerUris(List<String> jmsUris, List<JMSServer> jmsServers) {
+		for (String jmsUri : jmsUris) {
+			parseJMSServerUris(jmsUri, jmsServers);
+		}
+	}
+
+	/**
+	 * parse list of URIs to {@link JMSServer}
+	 * 
+	 * @param jmsUri
+	 * @param jmsServers
+	 */
+	public static final void parseJMSServerUris(String jmsUri, List<JMSServer> jmsServers) {
+		int index = jmsUri.indexOf("jms://");
+		if (index != -1) {
+			jmsUri = jmsUri.substring(index + "jms://".length());
+			index = jmsUri.indexOf("/");
+			if (index != -1) {
+
+				String jmsResource = jmsUri.substring(index + 1);
+				JMSConnectionFactory connectionFactory = null;
+				int moduleIndex = jmsResource.indexOf("/");
+				if (moduleIndex == -1) {
+					connectionFactory = new JMSConnectionFactory(jmsResource);
+				} else {
+					connectionFactory = new JMSConnectionFactory(jmsResource.substring(0, moduleIndex));
+					connectionFactory.addJmsQueue(jmsResource.substring(moduleIndex + 1));
+				}
+
+				String serversURI = jmsUri.substring(0, index);
+
+				String servers[] = serversURI.split(",");
+				for (String server : servers) {
+					JMSServer jmsServer = new JMSServer(server);
+
+					if (!existsJMSServer(jmsServers, jmsServer)) {
+						jmsServer.addJMSConnectionFactory(connectionFactory);
+						jmsServers.add(jmsServer);
+					}
+				}
+
+			}
+
+		}
+	}
+
+	private final static boolean existsJMSServer(List<JMSServer> jmsServers, JMSServer jmsServer) {
+		for (JMSServer server : jmsServers) {
+			if (server.getName().equals(jmsServer.getName())) {
+				if (server.getPort() != null) {
+					if (server.getPort().equals(jmsServer.getPort())) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * parse element binding
+	 * 
+	 * @param eBinding
+	 * @param proxy
+	 */
+	protected final Binding parseBinding(Element eBinding) {
+		if (eBinding != null) {
+			BindingType bindingType = BindingType.parse(eBinding.attributeValue("type"));
+			Binding binding = new Binding(bindingType, Boolean.parseBoolean(eBinding.attributeValue("isSoap12")));
+
+			Element eRequest = eBinding.element("request");
+			if (eRequest != null) {
+				binding.setRequest(eRequest.attributeValue("type"));
+			}
+			Element eResponse = eBinding.element("response");
+			if (eResponse != null) {
+				binding.setResponse(eResponse.attributeValue("type"));
+			}
+
+			if (bindingType == BindingType.SOAP_SERVICES) {
+				Element eWsdl = eBinding.element("wsdl");
+				binding.setWsdlRef(eWsdl.attributeValue("ref"));
+
+				Element eWsdlBinding = eBinding.element("binding");
+				if (eWsdlBinding != null) {
+					String name = eWsdlBinding.elementTextTrim("name");
+					String namespace = eWsdlBinding.elementTextTrim("namespace");
+					WsdlServiceBinding wsdlServiceBinding = new WsdlServiceBinding(WsldServiceBindingType.BINDING, name, namespace);
+					binding.setWsdlServiceBinding(wsdlServiceBinding);
+				}
+
+				Element eWsdlPort = eBinding.element("port");
+				if (eWsdlPort != null) {
+					String name = eWsdlPort.elementTextTrim("name");
+					String namespace = eWsdlPort.elementTextTrim("namespace");
+					WsdlServiceBinding wsdlServiceBinding = new WsdlServiceBinding(WsldServiceBindingType.PORT, name, namespace);
+					binding.setWsdlServiceBinding(wsdlServiceBinding);
+				}
+
+				Element eSelector = eBinding.element("selector");
+				if (eSelector != null) {
+					Element eMapping = eSelector.element("mapping");
+					if (eMapping != null) {
+						binding.setWsdlOperation(eMapping.attributeValue("operation"));
+					}
+				}
+			}
+
+			return binding;
+		}
+
+		return null;
+	}
+
 }

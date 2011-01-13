@@ -290,6 +290,13 @@ public final class PropertiesViewOsbAdapter extends ViewPart implements HideView
 			textBSejbObject.setText(ejb.getProviderSpecificEJB().getEjbObject());
 
 			showContent(businessServicePageEJB);
+		} else if (businessService.getEndpointConfig().getProtocol() == ProviderProtocol.UNKNOWN) {
+			textBSName.setText(businessService.getName());
+			EndpointConfig endpointConfig = businessService.getEndpointConfig();
+			textBSTrasportProvider.setText(((EndpointUNKNOWN) endpointConfig).getProviderId());
+			fillUriList(groupBSUri, endpointConfig.getUris());
+			businessServicePage.pack(true);
+			showContent(businessServicePage);
 		} else {
 			textBSName.setText(businessService.getName());
 			EndpointConfig endpointConfig = businessService.getEndpointConfig();

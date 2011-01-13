@@ -17,8 +17,13 @@ import com.tomecode.soa.ora.osb10g.services.Proxy;
  */
 public abstract class EndpointConfig {
 
+	private boolean inbound;
+
 	protected ProviderProtocol protocol;
 
+	/**
+	 * list of uris
+	 */
 	protected final List<String> uris;
 
 	public EndpointConfig() {
@@ -43,12 +48,20 @@ public abstract class EndpointConfig {
 		return protocol;
 	}
 
-	public final void putAllURI(List<String> uris) {
+	public void putAllURI(List<String> uris) {
 		this.uris.addAll(uris);
 	}
 
 	public final List<String> getUris() {
 		return uris;
+	}
+
+	public final boolean isInbound() {
+		return inbound;
+	}
+
+	public final void setInbound(boolean inbound) {
+		this.inbound = inbound;
 	}
 
 	/**

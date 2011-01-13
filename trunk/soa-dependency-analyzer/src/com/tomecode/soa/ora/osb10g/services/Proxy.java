@@ -6,7 +6,6 @@ import java.util.Iterator;
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
-import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig.ProviderProtocol;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointUNKNOWN;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.ServiceDependencyType;
@@ -27,17 +26,10 @@ public final class Proxy extends Service {
 
 	private boolean isAutoPublish;
 
-	private Binding binding;
-
 	/**
 	 * structure - contains all activities from this proxy service
 	 */
 	private ProxyStructure structure;
-
-	/**
-	 * endpoint config
-	 */
-	private EndpointConfig endpointConfig;
 
 	/**
 	 * Constructor
@@ -81,35 +73,12 @@ public final class Proxy extends Service {
 		this.isAutoPublish = isAutoPublish;
 	}
 
-	public final Binding getBinding() {
-		return binding;
-	}
-
-	public final void setBinding(Binding binding) {
-		this.binding = binding;
-	}
-
 	public final ProxyStructure getStructure() {
 		return structure;
 	}
 
 	public final Image getImage() {
 		return ImageFactory.OSB_10G_PROXY_SERVICE;
-	}
-
-	/**
-	 * @return the endpointConfig
-	 */
-	public final EndpointConfig getEndpointConfig() {
-		return endpointConfig;
-	}
-
-	/**
-	 * @param endpointConfig
-	 *            the endpointConfig to set
-	 */
-	public final void setEndpointConfig(EndpointConfig endpointConfig) {
-		this.endpointConfig = endpointConfig;
 	}
 
 	@Override

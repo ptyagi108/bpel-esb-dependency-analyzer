@@ -212,9 +212,9 @@ public final class OraSB10gProjectParser {
 		} else if (name.endsWith(".wsdl")) {
 			return new ResourceFile(file, ServiceDependencyType.WSDL);
 		} else if (name.endsWith(".xmlschema")) {
-			return new ResourceFile(file, ServiceDependencyType.XMLSCHEMA);
+			return new ResourceFile(file, ServiceDependencyType.XML_SCHEMA);
 		} else if (name.endsWith(".serviceaccount")) {
-			return new ResourceFile(file, ServiceDependencyType.SERVICEACCOUNT);
+			return new ResourceFile(file, ServiceDependencyType.SERVICE_ACCOUNT);
 		} else if (name.endsWith(".archive")) {
 			return new ResourceFile(file, ServiceDependencyType.ARCHIVE);
 		} else if (name.endsWith(".skp")) {

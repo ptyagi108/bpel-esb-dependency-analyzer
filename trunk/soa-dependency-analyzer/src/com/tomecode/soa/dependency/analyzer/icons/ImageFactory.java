@@ -159,6 +159,7 @@ public final class ImageFactory {
 	public static final Image OPEN_ESB_BPEL_ELSE = Activator.getImageDescriptor("/icons/com/tomecode/soa/openEsb/16/else.png").createImage();
 	public static final Image OPEN_ESB_BPEL_PROCESS = Activator.getImageDescriptor("/icons/com/tomecode/soa/openEsb/16/process.png").createImage();
 
+	public static final Image OSB_10G_SERVICE_ACCOUNT = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/serviceAccounts.gif").createImage();
 	public static final Image OSB_10G_STAGE = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/stage.gif").createImage();
 	public static final Image OSB_10G_BRANCH = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/branch.gif").createImage();
 	public static final Image OSB_10G_PROXY_SERVICE = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/proxyService.gif").createImage();
@@ -243,6 +244,10 @@ public final class ImageFactory {
 	public static Image ORACLE_10G_ESB_FTP_ADAPTER = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbFtpAdapter.png").createImage();
 	public static Image ORACLE_10G_ESB_AQ_ADAPTER = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbAQAdapter.png").createImage();
 	public static Image ORACLE_10G_ESB_MQ_ADAPTER = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbMQadapter.png").createImage();
+
+	public static final Image JMS_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/jms/jmsServer.png").createImage();
+	public static final Image JMS_QUEUE = Activator.getImageDescriptor("/icons/com/tomecode/soa/jms/jmsQueue.png").createImage();
+	public static final Image JMS_CONNECTION_FACTORY = Activator.getImageDescriptor("/icons/com/tomecode/soa/jms/jmsFactory.png").createImage();
 
 	private ImageFactory() {
 	}

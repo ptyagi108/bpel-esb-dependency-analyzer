@@ -43,21 +43,17 @@ public final class OraSB10gBusinessServiceParser extends OraSB10gBasicServicePar
 	}
 
 	private final BusinessService parseBusinessService(File file, Element eXml) {
-
 		if ("xml-fragment".equals(eXml.getName())) {
 			BusinessService businessService = new BusinessService(file);
-			businessService.setDescription(parseDescription(eXml));
+			Element eCoreEntry = eXml.element("coreEntry");
+			if (eCoreEntry != null) {
+				businessService.setDescription(eCoreEntry.elementText("description"));
+				businessService.setBinding(parseBinding(eCoreEntry.element("binding")));
+			}
 			businessService.setEndpointConfig(parseEndpointConfig(eXml));
 			return businessService;
 		}
 		return null;
 	}
 
-	private final String parseDescription(Element eXml) {
-		Element eCoreEntry = eXml.element("coreEntry");
-		if (eCoreEntry != null) {
-			return eCoreEntry.elementTextTrim("description");
-		}
-		return null;
-	}
 }

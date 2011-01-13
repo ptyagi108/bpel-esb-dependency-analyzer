@@ -9,8 +9,9 @@ import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
-import com.tomecode.soa.ora.osb10g.services.BusinessService;
-import com.tomecode.soa.ora.osb10g.services.Proxy;
+import com.tomecode.soa.jms.JMSConnectionFactory;
+import com.tomecode.soa.jms.JMSQueue;
+import com.tomecode.soa.jms.JMSServer;
 import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig.ProviderProtocol;
@@ -20,7 +21,6 @@ import com.tomecode.soa.ora.osb10g.services.config.EndpointHttp;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointJms;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointUNKNOWN;
 import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificJms;
-import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.ServiceDependencyType;
 import com.tomecode.soa.ora.suite10g.esb.EsbSvc;
 import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.ora.suite10g.project.BpelEsbDependency;
@@ -41,7 +41,7 @@ import com.tomecode.soa.workspace.Workspace;
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
-public final class ToolTipFactory {
+final class ToolTipFactory {
 
 	private ToolTipFactory() {
 
@@ -54,7 +54,7 @@ public final class ToolTipFactory {
 	 * @return
 	 */
 	// TODO: detail information about bpel process
-	public static final IFigure createToolTip(BpelProcess process) {
+	static final IFigure createToolTip(BpelProcess process) {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(GuiUtils.createLabel2dBold("Name:"));
 		tooltip.add(createLabel(process.getName(), process.getImage()));
@@ -69,8 +69,10 @@ public final class ToolTipFactory {
 	 * @param service
 	 * @return
 	 */
-	public static final IFigure createToolTip(Service service) {
+	static final IFigure createToolTip(Service service) {
 		IFigure tooltip = createDefaultToolTip();
+		tooltip.add(GuiUtils.createLabel2dBold("Type: "));
+		tooltip.add(new org.eclipse.draw2d.Label(service.getType().toString()));
 		tooltip.add(GuiUtils.createLabel2dBold("Name: "));
 		tooltip.add(createLabel(service.getName(), service.getImage()));
 
@@ -80,14 +82,8 @@ public final class ToolTipFactory {
 		}
 		tooltip.add(GuiUtils.createLabel2dBold("Path: "));
 		tooltip.add(new org.eclipse.draw2d.Label(service.getFile() != null ? service.getFile().toString() : ""));
+		addEndpointConfingToTooltip(service.getEndpointConfig(), tooltip);
 
-		if (service.getType() == ServiceDependencyType.BUSINESS_SERVICE) {
-			BusinessService businessService = (BusinessService) service;
-			addEndpointConfingToTooltip(businessService.getEndpointConfig(), tooltip);
-		} else if (service.getType() == ServiceDependencyType.PROXY_SERVICE) {
-			Proxy proxy = (Proxy) service;
-			addEndpointConfingToTooltip(proxy.getEndpointConfig(), tooltip);
-		}
 		return tooltip;
 	}
 
@@ -98,24 +94,26 @@ public final class ToolTipFactory {
 	 * @param tooltip
 	 */
 	private static final void addEndpointConfingToTooltip(EndpointConfig endpointConfig, IFigure tooltip) {
-		tooltip.add(GuiUtils.createLabel2dBold("Endpoint Type: "));
-		if (endpointConfig.getProtocol() == ProviderProtocol.UNKNOWN) {
-			tooltip.add(new org.eclipse.draw2d.Label(((EndpointUNKNOWN) endpointConfig).getProviderId()));
-		} else {
-			tooltip.add(new org.eclipse.draw2d.Label(endpointConfig.getProtocol().toString()));
-		}
-		if (!endpointConfig.getUris().isEmpty()) {
-			tooltip.add(GuiUtils.createLabel2dBold("URIs: "));
-			Iterator<String> i = endpointConfig.getUris().iterator();
-			while (i.hasNext()) {
-				tooltip.add(new org.eclipse.draw2d.Label(i.next()));
-				if (i.hasNext()) {
-					tooltip.add(new org.eclipse.draw2d.Label(""));
-				}
+		if (endpointConfig != null) {
+			tooltip.add(GuiUtils.createLabel2dBold("Endpoint Type: "));
+			if (endpointConfig.getProtocol() == ProviderProtocol.UNKNOWN) {
+				tooltip.add(new org.eclipse.draw2d.Label(((EndpointUNKNOWN) endpointConfig).getProviderId()));
+			} else {
+				tooltip.add(new org.eclipse.draw2d.Label(endpointConfig.getProtocol().toString()));
 			}
+			if (!endpointConfig.getUris().isEmpty()) {
+				tooltip.add(GuiUtils.createLabel2dBold("URIs: "));
+				Iterator<String> i = endpointConfig.getUris().iterator();
+				while (i.hasNext()) {
+					tooltip.add(new org.eclipse.draw2d.Label(i.next()));
+					if (i.hasNext()) {
+						tooltip.add(new org.eclipse.draw2d.Label(""));
+					}
+				}
 
+			}
+			fillProviderSpecific(endpointConfig, tooltip);
 		}
-		fillProviderSpecific(endpointConfig, tooltip);
 	}
 
 	/**
@@ -158,7 +156,7 @@ public final class ToolTipFactory {
 	 * @param project
 	 * @return
 	 */
-	public static final IFigure createToolTip(Project project) {
+	static final IFigure createToolTip(Project project) {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(GuiUtils.createLabel2dBold("Name: "));
 		tooltip.add(createLabel(project.getName(), project.getImage()));
@@ -184,7 +182,7 @@ public final class ToolTipFactory {
 	 * @param workspace
 	 * @return
 	 */
-	public static final IFigure createToolTip(Workspace workspace) {
+	static final IFigure createToolTip(Workspace workspace) {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(GuiUtils.createLabel2dBold("Name: "));
 		tooltip.add(createLabel(workspace.getName(), workspace.getImage()));
@@ -201,7 +199,7 @@ public final class ToolTipFactory {
 	 * @param multiWorkspace
 	 * @return
 	 */
-	public static final IFigure createToolTip(MultiWorkspace multiWorkspace) {
+	static final IFigure createToolTip(MultiWorkspace multiWorkspace) {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(GuiUtils.createLabel2dBold("Name: "));
 		tooltip.add(createLabel(multiWorkspace.getName(), multiWorkspace.getImage()));
@@ -232,7 +230,7 @@ public final class ToolTipFactory {
 	 * @param partnerLinkBinding
 	 * @return
 	 */
-	public final static IFigure createToolTip(PartnerLinkBinding partnerLinkBinding) {
+	final static IFigure createToolTip(PartnerLinkBinding partnerLinkBinding) {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(GuiUtils.createLabel2dBold("Partner Link: "));
 		tooltip.add(createLabel(partnerLinkBinding.getName(), partnerLinkBinding.getImage()));
@@ -277,7 +275,7 @@ public final class ToolTipFactory {
 	 * @param esbSvc
 	 * @return
 	 */
-	public final static IFigure createToolTip(EsbSvc esbSvc) {
+	final static IFigure createToolTip(EsbSvc esbSvc) {
 		IFigure tooltip = createDefaultToolTip();
 
 		tooltip.add(GuiUtils.createLabel2dBold("Name: "));
@@ -296,4 +294,52 @@ public final class ToolTipFactory {
 		return tooltip;
 	}
 
+	/**
+	 * create tooltip for {@link JMSServer}
+	 * 
+	 * @param server
+	 * @return
+	 */
+	static final IFigure createToolTip(JMSServer server) {
+		IFigure tooltip = createDefaultToolTip();
+		tooltip.add(GuiUtils.createLabel2dBold("Type: "));
+		tooltip.add(createLabel("JMS Server", server.getImage()));
+		tooltip.add(GuiUtils.createLabel2dBold("Name: "));
+		tooltip.add(new org.eclipse.draw2d.Label(server.getName()));
+		if (server.getPort() != null) {
+			tooltip.add(GuiUtils.createLabel2dBold("Port: "));
+			tooltip.add(new org.eclipse.draw2d.Label(server.getPort()));
+		}
+		return tooltip;
+	}
+
+	/**
+	 * create tooltip for {@link JMSConnectionFactory}
+	 * 
+	 * @param connectionFactory
+	 * @return
+	 */
+	static final IFigure createToolTip(JMSConnectionFactory connectionFactory) {
+		IFigure tooltip = createDefaultToolTip();
+		tooltip.add(GuiUtils.createLabel2dBold("Type: "));
+		tooltip.add(createLabel("JMS Connection Factory", connectionFactory.getImage()));
+		tooltip.add(GuiUtils.createLabel2dBold("Name: "));
+		tooltip.add(new org.eclipse.draw2d.Label(connectionFactory.getName()));
+		return tooltip;
+	}
+
+	/**
+	 * create tooltip for {@link JMSQueue}
+	 * 
+	 * @param queue
+	 * @return
+	 */
+	public final static IFigure createToolTip(JMSQueue queue) {
+		IFigure tooltip = createDefaultToolTip();
+		tooltip.add(GuiUtils.createLabel2dBold("Type: "));
+		tooltip.add(createLabel("JMS Queue", queue.getImage()));
+		tooltip.add(GuiUtils.createLabel2dBold("Name: "));
+		tooltip.add(new org.eclipse.draw2d.Label(queue.getName()));
+		return tooltip;
+	}
 }
