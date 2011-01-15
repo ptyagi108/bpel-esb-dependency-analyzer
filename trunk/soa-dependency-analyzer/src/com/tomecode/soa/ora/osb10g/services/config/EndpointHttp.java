@@ -1,5 +1,11 @@
 package com.tomecode.soa.ora.osb10g.services.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.tomecode.soa.ora.osb10g.parser.OraSB10gBasicServiceParser;
+import com.tomecode.soa.protocols.http.HttpServer;
+
 /**
  * Endpoint protocol - HTTP
  * 
@@ -12,8 +18,14 @@ public final class EndpointHttp extends EndpointConfig {
 
 	private ProviderSpecificHttp providerSpecificHttp;
 
+	/**
+	 * list of {@link HttpServer}
+	 */
+	private final List<HttpServer> httpServers;
+
 	public EndpointHttp() {
 		super(ProviderProtocol.HTTP);
+		this.httpServers = new ArrayList<HttpServer>();
 	}
 
 	/**
@@ -29,6 +41,15 @@ public final class EndpointHttp extends EndpointConfig {
 	 */
 	public final void setProviderSpecificHttp(ProviderSpecificHttp providerSpecificHttp) {
 		this.providerSpecificHttp = providerSpecificHttp;
+	}
+
+	public final void putAllURI(List<String> uris) {
+		this.uris.addAll(uris);
+		OraSB10gBasicServiceParser.parseHttpServersUris(uris, httpServers);
+	}
+
+	public final List<HttpServer> getHttpServers() {
+		return httpServers;
 	}
 
 }

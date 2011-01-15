@@ -1,4 +1,4 @@
-package com.tomecode.soa.jms;
+package com.tomecode.soa.protocols.jms;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +17,28 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  */
 public final class JMSServer implements ImageFace {
 
+	/**
+	 * JMS server name (host)
+	 */
 	private String name;
-
+	/**
+	 * JMS server port
+	 */
 	private String port;
 
+	/**
+	 * list of {@link JMSConnectionFactory}
+	 */
 	private final List<JMSConnectionFactory> connectionFactories;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 *            JMS name
+	 * @param port
+	 *            JMS port
+	 */
 	public JMSServer(String name, String port) {
 		this();
 		this.name = name;

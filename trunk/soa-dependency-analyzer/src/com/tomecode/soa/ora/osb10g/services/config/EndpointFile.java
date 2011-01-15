@@ -1,5 +1,9 @@
 package com.tomecode.soa.ora.osb10g.services.config;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+
 /**
  * Endpoint protocol - FILE
  * 
@@ -14,4 +18,7 @@ public final class EndpointFile extends EndpointConfig {
 		super(ProviderProtocol.FILE);
 	}
 
+	public final Image getImage() {
+		return ImageFactory.FILE_SERVER;
+	}
 }

@@ -169,7 +169,7 @@ public final class OraSB10gProjectParser {
 	 * @param file
 	 * @return
 	 */
-	private final Service parseService(File file) {
+	private final Service parseService(File file) {	
 		String name = file.getName().toLowerCase();
 		if (name.endsWith(".proxy") || name.endsWith(".proxyservice")) {
 			try {

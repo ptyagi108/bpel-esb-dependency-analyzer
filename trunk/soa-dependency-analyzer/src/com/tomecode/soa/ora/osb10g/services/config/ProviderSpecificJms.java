@@ -3,8 +3,8 @@ package com.tomecode.soa.ora.osb10g.services.config;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tomecode.soa.jms.JMSServer;
 import com.tomecode.soa.ora.osb10g.parser.OraSB10gBasicServiceParser;
+import com.tomecode.soa.protocols.jms.JMSServer;
 
 /**
  * element: provider-specific for JMS

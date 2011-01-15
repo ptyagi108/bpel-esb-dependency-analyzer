@@ -5,13 +5,13 @@ import java.util.List;
 import org.eclipse.zest.core.widgets.GraphConnection;
 import org.eclipse.zest.core.widgets.GraphNode;
 
-import com.tomecode.soa.jms.JMSConnectionFactory;
-import com.tomecode.soa.jms.JMSQueue;
-import com.tomecode.soa.jms.JMSServer;
 import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig.ProviderProtocol;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointJms;
 import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificJms;
+import com.tomecode.soa.protocols.jms.JMSConnectionFactory;
+import com.tomecode.soa.protocols.jms.JMSQueue;
+import com.tomecode.soa.protocols.jms.JMSServer;
 
 /**
  * (c) Copyright Tomecode.com, 2010. All rights reserved.

@@ -1,12 +1,12 @@
 package com.tomecode.soa.ora.osb10g.parser;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.dom4j.Element;
 
-import com.tomecode.soa.jms.JMSConnectionFactory;
-import com.tomecode.soa.jms.JMSServer;
 import com.tomecode.soa.ora.osb10g.services.Binding;
 import com.tomecode.soa.ora.osb10g.services.Binding.BindingType;
 import com.tomecode.soa.ora.osb10g.services.Binding.WsdlServiceBinding;
@@ -34,6 +34,15 @@ import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificEJB;
 import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificHttp;
 import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificJms;
 import com.tomecode.soa.parser.AbstractParser;
+import com.tomecode.soa.protocols.ejb.EjbHome;
+import com.tomecode.soa.protocols.ejb.EjbMethod;
+import com.tomecode.soa.protocols.ejb.EjbObject;
+import com.tomecode.soa.protocols.ejb.EjbProvider;
+import com.tomecode.soa.protocols.ftp.FtpServer;
+import com.tomecode.soa.protocols.ftp.SFtpServer;
+import com.tomecode.soa.protocols.http.HttpServer;
+import com.tomecode.soa.protocols.jms.JMSConnectionFactory;
+import com.tomecode.soa.protocols.jms.JMSServer;
 
 /**
  * 
@@ -314,7 +323,17 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	private final EndpointEJB parseEJBtransport(Element eEndpointConfig) {
 		EndpointEJB ejb = new EndpointEJB();
 		ejb.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
-		ejb.setProviderSpecificEJB(parseProviderSpecificEJB(eEndpointConfig.element("provider-specific")));
+
+		if (!ejb.getUris().isEmpty()) {
+			EjbHome ejbHome = parseEjbHome(eEndpointConfig.element("provider-specific"));
+			if (ejbHome != null) {
+				String[] ejbUris = ejb.getUris().get(0).split(":");
+				EjbProvider ejbProvider = new EjbProvider(ejbUris[1]);
+				ejbProvider.addEjbHome(ejbHome);
+				ejb.setEjbProvider(ejbProvider);
+			}
+		}
+
 		return ejb;
 	}
 
@@ -324,26 +343,31 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	 * @param element
 	 * @return
 	 */
-	private final ProviderSpecificEJB parseProviderSpecificEJB(Element element) {
-		ProviderSpecificEJB providerSpecificEJB = new ProviderSpecificEJB();
+	private final EjbHome parseEjbHome(Element element) {
 		if (element != null) {
 			Element eService = element.element("service");
 			if (eService != null) {
-				Element e = eService.element("clientJar");
-				if (e != null) {
-					providerSpecificEJB.setClientJar(e.attributeValue("ref"));
-				}
-				e = eService.element("ejbHome");
-				if (e != null) {
-					providerSpecificEJB.setEjbHome(e.attributeValue("classname"));
-				}
-				e = eService.element("ejbObject");
-				if (e != null) {
-					providerSpecificEJB.setEjbObject(e.attributeValue("classname"));
+				Element eEjbHome = eService.element("ejbHome");
+				if (eEjbHome != null) {
+					EjbHome ejbHome = new EjbHome(eEjbHome.attributeValue("classname"));
+					Element eEjbObject = eService.element("ejbObject");
+					if (eEjbObject != null) {
+						EjbObject ejbObject = new EjbObject(eEjbObject.attributeValue("classname"));
+						ejbHome.addEjbObject(ejbObject);
+
+						Element eMethod = eEjbObject.element("method");
+						if (eMethod != null) {
+							EjbMethod ejbMethod = new EjbMethod(eMethod.attributeValue("name"));
+							ejbObject.addEjbMethod(ejbMethod);
+						}
+					}
+
+					return ejbHome;
 				}
 			}
 		}
-		return providerSpecificEJB;
+
+		return null;
 	}
 
 	/**
@@ -440,6 +464,13 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 		}
 	}
 
+	/**
+	 * check, whether exists {@link JMSServer}
+	 * 
+	 * @param jmsServers
+	 * @param jmsServer
+	 * @return
+	 */
 	private final static boolean existsJMSServer(List<JMSServer> jmsServers, JMSServer jmsServer) {
 		for (JMSServer server : jmsServers) {
 			if (server.getName().equals(jmsServer.getName())) {
@@ -475,7 +506,9 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 
 			if (bindingType == BindingType.SOAP_SERVICES) {
 				Element eWsdl = eBinding.element("wsdl");
-				binding.setWsdlRef(eWsdl.attributeValue("ref"));
+				if (eWsdl != null) {
+					binding.setWsdlRef(eWsdl.attributeValue("ref"));
+				}
 
 				Element eWsdlBinding = eBinding.element("binding");
 				if (eWsdlBinding != null) {
@@ -506,6 +539,124 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 		}
 
 		return null;
+	}
+
+	/**
+	 * parse {@link HttpServer}
+	 * 
+	 * @param uris
+	 * @param httpServers
+	 */
+	public final static void parseHttpServersUris(List<String> uris, List<HttpServer> httpServers) {
+		for (String uri : uris) {
+			boolean isHttps = false;
+			try {
+				URL url = new URL(uri);
+				if ("https".equals(url.getProtocol())) {
+					isHttps = true;
+				}
+				HttpServer exists = findExistsHttpServer(isHttps, url.getHost(), url.getPort(), httpServers);
+				if (exists == null) {
+					exists = new HttpServer(isHttps, url.getHost(), url.getPort());
+					httpServers.add(exists);
+				}
+				if (url.getPath().trim().length() != 0) {
+					exists.addUrl(url.getPath());
+				}
+			} catch (MalformedURLException e) {
+				HttpServer exists = findExistsHttpServer(false, "", -1, httpServers);
+				if (exists == null) {
+					exists = new HttpServer(false, "", -1);
+					httpServers.add(exists);
+				}
+				if (uri.trim().length() != 0) {
+					exists.addUrl(uri);
+				}
+			}
+		}
+	}
+
+	/**
+	 * check, whether exists {@link HttpServer}
+	 * 
+	 * @param isHttps
+	 * @param url
+	 * @param httpServers
+	 * @return
+	 */
+	private final static HttpServer findExistsHttpServer(boolean isHttps, String host, int port, List<HttpServer> httpServers) {
+		for (HttpServer httpServer : httpServers) {
+			if (host.equals(httpServer.getServer()) && isHttps == httpServer.isHttps() && port == httpServer.getPort()) {
+				return httpServer;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * parse FTP urls
+	 * 
+	 * @param uris
+	 * @param ftpServers
+	 */
+	public final static void parseFtpServerUris(List<String> uris, List<FtpServer> ftpServers) {
+		for (String uri : uris) {
+			try {
+				URL url = new URL(uri);
+				FtpServer ftpServer = findExistsFtpServer(url.getHost(), url.getPort(), ftpServers);
+				if (ftpServer == null) {
+					ftpServer = new FtpServer(url.getHost(), url.getPort());
+					ftpServers.add(ftpServer);
+				}
+				if (url.getPath().trim().length() != 0) {
+					ftpServer.addUrl(url.getPath());
+				}
+			} catch (MalformedURLException e) {
+			}
+		}
+	}
+
+	/**
+	 * check, whether exists {@link FtpServer}
+	 * 
+	 * @param host
+	 * @param port
+	 * @param ftpServers
+	 * @return
+	 */
+	private final static FtpServer findExistsFtpServer(String host, int port, List<FtpServer> ftpServers) {
+		for (FtpServer ftpServer : ftpServers) {
+			if (host.equals(ftpServer.getServer()) && port == ftpServer.getPort()) {
+				return ftpServer;
+			}
+		}
+		return null;
+	}
+
+	private final static SFtpServer findExistsSFtpServer(String host, int port, List<SFtpServer> ftpServers) {
+		for (SFtpServer ftpServer : ftpServers) {
+			if (host.equals(ftpServer.getServer()) && port == ftpServer.getPort()) {
+				return ftpServer;
+			}
+		}
+		return null;
+	}
+
+	public static void parseSFtpServerUris(List<String> uris, List<SFtpServer> ftpServers) {
+		for (String uri : uris) {
+			try {
+				URL url = new URL(uri);
+				SFtpServer ftpServer = findExistsSFtpServer(url.getHost(), url.getPort(), ftpServers);
+				if (ftpServer == null) {
+					ftpServer = new SFtpServer(url.getHost(), url.getPort());
+					ftpServers.add(ftpServer);
+				}
+				if (url.getPath().trim().length() != 0) {
+					ftpServer.addUrl(url.getPath());
+				}
+			} catch (MalformedURLException e) {
+			}
+		}
 	}
 
 }

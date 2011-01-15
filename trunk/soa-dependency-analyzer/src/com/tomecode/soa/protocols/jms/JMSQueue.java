@@ -1,4 +1,4 @@
-package com.tomecode.soa.jms;
+package com.tomecode.soa.protocols.jms;
 
 import org.eclipse.swt.graphics.Image;
 
@@ -15,10 +15,24 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 public final class JMSQueue implements ImageFace {
 
+	/**
+	 * parent {@link JMSConnectionFactory}
+	 */
 	private JMSConnectionFactory parentJmsConnectionFactory;
 
+	/**
+	 * queue name
+	 */
 	private String name;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 *            JMS queue name
+	 * @param jmsConnectionFactory
+	 *            parent {@link JMSConnectionFactory}
+	 */
 	public JMSQueue(String name, JMSConnectionFactory jmsConnectionFactory) {
 		this.name = name;
 		this.parentJmsConnectionFactory = jmsConnectionFactory;
@@ -43,7 +57,7 @@ public final class JMSQueue implements ImageFace {
 
 	@Override
 	public String getToolTip() {
-		return null;
+		return "JMS Queue";
 	}
 
 }

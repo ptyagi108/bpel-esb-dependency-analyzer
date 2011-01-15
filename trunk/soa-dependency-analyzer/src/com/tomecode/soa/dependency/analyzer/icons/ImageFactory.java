@@ -249,6 +249,21 @@ public final class ImageFactory {
 	public static final Image JMS_QUEUE = Activator.getImageDescriptor("/icons/com/tomecode/soa/jms/jmsQueue.png").createImage();
 	public static final Image JMS_CONNECTION_FACTORY = Activator.getImageDescriptor("/icons/com/tomecode/soa/jms/jmsFactory.png").createImage();
 
+	public static final Image HTTP_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/httpServer.png").createImage();
+	public static final Image HTTPS_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/httpsServer.png").createImage();
+
+	public static final Image HTTP_URL = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/httpUrl.png").createImage();
+	public static final Image FILE_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/fileServer.png").createImage();
+	public static final Image FTP_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/ftpServer.png").createImage();
+	public static final Image SFTP_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/sftpServer.png").createImage();
+	public static final Image EJB_PROVIDER = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/ejbProvider.png").createImage();
+	public static final Image EJB_METHOD = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/ejbMethod.png").createImage();
+	public static final Image EJB_OBJECT = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/ejbObject.png").createImage();
+	public static final Image EJB_HOME = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/ejbHome.png").createImage();
+	public static final Image UNKNOWN_SERVICE = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/unknownService.png").createImage();
+
+	
+	
 	private ImageFactory() {
 	}
 

@@ -1,5 +1,14 @@
 package com.tomecode.soa.ora.osb10g.services.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.swt.graphics.Image;
+
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.ora.osb10g.parser.OraSB10gBasicServiceParser;
+import com.tomecode.soa.protocols.ftp.SFtpServer;
+
 /**
  * Endpoint protocol - SFTP
  * 
@@ -10,7 +19,27 @@ package com.tomecode.soa.ora.osb10g.services.config;
  */
 public final class EndpointSFTP extends EndpointConfig {
 
+	private final List<SFtpServer> ftpServers;
+
 	public EndpointSFTP() {
 		super(ProviderProtocol.SFTP);
+		this.ftpServers = new ArrayList<SFtpServer>();
+
+	}
+
+	public void putAllURI(List<String> uris) {
+		this.uris.addAll(uris);
+		OraSB10gBasicServiceParser.parseSFtpServerUris(uris, ftpServers);
+	}
+
+	/**
+	 * @return the ftpServers
+	 */
+	public final List<SFtpServer> getSFtpServers() {
+		return ftpServers;
+	}
+
+	public final Image getImage() {
+		return ImageFactory.FTP_SERVER;
 	}
 }

@@ -278,7 +278,7 @@ public final class OpenNewWorkspaceWizard extends Wizard {
 				config.setExitsMultiWorkspace(mw);
 				config.getWorkspacePaths().clear();
 				for (Workspace workspace : mw.getWorkspaces()) {
-					config.addWorkspacePath(workspace.getFile().getParentFile().getPath());
+					config.addWorkspacePath(workspace.getFile().getPath());
 				}
 
 				labeMWorkspacePathExists.setText(mw.getPath().getPath());

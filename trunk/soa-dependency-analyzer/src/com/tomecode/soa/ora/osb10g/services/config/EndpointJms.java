@@ -3,8 +3,8 @@ package com.tomecode.soa.ora.osb10g.services.config;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tomecode.soa.jms.JMSServer;
 import com.tomecode.soa.ora.osb10g.parser.OraSB10gBasicServiceParser;
+import com.tomecode.soa.protocols.jms.JMSServer;
 
 /**
  * Endpoint protocol - JMS
@@ -18,6 +18,9 @@ public final class EndpointJms extends EndpointConfig {
 
 	private ProviderSpecificJms providerSpecificJms;
 
+	/**
+	 * list of {@link JMSServer}
+	 */
 	private final List<JMSServer> jmsServers;
 
 	public EndpointJms() {

@@ -289,15 +289,20 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 		for (Service service : project.getServices()) {
 			if (service.getType() == type) {
 
-				if (service.getOrginalName().equals(serviceName) || service.getOrginalName().replaceAll(" ", "_").equals(serviceName2)) {
-					if (realPath == null) {
-						return service;
-					} else {
-						if (service.getFolder().getPath().equals(realPath)) {
+				try {
+					if (service.getOrginalName().equals(serviceName) || service.getOrginalName().replaceAll(" ", "_").equals(serviceName2)) {
+						if (realPath == null) {
 							return service;
+						} else {
+							if (service.getFolder().getPath().equals(realPath)) {
+								return service;
+							}
 						}
 					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
+
 			}
 		}
 		return null;

@@ -1,4 +1,4 @@
-package com.tomecode.soa.jms;
+package com.tomecode.soa.protocols.jms;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,21 +9,34 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
- * JMS Connection factory
+ * JMS Connection factory - A JMS ConnectionFactory object is used by the client
+ * to make connections to the server
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
-
 public final class JMSConnectionFactory implements ImageFace {
 
+	/**
+	 * connection factory name
+	 */
 	private String name;
-
+	/**
+	 * list of {@link JMSQueue}
+	 */
 	private final List<JMSQueue> jmsQueues;
-
+	/**
+	 * parent {@link JMSServer}
+	 */
 	private JMSServer parentJmsServer;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 *            connection factory name
+	 */
 	public JMSConnectionFactory(String name) {
 		this.jmsQueues = new ArrayList<JMSQueue>();
 		this.name = name;
