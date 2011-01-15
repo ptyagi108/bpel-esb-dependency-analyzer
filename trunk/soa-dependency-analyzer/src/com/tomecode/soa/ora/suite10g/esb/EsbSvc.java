@@ -206,7 +206,7 @@ public final class EsbSvc implements BasicEsbNode {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		if (ServiceSubType.JMS == serviceSubType) {
 			return ImageFactory.ORACLE_10G_ESB_JMS_ADAPTER;
 		} else if (ServiceSubType.DB == serviceSubType) {

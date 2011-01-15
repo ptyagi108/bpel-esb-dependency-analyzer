@@ -171,7 +171,7 @@ public class Activity implements ImageFace {
 	}
 
 	@Override
-	public Image getImage() {
+	public Image getImage(boolean small) {
 		return null;
 	}
 

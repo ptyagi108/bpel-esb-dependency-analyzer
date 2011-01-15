@@ -94,6 +94,10 @@ public abstract class Service implements ImageFace {
 		this.project = project;
 	}
 
+	public Image getImage(boolean small) {
+		return getImage();
+	}
+
 	public abstract Image getImage();
 
 	public final OraSB10gFolder getFolder() {

@@ -222,7 +222,7 @@ public final class ServiceOperationsDepNavigator extends ViewPart implements Hid
 			if (element instanceof BpelOperations) {
 				return ImageFactory.ORACLE_10G_BPEL_PROCESS;
 			} else if (element instanceof ImageFace) {
-				return ((ImageFace) element).getImage();
+				return ((ImageFace) element).getImage(true);
 			}
 			return null;
 		}

@@ -8,8 +8,6 @@ import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.openesb.bpel.dependencies.BpelActivityDependency;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.services.Service;
-import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig;
-import com.tomecode.soa.ora.osb10g.services.config.EndpointJms;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.OsbActivityDependency;
 import com.tomecode.soa.ora.suite10g.esb.BasicEsbNode;
 import com.tomecode.soa.ora.suite10g.esb.BasicEsbNode.EsbNodeType;

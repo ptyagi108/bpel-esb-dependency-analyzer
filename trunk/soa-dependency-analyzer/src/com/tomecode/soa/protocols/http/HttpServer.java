@@ -52,7 +52,7 @@ public final class HttpServer implements ImageFace {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		if (https) {
 			return ImageFactory.HTTPS_SERVER;
 		}

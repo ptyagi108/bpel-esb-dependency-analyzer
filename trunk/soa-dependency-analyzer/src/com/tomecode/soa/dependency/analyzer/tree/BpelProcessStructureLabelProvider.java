@@ -27,9 +27,9 @@ final class BpelProcessStructureLabelProvider extends CellLabelProvider {
 		if (element instanceof Ora10gBpelProcessStrukture) {
 			return ImageFactory.ORACLE_10G_BPEL_PROCESS;
 		} else if (element instanceof BpelProcess) {
-			return ((BpelProcess) element).getImage();
+			return ((BpelProcess) element).getImage(true);
 		} else if (element instanceof ImageFace) {
-			return ((ImageFace) element).getImage();
+			return ((ImageFace) element).getImage(true);
 		}
 		return null;
 	}

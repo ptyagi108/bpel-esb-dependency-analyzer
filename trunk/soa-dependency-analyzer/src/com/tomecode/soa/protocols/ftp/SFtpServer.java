@@ -26,8 +26,11 @@ public final class SFtpServer extends FtpServer implements ImageFace {
 	}
 
 	@Override
-	public final Image getImage() {
-		return ImageFactory.FTP_SERVER;
+	public final Image getImage(boolean small) {
+		if (small) {
+
+		}
+		return ImageFactory.SFTP_SERVER;
 	}
 
 }

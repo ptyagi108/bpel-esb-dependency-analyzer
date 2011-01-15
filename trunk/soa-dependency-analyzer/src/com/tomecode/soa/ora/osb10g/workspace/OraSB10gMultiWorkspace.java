@@ -101,7 +101,7 @@ public final class OraSB10gMultiWorkspace implements MultiWorkspace {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		return ImageFactory.MULTI_WORKSPACE;
 	}
 

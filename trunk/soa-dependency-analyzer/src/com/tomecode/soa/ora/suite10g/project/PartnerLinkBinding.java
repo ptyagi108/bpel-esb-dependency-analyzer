@@ -125,7 +125,7 @@ public final class PartnerLinkBinding implements ImageFace, Serializable {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		return ImageFactory.ORACLE_10G_PARTNERLINK;
 	}
 

@@ -587,8 +587,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 					if (dep instanceof Ora10gBpelProject) {
 						GraphNode depDestination = objectFactory.findDataInNodes(dep);
 						if (depDestination == null) {
-							Ora10gBpelProject bpelProject = (Ora10gBpelProject) dep;
-							depDestination = objectFactory.createNode(bpelProject.getName(), bpelProject.getImage(), bpelProject, ToolTipFactory.createToolTip(bpelProject));
+							depDestination = objectFactory.createNode((Ora10gBpelProject) dep);
 							objectFactory.createConnectionOutbound(source, depDestination, esbOperation, null, false);
 						} else {
 							if (objectFactory.findConnection(source, depDestination) == null) {
@@ -599,8 +598,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 					} else if (dep instanceof Ora10gEsbProject) {
 						GraphNode depDestination = objectFactory.findDataInNodes(dep);
 						if (depDestination == null) {
-							Ora10gEsbProject esbProject = (Ora10gEsbProject) dep;
-							depDestination = objectFactory.createNode(esbProject.getName(), esbProject.getImage(), esbProject, ToolTipFactory.createToolTip(esbProject));
+							depDestination = objectFactory.createNode((Ora10gEsbProject) dep);
 							objectFactory.createConnectionOutbound(source, depDestination, esbOperation, null, false);
 						} else {
 							objectFactory.createConnectionOutbound(source, depDestination, esbOperation, null, false);
@@ -615,7 +613,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 						for (EsbSvc rsEsbSvc : esbRoutingRule.getEsbSvcs()) {
 							GraphNode depDestination = objectFactory.findDataInNodes(rsEsbSvc);
 							if (depDestination == null) {
-								depDestination = objectFactory.createNode(rsEsbSvc.getName(), rsEsbSvc.getImage(), rsEsbSvc, ToolTipFactory.createToolTip(rsEsbSvc));
+								depDestination = objectFactory.createNode(rsEsbSvc);
 								objectFactory.createConnectionOutbound(source, depDestination, esbOperation, null, false);
 							} else {
 								objectFactory.createConnectionOutbound(source, depDestination, esbOperation, null, false);
@@ -626,8 +624,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 					} else if (dep instanceof EsbSvc) {
 						GraphNode depDestination = objectFactory.findDataInNodes(dep);
 						if (depDestination == null) {
-							EsbSvc esbSvc = (EsbSvc) dep;
-							depDestination = objectFactory.createNode(esbSvc.getName(), esbSvc.getImage(), esbSvc, ToolTipFactory.createToolTip(esbSvc));
+							depDestination = objectFactory.createNode((EsbSvc) dep);
 							objectFactory.createConnectionOutbound(source, depDestination, esbOperation, null, false);
 						} else {
 							objectFactory.createConnectionOutbound(source, depDestination, esbOperation, null, false);

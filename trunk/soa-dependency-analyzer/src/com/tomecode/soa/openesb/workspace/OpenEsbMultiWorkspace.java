@@ -104,7 +104,7 @@ public final class OpenEsbMultiWorkspace implements MultiWorkspace {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		return ImageFactory.MULTI_WORKSPACE;
 	}
 

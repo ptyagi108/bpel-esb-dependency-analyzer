@@ -218,7 +218,7 @@ public class OraSB10gFolder implements ImageFace {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		return ImageFactory.OSB_10G_OSB_FOLDER;
 	}
 

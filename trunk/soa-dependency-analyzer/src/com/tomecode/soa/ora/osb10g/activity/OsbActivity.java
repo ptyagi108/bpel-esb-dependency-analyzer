@@ -86,6 +86,10 @@ public abstract class OsbActivity implements ImageFace {
 		return name;
 	}
 
+	public Image getImage(boolean small) {
+		return getImage();
+	}
+
 	public abstract Image getImage();
 
 	public String toString() {

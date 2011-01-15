@@ -104,7 +104,7 @@ public final class Ora10gWorkspace implements Workspace {
 		return multiWorkspace;
 	}
 
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		return ImageFactory.WORKSPACE;
 	}
 

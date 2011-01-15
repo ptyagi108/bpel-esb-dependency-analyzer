@@ -120,7 +120,7 @@ public final class OsbActivityDependency implements ImageFace {
 		return activity.toString();
 	}
 
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		return activity.getImage();
 	}
 

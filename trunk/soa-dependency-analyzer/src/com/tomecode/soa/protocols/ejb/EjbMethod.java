@@ -49,7 +49,10 @@ public final class EjbMethod implements ImageFace {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
+		if (small) {
+			return ImageFactory.EJB_METHOD_SMALL;
+		}
 		return ImageFactory.EJB_METHOD;
 	}
 

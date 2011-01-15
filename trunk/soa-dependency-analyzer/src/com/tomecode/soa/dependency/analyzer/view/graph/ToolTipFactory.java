@@ -62,7 +62,7 @@ final class ToolTipFactory {
 	static final IFigure createToolTip(BpelProcess process) {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(GuiUtils.createLabel2dBold("Name:"));
-		tooltip.add(createLabel(process.getName(), process.getImage()));
+		tooltip.add(createLabel(process.getName(), process.getImage(true)));
 		tooltip.add(GuiUtils.createLabel2dBold("Path:"));
 		tooltip.add(new org.eclipse.draw2d.Label(process.getFile() != null ? process.getFile().toString() : ""));
 		return tooltip;
@@ -171,7 +171,7 @@ final class ToolTipFactory {
 	static final IFigure createToolTip(Project project) {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(GuiUtils.createLabel2dBold("Name: "));
-		tooltip.add(createLabel(project.getName(), project.getImage()));
+		tooltip.add(createLabel(project.getName(), project.getImage(true)));
 		if (project.getType() == ProjectType.UNKNOWN) {
 			UnknownProject unknownProject = (UnknownProject) project;
 			tooltip.add(GuiUtils.createLabel2dBold("Type: "));
@@ -197,7 +197,7 @@ final class ToolTipFactory {
 	static final IFigure createToolTip(Workspace workspace) {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(GuiUtils.createLabel2dBold("Name: "));
-		tooltip.add(createLabel(workspace.getName(), workspace.getImage()));
+		tooltip.add(createLabel(workspace.getName(), workspace.getImage(true)));
 		tooltip.add(GuiUtils.createLabel2dBold("Type:"));
 		tooltip.add(new org.eclipse.draw2d.Label("Workspace " + workspace.getType().toString()));
 		tooltip.add(GuiUtils.createLabel2dBold("Path:"));
@@ -214,7 +214,7 @@ final class ToolTipFactory {
 	static final IFigure createToolTip(MultiWorkspace multiWorkspace) {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(GuiUtils.createLabel2dBold("Name: "));
-		tooltip.add(createLabel(multiWorkspace.getName(), multiWorkspace.getImage()));
+		tooltip.add(createLabel(multiWorkspace.getName(), multiWorkspace.getImage(true)));
 		tooltip.add(GuiUtils.createLabel2dBold("Type: "));
 		tooltip.add(new org.eclipse.draw2d.Label("Multi-Workspace " + multiWorkspace.getType().toString()));
 		tooltip.add(GuiUtils.createLabel2dBold("Path: "));
@@ -245,7 +245,7 @@ final class ToolTipFactory {
 	final static IFigure createToolTip(PartnerLinkBinding partnerLinkBinding) {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(GuiUtils.createLabel2dBold("Partner Link: "));
-		tooltip.add(createLabel(partnerLinkBinding.getName(), partnerLinkBinding.getImage()));
+		tooltip.add(createLabel(partnerLinkBinding.getName(), partnerLinkBinding.getImage(true)));
 
 		tooltip.add(GuiUtils.createLabel2dBold("WSDL Location: "));
 		tooltip.add(new org.eclipse.draw2d.Label(partnerLinkBinding.getWsdlLocation()));
@@ -254,11 +254,11 @@ final class ToolTipFactory {
 			BpelEsbDependency esbDependency = partnerLinkBinding.getDependencyEsbProject();
 			tooltip.add(GuiUtils.createLabel2dBold("a reference to the ESB Project: "));
 			Ora10gEsbProject esbProject = esbDependency.getEsbProject();
-			tooltip.add(createLabel(esbProject.getName(), esbProject.getImage()));
+			tooltip.add(createLabel(esbProject.getName(), esbProject.getImage(true)));
 			tooltip.add(GuiUtils.createLabel2dBold("Service: "));
 			EsbSvc esbSvc = esbDependency.getEsbSvc();
 			if (esbSvc != null) {
-				tooltip.add(createLabel(esbSvc.getName(), esbSvc.getImage()));
+				tooltip.add(createLabel(esbSvc.getName(), esbSvc.getImage(true)));
 			} else {
 				tooltip.add(new org.eclipse.draw2d.Label(("")));
 			}
@@ -291,7 +291,7 @@ final class ToolTipFactory {
 		IFigure tooltip = createDefaultToolTip();
 
 		tooltip.add(GuiUtils.createLabel2dBold("Name: "));
-		tooltip.add(createLabel(esbSvc.getName(), esbSvc.getImage()));
+		tooltip.add(createLabel(esbSvc.getName(), esbSvc.getImage(true)));
 		tooltip.add(GuiUtils.createLabel2dBold("Type: "));
 		tooltip.add(new org.eclipse.draw2d.Label(esbSvc.getTypeDescription()));
 
@@ -315,7 +315,7 @@ final class ToolTipFactory {
 	static final IFigure createToolTip(JMSServer server) {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(GuiUtils.createLabel2dBold("Type: "));
-		tooltip.add(createLabel("JMS Server", server.getImage()));
+		tooltip.add(createLabel("JMS Server", server.getImage(true)));
 		tooltip.add(GuiUtils.createLabel2dBold("Name: "));
 		tooltip.add(new org.eclipse.draw2d.Label(server.getName()));
 		if (server.getPort() != null) {
@@ -334,7 +334,7 @@ final class ToolTipFactory {
 	static final IFigure createToolTip(JMSConnectionFactory connectionFactory) {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(GuiUtils.createLabel2dBold("Type: "));
-		tooltip.add(createLabel("JMS Connection Factory", connectionFactory.getImage()));
+		tooltip.add(createLabel("JMS Connection Factory", connectionFactory.getImage(true)));
 		tooltip.add(GuiUtils.createLabel2dBold("Name: "));
 		tooltip.add(new org.eclipse.draw2d.Label(connectionFactory.getName()));
 		return tooltip;
@@ -349,7 +349,7 @@ final class ToolTipFactory {
 	final static IFigure createToolTip(JMSQueue queue) {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(GuiUtils.createLabel2dBold("Type: "));
-		tooltip.add(createLabel("JMS Queue", queue.getImage()));
+		tooltip.add(createLabel("JMS Queue", queue.getImage(true)));
 		tooltip.add(GuiUtils.createLabel2dBold("Name: "));
 		tooltip.add(new org.eclipse.draw2d.Label(queue.getName()));
 		return tooltip;
@@ -364,7 +364,7 @@ final class ToolTipFactory {
 	final static IFigure createToolTip(HttpServer httpServer) {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(GuiUtils.createLabel2dBold("Type: "));
-		tooltip.add(createLabel("HTTP Server", httpServer.getImage()));
+		tooltip.add(createLabel("HTTP Server", httpServer.getImage(true)));
 		tooltip.add(GuiUtils.createLabel2dBold("Protocol: "));
 		if (httpServer.isHttps()) {
 			tooltip.add(new org.eclipse.draw2d.Label("https"));

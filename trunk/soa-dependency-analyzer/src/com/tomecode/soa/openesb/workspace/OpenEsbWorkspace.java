@@ -91,7 +91,7 @@ public final class OpenEsbWorkspace implements Workspace {
 		return multiWorkspace;
 	}
 
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		return ImageFactory.WORKSPACE;
 	}
 

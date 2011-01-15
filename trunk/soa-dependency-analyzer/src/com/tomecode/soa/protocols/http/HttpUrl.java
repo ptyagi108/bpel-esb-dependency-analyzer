@@ -46,7 +46,10 @@ public final class HttpUrl implements ImageFace {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
+		if (small) {
+			return null;
+		}
 		return ImageFactory.HTTP_URL;
 	}
 

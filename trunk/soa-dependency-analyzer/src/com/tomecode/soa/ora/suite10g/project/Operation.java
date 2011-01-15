@@ -210,9 +210,9 @@ public final class Operation implements ImageFace {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		if (activity != null) {
-			return activity.getImage();
+			return activity.getImage(small);
 		}
 		return null;
 	}

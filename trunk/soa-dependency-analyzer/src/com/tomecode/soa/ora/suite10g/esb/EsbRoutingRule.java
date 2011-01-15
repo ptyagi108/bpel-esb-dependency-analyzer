@@ -66,7 +66,7 @@ public final class EsbRoutingRule implements BasicEsbNode {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		return ImageFactory.ORACLE_10G_ROUTING_RULES;
 	}
 

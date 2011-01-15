@@ -188,7 +188,7 @@ public final class EsbSys implements BasicEsbNode {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		return ImageFactory.ORACLE_10G_SYSTEM;
 	}
 

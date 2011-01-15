@@ -121,7 +121,7 @@ public final class OraSB10gProject implements Project {
 		return workspace;
 	}
 
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		return ImageFactory.OSB_10G_PROJECT;
 	}
 

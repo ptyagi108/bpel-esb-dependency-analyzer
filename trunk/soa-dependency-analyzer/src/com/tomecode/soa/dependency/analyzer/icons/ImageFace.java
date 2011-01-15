@@ -12,11 +12,13 @@ import org.eclipse.swt.graphics.Image;
 public interface ImageFace {
 
 	/**
-	 * image for GUI
+	 * get image
 	 * 
+	 * @param small
+	 *            - true then return small image
 	 * @return
 	 */
-	Image getImage();
+	Image getImage(boolean small);
 
 	/**
 	 * get tool tip for object

@@ -51,7 +51,10 @@ public final class JMSQueue implements ImageFace {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
+		if (small) {
+			return ImageFactory.JMS_QUEUE_SMALL;
+		}
 		return ImageFactory.JMS_QUEUE;
 	}
 

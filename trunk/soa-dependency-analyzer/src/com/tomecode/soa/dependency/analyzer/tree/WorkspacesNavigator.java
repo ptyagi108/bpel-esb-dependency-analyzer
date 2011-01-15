@@ -288,7 +288,7 @@ public final class WorkspacesNavigator extends ViewPart implements ISelectionCha
 
 		public final Image getImage(Object element) {
 			if (element instanceof ImageFace) {
-				return ((ImageFace) element).getImage();
+				return ((ImageFace) element).getImage(true);
 			}
 			return null;
 		}

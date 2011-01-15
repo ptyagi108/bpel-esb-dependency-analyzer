@@ -235,7 +235,8 @@ public final class ImageFactory {
 	public static final Image OSB_10G_OSB_FOLDER = Activator.getImageDescriptor("/icons/com/tomecode/soa/osb10g/16/osbfolder.png").createImage();
 
 	public static final Image UNKNOWN = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/unknown.png").createImage();
-	public static final Image UNKNOWN_BIG = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/unknown_big.png").createImage();
+	// public static final Image UNKNOWN_BIG =
+	// Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/unknown_big.png").createImage();
 	public static final Image ORACLE_10G_ESB_JMS_ADAPTER = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbJmsAdapter.png").createImage();
 	public static Image ORACLE_10G_ESB_DB_ADAPTER = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbDBadapter.png").createImage();
 	public static Image ORACLE_10G_ESB_SOAP_SERVICE = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbSOAPservice.png").createImage();
@@ -261,9 +262,14 @@ public final class ImageFactory {
 	public static final Image EJB_OBJECT = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/ejbObject.png").createImage();
 	public static final Image EJB_HOME = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/ejbHome.png").createImage();
 	public static final Image UNKNOWN_SERVICE = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/unknownService.png").createImage();
+	public static final Image EJB_HOME_SMALL = null;
+	public static final Image EJB_METHOD_SMALL = null;
+	public static final Image EJB_PROVIDER_SMALL = null;
+	public static final Image FTP_SERVER_SMALL = null;
+	public static final Image JMS_QUEUE_SMALL = null;
+	public static final Image JMS_SERVER_SMALL = null;
+	public static final Image JMS_CONNECTION_FACTORY_SMALL = null;
 
-	
-	
 	private ImageFactory() {
 	}
 

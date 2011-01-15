@@ -93,7 +93,7 @@ public final class OraSB10gWorkspace implements Workspace {
 		return name;
 	}
 
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		return ImageFactory.WORKSPACE;
 	}
 

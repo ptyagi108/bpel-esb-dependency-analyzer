@@ -218,7 +218,7 @@ public final class Ora10gBpelProject implements Project {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		return ImageFactory.ORACLE_10G_BPEL_PROCESS;
 	}
 

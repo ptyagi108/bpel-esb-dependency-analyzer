@@ -55,7 +55,10 @@ public class FtpServer implements ImageFace {
 	}
 
 	@Override
-	public Image getImage() {
+	public Image getImage(boolean small) {
+		if (small) {
+			return ImageFactory.FTP_SERVER_SMALL;
+		}
 		return ImageFactory.FTP_SERVER;
 	}
 
@@ -84,7 +87,6 @@ public class FtpServer implements ImageFace {
 
 	@Override
 	public String getToolTip() {
-
 		return null;
 	}
 

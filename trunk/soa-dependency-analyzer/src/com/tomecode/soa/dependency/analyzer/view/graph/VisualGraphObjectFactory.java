@@ -326,7 +326,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(HttpServer httpServer) {
-		return createNode(httpServer.getServer(), httpServer.getImage(), httpServer, ToolTipFactory.createToolTip(httpServer));
+		return createNode(httpServer.getServer(), httpServer.getImage(false), httpServer, ToolTipFactory.createToolTip(httpServer));
 	}
 
 	/**
@@ -336,7 +336,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(JMSServer jmsServer) {
-		return createNode(jmsServer.toString(), jmsServer.getImage(), jmsServer, ToolTipFactory.createToolTip(jmsServer));
+		return createNode(jmsServer.toString(), jmsServer.getImage(false), jmsServer, ToolTipFactory.createToolTip(jmsServer));
 	}
 
 	/**
@@ -346,7 +346,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(JMSConnectionFactory connectionFactory) {
-		return createNode(connectionFactory.toString(), connectionFactory.getImage(), connectionFactory, ToolTipFactory.createToolTip(connectionFactory));
+		return createNode(connectionFactory.toString(), connectionFactory.getImage(false), connectionFactory, ToolTipFactory.createToolTip(connectionFactory));
 	}
 
 	/**
@@ -356,7 +356,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(EsbSvc sourceEsbSvc) {
-		return createNode(sourceEsbSvc.getName(), sourceEsbSvc.getImage(), sourceEsbSvc, ToolTipFactory.createToolTip(sourceEsbSvc));
+		return createNode(sourceEsbSvc.getName(), sourceEsbSvc.getImage(false), sourceEsbSvc, ToolTipFactory.createToolTip(sourceEsbSvc));
 	}
 
 	/**
@@ -366,7 +366,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(Ora10gEsbProject rootEsbProject) {
-		return createNode(rootEsbProject.getName(), rootEsbProject.getImage(), rootEsbProject, ToolTipFactory.createToolTip(rootEsbProject));
+		return createNode(rootEsbProject.getName(), rootEsbProject.getImage(false), rootEsbProject, ToolTipFactory.createToolTip(rootEsbProject));
 	}
 
 	/**
@@ -376,7 +376,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(JMSQueue queue) {
-		return createNode(queue.toString(), queue.getImage(), queue, ToolTipFactory.createToolTip(queue));
+		return createNode(queue.toString(), queue.getImage(false), queue, ToolTipFactory.createToolTip(queue));
 	}
 
 	/**
@@ -406,7 +406,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(OpenEsbBpelProcess bpelProcess) {
-		return createNode(bpelProcess.getName(), bpelProcess.getImage(), bpelProcess, ToolTipFactory.createToolTip(bpelProcess));
+		return createNode(bpelProcess.getName(), bpelProcess.getImage(false), bpelProcess, ToolTipFactory.createToolTip(bpelProcess));
 	}
 
 	/**
@@ -416,7 +416,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(Project project) {
-		return createNode(project.getName(), project.getImage(), project, ToolTipFactory.createToolTip(project));
+		return createNode(project.getName(), project.getImage(true), project, ToolTipFactory.createToolTip(project));
 	}
 
 	/**
@@ -426,7 +426,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(Ora10gWorkspace ora10gWorkspace) {
-		return createNode(ora10gWorkspace.getName(), ora10gWorkspace.getImage(), ora10gWorkspace, ToolTipFactory.createToolTip(ora10gWorkspace));
+		return createNode(ora10gWorkspace.getName(), ora10gWorkspace.getImage(false), ora10gWorkspace, ToolTipFactory.createToolTip(ora10gWorkspace));
 	}
 
 	/**
@@ -436,7 +436,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(OraSB10gWorkspace oraSB10gWorkspace) {
-		return createNode(oraSB10gWorkspace.getName(), oraSB10gWorkspace.getImage(), oraSB10gWorkspace, ToolTipFactory.createToolTip(oraSB10gWorkspace));
+		return createNode(oraSB10gWorkspace.getName(), oraSB10gWorkspace.getImage(false), oraSB10gWorkspace, ToolTipFactory.createToolTip(oraSB10gWorkspace));
 	}
 
 	/**
@@ -446,7 +446,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(OpenEsbWorkspace openEsbWorkspace) {
-		return createNode(openEsbWorkspace.getName(), openEsbWorkspace.getImage(), openEsbWorkspace, ToolTipFactory.createToolTip(openEsbWorkspace));
+		return createNode(openEsbWorkspace.getName(), openEsbWorkspace.getImage(false), openEsbWorkspace, ToolTipFactory.createToolTip(openEsbWorkspace));
 	}
 
 	/**
@@ -456,7 +456,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(MultiWorkspace multiWorkspace) {
-		return createNode(multiWorkspace.getName(), multiWorkspace.getImage(), multiWorkspace, ToolTipFactory.createToolTip(multiWorkspace));
+		return createNode(multiWorkspace.getName(), multiWorkspace.getImage(false), multiWorkspace, ToolTipFactory.createToolTip(multiWorkspace));
 	}
 
 	/**
@@ -466,7 +466,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(Workspace workspace) {
-		return createNode(workspace.getName(), workspace.getImage(), workspace, ToolTipFactory.createToolTip(workspace));
+		return createNode(workspace.getName(), workspace.getImage(false), workspace, ToolTipFactory.createToolTip(workspace));
 	}
 
 	/**
@@ -476,7 +476,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(HttpUrl httpUrl) {
-		return createNode(httpUrl.getUrl(), httpUrl.getImage(), httpUrl, ToolTipFactory.createToolTip("HTTP Url", httpUrl.getUrl(), httpUrl.getImage()));
+		return createNode(httpUrl.getUrl(), httpUrl.getImage(false), httpUrl, ToolTipFactory.createToolTip("HTTP Url", httpUrl.getUrl(), httpUrl.getImage(true)));
 	}
 
 	/**
@@ -496,7 +496,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(FtpServer ftpServer) {
-		return createNode(ftpServer.toString(), ftpServer.getImage(), ftpServer, ToolTipFactory.createToolTip("FTP Server", ftpServer.getServer(), ftpServer.getPort(), ftpServer.getImage()));
+		return createNode(ftpServer.toString(), ftpServer.getImage(false), ftpServer, ToolTipFactory.createToolTip("FTP Server", ftpServer.getServer(), ftpServer.getPort(), ftpServer.getImage(true)));
 	}
 
 	/**
@@ -506,7 +506,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(SFtpServer ftpServer) {
-		return createNode(ftpServer.toString(), ftpServer.getImage(), ftpServer, ToolTipFactory.createToolTip("SFTP Server", ftpServer.getServer(), ftpServer.getPort(), ftpServer.getImage()));
+		return createNode(ftpServer.toString(), ftpServer.getImage(false), ftpServer, ToolTipFactory.createToolTip("SFTP Server", ftpServer.getServer(), ftpServer.getPort(), ftpServer.getImage(true)));
 	}
 
 	/**
@@ -516,7 +516,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(EjbProvider ejbProvider) {
-		return createNode(ejbProvider.getName(), ejbProvider.getImage(), ejbProvider, ToolTipFactory.createToolTip("EJB Provider", ejbProvider.getName(), ejbProvider.getImage()));
+		return createNode(ejbProvider.getName(), ejbProvider.getImage(false), ejbProvider, ToolTipFactory.createToolTip("EJB Provider", ejbProvider.getName(), ejbProvider.getImage(true)));
 	}
 
 	/**
@@ -526,7 +526,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(EjbHome ejbHome) {
-		return createNode(ejbHome.getName(), ejbHome.getImage(), ejbHome, ToolTipFactory.createToolTip("EJB Home", ejbHome.getName(), ejbHome.getImage()));
+		return createNode(ejbHome.getName(), ejbHome.getImage(false), ejbHome, ToolTipFactory.createToolTip("EJB Home", ejbHome.getName(), ejbHome.getImage(true)));
 	}
 
 	/**
@@ -536,7 +536,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(EjbObject ejbObject) {
-		return createNode(ejbObject.getName(), ejbObject.getImage(), ejbObject, ToolTipFactory.createToolTip("EJB Object", ejbObject.getName(), ejbObject.getImage()));
+		return createNode(ejbObject.getName(), ejbObject.getImage(false), ejbObject, ToolTipFactory.createToolTip("EJB Object", ejbObject.getName(), ejbObject.getImage(true)));
 	}
 
 	/**
@@ -546,7 +546,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(EjbMethod ejbMethod) {
-		return createNode(ejbMethod.getName(), ejbMethod.getImage(), ejbMethod, ToolTipFactory.createToolTip(ejbMethod));
+		return createNode(ejbMethod.getName(), ejbMethod.getImage(false), ejbMethod, ToolTipFactory.createToolTip(ejbMethod));
 	}
 
 	final GraphNode createNode(String uris, EndpointConfig endpointConfig) {

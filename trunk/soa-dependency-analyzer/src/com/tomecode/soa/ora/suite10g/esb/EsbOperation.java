@@ -155,7 +155,7 @@ public final class EsbOperation implements BasicEsbNode {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		if (mep == Mep.REQUEST) {
 			return ImageFactory.ORACLE_10G_OPERATION_REQUEST;
 		}

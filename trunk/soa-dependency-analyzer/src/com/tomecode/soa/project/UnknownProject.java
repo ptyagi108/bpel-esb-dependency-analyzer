@@ -133,7 +133,7 @@ public final class UnknownProject implements Project {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		if (type == UnknownProjectType.FILE) {
 			return ImageFactory.ORACLE_10G_ESB_FILE_ADAPTER;
 		} else if (type == UnknownProjectType.DB) {

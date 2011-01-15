@@ -101,7 +101,10 @@ public final class JMSServer implements ImageFace {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
+		if (small) {
+			return ImageFactory.JMS_SERVER_SMALL;
+		}
 		return ImageFactory.JMS_SERVER;
 	}
 

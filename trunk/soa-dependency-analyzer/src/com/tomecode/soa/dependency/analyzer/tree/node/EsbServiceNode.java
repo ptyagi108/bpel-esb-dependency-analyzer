@@ -53,13 +53,12 @@ public final class EsbServiceNode implements DependencyNode, ImageFace {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		return ImageFactory.ORACLE_10G_ESB;
 	}
 
 	@Override
 	public String getToolTip() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -78,7 +78,10 @@ public final class JMSConnectionFactory implements ImageFace {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
+		if (small) {
+			return ImageFactory.JMS_CONNECTION_FACTORY_SMALL;
+		}
 		return ImageFactory.JMS_CONNECTION_FACTORY;
 	}
 

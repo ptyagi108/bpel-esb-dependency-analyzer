@@ -251,7 +251,7 @@ public final class Ora10gEsbProject implements Project {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		return ImageFactory.ORACLE_10G_ESB;
 	}
 

@@ -65,7 +65,7 @@ public final class BpelActivityDependency implements ImageFace {
 		return bpelProcesses;
 	}
 
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		return activity.getActivtyType().getImage();
 	}
 

@@ -121,7 +121,7 @@ public final class OpenEsbBpelProject implements Project {
 	}
 
 	@Override
-	public Image getImage() {
+	public final Image getImage(boolean small) {
 		return ImageFactory.OPEN_ESB_BPEL_BPEL_MODULE;
 	}
 

@@ -57,7 +57,10 @@ public final class EjbHome implements ImageFace {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
+		if (small) {
+			return ImageFactory.EJB_HOME_SMALL;
+		}
 		return ImageFactory.EJB_HOME;
 	}
 

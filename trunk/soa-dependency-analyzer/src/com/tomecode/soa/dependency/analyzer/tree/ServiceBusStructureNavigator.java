@@ -176,7 +176,7 @@ public final class ServiceBusStructureNavigator extends ViewPart implements Hide
 			} else if (element instanceof SplitJoin) {
 				return ((SplitJoin) element).getImage();
 			} else if (element instanceof ImageFace) {
-				return ((ImageFace) element).getImage();
+				return ((ImageFace) element).getImage(true);
 			}
 			return null;
 		}

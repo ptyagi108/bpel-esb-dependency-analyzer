@@ -166,7 +166,7 @@ public final class OpenEsbBpelProcess implements BpelProcess {
 		return activityDependencies;
 	}
 
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
 		return ImageFactory.OPEN_ESB_BPEL_PROCESS;
 	}
 

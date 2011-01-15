@@ -194,7 +194,7 @@ public final class ProjectServicesNavigator extends ViewPart implements HideView
 
 		public final Image getImage(Object element) {
 			if (element instanceof ImageFace) {
-				return ((ImageFace) element).getImage();
+				return ((ImageFace) element).getImage(true);
 			}
 			return null;
 		}

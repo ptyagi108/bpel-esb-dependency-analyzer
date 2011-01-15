@@ -38,7 +38,10 @@ public final class EjbProvider implements ImageFace {
 	}
 
 	@Override
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
+		if( small){
+			return ImageFactory.EJB_PROVIDER_SMALL;
+		}
 		return ImageFactory.EJB_PROVIDER;
 	}
 
