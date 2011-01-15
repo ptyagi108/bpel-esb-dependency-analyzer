@@ -58,7 +58,7 @@ public final class EjbMethod implements ImageFace {
 
 	@Override
 	public final String getToolTip() {
-		return "EJB Method\nName: " + name;
+		return "Type: EJB Method\nName: " + name;
 	}
 
 }

@@ -20,11 +20,11 @@ public class FtpServer implements ImageFace {
 	/**
 	 * ftp server host
 	 */
-	private String server;
+	protected String server;
 	/**
 	 * ftp server port
 	 */
-	private int port;
+	protected int port;
 	/**
 	 * list of {@link FtpFolder}
 	 */
@@ -87,7 +87,6 @@ public class FtpServer implements ImageFace {
 
 	@Override
 	public String getToolTip() {
-		return null;
+		return "Type: FTP Server\nName: " + server + (port != -1 ? ("\nPort: " + String.valueOf(port)) : "");
 	}
-
 }

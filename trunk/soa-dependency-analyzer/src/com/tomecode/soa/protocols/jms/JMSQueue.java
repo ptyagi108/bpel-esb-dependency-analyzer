@@ -59,8 +59,8 @@ public final class JMSQueue implements ImageFace {
 	}
 
 	@Override
-	public String getToolTip() {
-		return "JMS Queue";
+	public final String getToolTip() {
+		return "Type: JMS Queue\nName: " + name;
 	}
 
 }

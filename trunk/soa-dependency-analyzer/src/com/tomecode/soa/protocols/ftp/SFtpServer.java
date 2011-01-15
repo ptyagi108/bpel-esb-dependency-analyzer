@@ -28,9 +28,13 @@ public final class SFtpServer extends FtpServer implements ImageFace {
 	@Override
 	public final Image getImage(boolean small) {
 		if (small) {
-
+			return ImageFactory.SFTP_SERVER_SMALL;
 		}
 		return ImageFactory.SFTP_SERVER;
 	}
 
+	@Override
+	public String getToolTip() {
+		return "Type: FTP Server\nName: " + server + (port != -1 ? ("\nPort: " + String.valueOf(port)) : "");
+	}
 }

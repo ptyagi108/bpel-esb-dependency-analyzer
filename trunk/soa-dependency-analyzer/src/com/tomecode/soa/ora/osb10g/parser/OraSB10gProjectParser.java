@@ -169,7 +169,7 @@ public final class OraSB10gProjectParser {
 	 * @param file
 	 * @return
 	 */
-	private final Service parseService(File file) {	
+	private final Service parseService(File file) {
 		String name = file.getName().toLowerCase();
 		if (name.endsWith(".proxy") || name.endsWith(".proxyservice")) {
 			try {
@@ -211,9 +211,9 @@ public final class OraSB10gProjectParser {
 			return new ResourceFile(file, ServiceDependencyType.XQUERY);
 		} else if (name.endsWith(".wsdl")) {
 			return new ResourceFile(file, ServiceDependencyType.WSDL);
-		} else if (name.endsWith(".xmlschema")) {
+		} else if (name.endsWith(".xmlschema") || name.endsWith(".xsd")) {
 			return new ResourceFile(file, ServiceDependencyType.XML_SCHEMA);
-		} else if (name.endsWith(".serviceaccount")) {
+		} else if (name.endsWith(".serviceaccount") || name.endsWith(".sa")) {
 			return new ResourceFile(file, ServiceDependencyType.SERVICE_ACCOUNT);
 		} else if (name.endsWith(".archive")) {
 			return new ResourceFile(file, ServiceDependencyType.ARCHIVE);

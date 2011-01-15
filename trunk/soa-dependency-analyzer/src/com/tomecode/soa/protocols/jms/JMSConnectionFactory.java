@@ -86,8 +86,7 @@ public final class JMSConnectionFactory implements ImageFace {
 	}
 
 	@Override
-	public String getToolTip() {
-
-		return null;
+	public final String getToolTip() {
+		return "Type: JMS Connection Factory\nName: " + name;
 	}
 }

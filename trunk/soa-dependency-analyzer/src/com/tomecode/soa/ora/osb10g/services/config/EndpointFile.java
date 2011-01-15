@@ -18,7 +18,10 @@ public final class EndpointFile extends EndpointConfig {
 		super(ProviderProtocol.FILE);
 	}
 
-	public final Image getImage() {
+	public final Image getImage(boolean small) {
+		if (small) {
+			return ImageFactory.FILE_SERVER_SMALL;
+		}
 		return ImageFactory.FILE_SERVER;
 	}
 }

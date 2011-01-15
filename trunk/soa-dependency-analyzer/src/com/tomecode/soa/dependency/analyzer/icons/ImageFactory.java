@@ -246,29 +246,37 @@ public final class ImageFactory {
 	public static Image ORACLE_10G_ESB_AQ_ADAPTER = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbAQAdapter.png").createImage();
 	public static Image ORACLE_10G_ESB_MQ_ADAPTER = Activator.getImageDescriptor("/icons/com/tomecode/soa/oracle10g/icons/esbMQadapter.png").createImage();
 
-	public static final Image JMS_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/jms/jmsServer.png").createImage();
-	public static final Image JMS_QUEUE = Activator.getImageDescriptor("/icons/com/tomecode/soa/jms/jmsQueue.png").createImage();
-	public static final Image JMS_CONNECTION_FACTORY = Activator.getImageDescriptor("/icons/com/tomecode/soa/jms/jmsFactory.png").createImage();
-
-	public static final Image HTTP_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/httpServer.png").createImage();
-	public static final Image HTTPS_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/httpsServer.png").createImage();
-
-	public static final Image HTTP_URL = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/httpUrl.png").createImage();
-	public static final Image FILE_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/fileServer.png").createImage();
-	public static final Image FTP_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/ftpServer.png").createImage();
-	public static final Image SFTP_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/sftpServer.png").createImage();
-	public static final Image EJB_PROVIDER = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/ejbProvider.png").createImage();
-	public static final Image EJB_METHOD = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/ejbMethod.png").createImage();
-	public static final Image EJB_OBJECT = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/ejbObject.png").createImage();
-	public static final Image EJB_HOME = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/ejbHome.png").createImage();
-	public static final Image UNKNOWN_SERVICE = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/unknownService.png").createImage();
-	public static final Image EJB_HOME_SMALL = null;
-	public static final Image EJB_METHOD_SMALL = null;
-	public static final Image EJB_PROVIDER_SMALL = null;
-	public static final Image FTP_SERVER_SMALL = null;
-	public static final Image JMS_QUEUE_SMALL = null;
-	public static final Image JMS_SERVER_SMALL = null;
-	public static final Image JMS_CONNECTION_FACTORY_SMALL = null;
+	// ---transports
+	public static final Image JMS_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/jmsServer.png").createImage();
+	public static final Image JMS_QUEUE = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/jmsQueue.png").createImage();
+	public static final Image JMS_CONNECTION_FACTORY = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/jmsFactory.png").createImage();
+	public static final Image HTTP_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/httpServer.png").createImage();
+	public static final Image HTTPS_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/httpsServer.png").createImage();
+	public static final Image HTTP_URL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/httpUrl.png").createImage();
+	public static final Image FILE_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/fileServer.png").createImage();
+	public static final Image FTP_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/ftpServer.png").createImage();
+	public static final Image SFTP_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/sftpServer.png").createImage();
+	public static final Image EJB_PROVIDER = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/ejbProvider.png").createImage();
+	public static final Image EJB_METHOD = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/ejbMethod.png").createImage();
+	public static final Image EJB_OBJECT = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/ejbObject.png").createImage();
+	public static final Image EJB_HOME = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/ejbHome.png").createImage();
+	public static final Image UNKNOWN_SERVICE = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/unknownService.png").createImage();
+	public static final Image EJB_HOME_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/ejbHome.png").createImage();
+	public static final Image EJB_METHOD_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/ejbMethod.png").createImage();
+	public static final Image EJB_PROVIDER_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/ejbProvider.png").createImage();
+	public static final Image FTP_SERVER_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/ftpServer.png").createImage();
+	public static final Image JMS_QUEUE_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/jmsQueue.png").createImage();
+	public static final Image JMS_SERVER_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/jmsServer.png").createImage();
+	public static final Image JMS_CONNECTION_FACTORY_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/jmsFactory.png").createImage();
+	public static final Image UNKNOWN_SERVICE_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/unknownService.png").createImage();
+	public static final Image HTTP_URL_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/httpUrl.png").createImage();
+	public static final Image SFTP_SERVER_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/sftpServer.png").createImage();
+	public static final Image FTP_FOLDER_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/ftpFolder.png").createImage();
+	public static final Image FTP_FOLDER = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/ftpFolder.png").createImage();
+	public static final Image FILE_SERVER_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/fileServer.png").createImage();
+	public static final Image EJB_OBJECT_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/ejbObject.png").createImage();
+	public static final Image HTTPS_SERVER_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/httpsServer.png").createImage();;
+	public static final Image HTTP_SERVER_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/httpServer.png").createImage();;
 
 	private ImageFactory() {
 	}

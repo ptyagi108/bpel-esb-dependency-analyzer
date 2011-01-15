@@ -110,7 +110,7 @@ public final class JMSServer implements ImageFace {
 
 	@Override
 	public final String getToolTip() {
-		return "Type: JMS Server" + "\nName: " + name + "\nPort: " + port;
+		return "Type: JMS Server" + "\nName: " + name + (port != null ? "\nPort: " + port : "");
 	}
 
 }

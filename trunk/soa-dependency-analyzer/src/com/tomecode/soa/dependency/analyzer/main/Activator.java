@@ -69,6 +69,11 @@ public class Activator extends AbstractUIPlugin {
 	 * @return the image descriptor
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
-		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+		try {
+			return imageDescriptorFromPlugin(PLUGIN_ID, path);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

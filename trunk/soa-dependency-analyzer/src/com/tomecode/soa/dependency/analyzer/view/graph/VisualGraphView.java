@@ -862,7 +862,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 	 */
 	private final void createEndpointHttpServer(EndpointHttp endpointConfig, GraphNode nodeSourceService) {
 		for (HttpServer httpServer : endpointConfig.getHttpServers()) {
-			GraphNode nodeHttpServer = HighlightFactory.findTextDataInNodes(httpServer.toString(), JMSServer.class, objectFactory.getGraphNodes());
+			GraphNode nodeHttpServer = HighlightFactory.findTextDataInNodes(httpServer.toString(), HttpServer.class, objectFactory.getGraphNodes());
 			if (nodeHttpServer == null) {
 				nodeHttpServer = objectFactory.createNode(httpServer);
 				objectFactory.createConnectionRequestResponse(nodeSourceService, nodeHttpServer, null, null, false);

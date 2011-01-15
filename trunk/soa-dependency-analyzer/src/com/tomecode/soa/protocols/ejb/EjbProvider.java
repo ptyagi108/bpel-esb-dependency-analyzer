@@ -17,10 +17,22 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  */
 public final class EjbProvider implements ImageFace {
 
+	/**
+	 * ejb provider name
+	 */
 	private String name;
 
+	/**
+	 * lisst of {@link EjbHome}
+	 */
 	private final List<EjbHome> ejbHomes;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 *            provider name
+	 */
 	public EjbProvider(String name) {
 		this.ejbHomes = new ArrayList<EjbHome>();
 		this.name = name;
@@ -39,7 +51,7 @@ public final class EjbProvider implements ImageFace {
 
 	@Override
 	public final Image getImage(boolean small) {
-		if( small){
+		if (small) {
 			return ImageFactory.EJB_PROVIDER_SMALL;
 		}
 		return ImageFactory.EJB_PROVIDER;
@@ -47,7 +59,7 @@ public final class EjbProvider implements ImageFace {
 
 	@Override
 	public String getToolTip() {
-		return "EJBprovider";
+		return "Type: EJBprovider\nName: " + name;
 	}
 
 	public final void addEjbHome(EjbHome ejbHome) {

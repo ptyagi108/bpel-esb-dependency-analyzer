@@ -389,7 +389,7 @@ final class ToolTipFactory {
 	final static IFigure createToolTip(EndpointFile endpointFile) {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(GuiUtils.createLabel2dBold("Type: "));
-		tooltip.add(createLabel("File", endpointFile.getImage()));
+		tooltip.add(createLabel("File", endpointFile.getImage(true)));
 		tooltip.add(GuiUtils.createLabel2dBold("File: "));
 		tooltip.add(new org.eclipse.draw2d.Label(endpointFile.getUris().get(0)));
 		return tooltip;
@@ -441,7 +441,7 @@ final class ToolTipFactory {
 	final static IFigure createToolTip(EndpointConfig endpointConfig) {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(GuiUtils.createLabel2dBold("Type: "));
-		tooltip.add(createLabel("Unknown Service", ImageFactory.UNKNOWN_SERVICE));
+		tooltip.add(createLabel("Unknown Service", ImageFactory.UNKNOWN_SERVICE_SMALL));
 		createEndpointConfingToTooltip(endpointConfig, tooltip);
 		return tooltip;
 	}

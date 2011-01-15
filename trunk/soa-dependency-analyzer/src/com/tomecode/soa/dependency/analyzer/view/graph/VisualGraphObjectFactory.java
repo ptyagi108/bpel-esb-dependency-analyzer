@@ -486,7 +486,7 @@ final class VisualGraphObjectFactory {
 	 * @return
 	 */
 	final GraphNode createNode(EndpointFile endpointFile) {
-		return createNode(endpointFile.getUris().get(0), endpointFile.getImage(), endpointFile, ToolTipFactory.createToolTip(endpointFile));
+		return createNode(endpointFile.getUris().get(0), endpointFile.getImage(false), endpointFile, ToolTipFactory.createToolTip(endpointFile));
 	}
 
 	/**

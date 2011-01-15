@@ -53,6 +53,12 @@ public final class HttpServer implements ImageFace {
 
 	@Override
 	public final Image getImage(boolean small) {
+		if (small) {
+			if (https) {
+				return ImageFactory.HTTPS_SERVER_SMALL;
+			}
+			return ImageFactory.HTTP_SERVER_SMALL;
+		}
 		if (https) {
 			return ImageFactory.HTTPS_SERVER;
 		}
@@ -61,7 +67,7 @@ public final class HttpServer implements ImageFace {
 
 	@Override
 	public final String getToolTip() {
-		return null;
+		return "Type: HTTP" + (https ? "S" : "") + "\nName: " + server + (port != -1 ? ("\nPort: " + String.valueOf(port)) : "");
 	}
 
 	public final boolean isHttps() {
