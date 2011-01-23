@@ -12,11 +12,13 @@ import com.tomecode.soa.protocols.ejb.EjbProvider;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class EndpointEJB extends EndpointConfig {
+public final class EndpointEJB extends EndpointConfig<EjbProvider> {
 
 	private ProviderSpecificEJB providerSpecificEJB;
 
-	private EjbProvider ejbProvider;
+	// private EjbProvider ejbProvider;
+
+	private String clientJar;
 
 	public EndpointEJB() {
 		super(ProviderProtocol.EJB);
@@ -41,12 +43,33 @@ public final class EndpointEJB extends EndpointConfig {
 		this.uris.addAll(uris);
 	}
 
-	public final EjbProvider getEjbProvider() {
-		return ejbProvider;
+	// public final EjbProvider getEjbProvider() {
+	// return ejbProvider;
+	// }
+	//
+	// public final void setEjbProvider(EjbProvider ejbProvider) {
+	// this.ejbProvider = ejbProvider;
+	// }
+
+	/**
+	 * @return the clientJar
+	 */
+	public final String getClientJar() {
+		return clientJar;
 	}
 
-	public final void setEjbProvider(EjbProvider ejbProvider) {
-		this.ejbProvider = ejbProvider;
+	/**
+	 * @param clientJar
+	 *            the clientJar to set
+	 */
+	public final void setClientJar(String clientJar) {
+		this.clientJar = clientJar;
+	}
+
+	public final void addEjbProvider(EjbProvider ejbProvider) {
+		if (!existsChild(ejbProvider)) {
+			nodes.add(ejbProvider);
+		}
 	}
 
 }

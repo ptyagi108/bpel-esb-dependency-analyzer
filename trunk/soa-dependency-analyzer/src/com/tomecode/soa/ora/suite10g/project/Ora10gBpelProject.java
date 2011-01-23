@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.openesb.bpel.activity.PartnerLink;
 import com.tomecode.soa.ora.suite10g.parser.Ora10gBpelParser;
@@ -25,6 +27,7 @@ import com.tomecode.soa.wsdl.Wsdl;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
+@PropertyGroupView(type = "BPEL Project...", name = "Oracle SOA Suite 10g", parentMethod = "getWorkpsace")
 public final class Ora10gBpelProject implements Project {
 
 	private boolean folder;
@@ -108,11 +111,6 @@ public final class Ora10gBpelProject implements Project {
 	public Ora10gBpelProject(File file, boolean folder) {
 		this(folder);
 		this.file = file;
-	}
-
-	@Override
-	public File getFile() {
-		return file;
 	}
 
 	public final String getId() {
@@ -207,9 +205,16 @@ public final class Ora10gBpelProject implements Project {
 		return getId();
 	}
 
+	@PropertyViewData(title = "Name")
 	@Override
 	public final String getName() {
 		return getId();
+	}
+
+	@PropertyViewData(title = "Path")
+	@Override
+	public File getFile() {
+		return file;
 	}
 
 	@Override

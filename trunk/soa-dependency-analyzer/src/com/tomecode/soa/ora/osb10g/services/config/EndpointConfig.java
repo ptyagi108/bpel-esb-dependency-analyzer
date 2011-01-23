@@ -1,6 +1,7 @@
 package com.tomecode.soa.ora.osb10g.services.config;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.tomecode.soa.ora.osb10g.services.BusinessService;
@@ -15,7 +16,7 @@ import com.tomecode.soa.ora.osb10g.services.Proxy;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public abstract class EndpointConfig {
+public abstract class EndpointConfig<T> {
 
 	private boolean inbound;
 
@@ -26,8 +27,11 @@ public abstract class EndpointConfig {
 	 */
 	protected final List<String> uris;
 
+	protected final List<T> nodes;
+
 	public EndpointConfig() {
 		this.uris = new ArrayList<String>();
+		this.nodes = new ArrayList<T>();
 	}
 
 	/**
@@ -62,6 +66,32 @@ public abstract class EndpointConfig {
 
 	public final void setInbound(boolean inbound) {
 		this.inbound = inbound;
+	}
+
+	public final String makeuris() {
+		String uris = "";
+		Iterator<String> i = getUris().iterator();
+		while (i.hasNext()) {
+			uris += i.next();
+			if (i.hasNext()) {
+				uris += "\n";
+			}
+		}
+
+		return uris;
+	}
+
+	protected final boolean existsChild(Object obj) {
+		for (T node : nodes) {
+			if (obj.equals(node)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public final List<T> getNodes() {
+		return nodes;
 	}
 
 	/**

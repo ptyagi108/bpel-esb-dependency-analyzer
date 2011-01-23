@@ -3,6 +3,7 @@ package com.tomecode.soa.ora.suite10g.parser;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -24,6 +25,7 @@ import com.tomecode.soa.ora.suite10g.project.PartnerLinkBinding;
 import com.tomecode.soa.parser.AbstractParser;
 import com.tomecode.soa.parser.ServiceParserException;
 import com.tomecode.soa.project.Project;
+import com.tomecode.soa.protocols.db.Database;
 
 /**
  * (c) Copyright Tomecode.com, 2010. All rights reserved.
@@ -193,6 +195,7 @@ public final class Ora10gEsbParser extends AbstractParser {
 	 */
 	private final void parseEsbGrp(File esbGrpFile, Element eService, Ora10gEsbProject esbProject) {
 		EsbGrp esbGrp = new EsbGrp(esbGrpFile, eService.attributeValue("name"), eService.attributeValue("qname"));
+		esbGrp.setProject(esbProject);
 		Element parent = eService.element("parent");
 		if (parent != null) {
 
@@ -323,6 +326,8 @@ public final class Ora10gEsbParser extends AbstractParser {
 		if (eServiceDefinition != null) {
 			esb.setWsdlURL(eServiceDefinition.elementTextTrim("wsdlURL"));
 
+			parseServicEndpoints(esb);
+
 			Element eEndpointDefinition = eServiceDefinition.element("endpointDefinition");
 			if (eEndpointDefinition != null) {
 				esb.setConcreteWSDLURL(eEndpointDefinition.elementTextTrim("concreteWSDLURL"));
@@ -353,7 +358,7 @@ public final class Ora10gEsbParser extends AbstractParser {
 		if (eInvocation != null) {
 			Element eInterface = eService.element("interface");
 			if (eInterface != null) {
-
+				// ZISTIM WSDL A ZNEHO VYPARSUJEM JCA
 			}
 
 			Element eTargetService = eInvocation.element("targetService");
@@ -362,6 +367,47 @@ public final class Ora10gEsbParser extends AbstractParser {
 			}
 		}
 
+		parseServicEndpoints(esb);
+	}
+
+	private final void parseServicEndpoints(EsbSvc esbSvc) {
+		if (esbSvc.getWsdlURL() != null) {
+			try {
+				new URL(esbSvc.getWsdlURL()).getPath();
+			} catch (MalformedURLException e) {
+				File file = new File(esbSvc.getProject().getFile() + File.separator + esbSvc.getWsdlURL());
+
+				if (file.exists()) {
+					try {
+						parseEndpointType(esbSvc, parseXml(file));
+					} catch (ServiceParserException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		}
+
+	}
+
+	private final void parseEndpointType(EsbSvc esbSvc, Element element) {
+		if (esbSvc.getServiceSubType() == ServiceSubType.DB) {
+			parseEndpointDB(esbSvc, element);
+		}
+
+	}
+
+	private final void parseEndpointDB(EsbSvc esbSvc, Element element) {
+		Element eDefinitions = element.element("definitions");
+		if (eDefinitions != null) {
+			Element eService = eDefinitions.element("service");
+			if (eService != null) {
+				Element eAddress = eService.element("address");
+				if (eAddress != null) {
+					Database database = new Database(eAddress.attributeValue("location"));
+					database.toString();
+				}
+			}
+		}
 	}
 
 	/**

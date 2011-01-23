@@ -10,29 +10,23 @@ import org.eclipse.zest.core.widgets.Graph;
 import org.eclipse.zest.core.widgets.GraphConnection;
 import org.eclipse.zest.core.widgets.GraphNode;
 
+import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.dependency.analyzer.view.graph.model.CollectionGraphNode;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.openesb.workspace.OpenEsbWorkspace;
 import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig;
-import com.tomecode.soa.ora.osb10g.services.config.EndpointFile;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency;
+import com.tomecode.soa.ora.osb10g.services.protocols.jms.JMSConnectionFactory;
+import com.tomecode.soa.ora.osb10g.services.protocols.jms.JMSQueue;
+import com.tomecode.soa.ora.osb10g.services.protocols.jms.JMSServer;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gWorkspace;
 import com.tomecode.soa.ora.suite10g.esb.EsbSvc;
 import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gWorkspace;
 import com.tomecode.soa.project.Project;
-import com.tomecode.soa.protocols.ejb.EjbHome;
-import com.tomecode.soa.protocols.ejb.EjbMethod;
-import com.tomecode.soa.protocols.ejb.EjbObject;
-import com.tomecode.soa.protocols.ejb.EjbProvider;
-import com.tomecode.soa.protocols.ftp.FtpServer;
-import com.tomecode.soa.protocols.ftp.SFtpServer;
 import com.tomecode.soa.protocols.http.HttpServer;
-import com.tomecode.soa.protocols.http.HttpUrl;
-import com.tomecode.soa.protocols.jms.JMSConnectionFactory;
-import com.tomecode.soa.protocols.jms.JMSQueue;
-import com.tomecode.soa.protocols.jms.JMSServer;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
@@ -175,29 +169,13 @@ final class VisualGraphObjectFactory {
 		return graphNode;
 	}
 
-	/**
-	 * 'unhighlight' on the last selected node in graph
-	 */
-	final void clearLastSelectedNode() {
-		if (lastSelectedNode != null) {
-			try {
-				lastSelectedNode.unhighlight();
-			} catch (java.lang.IndexOutOfBoundsException e) {
-
-			}
+	private final CollectionGraphNode createCollectionGraphNode(String name, Image image, Object data, IFigure toolTip) {
+		CollectionGraphNode graphNode = new CollectionGraphNode(graph, name, image, data);
+		if (toolTip != null) {
+			graphNode.setTooltip(toolTip);
 		}
-		HighlightFactory.clearAllHighlight(lastSelectedNode, graphNodes, graphConnections);
-		lastSelectedNode = null;
-	}
-
-	final void highlightSelectedNode(Object source) {
-		for (GraphNode graphNode : graphNodes) {
-			if (graphNode.getData().equals(source)) {
-				lastSelectedNode = graphNode;
-				lastSelectedNode.highlight();
-
-			}
-		}
+		graphNodes.add(graphNode);
+		return graphNode;
 	}
 
 	/**
@@ -263,7 +241,6 @@ final class VisualGraphObjectFactory {
 		if (isRequest) {
 			return findConnection(source, destination);
 		}
-
 		return findConnection(destination, source);
 	}
 
@@ -325,28 +302,8 @@ final class VisualGraphObjectFactory {
 	 * @param httpServer
 	 * @return
 	 */
-	final GraphNode createNode(HttpServer httpServer) {
-		return createNode(httpServer.getServer(), httpServer.getImage(false), httpServer, ToolTipFactory.createToolTip(httpServer));
-	}
-
-	/**
-	 * create node for {@link JMSServer}
-	 * 
-	 * @param jmsServer
-	 * @return
-	 */
-	final GraphNode createNode(JMSServer jmsServer) {
-		return createNode(jmsServer.toString(), jmsServer.getImage(false), jmsServer, ToolTipFactory.createToolTip(jmsServer));
-	}
-
-	/**
-	 * create node for {@link JMSConnectionFactory}
-	 * 
-	 * @param connectionFactory
-	 * @return
-	 */
-	final GraphNode createNode(JMSConnectionFactory connectionFactory) {
-		return createNode(connectionFactory.toString(), connectionFactory.getImage(false), connectionFactory, ToolTipFactory.createToolTip(connectionFactory));
+	final CollectionGraphNode createCollectionNode(HttpServer httpServer) {
+		return createCollectionGraphNode(httpServer.toString(), httpServer.getImage(false), httpServer, ToolTipFactory.createToolTip(httpServer));
 	}
 
 	/**
@@ -367,16 +324,6 @@ final class VisualGraphObjectFactory {
 	 */
 	final GraphNode createNode(Ora10gEsbProject rootEsbProject) {
 		return createNode(rootEsbProject.getName(), rootEsbProject.getImage(false), rootEsbProject, ToolTipFactory.createToolTip(rootEsbProject));
-	}
-
-	/**
-	 * create node for {@link JMSQueue}
-	 * 
-	 * @param queue
-	 * @return
-	 */
-	final GraphNode createNode(JMSQueue queue) {
-		return createNode(queue.toString(), queue.getImage(false), queue, ToolTipFactory.createToolTip(queue));
 	}
 
 	/**
@@ -470,86 +417,93 @@ final class VisualGraphObjectFactory {
 	}
 
 	/**
-	 * create node for {@link HttpUrl}
+	 * create node for uris and {@link EndpointConfig}
 	 * 
-	 * @param httpUrl
+	 * @param uris
+	 * @param endpointConfig
 	 * @return
 	 */
-	final GraphNode createNode(HttpUrl httpUrl) {
-		return createNode(httpUrl.getUrl(), httpUrl.getImage(false), httpUrl, ToolTipFactory.createToolTip("HTTP Url", httpUrl.getUrl(), httpUrl.getImage(true)));
+	final CollectionGraphNode createCollectionNode(EndpointConfig<?> endpointConfig) {
+		return createCollectionGraphNode(endpointConfig.toString(), ImageFactory.UNKNOWN_SERVICE, endpointConfig, ToolTipFactory.createToolTip(endpointConfig));
 	}
 
 	/**
-	 * create node for {@link EndpointFile}
+	 * find {@link CollectionGraphNode} with title and class type
 	 * 
-	 * @param endpointFile
+	 * @param data
 	 * @return
 	 */
-	final GraphNode createNode(EndpointFile endpointFile) {
-		return createNode(endpointFile.getUris().get(0), endpointFile.getImage(false), endpointFile, ToolTipFactory.createToolTip(endpointFile));
+	final CollectionGraphNode findCollectionNodeTitleAndType(Object data) {
+		for (GraphNode graphNode : graphNodes) {
+			if (graphNode instanceof CollectionGraphNode) {
+				CollectionGraphNode collectionGraphNode = (CollectionGraphNode) graphNode;
+				if (collectionGraphNode.containsTitleAndType(data)) {
+					return collectionGraphNode;
+				}
+			}
+		}
+		return null;
 	}
 
 	/**
-	 * create node for {@link FtpServer}
+	 * find {@link CollectionGraphNode} with title and data
 	 * 
-	 * @param ftpServer
+	 * @param data
 	 * @return
 	 */
-	final GraphNode createNode(FtpServer ftpServer) {
-		return createNode(ftpServer.toString(), ftpServer.getImage(false), ftpServer, ToolTipFactory.createToolTip("FTP Server", ftpServer.getServer(), ftpServer.getPort(), ftpServer.getImage(true)));
+	final CollectionGraphNode findCollectionNodeTitleAndData(Object data) {
+		for (GraphNode graphNode : graphNodes) {
+			if (graphNode instanceof CollectionGraphNode) {
+				CollectionGraphNode collectionGraphNode = (CollectionGraphNode) graphNode;
+				if (collectionGraphNode.containsTitleAndData(data)) {
+					return collectionGraphNode;
+				}
+			}
+		}
+		return null;
 	}
 
 	/**
-	 * create node for {@link SFtpServer}
+	 * create {@link CollectionGraphNode} for {@link JMSServer}
 	 * 
-	 * @param ftpServer
+	 * @param server
 	 * @return
 	 */
-	final GraphNode createNode(SFtpServer ftpServer) {
-		return createNode(ftpServer.toString(), ftpServer.getImage(false), ftpServer, ToolTipFactory.createToolTip("SFTP Server", ftpServer.getServer(), ftpServer.getPort(), ftpServer.getImage(true)));
+	final CollectionGraphNode createCollectionNode(JMSServer server) {
+		return createCollectionGraphNode(server.toString(), server.getImage(false), server, ToolTipFactory.createToolTip(server));
 	}
 
 	/**
-	 * create node for {@link EjbProvider}
+	 * create {@link CollectionGraphNode} for {@link JMSConnectionFactory}
 	 * 
-	 * @param ejbProvider
+	 * @param connectionFactory
 	 * @return
 	 */
-	final GraphNode createNode(EjbProvider ejbProvider) {
-		return createNode(ejbProvider.getName(), ejbProvider.getImage(false), ejbProvider, ToolTipFactory.createToolTip("EJB Provider", ejbProvider.getName(), ejbProvider.getImage(true)));
+	final CollectionGraphNode createCollectionNode(JMSConnectionFactory connectionFactory) {
+		return createCollectionGraphNode(connectionFactory.toString(), connectionFactory.getImage(false), connectionFactory, ToolTipFactory.createToolTip(connectionFactory));
 	}
 
 	/**
-	 * create node for {@link EjbHome}
+	 * create {@link CollectionGraphNode} for {@link JMSQueue}
 	 * 
-	 * @param ejbHome
+	 * @param queue
 	 * @return
 	 */
-	final GraphNode createNode(EjbHome ejbHome) {
-		return createNode(ejbHome.getName(), ejbHome.getImage(false), ejbHome, ToolTipFactory.createToolTip("EJB Home", ejbHome.getName(), ejbHome.getImage(true)));
+	final CollectionGraphNode createCollectionNode(JMSQueue queue) {
+		return createCollectionGraphNode(queue.toString(), queue.getImage(false), queue, ToolTipFactory.createToolTip(queue));
 	}
 
 	/**
-	 * create node for {@link EjbObject}
+	 * set {@link #lastSelectedNode}
 	 * 
-	 * @param ejbObject
-	 * @return
+	 * @param object
 	 */
-	final GraphNode createNode(EjbObject ejbObject) {
-		return createNode(ejbObject.getName(), ejbObject.getImage(false), ejbObject, ToolTipFactory.createToolTip("EJB Object", ejbObject.getName(), ejbObject.getImage(true)));
+	final void setLastSelectedNode(Object object) {
+		this.lastSelectedNode = null;
 	}
 
-	/**
-	 * create node for {@link EjbMethod}
-	 * 
-	 * @param ejbMethod
-	 * @return
-	 */
-	final GraphNode createNode(EjbMethod ejbMethod) {
-		return createNode(ejbMethod.getName(), ejbMethod.getImage(false), ejbMethod, ToolTipFactory.createToolTip(ejbMethod));
+	final CollectionGraphNode createCollectionNode(Object obj) {
+		return createCollectionGraphNode(obj.toString(), ((ImageFace) obj).getImage(false), obj, ToolTipFactory.createToolTip(obj));
 	}
 
-	final GraphNode createNode(String uris, EndpointConfig endpointConfig) {
-		return createNode(uris, ImageFactory.UNKNOWN_SERVICE, endpointConfig, ToolTipFactory.createToolTip(endpointConfig));
-	}
 }

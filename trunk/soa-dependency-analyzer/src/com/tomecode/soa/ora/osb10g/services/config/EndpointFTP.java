@@ -1,6 +1,5 @@
 package com.tomecode.soa.ora.osb10g.services.config;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
@@ -17,22 +16,15 @@ import com.tomecode.soa.protocols.ftp.FtpServer;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class EndpointFTP extends EndpointConfig {
-
-	private final List<FtpServer> ftpServers;
+public final class EndpointFTP extends EndpointConfig<FtpServer> {
 
 	public EndpointFTP() {
 		super(ProviderProtocol.FTP);
-		this.ftpServers = new ArrayList<FtpServer>();
-	}
-
-	public final List<FtpServer> getFtpServers() {
-		return ftpServers;
 	}
 
 	public void putAllURI(List<String> uris) {
 		this.uris.addAll(uris);
-		OraSB10gBasicServiceParser.parseFtpServerUris(uris, ftpServers);
+		OraSB10gBasicServiceParser.parseFtpServerUris(uris, nodes);
 	}
 
 	public final Image getImage() {

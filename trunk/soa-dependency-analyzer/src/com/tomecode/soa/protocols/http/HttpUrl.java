@@ -1,9 +1,13 @@
 package com.tomecode.soa.protocols.http;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.protocols.Node;
 
 /**
  * HTTP URL
@@ -12,7 +16,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
-public final class HttpUrl implements ImageFace {
+public final class HttpUrl implements ImageFace, Node<HttpUrl> {
 
 	/**
 	 * parent {@link HttpServer}
@@ -23,6 +27,8 @@ public final class HttpUrl implements ImageFace {
 	 * HTTP URL
 	 */
 	private String url;
+
+	private final List<Node<?>> nodes = new ArrayList<Node<?>>();
 
 	/**
 	 * Constructor
@@ -53,9 +59,28 @@ public final class HttpUrl implements ImageFace {
 		return ImageFactory.HTTP_URL;
 	}
 
+	public final String toString() {
+		return url;
+	}
+
 	@Override
 	public final String getToolTip() {
 		return "Http URL: " + url;
+	}
+
+	@Override
+	public final HttpServer getParent() {
+		return parentHttpServer;
+	}
+
+	@Override
+	public final List<?> getChilds() {
+		return nodes;
+	}
+
+	@Override
+	public final HttpUrl getObj() {
+		return this;
 	}
 
 }

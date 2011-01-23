@@ -1,4 +1,4 @@
-package com.tomecode.soa.protocols.jms;
+package com.tomecode.soa.ora.osb10g.services.protocols.jms;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,8 @@ import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.ora.osb10g.services.Service;
+import com.tomecode.soa.protocols.Node;
 
 /**
  * JMS Server
@@ -15,7 +17,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
-public final class JMSServer implements ImageFace {
+public final class JMSServer implements ImageFace, Node<JMSServer> {
 
 	/**
 	 * JMS server name (host)
@@ -25,6 +27,11 @@ public final class JMSServer implements ImageFace {
 	 * JMS server port
 	 */
 	private String port;
+
+	/**
+	 * parent service
+	 */
+	private Object parentService;
 
 	/**
 	 * list of {@link JMSConnectionFactory}
@@ -67,7 +74,7 @@ public final class JMSServer implements ImageFace {
 
 	public final void addJMSConnectionFactory(JMSConnectionFactory connectionFactory) {
 		if (!existJMSConnectionFactory(connectionFactory)) {
-			connectionFactory.setJmsServer(this);
+			connectionFactory.addJmsServer(this);
 			connectionFactories.add(connectionFactory);
 		}
 	}
@@ -79,10 +86,6 @@ public final class JMSServer implements ImageFace {
 			}
 		}
 		return false;
-	}
-
-	public final List<JMSConnectionFactory> getConnectionFactories() {
-		return connectionFactories;
 	}
 
 	public final String getName() {
@@ -111,6 +114,25 @@ public final class JMSServer implements ImageFace {
 	@Override
 	public final String getToolTip() {
 		return "Type: JMS Server" + "\nName: " + name + (port != null ? "\nPort: " + port : "");
+	}
+
+	public final void setParentService(Service parentService) {
+		this.parentService = parentService;
+	}
+
+	@Override
+	public final Object getParent() {
+		return parentService;
+	}
+
+	@Override
+	public final List<JMSConnectionFactory> getChilds() {
+		return connectionFactories;
+	}
+
+	@Override
+	public final JMSServer getObj() {
+		return this;
 	}
 
 }

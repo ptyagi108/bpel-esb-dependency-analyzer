@@ -30,6 +30,7 @@ public final class ImageFactory {
 
 	public static final Image FILE = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/file.png").createImage();
 	public static final Image FOLDER = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/folder.png").createImage();
+	public static final Image JAR = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/jar.png").createImage();
 
 	public static final ImageDescriptor link_with_navigator_on = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/link_with_navigator_on.png");
 	public static final ImageDescriptor link_with_navigator_off = Activator.getImageDescriptor("/icons/com/tomecode/soa/icons/link_with_navigator_off.png");
@@ -261,6 +262,8 @@ public final class ImageFactory {
 	public static final Image EJB_OBJECT = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/ejbObject.png").createImage();
 	public static final Image EJB_HOME = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/ejbHome.png").createImage();
 	public static final Image UNKNOWN_SERVICE = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/unknownService.png").createImage();
+	public static final Image DB_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/DBserver.png").createImage();;
+
 	public static final Image EJB_HOME_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/ejbHome.png").createImage();
 	public static final Image EJB_METHOD_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/ejbMethod.png").createImage();
 	public static final Image EJB_PROVIDER_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/ejbProvider.png").createImage();
@@ -277,6 +280,7 @@ public final class ImageFactory {
 	public static final Image EJB_OBJECT_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/ejbObject.png").createImage();
 	public static final Image HTTPS_SERVER_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/httpsServer.png").createImage();;
 	public static final Image HTTP_SERVER_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/httpServer.png").createImage();;
+	public static final Image DB_SERVER_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/DBserver.png").createImage();;
 
 	private ImageFactory() {
 	}

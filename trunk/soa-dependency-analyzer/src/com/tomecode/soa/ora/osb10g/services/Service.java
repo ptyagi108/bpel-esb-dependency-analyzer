@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig;
 import com.tomecode.soa.ora.osb10g.services.dependnecies.OsbActivityDependency;
@@ -24,21 +25,23 @@ import com.tomecode.soa.project.Project;
 public abstract class Service implements ImageFace {
 
 	/**
+	 * service name
+	 */
+	@PropertyViewData(title = "Name")
+	protected String name;
+
+	/**
+	 * service file
+	 */
+	@PropertyViewData(title = "Path")
+	protected File file;
+
+	@PropertyViewData(title = "Description")
+	protected String description;
+	/**
 	 * service binding
 	 */
 	private Binding binding;
-
-	protected String description;
-
-	/**
-	 * PROXY service file
-	 */
-	protected File file;
-
-	/**
-	 * service name
-	 */
-	protected String name;
 
 	protected String orginalName;
 
@@ -67,7 +70,7 @@ public abstract class Service implements ImageFace {
 	/**
 	 * service endpoint config
 	 */
-	protected EndpointConfig endpointConfig;
+	protected EndpointConfig<?> endpointConfig;
 
 	/**
 	 * Constructor
@@ -100,6 +103,7 @@ public abstract class Service implements ImageFace {
 
 	public abstract Image getImage();
 
+	@PropertyViewData(title = "Folder")
 	public final OraSB10gFolder getFolder() {
 		return folder;
 	}
@@ -153,7 +157,7 @@ public abstract class Service implements ImageFace {
 	/**
 	 * @return the endpointConfig
 	 */
-	public final EndpointConfig getEndpointConfig() {
+	public final EndpointConfig<?> getEndpointConfig() {
 		return endpointConfig;
 	}
 
@@ -162,7 +166,7 @@ public abstract class Service implements ImageFace {
 	 * 
 	 * @param endpointConfig
 	 */
-	public final void setEndpointConfig(EndpointConfig endpointConfig) {
+	public final void setEndpointConfig(EndpointConfig<?> endpointConfig) {
 		this.endpointConfig = endpointConfig;
 	}
 

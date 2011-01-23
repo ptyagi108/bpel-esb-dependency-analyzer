@@ -7,6 +7,8 @@ import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.ora.osb10g.services.Service;
+import com.tomecode.soa.protocols.Node;
 
 /**
  * FTP server
@@ -15,7 +17,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
-public class FtpServer implements ImageFace {
+public final class FtpServer implements ImageFace, Node<FtpServer> {
 
 	/**
 	 * ftp server host
@@ -28,7 +30,12 @@ public class FtpServer implements ImageFace {
 	/**
 	 * list of {@link FtpFolder}
 	 */
-	private final List<FtpFolder> ftpFolders;
+	protected final List<FtpFolder> ftpFolders = new ArrayList<FtpFolder>();
+
+	/**
+	 * parent service
+	 */
+	private Object parentService;
 
 	/**
 	 * Constructor
@@ -37,7 +44,6 @@ public class FtpServer implements ImageFace {
 	 * @param port
 	 */
 	public FtpServer(String server, int port) {
-		this.ftpFolders = new ArrayList<FtpFolder>();
 		this.server = server;
 		this.port = port;
 	}
@@ -48,10 +54,6 @@ public class FtpServer implements ImageFace {
 
 	public final int getPort() {
 		return port;
-	}
-
-	public final List<FtpFolder> getFtpFolders() {
-		return ftpFolders;
 	}
 
 	@Override
@@ -78,15 +80,34 @@ public class FtpServer implements ImageFace {
 
 	private final boolean exists(String url) {
 		for (FtpFolder folder : ftpFolders) {
-			if (folder.equals(url)) {
+			if (folder.toString().equals(url)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
+	public final void setParentService(Service parentService) {
+		this.parentService = parentService;
+	}
+
 	@Override
 	public String getToolTip() {
 		return "Type: FTP Server\nName: " + server + (port != -1 ? ("\nPort: " + String.valueOf(port)) : "");
+	}
+
+	@Override
+	public final Object getParent() {
+		return parentService;
+	}
+
+	@Override
+	public final List<FtpFolder> getChilds() {
+		return ftpFolders;
+	}
+
+	@Override
+	public FtpServer getObj() {
+		return this;
 	}
 }

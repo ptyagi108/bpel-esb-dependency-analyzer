@@ -1,9 +1,13 @@
-package com.tomecode.soa.protocols.jms;
+package com.tomecode.soa.ora.osb10g.services.protocols.jms;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.protocols.Node;
 
 /**
  * JMS Queue
@@ -13,7 +17,9 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
 
-public final class JMSQueue implements ImageFace {
+public final class JMSQueue implements ImageFace, Node<JMSQueue> {
+
+	private final List<Node<?>> nodes = new ArrayList<Node<?>>();
 
 	/**
 	 * parent {@link JMSConnectionFactory}
@@ -38,10 +44,6 @@ public final class JMSQueue implements ImageFace {
 		this.parentJmsConnectionFactory = jmsConnectionFactory;
 	}
 
-	public final JMSConnectionFactory getJmsConnectionFactory() {
-		return parentJmsConnectionFactory;
-	}
-
 	public final String getName() {
 		return name;
 	}
@@ -61,6 +63,21 @@ public final class JMSQueue implements ImageFace {
 	@Override
 	public final String getToolTip() {
 		return "Type: JMS Queue\nName: " + name;
+	}
+
+	@Override
+	public final Object getParent() {
+		return this.parentJmsConnectionFactory;
+	}
+
+	@Override
+	public final List<?> getChilds() {
+		return nodes;
+	}
+
+	@Override
+	public final JMSQueue getObj() {
+		return this;
 	}
 
 }

@@ -103,24 +103,15 @@ public final class OraSB10gProxyParser extends OraSB10gBasicServiceParser {
 	 * @throws ServiceParserException
 	 */
 	public final Proxy parseProxy(File file, InputStream inputStream) throws ServiceParserException {
-
-		if ("Proxy Service 1.proxy".equals(file.getName())) {
-			toString();
-		}
 		return parseProxy(file, parseXml(inputStream));
 	}
 
 	public final Proxy parseProxy(File file, Element eXml) throws ServiceParserException {
-		
-		if(file.getName().equals("SplitJoinFlow.wsdl")){
-			file.toString();
-		}
-		
 		if (eXml != null) {
 			Element eCoreEntry = eXml.element("coreEntry");
 			if (eCoreEntry != null) {
 				Proxy proxy = new Proxy(file);
-				proxy.setEndpointConfig(parseEndpointConfig(eXml));
+				proxy.setEndpointConfig(parseEndpointConfig(eXml, proxy));
 				parseCoreEntrty(eCoreEntry, proxy);
 				parseFlow(eXml.element("router"), proxy);
 				return proxy;

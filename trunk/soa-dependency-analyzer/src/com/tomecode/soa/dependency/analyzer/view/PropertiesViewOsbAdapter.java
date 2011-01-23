@@ -25,7 +25,6 @@ import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig.ProviderProtoc
 import com.tomecode.soa.ora.osb10g.services.config.EndpointEJB;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointJms;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointUNKNOWN;
-import com.tomecode.soa.protocols.ejb.EjbProvider;
 
 /**
  * detail informations about selected adapter in OSB 10
@@ -287,12 +286,13 @@ public final class PropertiesViewOsbAdapter extends ViewPart implements HideView
 			textBSNameEJB.setText(businessService.getName());
 			EndpointEJB ejb = (EndpointEJB) businessService.getEndpointConfig();
 
-			if (ejb.getEjbProvider() != null) {
-				EjbProvider ejbProvider = ejb.getEjbProvider();
-
-			}
+			// if (ejb.getEjbProvider() != null) {
+			// EjbProvider ejbProvider = ejb.getEjbProvider();
+			//
+			// }
 			// textBSclientJar.setText(ejb.getProviderSpecificEJB().getClientJar());
-			// textBSejbHome.setText(ejb.	getProviderSpecificEJB().getEjbHome());
+			// textBSejbHome.setText(ejb.
+			// getProviderSpecificEJB().getEjbHome());
 			// textBSejbObject.setText(ejb.getProviderSpecificEJB().getEjbObject());
 
 			showContent(businessServicePageEJB);
@@ -319,7 +319,7 @@ public final class PropertiesViewOsbAdapter extends ViewPart implements HideView
 		}
 
 		for (String uri : uris) {
-			GuiUtils.createTextWithGrid(group, uri);
+			GuiUtils.createTextReadOnlyWithGrid(group, uri);
 		}
 	}
 

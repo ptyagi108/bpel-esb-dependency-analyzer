@@ -10,17 +10,20 @@ import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
+import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig.ProviderProtocol;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointDsp;
-import com.tomecode.soa.ora.osb10g.services.config.EndpointEJB;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointFile;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointHttp;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointJms;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointUNKNOWN;
 import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificJms;
+import com.tomecode.soa.ora.osb10g.services.protocols.jms.JMSConnectionFactory;
+import com.tomecode.soa.ora.osb10g.services.protocols.jms.JMSQueue;
+import com.tomecode.soa.ora.osb10g.services.protocols.jms.JMSServer;
 import com.tomecode.soa.ora.suite10g.esb.EsbSvc;
 import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
 import com.tomecode.soa.ora.suite10g.project.BpelEsbDependency;
@@ -28,11 +31,16 @@ import com.tomecode.soa.ora.suite10g.project.PartnerLinkBinding;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.project.ProjectType;
 import com.tomecode.soa.project.UnknownProject;
+import com.tomecode.soa.protocols.ejb.EjbHome;
 import com.tomecode.soa.protocols.ejb.EjbMethod;
+import com.tomecode.soa.protocols.ejb.EjbObject;
+import com.tomecode.soa.protocols.ejb.EjbProvider;
+import com.tomecode.soa.protocols.ftp.FtpFolder;
+import com.tomecode.soa.protocols.ftp.FtpServer;
+import com.tomecode.soa.protocols.ftp.SFtpFolder;
+import com.tomecode.soa.protocols.ftp.SFtpServer;
 import com.tomecode.soa.protocols.http.HttpServer;
-import com.tomecode.soa.protocols.jms.JMSConnectionFactory;
-import com.tomecode.soa.protocols.jms.JMSQueue;
-import com.tomecode.soa.protocols.jms.JMSServer;
+import com.tomecode.soa.protocols.http.HttpUrl;
 import com.tomecode.soa.services.BpelProcess;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
@@ -98,7 +106,7 @@ final class ToolTipFactory {
 	 * @param endpointConfig
 	 * @param tooltip
 	 */
-	private static final void createEndpointConfingToTooltip(EndpointConfig endpointConfig, IFigure tooltip) {
+	private static final void createEndpointConfingToTooltip(EndpointConfig<?> endpointConfig, IFigure tooltip) {
 		if (endpointConfig != null) {
 			tooltip.add(GuiUtils.createLabel2dBold("Endpoint Type: "));
 			if (endpointConfig.getProtocol() == ProviderProtocol.UNKNOWN) {
@@ -132,7 +140,7 @@ final class ToolTipFactory {
 	 * @param endpointConfig
 	 * @param tooltip
 	 */
-	private static final void fillProviderSpecific(EndpointConfig endpointConfig, IFigure tooltip) {
+	private static final void fillProviderSpecific(EndpointConfig<?> endpointConfig, IFigure tooltip) {
 		if (endpointConfig.getProtocol() == ProviderProtocol.JMS) {
 			EndpointJms endpointJms = (EndpointJms) endpointConfig;
 			ProviderSpecificJms jms = endpointJms.getProviderSpecificJms();
@@ -150,16 +158,8 @@ final class ToolTipFactory {
 			EndpointDsp endpointDsp = (EndpointDsp) endpointConfig;
 			tooltip.add(GuiUtils.createLabel2dBold("Request Response: "));
 			tooltip.add(new org.eclipse.draw2d.Label(String.valueOf(endpointDsp.getProviderSpecificDsp().isRequestResponse())));
-		} else if (endpointConfig.getProtocol() == ProviderProtocol.EJB) {
-			EndpointEJB endpointEJB = (EndpointEJB) endpointConfig;
-			// if (endpointEJB.getProviderSpecificEJB().getClientJar() != null)
-			// {
-			// tooltip.add(GuiUtils.createLabel2dBold("Client Jar: "));
-			// tooltip.add(new
-			// org.eclipse.draw2d.Label(endpointEJB.getProviderSpecificEJB().getClientJar()));
-			// }
-
 		}
+
 	}
 
 	/**
@@ -391,7 +391,7 @@ final class ToolTipFactory {
 		tooltip.add(GuiUtils.createLabel2dBold("Type: "));
 		tooltip.add(createLabel("File", endpointFile.getImage(true)));
 		tooltip.add(GuiUtils.createLabel2dBold("File: "));
-		tooltip.add(new org.eclipse.draw2d.Label(endpointFile.getUris().get(0)));
+		tooltip.add(new org.eclipse.draw2d.Label(endpointFile.getUris().get(0).toString()));
 		return tooltip;
 	}
 
@@ -434,15 +434,62 @@ final class ToolTipFactory {
 		return tooltip;
 	}
 
+	/**
+	 * create tooltip for {@link EjbMethod}
+	 * 
+	 * @param ejbMethod
+	 * @return
+	 */
 	final static IFigure createToolTip(EjbMethod ejbMethod) {
-		return null;
+		IFigure tooltip = createDefaultToolTip();
+		tooltip.add(GuiUtils.createLabel2dBold("Type: "));
+		tooltip.add(createLabel("EJB Method", ejbMethod.getImage(true)));
+		tooltip.add(GuiUtils.createLabel2dBold("Name: "));
+		tooltip.add(new org.eclipse.draw2d.Label(ejbMethod.toString()));
+		tooltip.add(GuiUtils.createLabel2dBold("Signature: "));
+		tooltip.add(new org.eclipse.draw2d.Label(ejbMethod.getSignature()));
+		return tooltip;
 	}
 
-	final static IFigure createToolTip(EndpointConfig endpointConfig) {
+	final static IFigure createToolTip(EndpointConfig<?> endpointConfig) {
 		IFigure tooltip = createDefaultToolTip();
 		tooltip.add(GuiUtils.createLabel2dBold("Type: "));
 		tooltip.add(createLabel("Unknown Service", ImageFactory.UNKNOWN_SERVICE_SMALL));
 		createEndpointConfingToTooltip(endpointConfig, tooltip);
 		return tooltip;
+	}
+
+	public final static IFigure createToolTip(Object obj) {
+		if (obj instanceof EjbMethod) {
+			return createToolTip((EjbMethod) obj);
+		} else if (obj instanceof HttpServer) {
+			return createToolTip((HttpServer) obj);
+		} else if (obj instanceof FtpServer) {
+			FtpServer ftpServer = ((FtpServer) obj);
+			return createToolTip("FTP Server", ftpServer.getServer(), ftpServer.getPort(), ftpServer.getImage(true));
+		} else if (obj instanceof SFtpServer) {
+			SFtpServer sFtpServer = (SFtpServer) obj;
+			return createToolTip("SFTP Server", sFtpServer.getServer(), sFtpServer.getPort(), sFtpServer.getImage(true));
+		} else if (obj instanceof FtpFolder) {
+			FtpFolder folder = (FtpFolder) obj;
+			return createToolTip("FTP Folder", folder.getPath(), folder.getImage(true));
+		} else if (obj instanceof SFtpServer) {
+			SFtpFolder ftpFolder = (SFtpFolder) obj;
+			return createToolTip("SFTP Folder", ftpFolder.getPath(), ftpFolder.getImage(true));
+		} else if (obj instanceof EjbProvider) {
+			EjbProvider ejbProvider = (EjbProvider) obj;
+			return createToolTip("EJB Provider", ejbProvider.getName(), ejbProvider.getImage(true));
+		} else if (obj instanceof EjbHome) {
+			EjbHome ejbHome = (EjbHome) obj;
+			return createToolTip("EJB Home", ejbHome.getName(), ejbHome.getImage(true));
+		} else if (obj instanceof EjbObject) {
+			EjbObject ejbObject = (EjbObject) obj;
+			return createToolTip("EJB Object", ejbObject.getName(), ejbObject.getImage(true));
+		} else if (obj instanceof HttpUrl) {
+			HttpUrl httpUrl = (HttpUrl) obj;
+			return createToolTip("HTTP URL", httpUrl.getUrl(), httpUrl.getImage(true));
+		}
+
+		return createToolTip("", obj.toString(), ((ImageFace) obj).getImage(true));
 	}
 }

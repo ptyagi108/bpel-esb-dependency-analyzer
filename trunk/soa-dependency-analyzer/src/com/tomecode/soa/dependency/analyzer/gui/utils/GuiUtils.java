@@ -363,7 +363,7 @@ public final class GuiUtils {
 	 * @return
 	 */
 	public static final Text createTextWithGrid(Composite parent, String text) {
-		Text textComponent = new Text(parent, SWT.BORDER | SWT.READ_ONLY);
+		Text textComponent = new Text(parent, SWT.BORDER);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		textComponent.setLayoutData(gridData);
 		textComponent.setText(text);
@@ -415,4 +415,5 @@ public final class GuiUtils {
 		label.setFont(FONT_BOLD);
 		return label;
 	}
+
 }

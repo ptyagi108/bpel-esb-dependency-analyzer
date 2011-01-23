@@ -43,6 +43,8 @@ public final class ResourceFile extends Service {
 			return ImageFactory.OSB_10G_XQ_TRANSFORMATION;
 		} else if (type == ServiceDependencyType.SERVICE_ACCOUNT) {
 			return ImageFactory.OSB_10G_SERVICE_ACCOUNT;
+		} else if (type == ServiceDependencyType.JAR) {
+			return ImageFactory.JAR;
 		}
 		return null;
 	}

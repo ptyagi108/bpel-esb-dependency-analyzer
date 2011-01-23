@@ -1,5 +1,8 @@
 package com.tomecode.soa.dependency.analyzer.view;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StackLayout;
@@ -11,13 +14,13 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.gui.utils.HideView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
 import com.tomecode.soa.ora.osb10g.services.Service;
-import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency;
 import com.tomecode.soa.project.Project;
-import com.tomecode.soa.services.BpelProcess;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
@@ -31,6 +34,7 @@ import com.tomecode.soa.workspace.Workspace;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
+
 public final class PropertiesView extends ViewPart implements HideView {
 
 	public static final String ID = "view.properties";
@@ -45,26 +49,7 @@ public final class PropertiesView extends ViewPart implements HideView {
 
 	private Composite emptyPage;
 
-	private Composite multiWokrspacePage;
-	private Text txtMultiWorkspaceName;
-	private Text txtMultiWorkspacePath;
-	private Text txtMultiWorkspaceType;
-
-	private Composite workspacePage;
-	private Text txtWorkspaceParentPath;
-	private Text txtWorkspaceParentType;
-	private Text txtWorkspaceParent;
-	private Text txtWorkspaceName;
-	private Text txtWorkspacePath;
-
-	private Composite projectPage;
-	private Text txtProjectName;
-	private Text txtProjectType;
-	private Text txtProjectPath;
-	private Text txtProjectWorkspace;
-	private Text txtProjectWorkspacePath;
-	private Text txtProjectMultiWorkspaceName;
-	private Text txtProjectMultiWorkspacePath;
+	private Composite dynamicPage;
 
 	private Composite servicePage;
 	private Text txtServiceName;
@@ -85,18 +70,6 @@ public final class PropertiesView extends ViewPart implements HideView {
 	private Text txtServiceDepOsbActivity;
 	private Text txtServiceDepOsbType;
 
-	private Composite processPage;
-	private Text txtProcessName;
-	private Text txtProcessType;
-	private Text txtProcessPath;
-	private Text txtProcessProjectName;
-	private Text txtProcessProjectType;
-	private Text txtProcessProjectPath;
-	private Text txtProcessProjectWorkspace;
-	private Text txtProcessProjectWorkspacePath;
-	private Text txtProcessProjectMultiWorkspaceName;
-	private Text txtProcessProjectMultiWorkspacePath;
-
 	/**
 	 * Constructor
 	 */
@@ -112,84 +85,15 @@ public final class PropertiesView extends ViewPart implements HideView {
 
 		emptyPage = new Composite(contentPanel, SWT.NONE);
 		emptyPage.pack();
-		initMultiWorkspacePage(contentPanel);
-		initWorkspacePage(contentPanel);
-		initProjectPage(contentPanel);
-		initServicePage(contentPanel); // initOra10gProcessPage(contentPanel);
-		initServiceDepPage(contentPanel);
-		initProcessPage(contentPanel);
+		dynamicPage = new Composite(contentPanel, SWT.NONE);
+		dynamicPage.pack();
+		// initServicePage(contentPanel); //
+		// initOra10gProcessPage(contentPanel);
+		// initServiceDepPage(contentPanel);
 		layout.topControl = emptyPage;
 
 		contentPanel.layout();
 
-		// getSite().getWorkbenchWindow().addPerspectiveListener(new
-		// IPerspectiveListener2() {
-		//
-		// @Override
-		// public void perspectiveChanged(IWorkbenchPage paramIWorkbenchPage,
-		// IPerspectiveDescriptor paramIPerspectiveDescriptor, String type) {
-		// }
-		//
-		// @Override
-		// public void perspectiveActivated(IWorkbenchPage paramIWorkbenchPage,
-		// IPerspectiveDescriptor paramIPerspectiveDescriptor) {
-		// }
-		//
-		// @Override
-		// public void perspectiveChanged(IWorkbenchPage paramIWorkbenchPage,
-		// IPerspectiveDescriptor paramIPerspectiveDescriptor,
-		// IWorkbenchPartReference paramIWorkbenchPartReference, String type) {
-		// System.out.println(getClass() + " 2" + type);
-		// if ("viewHide".equals(type)) {
-		// WindowChangeListener.getInstance().hideFromView(ID);
-		// } else if ("viewShow".equals(type)) {
-		// setFocus();
-		// }
-		// }
-		// });
-	}
-
-	/**
-	 * create panel for {@link BpelProcess}
-	 * 
-	 * @param parent
-	 */
-	private final void initProcessPage(Composite parent) {
-		processPage = new Composite(parent, SWT.NONE);
-		processPage.setLayout(new FillLayout());
-
-		ScrolledComposite sc = new ScrolledComposite(processPage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
-		Composite composite = GuiUtils.createCompositeWithGrid(sc);
-
-		Group groupProcess = GuiUtils.createGroupWithGrid(composite, "Bpel Process...");
-		GuiUtils.createLabelWithGrid(groupProcess, "Type ");
-		txtProcessType = GuiUtils.createTextReadOnlyWithGrid(groupProcess);
-		GuiUtils.createLabelWithGrid(groupProcess, "Name ");
-		txtProcessName = GuiUtils.createTextReadOnlyWithGrid(groupProcess);
-		GuiUtils.createLabelWithGrid(groupProcess, "Path ");
-		txtProcessPath = GuiUtils.createTextReadOnlyWithGrid(groupProcess);
-
-		Group groupProject = GuiUtils.createGroupWithGrid(composite, "Project...");
-		GuiUtils.createLabelWithGrid(groupProject, "Type ");
-		txtProcessProjectType = GuiUtils.createTextReadOnlyWithGrid(groupProject);
-		GuiUtils.createLabelWithGrid(groupProject, "Name ");
-		txtProcessProjectName = GuiUtils.createTextReadOnlyWithGrid(groupProject);
-		GuiUtils.createLabelWithGrid(groupProject, "Path:");
-		txtProcessProjectPath = GuiUtils.createTextReadOnlyWithGrid(groupProject);
-
-		Group groupWorkspace = GuiUtils.createGroupWithGrid(composite, "Workspace...");
-		GuiUtils.createLabelWithGrid(groupWorkspace, "Name ");
-		txtProcessProjectWorkspace = GuiUtils.createTextReadOnlyWithGrid(groupWorkspace);
-		GuiUtils.createLabelWithGrid(groupWorkspace, "Path ");
-		txtProcessProjectWorkspacePath = GuiUtils.createTextReadOnlyWithGrid(groupWorkspace);
-
-		Group groupMultiWorkspace = GuiUtils.createGroupWithGrid(composite, "Multi-Workspace...");
-		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Name ");
-		txtProcessProjectMultiWorkspaceName = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
-		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Path ");
-		txtProcessProjectMultiWorkspacePath = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
-
-		finishPage(composite, sc);
 	}
 
 	/**
@@ -258,99 +162,12 @@ public final class PropertiesView extends ViewPart implements HideView {
 		finishPage(composite, sc);
 	}
 
-	/**
-	 * create {@link Composite} for {@link Project}
-	 * 
-	 * @param parent
-	 */
-	private final void initProjectPage(Composite parent) {
-		projectPage = new Composite(parent, SWT.NONE);
-		projectPage.setLayout(new FillLayout());
-
-		ScrolledComposite sc = new ScrolledComposite(projectPage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
-		Composite composite = GuiUtils.createCompositeWithGrid(sc);
-
-		Group groupProject = GuiUtils.createGroupWithGrid(composite, "Project...");
-		GuiUtils.createLabelWithGrid(groupProject, "Type ");
-		txtProjectType = GuiUtils.createTextReadOnlyWithGrid(groupProject);
-		GuiUtils.createLabelWithGrid(groupProject, "Name ");
-		txtProjectName = GuiUtils.createTextReadOnlyWithGrid(groupProject);
-		GuiUtils.createLabelWithGrid(groupProject, "Path:");
-		txtProjectPath = GuiUtils.createTextReadOnlyWithGrid(groupProject);
-
-		Group groupWorkspace = GuiUtils.createGroupWithGrid(composite, "Workspace...");
-		GuiUtils.createLabelWithGrid(groupWorkspace, "Name ");
-		txtProjectWorkspace = GuiUtils.createTextReadOnlyWithGrid(groupWorkspace);
-		GuiUtils.createLabelWithGrid(groupWorkspace, "Path ");
-		txtProjectWorkspacePath = GuiUtils.createTextReadOnlyWithGrid(groupWorkspace);
-
-		Group groupMultiWorkspace = GuiUtils.createGroupWithGrid(composite, "Multi-Workspace...");
-		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Name ");
-		txtProjectMultiWorkspaceName = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
-		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Path ");
-		txtProjectMultiWorkspacePath = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
-
-		finishPage(composite, sc);
-	}
-
 	private void finishPage(Composite composite, ScrolledComposite sc) {
 		composite.pack();
 		sc.setMinSize(composite.getSize());
 		sc.setExpandHorizontal(true);
 		sc.setExpandVertical(true);
 		sc.setContent(composite);
-	}
-
-	/**
-	 * create {@link Composite} for {@link Workspace}
-	 * 
-	 * @param parent
-	 */
-	private final void initWorkspacePage(Composite parent) {
-		workspacePage = new Composite(parent, SWT.NONE);
-		workspacePage.setLayout(new FillLayout());
-
-		ScrolledComposite sc = new ScrolledComposite(workspacePage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
-		Composite composite = GuiUtils.createCompositeWithGrid(sc);
-
-		Group groupWorkspace = GuiUtils.createGroupWithGrid(composite, "Workspace...");
-		GuiUtils.createLabelWithGrid(groupWorkspace, "Type ");
-		txtWorkspaceParentType = GuiUtils.createTextReadOnlyWithGrid(groupWorkspace);
-		GuiUtils.createLabelWithGrid(groupWorkspace, "Name ");
-		txtWorkspaceName = GuiUtils.createTextReadOnlyWithGrid(groupWorkspace);
-		GuiUtils.createLabelWithGrid(groupWorkspace, "Path ");
-		txtWorkspacePath = GuiUtils.createTextReadOnlyWithGrid(groupWorkspace);
-
-		Group groupMultiWorkspace = GuiUtils.createGroupWithGrid(composite, "Multi-Workspace...");
-		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Name ");
-		txtWorkspaceParent = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
-		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Path ");
-		txtWorkspaceParentPath = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
-
-		finishPage(composite, sc);
-	}
-
-	/**
-	 * create {@link Composite} for {@link MultiWorkspace}
-	 * 
-	 * @param parent
-	 */
-	private final void initMultiWorkspacePage(Composite parent) {
-		multiWokrspacePage = new Composite(parent, SWT.NONE);
-		multiWokrspacePage.setLayout(new FillLayout());
-
-		ScrolledComposite sc = new ScrolledComposite(multiWokrspacePage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
-		Composite composite = GuiUtils.createCompositeWithGrid(sc);
-
-		Group groupMultiWorkspace = GuiUtils.createGroupWithGrid(composite, "Multi-Workspace...");
-		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Type ");
-		txtMultiWorkspaceType = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
-		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Name ");
-		txtMultiWorkspaceName = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
-		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Path ");
-		txtMultiWorkspacePath = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
-
-		finishPage(composite, sc);
 	}
 
 	@Override
@@ -377,86 +194,158 @@ public final class PropertiesView extends ViewPart implements HideView {
 	 */
 	public final void show(Object data) {
 		dataForProperties = data;
-
-		if (dataForProperties instanceof MultiWorkspace) {
-			MultiWorkspace multiWorkspace = (MultiWorkspace) dataForProperties;
-			txtMultiWorkspaceType.setText(multiWorkspace.getType().toString());
-			txtMultiWorkspaceName.setText(multiWorkspace.getName());
-			txtMultiWorkspacePath.setText(multiWorkspace.getPath().toString());
-			showContent(multiWokrspacePage);
-		} else if (dataForProperties instanceof Workspace) {
-			Workspace workspace = (Workspace) dataForProperties;
-			txtWorkspaceParentType.setText(workspace.getMultiWorkspace().getType().toString());
-			txtWorkspaceParent.setText(workspace.getMultiWorkspace().getName());
-			txtWorkspaceParentPath.setText(workspace.getMultiWorkspace().getPath().toString());
-			txtWorkspaceName.setText(workspace.getName());
-			txtWorkspacePath.setText(workspace.getFile().toString());
-			showContent(workspacePage);
-		} else if (dataForProperties instanceof Project) {
-			Project project = (Project) dataForProperties;
-			txtProjectName.setText(project.getName());
-			txtProjectType.setText(project.getType().toString());
-			txtProjectPath.setText(project.getFile() == null ? "" : project.getFile().toString());
-
-			if (project.getWorkpsace() == null) {
-				txtProjectWorkspace.setText("");
-				txtProjectWorkspacePath.setText("");
-				txtProjectMultiWorkspacePath.setText("");
-				txtProjectMultiWorkspaceName.setText("");
-			} else {
-				txtProjectWorkspace.setText(project.getWorkpsace().getName());
-				txtProjectWorkspacePath.setText(project.getWorkpsace().getFile().toString());
-				txtProjectMultiWorkspacePath.setText(project.getWorkpsace().getMultiWorkspace().getPath().toString());
-				txtProjectMultiWorkspaceName.setText(project.getWorkpsace().getMultiWorkspace().getName());
-			}
-			showContent(projectPage);
-		} else if (dataForProperties instanceof Service) {
-			Service service = (Service) dataForProperties;
-
-			txtServiceName.setText(service.getName());
-			txtServiceFolder.setText(service.getFolder() == null ? "" : service.getFolder().toString());
-			txtServicePath.setText(service.getFile() == null ? "" : service.getFile().toString());
-			txtServiceType.setText(service.getType().toString());
-			Project project = (Project) service.getProject();
-			try {
-				txtServiceProjectName.setText(project.getName());
-				txtServiceProjectType.setText(project.getType().toString());
-				txtServiceProjectPath.setText(project.getFile().toString());
-				txtServiceProjectWorkspace.setText(project.getWorkpsace().getName());
-				txtServiceProjectWorkspacePath.setText(project.getWorkpsace().getFile().toString());
-				txtServiceProjectMultiWorkspacePath.setText(project.getWorkpsace().getMultiWorkspace().getPath().toString());
-				txtServiceProjectMultiWorkspaceName.setText(project.getWorkpsace().getMultiWorkspace().getName());
-
-			} catch (NullPointerException e) {
-				e.printStackTrace();
-			}
-			showContent(servicePage);
-		} else if (dataForProperties instanceof ServiceDependency) {
-			ServiceDependency dependency = (ServiceDependency) dataForProperties;
-			txtServiceDepName.setText(dependency.getRefPath());
-			txtServiceDepOsbType.setText(dependency.getType().toString());
-			String name = dependency.getServiceName();
-			txtServiceDepOsbActivity.setText(name == null ? "" : name);
-			txtServiceDepOsbActivity.setText(dependency.getActivity().toString());
-			txtServiceDepProjectName.setText(dependency.getProjectNameFromRefPath());
-			showContent(serviceDepPage);
-		} else if (dataForProperties instanceof BpelProcess) {
-			BpelProcess bpelProcess = (BpelProcess) dataForProperties;
-			txtProcessName.setText(bpelProcess.getName());
-			txtProcessPath.setText(bpelProcess.getFile() == null ? "" : bpelProcess.getFile().toString());
-			txtProcessType.setText(bpelProcess.getProject().getType().toString());
-			Project project = (Project) bpelProcess.getProject();
-			txtProcessProjectName.setText(project.getName());
-			txtProcessProjectType.setText(project.getType().toString());
-			txtProcessProjectPath.setText(project.getFile().toString());
-			txtProcessProjectWorkspace.setText(project.getWorkpsace().getName());
-			txtProcessProjectWorkspacePath.setText(project.getWorkpsace().getFile().toString());
-			txtProcessProjectMultiWorkspacePath.setText(project.getWorkpsace().getMultiWorkspace().getPath().toString());
-			txtProcessProjectMultiWorkspaceName.setText(project.getWorkpsace().getMultiWorkspace().getName());
-			showContent(processPage);
+		if (dataForProperties == null) {
+			showContent(emptyPage);
+		} else if (dataForProperties.getClass().getAnnotation(PropertyGroupView.class) != null) {
+			createDynamicPage(dataForProperties);
 		} else {
 			showContent(emptyPage);
 		}
+	}
+
+	private final void createDynamicPage(Object data) {
+		dynamicPage.dispose();
+		dynamicPage = new Composite(contentPanel, SWT.NONE);
+		dynamicPage.setLayout(new FillLayout());
+		dynamicPage.pack();
+
+		ScrolledComposite sc = new ScrolledComposite(dynamicPage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
+		Composite composite = GuiUtils.createCompositeWithGrid(sc);
+		createDynamicParent(data, composite);
+
+		finishPage(composite, sc);
+		showContent(dynamicPage);
+	}
+
+	/**
+	 * create dynamic content
+	 * 
+	 * @param data
+	 * @param parentComposite
+	 */
+	private final void createDynamicParent(Object data, Composite parentComposite) {
+		PropertyGroupView propertyGroupView = data.getClass().getAnnotation(PropertyGroupView.class);
+		Group group = GuiUtils.createGroupWithGrid(parentComposite, propertyGroupView.type());
+		createTextWithLable(group, "Type", propertyGroupView.name());
+		createDymaicContent(data, group);
+
+		Object parentObject = getMethodValue(data, data.getClass().getDeclaredMethods(), propertyGroupView.parentMethod());
+		if (parentObject != null) {
+			createDynamicParent(parentObject, parentComposite);
+		} else {
+			if (!data.getClass().getSuperclass().toString().equals("class java.lang.Object")) {
+				parentObject = getMethodValue(data, data.getClass().getSuperclass().getDeclaredMethods(), propertyGroupView.parentMethod());
+				if (parentObject != null) {
+					createDynamicParent(parentObject, parentComposite);
+				}
+			}
+		}
+	}
+
+	private final void createDymaicContent(Object data, Group group) {
+		createDymaicContentFromField(data, data.getClass().getDeclaredFields(), group);
+		if (!data.getClass().getSuperclass().toString().equals("class java.lang.Object")) {
+			createDymaicContentFromField(data, data.getClass().getSuperclass().getDeclaredFields(), group);
+		}
+		createDynamicContentFromMethod(data, data.getClass().getDeclaredMethods(), group);
+		if (!data.getClass().getSuperclass().toString().equals("class java.lang.Object")) {
+			createDynamicContentFromMethod(data, data.getClass().getSuperclass().getDeclaredMethods(), group);
+		}
+
+	}
+
+	/**
+	 * create text and label from {@link Field}
+	 * 
+	 * @param data
+	 * @param fields
+	 * @param group
+	 */
+	private final void createDymaicContentFromField(Object data, Field[] fields, Group group) {
+		for (Field field : fields) {
+			PropertyViewData propertyViewData = field.getAnnotation(PropertyViewData.class);
+			if (propertyViewData != null) {
+				Object value = getObjectValue(data, field);
+				createTextWithLable(group, propertyViewData.title(), (value == null ? "" : value.toString()));
+			}
+		}
+	}
+
+	/**
+	 * create text and lable from {@link Method}
+	 * 
+	 * @param data
+	 * @param methods
+	 * @param group
+	 */
+	private final void createDynamicContentFromMethod(Object data, Method[] methods, Group group) {
+		for (Method method : methods) {
+			PropertyViewData propertyViewData = method.getAnnotation(PropertyViewData.class);
+			if (propertyViewData != null) {
+				if (propertyViewData.title().equals("Path")) {
+					toString();
+				}
+				Object value = getMethodValue(data, method);
+				createTextWithLable(group, propertyViewData.title(), (value == null ? "" : value.toString()));
+			}
+		}
+	}
+
+	private final Object getMethodValue(Object owner, Method method) {
+		try {
+			method.setAccessible(true);
+			return method.invoke(owner, new Object[] {});
+		} catch (Exception e) {
+		} finally {
+			method.setAccessible(false);
+		}
+		return null;
+	}
+
+	private final void createTextWithLable(Composite parent, String title, String value) {
+		GuiUtils.createLabelWithGrid(parent, title);
+		Text text = GuiUtils.createTextReadOnlyWithGrid(parent);
+		text.setText(value);
+	}
+
+	private final Object getMethodValue(Object data, Method[] methods, String methodName) {
+		for (Method method : methods) {
+			try {
+				if (method.getName().equals(methodName)) {
+					return invokeMethod(data, method);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
+	private final Object invokeMethod(Object owner, Method method) {
+		try {
+			method.setAccessible(true);
+			return method.invoke(owner, new Object[] {});
+		} catch (Exception e) {
+		} finally {
+			method.setAccessible(false);
+		}
+		return null;
+	}
+
+	private final String getObjectValue(Object parentObject, Field field) {
+		try {
+			field.setAccessible(true);
+			Object value = field.get(parentObject);
+			if (value != null) {
+				return value.toString();
+			}
+		} catch (Exception e) {
+
+		} finally {
+			field.setAccessible(false);
+		}
+
+		return "";
 	}
 
 	private final void showContent(Composite composite) {

@@ -31,4 +31,8 @@ public final class EndpointUNKNOWN extends EndpointConfig {
 		this.providerId = providerId;
 	}
 
+	public final String toString() {
+		return "Unknow Endpoint - providerId: " + providerId;
+	}
+
 }

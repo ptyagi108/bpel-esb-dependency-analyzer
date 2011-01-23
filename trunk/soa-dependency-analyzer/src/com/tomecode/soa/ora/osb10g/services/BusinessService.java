@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig.ProviderProtocol;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointUNKNOWN;
@@ -20,6 +21,7 @@ import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.Servi
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
+@PropertyGroupView(type = "Business Service", name = "Oracle Service Bus 10g", parentMethod = "getProject")
 public final class BusinessService extends Service {
 
 	/**

@@ -11,6 +11,7 @@ import com.tomecode.soa.ora.osb10g.services.Binding;
 import com.tomecode.soa.ora.osb10g.services.Binding.BindingType;
 import com.tomecode.soa.ora.osb10g.services.Binding.WsdlServiceBinding;
 import com.tomecode.soa.ora.osb10g.services.Binding.WsldServiceBindingType;
+import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointBPEL10g;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig.ProviderProtocol;
@@ -33,16 +34,18 @@ import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificDsp;
 import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificEJB;
 import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificHttp;
 import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificJms;
+import com.tomecode.soa.ora.osb10g.services.protocols.jms.JMSConnectionFactory;
+import com.tomecode.soa.ora.osb10g.services.protocols.jms.JMSServer;
 import com.tomecode.soa.parser.AbstractParser;
+import com.tomecode.soa.protocols.Node;
 import com.tomecode.soa.protocols.ejb.EjbHome;
 import com.tomecode.soa.protocols.ejb.EjbMethod;
 import com.tomecode.soa.protocols.ejb.EjbObject;
 import com.tomecode.soa.protocols.ejb.EjbProvider;
+import com.tomecode.soa.protocols.file.File;
 import com.tomecode.soa.protocols.ftp.FtpServer;
 import com.tomecode.soa.protocols.ftp.SFtpServer;
 import com.tomecode.soa.protocols.http.HttpServer;
-import com.tomecode.soa.protocols.jms.JMSConnectionFactory;
-import com.tomecode.soa.protocols.jms.JMSServer;
 
 /**
  * 
@@ -61,8 +64,8 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	 * @param eXml
 	 * @return
 	 */
-	protected final EndpointConfig parseEndpointConfig(Element eXml) {
-		EndpointConfig endpoint = null;
+	protected final EndpointConfig<?> parseEndpointConfig(Element eXml, Service service) {
+		EndpointConfig<?> endpoint = null;
 
 		Element eEndpointConfig = eXml.element("endpointConfig");
 
@@ -71,9 +74,9 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 			if (ProviderProtocol.LOCAL.name().equalsIgnoreCase(providerId)) {
 				endpoint = new EndpointLocal();
 			} else if (ProviderProtocol.EJB.name().equalsIgnoreCase(providerId)) {
-				endpoint = parseEJBtransport(eEndpointConfig);
+				endpoint = parseEJBtransport(eEndpointConfig, service);
 			} else if (ProviderProtocol.HTTP.name().equalsIgnoreCase(providerId)) {
-				endpoint = parseHttpTransport(eEndpointConfig);
+				endpoint = parseHttpTransport(eEndpointConfig, service);
 			} else if (ProviderProtocol.JCA.name().equalsIgnoreCase(providerId)) {
 				endpoint = parseJCAtransport(eEndpointConfig);
 			} else if (ProviderProtocol.SB.name().equalsIgnoreCase(providerId)) {
@@ -81,21 +84,21 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 			} else if (ProviderProtocol.WS.name().equalsIgnoreCase(providerId)) {
 				endpoint = parseWStransport(eEndpointConfig);
 			} else if (ProviderProtocol.FILE.name().equalsIgnoreCase(providerId)) {
-				endpoint = parseFILEtransport(eEndpointConfig);
+				endpoint = parseFILEtransport(eEndpointConfig, service);
 			} else if (ProviderProtocol.DSP.name().equalsIgnoreCase(providerId)) {
 				endpoint = parseDSPtransport(eEndpointConfig);
 			} else if (ProviderProtocol.FTP.name().equalsIgnoreCase(providerId)) {
-				endpoint = parseFTPtransport(eEndpointConfig);
+				endpoint = parseFTPtransport(eEndpointConfig, service);
 			} else if (ProviderProtocol.JPD.name().equalsIgnoreCase(providerId)) {
 				endpoint = parseJPDtransport(eEndpointConfig);
 			} else if (ProviderProtocol.JMS.name().equalsIgnoreCase(providerId)) {
-				endpoint = parseJMStransport(eEndpointConfig);
+				endpoint = parseJMStransport(eEndpointConfig, service);
 			} else if (ProviderProtocol.MAIL.name().equalsIgnoreCase(providerId)) {
 				endpoint = parseMAILtransport(eEndpointConfig);
 			} else if (ProviderProtocol.MQ.name().equalsIgnoreCase(providerId)) {
 				endpoint = parseMQtransport(eEndpointConfig);
 			} else if (ProviderProtocol.SFTP.name().equalsIgnoreCase(providerId)) {
-				endpoint = parseSFTPtransport(eEndpointConfig);
+				endpoint = parseSFTPtransport(eEndpointConfig, service);
 			} else if (ProviderProtocol.BPEL_10G.name().equalsIgnoreCase(providerId)) {
 				endpoint = parseBPEL10Gtransport(eEndpointConfig);
 			} else {
@@ -106,7 +109,6 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 		} else {
 			endpoint = parseUnknownEndpoint(eEndpointConfig);
 		}
-
 		return endpoint;
 	}
 
@@ -141,9 +143,12 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	 * @param eEndpointConfig
 	 * @return
 	 */
-	private final EndpointSFTP parseSFTPtransport(Element eEndpointConfig) {
+	private final EndpointSFTP parseSFTPtransport(Element eEndpointConfig, Service service) {
 		EndpointSFTP sftp = new EndpointSFTP();
 		sftp.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
+		for (SFtpServer sFtpServer : sftp.getSFtpServers()) {
+			sFtpServer.setParentService(service);
+		}
 		return sftp;
 	}
 
@@ -177,10 +182,11 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	 * @param eEndpointConfig
 	 * @return
 	 */
-	private final EndpointJms parseJMStransport(Element eEndpointConfig) {
+	private final EndpointJms parseJMStransport(Element eEndpointConfig, Service parentService) {
 		EndpointJms jms = new EndpointJms();
 		jms.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
 		jms.setProviderSpecificJms(parseProviderSpecificJms(eEndpointConfig.element("provider-specific")));
+		jms.setParentService(parentService);
 		return jms;
 	}
 
@@ -202,9 +208,12 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	 * @param eEndpointConfig
 	 * @return
 	 */
-	private final EndpointFTP parseFTPtransport(Element eEndpointConfig) {
+	private final EndpointFTP parseFTPtransport(Element eEndpointConfig, Service service) {
 		EndpointFTP ftp = new EndpointFTP();
 		ftp.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
+		for (Node<FtpServer> ftpServer : ftp.getNodes()) {
+			ftpServer.getObj().setParentService(service);
+		}
 		return ftp;
 	}
 
@@ -241,9 +250,12 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	 * @param eEndpointConfig
 	 * @return
 	 */
-	private final EndpointFile parseFILEtransport(Element eEndpointConfig) {
+	private final EndpointFile parseFILEtransport(Element eEndpointConfig, Service service) {
 		EndpointFile file = new EndpointFile();
 		file.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
+		for (File f : file.getNodes()) {
+			f.setParentService(service);
+		}
 		return file;
 	}
 
@@ -289,10 +301,13 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	 * @param eEndpointConfig
 	 * @return
 	 */
-	private final EndpointHttp parseHttpTransport(Element eEndpointConfig) {
+	private final EndpointHttp parseHttpTransport(Element eEndpointConfig, Service service) {
 		EndpointHttp http = new EndpointHttp();
 		http.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
 		http.setProviderSpecificHttp(parseProviderSpecificHttp(eEndpointConfig.element("provider-specific")));
+		for (Node<HttpServer> httpServer : http.getNodes()) {
+			httpServer.getObj().setParentService(service);
+		}
 		return http;
 	}
 
@@ -320,17 +335,18 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	 * @param eEndpointConfig
 	 * @return
 	 */
-	private final EndpointEJB parseEJBtransport(Element eEndpointConfig) {
+	private final EndpointEJB parseEJBtransport(Element eEndpointConfig, Service service) {
 		EndpointEJB ejb = new EndpointEJB();
 		ejb.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
 
 		if (!ejb.getUris().isEmpty()) {
 			EjbHome ejbHome = parseEjbHome(eEndpointConfig.element("provider-specific"));
 			if (ejbHome != null) {
-				String[] ejbUris = ejb.getUris().get(0).split(":");
+				String[] ejbUris = ejb.getUris().get(0).toString().split(":");
 				EjbProvider ejbProvider = new EjbProvider(ejbUris[1]);
 				ejbProvider.addEjbHome(ejbHome);
-				ejb.setEjbProvider(ejbProvider);
+				ejb.addEjbProvider(ejbProvider);
+				ejbProvider.setParentService(service);
 			}
 		}
 
@@ -357,8 +373,7 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 
 						Element eMethod = eEjbObject.element("method");
 						if (eMethod != null) {
-							EjbMethod ejbMethod = new EjbMethod(eMethod.attributeValue("name"));
-							ejbObject.addEjbMethod(ejbMethod);
+							ejbObject.addEjbMethod(new EjbMethod(eMethod.attributeValue("name"), eMethod.attributeValue("signature")));
 						}
 					}
 
@@ -587,7 +602,7 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	private final static HttpServer findExistsHttpServer(boolean isHttps, String host, int port, List<HttpServer> httpServers) {
 		for (HttpServer httpServer : httpServers) {
 			if (host.equals(httpServer.getServer()) && isHttps == httpServer.isHttps() && port == httpServer.getPort()) {
-				return httpServer;
+				return httpServer.getObj();
 			}
 		}
 		return null;

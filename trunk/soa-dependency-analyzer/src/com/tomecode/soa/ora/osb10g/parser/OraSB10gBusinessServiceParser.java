@@ -50,7 +50,7 @@ public final class OraSB10gBusinessServiceParser extends OraSB10gBasicServicePar
 				businessService.setDescription(eCoreEntry.elementText("description"));
 				businessService.setBinding(parseBinding(eCoreEntry.element("binding")));
 			}
-			businessService.setEndpointConfig(parseEndpointConfig(eXml));
+			businessService.setEndpointConfig(parseEndpointConfig(eXml, businessService));
 			return businessService;
 		}
 		return null;

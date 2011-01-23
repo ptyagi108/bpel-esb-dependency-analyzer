@@ -1,4 +1,4 @@
-package com.tomecode.soa.protocols.jms;
+package com.tomecode.soa.ora.osb10g.services.protocols.jms;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,7 @@ import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.protocols.Node;
 
 /**
  * JMS Connection factory - A JMS ConnectionFactory object is used by the client
@@ -16,7 +17,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
-public final class JMSConnectionFactory implements ImageFace {
+public final class JMSConnectionFactory implements ImageFace, Node<JMSConnectionFactory> {
 
 	/**
 	 * connection factory name
@@ -29,7 +30,7 @@ public final class JMSConnectionFactory implements ImageFace {
 	/**
 	 * parent {@link JMSServer}
 	 */
-	private JMSServer parentJmsServer;
+	private final List<JMSServer> parentJmsServers;
 
 	/**
 	 * Constructor
@@ -38,20 +39,27 @@ public final class JMSConnectionFactory implements ImageFace {
 	 *            connection factory name
 	 */
 	public JMSConnectionFactory(String name) {
-		this.jmsQueues = new ArrayList<JMSQueue>();
+		this();
 		this.name = name;
+	}
+
+	private JMSConnectionFactory() {
+		this.jmsQueues = new ArrayList<JMSQueue>();
+		this.parentJmsServers = new ArrayList<JMSServer>();
 	}
 
 	public final String getName() {
 		return name;
 	}
 
-	public final JMSServer getJmsServer() {
-		return parentJmsServer;
+	public final List<JMSServer> getJmsServer() {
+		return parentJmsServers;
 	}
 
-	public final void setJmsServer(JMSServer jmsServer) {
-		this.parentJmsServer = jmsServer;
+	public final void addJmsServer(JMSServer jmsServer) {
+		if (!parentJmsServers.contains(jmsServer)) {
+			parentJmsServers.add(jmsServer);
+		}
 	}
 
 	public final void addJmsQueue(String queue) {
@@ -69,10 +77,6 @@ public final class JMSConnectionFactory implements ImageFace {
 		return false;
 	}
 
-	public final List<JMSQueue> getJmsQueues() {
-		return jmsQueues;
-	}
-
 	public final String toString() {
 		return name;
 	}
@@ -88,5 +92,20 @@ public final class JMSConnectionFactory implements ImageFace {
 	@Override
 	public final String getToolTip() {
 		return "Type: JMS Connection Factory\nName: " + name;
+	}
+
+	@Override
+	public final Object getParent() {
+		return parentJmsServers;
+	}
+
+	@Override
+	public final List<JMSQueue> getChilds() {
+		return jmsQueues;
+	}
+
+	@Override
+	public final JMSConnectionFactory getObj() {
+		return this;
 	}
 }

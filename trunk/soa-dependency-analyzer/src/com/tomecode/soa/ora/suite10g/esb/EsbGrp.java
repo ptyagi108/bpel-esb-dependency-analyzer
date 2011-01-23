@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
@@ -19,6 +21,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
+@PropertyGroupView(type = "System Group", name = "Oracle SOA Suite 10g", parentMethod = "getProject")
 public final class EsbGrp implements BasicEsbNode {
 
 	private static final long serialVersionUID = -5057011739449470393L;
@@ -26,14 +29,17 @@ public final class EsbGrp implements BasicEsbNode {
 	private final List<BasicEsbNode> childs;
 
 	private Ora10gEsbProject ownerEsbProject;
-	/**
-	 * service group file
-	 */
-	private File file;
+
 	/**
 	 * service group name
 	 */
+	@PropertyViewData(title = "Name")
 	private String name;
+	/**
+	 * service group file
+	 */
+	@PropertyViewData(title = "Path")
+	private File file;
 	/**
 	 * service group qName
 	 */
@@ -106,11 +112,11 @@ public final class EsbGrp implements BasicEsbNode {
 		return null;
 	}
 
-	public final Ora10gEsbProject getOwnerEsbProject() {
+	public final Ora10gEsbProject getProject() {
 		return ownerEsbProject;
 	}
 
-	public final void setOwnerEsbProject(Ora10gEsbProject ownerEsbProject) {
+	public final void setProject(Ora10gEsbProject ownerEsbProject) {
 		this.ownerEsbProject = ownerEsbProject;
 	}
 
@@ -118,7 +124,7 @@ public final class EsbGrp implements BasicEsbNode {
 		for (BasicEsbNode basicEsbNode : childs) {
 			if (basicEsbNode.getType() == EsbNodeType.ESBSYS) {
 				if (basicEsbNode.getQname().equals(qName)) {
-					return ((EsbSys) basicEsbNode.get()).getOwnerEsbProject();
+					return ((EsbSys) basicEsbNode.get()).getProject();
 				} else {
 					Ora10gEsbProject esbProject = ((EsbSys) basicEsbNode.get()).findEsbProjectByQname(qName, serviceURL);
 					if (esbProject != null) {
@@ -127,7 +133,7 @@ public final class EsbGrp implements BasicEsbNode {
 				}
 			} else if (basicEsbNode.getType() == EsbNodeType.ESBGRP) {
 				if (basicEsbNode.getQname().equals(qName)) {
-					return ((EsbGrp) basicEsbNode.get()).getOwnerEsbProject();
+					return ((EsbGrp) basicEsbNode.get()).getProject();
 				} else {
 					Ora10gEsbProject esbProject = ((EsbGrp) basicEsbNode.get()).findEsbProjectByQname(qName, serviceURL);
 					if (esbProject != null) {

@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.services.OraSB10gFolders;
 import com.tomecode.soa.ora.osb10g.services.Proxy;
@@ -26,6 +28,7 @@ import com.tomecode.soa.workspace.Workspace;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
+@PropertyGroupView(type = "Project...", name = "Oracle Service Bus 10g", parentMethod = "getWorkpsace")
 public final class OraSB10gProject implements Project {
 
 	/**
@@ -102,11 +105,13 @@ public final class OraSB10gProject implements Project {
 		return file.getName();
 	}
 
+	@PropertyViewData(title = "Name")
 	public final String getName() {
 		return file.getName();
 	}
 
 	@Override
+	@PropertyViewData(title = "Path")
 	public final File getFile() {
 		return file;
 	}

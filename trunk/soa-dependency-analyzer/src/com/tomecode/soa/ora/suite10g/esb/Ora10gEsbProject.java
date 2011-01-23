@@ -8,6 +8,8 @@ import java.util.Vector;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.suite10g.esb.BasicEsbNode.EsbNodeType;
 import com.tomecode.soa.ora.suite10g.workspace.Ora10gWorkspace;
@@ -25,13 +27,17 @@ import com.tomecode.soa.workspace.Workspace;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
+@PropertyGroupView(type = "ESB Project...", name = "Oracle SOA Suite 10g", parentMethod = "getWorkpsace")
 public final class Ora10gEsbProject implements Project {
 
 	private static final long serialVersionUID = 1517251079778988223L;
 
 	private boolean folder;
+
+	@PropertyViewData(title = "Name")
 	private String name;
 
+	@PropertyViewData(title = "Path")
 	private File file;
 	/**
 	 * if true then project is in *.jws

@@ -7,6 +7,8 @@ import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.ora.osb10g.services.Service;
+import com.tomecode.soa.protocols.Node;
 
 /**
  * EJB provider
@@ -15,7 +17,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
-public final class EjbProvider implements ImageFace {
+public final class EjbProvider implements ImageFace, Node<EjbProvider> {
 
 	/**
 	 * ejb provider name
@@ -23,9 +25,14 @@ public final class EjbProvider implements ImageFace {
 	private String name;
 
 	/**
-	 * lisst of {@link EjbHome}
+	 * list of {@link EjbHome}
 	 */
-	private final List<EjbHome> ejbHomes;
+	private final List<EjbHome> ejbHomes = new ArrayList<EjbHome>();
+
+	/**
+	 * parent service
+	 */
+	private Object parentService;
 
 	/**
 	 * Constructor
@@ -34,12 +41,7 @@ public final class EjbProvider implements ImageFace {
 	 *            provider name
 	 */
 	public EjbProvider(String name) {
-		this.ejbHomes = new ArrayList<EjbHome>();
 		this.name = name;
-	}
-
-	public final List<EjbHome> getEjbHomes() {
-		return ejbHomes;
 	}
 
 	/**
@@ -67,4 +69,26 @@ public final class EjbProvider implements ImageFace {
 		ejbHome.setEjbProvider(this);
 	}
 
+	public final String toString() {
+		return name;
+	}
+
+	public final void setParentService(Service parentService) {
+		this.parentService = parentService;
+	}
+
+	@Override
+	public final Object getParent() {
+		return parentService;
+	}
+
+	@Override
+	public final List<EjbHome> getChilds() {
+		return ejbHomes;
+	}
+
+	@Override
+	public final EjbProvider getObj() {
+		return this;
+	}
 }

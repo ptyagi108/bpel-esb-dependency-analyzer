@@ -3,6 +3,7 @@ package com.tomecode.soa.ora.osb10g.services.config;
 import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.protocols.file.File;
 
 /**
  * Endpoint protocol - FILE
@@ -12,7 +13,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class EndpointFile extends EndpointConfig {
+public final class EndpointFile extends EndpointConfig<File> {
 
 	public EndpointFile() {
 		super(ProviderProtocol.FILE);
@@ -23,5 +24,12 @@ public final class EndpointFile extends EndpointConfig {
 			return ImageFactory.FILE_SERVER_SMALL;
 		}
 		return ImageFactory.FILE_SERVER;
+	}
+
+	public final String toString() {
+		if (uris.isEmpty()) {
+			return "";
+		}
+		return makeuris();
 	}
 }

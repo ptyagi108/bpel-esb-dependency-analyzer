@@ -1,10 +1,11 @@
 package com.tomecode.soa.ora.osb10g.services.config;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.tomecode.soa.ora.osb10g.parser.OraSB10gBasicServiceParser;
-import com.tomecode.soa.protocols.jms.JMSServer;
+import com.tomecode.soa.ora.osb10g.services.Service;
+import com.tomecode.soa.ora.osb10g.services.protocols.jms.JMSServer;
+import com.tomecode.soa.protocols.Node;
 
 /**
  * Endpoint protocol - JMS
@@ -14,18 +15,12 @@ import com.tomecode.soa.protocols.jms.JMSServer;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class EndpointJms extends EndpointConfig {
+public final class EndpointJms extends EndpointConfig<JMSServer> {
 
 	private ProviderSpecificJms providerSpecificJms;
 
-	/**
-	 * list of {@link JMSServer}
-	 */
-	private final List<JMSServer> jmsServers;
-
 	public EndpointJms() {
 		super(ProviderProtocol.JMS);
-		this.jmsServers = new ArrayList<JMSServer>();
 	}
 
 	/**
@@ -45,11 +40,17 @@ public final class EndpointJms extends EndpointConfig {
 
 	public final void putAllURI(List<String> uris) {
 		this.uris.addAll(uris);
-		OraSB10gBasicServiceParser.parseJMSServerUris(uris, jmsServers);
+		OraSB10gBasicServiceParser.parseJMSServerUris(uris, nodes);
 	}
 
-	public final List<JMSServer> getJmsServers() {
-		return jmsServers;
+	public final void setParentService(Service parentService) {
+		for (Node<JMSServer> jmsServer : nodes) {
+			jmsServer.getObj().setParentService(parentService);
+		}
+		if (providerSpecificJms != null) {
+			for (Node<JMSServer> jmsServer : providerSpecificJms.getJmsServers()) {
+				jmsServer.getObj().setParentService(parentService);
+			}
+		}
 	}
-
 }

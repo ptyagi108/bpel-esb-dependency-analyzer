@@ -7,6 +7,7 @@ import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.protocols.Node;
 
 /**
  * EJB object
@@ -15,7 +16,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
-public final class EjbObject implements ImageFace {
+public final class EjbObject implements ImageFace, Node<EjbObject> {
 
 	/**
 	 * ejb object name
@@ -29,7 +30,7 @@ public final class EjbObject implements ImageFace {
 	/**
 	 * list of {@link EjbMethod}
 	 */
-	private final List<EjbMethod> ejbMethods;
+	private final List<EjbMethod> ejbMethods = new ArrayList<EjbMethod>();
 
 	/**
 	 * Constructor
@@ -38,26 +39,11 @@ public final class EjbObject implements ImageFace {
 	 *            ejb object name
 	 */
 	public EjbObject(String name) {
-		this.ejbMethods = new ArrayList<EjbMethod>();
 		this.name = name;
 	}
 
 	public final String getName() {
 		return name;
-	}
-
-	/**
-	 * @return the ejbHome
-	 */
-	public final EjbHome getEjbHome() {
-		return ejbHome;
-	}
-
-	/**
-	 * @return the ejbMethods
-	 */
-	public final List<EjbMethod> getEjbMethods() {
-		return ejbMethods;
 	}
 
 	/**
@@ -84,6 +70,25 @@ public final class EjbObject implements ImageFace {
 	@Override
 	public final String getToolTip() {
 		return "Type: EJB Object\nName: " + name;
+	}
+
+	public final String toString() {
+		return name;
+	}
+
+	@Override
+	public final EjbHome getParent() {
+		return ejbHome;
+	}
+
+	@Override
+	public final List<EjbMethod> getChilds() {
+		return ejbMethods;
+	}
+
+	@Override
+	public final EjbObject getObj() {
+		return this;
 	}
 
 }

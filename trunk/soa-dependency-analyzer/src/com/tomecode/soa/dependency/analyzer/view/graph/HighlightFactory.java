@@ -5,13 +5,16 @@ import java.util.List;
 import org.eclipse.zest.core.widgets.GraphConnection;
 import org.eclipse.zest.core.widgets.GraphNode;
 
+import com.tomecode.soa.dependency.analyzer.view.graph.model.CollectionGraphNode;
 import com.tomecode.soa.ora.osb10g.services.Service;
+import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig.ProviderProtocol;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointJms;
 import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificJms;
-import com.tomecode.soa.protocols.jms.JMSConnectionFactory;
-import com.tomecode.soa.protocols.jms.JMSQueue;
-import com.tomecode.soa.protocols.jms.JMSServer;
+import com.tomecode.soa.ora.osb10g.services.protocols.jms.JMSConnectionFactory;
+import com.tomecode.soa.ora.osb10g.services.protocols.jms.JMSQueue;
+import com.tomecode.soa.ora.osb10g.services.protocols.jms.JMSServer;
+import com.tomecode.soa.protocols.Node;
 
 /**
  * (c) Copyright Tomecode.com, 2010. All rights reserved.
@@ -24,19 +27,86 @@ import com.tomecode.soa.protocols.jms.JMSServer;
  */
 final class HighlightFactory {
 
-	private HighlightFactory() {
+	private VisualGraphObjectFactory objectFactory;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param objectFactory
+	 */
+	HighlightFactory(VisualGraphObjectFactory objectFactory) {
+		this.objectFactory = objectFactory;
 	}
 
-	// TODO: highlight connections
-	static final void highlightObjectDependencies(GraphNode lastSelectedNode, List<GraphNode> graphNodes, List<GraphConnection> graphConnections) {
-		for (GraphConnection connection : graphConnections) {
-			if (connection.getSource() != null && connection.getSource().equals(lastSelectedNode)) {
+	final void highlightWithDependencies(GraphNode selectedNode) {
+		if (selectedNode instanceof CollectionGraphNode) {
+			reverzHighlightDataInCollection((CollectionGraphNode) selectedNode);
+		} else {
+			highlightObjectDependencies(selectedNode);
+		}
+	}
+
+	/**
+	 * highlight data in {@link CollectionGraphNode}
+	 * 
+	 * @param selectedNode
+	 */
+	private final void reverzHighlightDataInCollection(CollectionGraphNode selectedNode) {
+		selectedNode.highlight();
+		highlightNodeMiddle(selectedNode);
+	}
+
+	private final void highlightNodeMiddle(CollectionGraphNode selectedNode) {
+		for (Object data : selectedNode.getDatas()) {
+			Node<?> node = (Node<?>) data;
+			highlightParentNode(node, selectedNode);
+
+			for (Object childNodeObj : node.getChilds()) {
+				highlightNodeData(childNodeObj, selectedNode);
+			}
+		}
+	}
+
+	private final void highlightParentNode(Node<?> node, GraphNode currentNode) {
+		CollectionGraphNode nodeInGraph = null;
+		if (node.getParent() instanceof Node<?>) {
+			nodeInGraph = objectFactory.findCollectionNodeTitleAndData(node.getParent());
+			nodeInGraph.highlight();
+			highlightConnections(nodeInGraph, currentNode);
+			highlightParentNode((Node<?>) node.getParent(), nodeInGraph);
+		} else if (node.getParent() instanceof List<?>) {
+			@SuppressWarnings("unchecked")
+			List<Node<?>> nodes = (List<Node<?>>) node.getParent();
+			for (Node<?> node2 : nodes) {
+				nodeInGraph = objectFactory.findCollectionNodeTitleAndData(node2);
+				if (nodeInGraph != null) {
+					nodeInGraph.highlight();
+					highlightConnections(nodeInGraph, currentNode);
+					highlightParentNode(node2, nodeInGraph);
+				}
+
+			}
+		} else {
+			GraphNode nodeInGraph1 = objectFactory.findDataInNodes(node.getParent());
+			if (nodeInGraph1 != null) {
+				nodeInGraph1.highlight();
+				highlightConnections(nodeInGraph1, currentNode);
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * @param selectedNode
+	 */
+	private final void highlightObjectDependencies(GraphNode selectedNode) {
+		for (GraphConnection connection : objectFactory.getGraphConnections()) {
+			if (connection.getSource() != null && connection.getSource().equals(selectedNode)) {
 				connection.highlight();
-				highlightJMS(connection.getSource(), graphNodes, graphConnections);
-			} else if (connection.getDestination() != null && connection.getDestination().equals(lastSelectedNode)) {
+				highlightServiceTypes(connection.getSource());
+			} else if (connection.getDestination() != null && connection.getDestination().equals(selectedNode)) {
 				connection.highlight();
-				highlightJMS(connection.getDestination(), graphNodes, graphConnections);
+				highlightServiceTypes(connection.getDestination());
 			}
 		}
 	}
@@ -48,22 +118,32 @@ final class HighlightFactory {
 	 * @param graphNodes
 	 * @param graphConnections
 	 */
-	static final void clearAllHighlight(GraphNode lastSelectedNode, List<GraphNode> graphNodes, List<GraphConnection> graphConnections) {
-		for (GraphConnection graphConnection : graphConnections) {
+	final void clearAllHighlight() {
+		for (GraphConnection graphConnection : objectFactory.getGraphConnections()) {
 			try {
 				graphConnection.unhighlight();
 			} catch (IndexOutOfBoundsException e) {
 			}
 		}
 
-		for (GraphNode graphNode : graphNodes) {
-			if (!graphNode.equals(lastSelectedNode)) {
+		for (GraphNode graphNode : objectFactory.getGraphNodes()) {
+			if (!graphNode.equals(objectFactory.getLastSelectedNode())) {
 				try {
 					graphNode.unhighlight();
 				} catch (IndexOutOfBoundsException e) {
 				}
 			}
 		}
+
+		if (objectFactory.getLastSelectedNode() != null) {
+			try {
+				objectFactory.getLastSelectedNode().unhighlight();
+			} catch (java.lang.IndexOutOfBoundsException e) {
+
+			}
+		}
+		objectFactory.setLastSelectedNode(null);
+
 	}
 
 	/**
@@ -74,56 +154,70 @@ final class HighlightFactory {
 	 * @param highlight
 	 * @param graphNodes
 	 */
-	private static final void highlightJMS(GraphNode sourceGraphNode, List<GraphNode> graphNodes, List<GraphConnection> graphConnections) {
+	private final void highlightServiceTypes(GraphNode selectedNode) {
+		if (selectedNode.getData() instanceof Service) {
+			Service service = (Service) selectedNode.getData();
+			if (service.getEndpointConfig() != null) {
+				EndpointConfig<?> endpointConfig = service.getEndpointConfig();
+				if (endpointConfig.getProtocol() == ProviderProtocol.JMS) {
+					// request JMS
+					EndpointJms endpointJms = (EndpointJms) endpointConfig;
+					// highlightJMSResources(endpointJms.getNodes());
+					highlightNode(endpointJms.getNodes(), selectedNode);
+					// response JMS
+					ProviderSpecificJms providerSpecificJms = endpointJms.getProviderSpecificJms();
+					if (providerSpecificJms != null) {
+						highlightNode(providerSpecificJms.getJmsServers(), selectedNode);
+					}
+				} else if (endpointConfig.getProtocol() == ProviderProtocol.UNKNOWN) {
+					highlightEndpointUnknown(endpointConfig);
+				} else {
+					highlightNode(endpointConfig.getNodes(), selectedNode);
+				}
 
-		if (sourceGraphNode.getData() instanceof Service) {
-			Service service = (Service) sourceGraphNode.getData();
-			if (service.getEndpointConfig() != null && service.getEndpointConfig().getProtocol() == ProviderProtocol.JMS) {
+			}
+		}
+	}
 
-				EndpointJms endpointJms = (EndpointJms) service.getEndpointConfig();
-				// request JMS
-				highlightJMSResources(endpointJms.getJmsServers(), graphNodes, graphConnections);
+	private final void highlightNode(List<?> nodes, GraphNode selectedNode) {
+		for (Object nodeObj : nodes) {
+			Node<?> node = (Node<?>) nodeObj;
+			CollectionGraphNode nodeInGraph = objectFactory.findCollectionNodeTitleAndData(node.getObj());
+			if (nodeInGraph != null) {
+				nodeInGraph.highlight();
+				highlightConnections(selectedNode, nodeInGraph);
 
-				// response JMS
-				ProviderSpecificJms providerSpecificJms = endpointJms.getProviderSpecificJms();
-				if (providerSpecificJms != null) {
-					highlightJMSResources(providerSpecificJms.getJmsServers(), graphNodes, graphConnections);
+				for (Object childNodeObj : node.getChilds()) {
+					highlightNodeData(childNodeObj, nodeInGraph);
 				}
 			}
 		}
 	}
 
-	/**
-	 * 
-	 * highlight {@link JMSServer}, {@link JMSConnectionFactory} and
-	 * {@link JMSQueue}
-	 * 
-	 * @param jmsServers
-	 * @param graphNodes
-	 * @param graphConnections
-	 */
-	private static final void highlightJMSResources(List<JMSServer> jmsServers, List<GraphNode> graphNodes, List<GraphConnection> graphConnections) {
-		for (JMSServer jmsServer : jmsServers) {
-			GraphNode jmsNode = findTextDataInNodes(jmsServer.toString(), JMSServer.class, graphNodes);
-			if (jmsNode != null) {
-				jmsNode.highlight();
-				// connections
-				for (JMSConnectionFactory connectionFactory : jmsServer.getConnectionFactories()) {
-					GraphNode cfNode = findTextDataInNodes(connectionFactory.toString(), JMSConnectionFactory.class, graphNodes);
-					if (cfNode != null) {
-						cfNode.highlight();
-						highlightConnections(jmsNode, cfNode, graphConnections);
-					}
-					// queues
-					for (JMSQueue jmsQueue : connectionFactory.getJmsQueues()) {
-						GraphNode queueNode = findTextDataInNodes(jmsQueue.toString(), JMSQueue.class, graphNodes);
-						if (queueNode != null) {
-							queueNode.highlight();
-							highlightConnections(cfNode, queueNode, graphConnections);
-						}
-					}
-				}
+	private final void highlightNodeData(Object nodeObj, CollectionGraphNode parentNode) {
+		if (nodeObj instanceof Node<?>) {
+			Node<?> node = ((Node<?>) nodeObj);
+			CollectionGraphNode nodeInGraph = objectFactory.findCollectionNodeTitleAndData(node.getObj());
+			if (nodeInGraph != null) {
+				nodeInGraph.highlight();
+				highlightConnections(parentNode, nodeInGraph);
 			}
+
+			for (Object nodeChild : node.getChilds()) {
+				highlightNodeData(nodeChild, nodeInGraph);
+			}
+		}
+	}
+
+	/**
+	 * highlight for {@link EndpointConfig} = {@link ProviderProtocol#LOCAL}
+	 * 
+	 * @param endpointConfig
+	 */
+	private final void highlightEndpointUnknown(EndpointConfig<?> endpointConfig) {
+		CollectionGraphNode localNode = objectFactory.findCollectionNodeTitleAndData(endpointConfig);
+		if (localNode != null) {
+			localNode.highlight();
 		}
 	}
 
@@ -135,8 +229,8 @@ final class HighlightFactory {
 	 * @param target
 	 * @param graphConnections
 	 */
-	private static final void highlightConnections(GraphNode source, GraphNode target, List<GraphConnection> graphConnections) {
-		for (GraphConnection connection : graphConnections) {
+	private final void highlightConnections(GraphNode source, GraphNode target) {
+		for (GraphConnection connection : objectFactory.getGraphConnections()) {
 			if (source.equals(connection.getSource()) && target.equals(connection.getDestination())) {
 				connection.highlight();
 			} else if (source.equals(connection.getDestination()) && target.equals(connection.getSource())) {
@@ -146,19 +240,18 @@ final class HighlightFactory {
 	}
 
 	/**
-	 * find {@link GraphNode} in graph by text
+	 * highlight selected node
 	 * 
-	 * @param data
-	 * @param class1
-	 * @return
+	 * @param source
 	 */
-	static final GraphNode findTextDataInNodes(String data, Class<?> class1, List<GraphNode> graphNodes) {
-		if (data == null) {
-			return null;
-		}
-		for (GraphNode graphNode : graphNodes) {
-			if (graphNode.getData() != null) {
-				if (graphNode.getData().getClass().equals(class1) && graphNode.getText().equals(data)) {
+	final GraphNode highlightSelectedNode(Object source, boolean setLastSelectedNode) {
+		if (source != null) {
+			for (GraphNode graphNode : objectFactory.getGraphNodes()) {
+				if (source.equals(graphNode.getData())) {
+					graphNode.highlight();
+					if (setLastSelectedNode) {
+						objectFactory.setLastSelectedNode(graphNode);
+					}
 					return graphNode;
 				}
 			}

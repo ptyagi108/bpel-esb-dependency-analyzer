@@ -1,6 +1,5 @@
 package com.tomecode.soa.ora.osb10g.services.config;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.tomecode.soa.ora.osb10g.parser.OraSB10gBasicServiceParser;
@@ -14,18 +13,18 @@ import com.tomecode.soa.protocols.http.HttpServer;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class EndpointHttp extends EndpointConfig {
+public final class EndpointHttp extends EndpointConfig<HttpServer> {
 
 	private ProviderSpecificHttp providerSpecificHttp;
 
 	/**
 	 * list of {@link HttpServer}
 	 */
-	private final List<HttpServer> httpServers;
+	// private final List<HttpServer> httpServers;
 
 	public EndpointHttp() {
 		super(ProviderProtocol.HTTP);
-		this.httpServers = new ArrayList<HttpServer>();
+		// this.httpServers = new ArrayList<HttpServer>();
 	}
 
 	/**
@@ -45,11 +44,11 @@ public final class EndpointHttp extends EndpointConfig {
 
 	public final void putAllURI(List<String> uris) {
 		this.uris.addAll(uris);
-		OraSB10gBasicServiceParser.parseHttpServersUris(uris, httpServers);
+		OraSB10gBasicServiceParser.parseHttpServersUris(uris, nodes);
 	}
 
-	public final List<HttpServer> getHttpServers() {
-		return httpServers;
-	}
+	// public final List<HttpServer> getHttpServers() {
+	// return httpServers;
+	// }
 
 }

@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
@@ -19,12 +21,17 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
+@PropertyGroupView(type = "System", name = "Oracle SOA Suite 10g", parentMethod = "getProject")
 public final class EsbSys implements BasicEsbNode {
 
 	private static final long serialVersionUID = -5469410851019923440L;
 	private Ora10gEsbProject ownerEsbProject;
-	private File file;
+
+	@PropertyViewData(title = "Name")
 	private String name;
+
+	@PropertyViewData(title = "Path")
+	private File file;
 	private String qName;
 
 	private final List<BasicEsbNode> childs;
@@ -65,7 +72,7 @@ public final class EsbSys implements BasicEsbNode {
 		childs.add(basicEsbNode);
 	}
 
-	public final Ora10gEsbProject getOwnerEsbProject() {
+	public final Ora10gEsbProject getProject() {
 		return ownerEsbProject;
 	}
 
@@ -138,7 +145,7 @@ public final class EsbSys implements BasicEsbNode {
 		for (BasicEsbNode basicEsbNode : childs) {
 			if (basicEsbNode.getType() == EsbNodeType.ESBSYS) {
 				if (basicEsbNode.getQname().equals(qName)) {
-					return ((EsbSys) basicEsbNode.get()).getOwnerEsbProject();
+					return ((EsbSys) basicEsbNode.get()).getProject();
 				} else {
 					Ora10gEsbProject esbProject = ((EsbSys) basicEsbNode.get()).findEsbProjectByQname(qName, sericeURL);
 					if (esbProject != null) {
@@ -147,7 +154,7 @@ public final class EsbSys implements BasicEsbNode {
 				}
 			} else if (basicEsbNode.getType() == EsbNodeType.ESBGRP) {
 				if (basicEsbNode.getQname().equals(qName)) {
-					return ((EsbGrp) basicEsbNode.get()).getOwnerEsbProject();
+					return ((EsbGrp) basicEsbNode.get()).getProject();
 				} else {
 					Ora10gEsbProject esbProject = ((EsbGrp) basicEsbNode.get()).findEsbProjectByQname(qName, sericeURL);
 					if (esbProject != null) {

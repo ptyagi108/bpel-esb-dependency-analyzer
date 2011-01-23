@@ -475,6 +475,7 @@ public final class AddNewProjectToWorkspaceWizard extends Wizard {
 				if (f.exists() && f.isDirectory()) {
 					config.setPath(f);
 					config.setProjectType(ProjectType.ORACLE10G_BPEL);
+					config.setAsFolder(true);
 					setPageComplete(true);
 				}
 			} else if (buttonBPEL10gJar.getSelection()) {
@@ -482,13 +483,15 @@ public final class AddNewProjectToWorkspaceWizard extends Wizard {
 				if (f.exists() && f.isFile()) {
 					config.setPath(f);
 					config.setProjectType(ProjectType.ORACLE10G_BPEL);
+					config.setAsFolder(false);
 					setPageComplete(true);
 				}
 			} else if (buttonESB10gProject.getSelection()) {
 				File f = new File(textFileESB10gProject.getText());
-				if (f.exists() && f.isFile()) {
+				if (f.exists() && f.isDirectory()) {
 					config.setPath(f);
 					config.setProjectType(ProjectType.ORACLE10G_ESB);
+					config.setAsFolder(true);
 					setPageComplete(true);
 				}
 			} else if (buttonESB10gZip.getSelection()) {
@@ -496,6 +499,7 @@ public final class AddNewProjectToWorkspaceWizard extends Wizard {
 				if (f.exists() && f.isFile()) {
 					config.setPath(f);
 					config.setProjectType(ProjectType.ORACLE10G_ESB);
+					config.setAsFolder(false);
 					setPageComplete(true);
 				}
 			}

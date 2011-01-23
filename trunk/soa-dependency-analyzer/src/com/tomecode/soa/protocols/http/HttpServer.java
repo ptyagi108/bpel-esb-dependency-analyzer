@@ -7,6 +7,8 @@ import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.ora.osb10g.services.Service;
+import com.tomecode.soa.protocols.Node;
 
 /**
  * HTTP server
@@ -15,7 +17,7 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
-public final class HttpServer implements ImageFace {
+public final class HttpServer implements ImageFace, Node<HttpServer> {
 
 	private boolean https;
 
@@ -26,6 +28,11 @@ public final class HttpServer implements ImageFace {
 	 * list of {@link HttpUrl}
 	 */
 	private final List<HttpUrl> httpUrls;
+
+	/**
+	 * parent service
+	 */
+	private Object parentService;
 
 	/**
 	 * Constructor
@@ -99,4 +106,31 @@ public final class HttpServer implements ImageFace {
 		}
 		return server;
 	}
+
+	/**
+	 * @return the parentService
+	 */
+	public final Object getParentService() {
+		return parentService;
+	}
+
+	public final void setParentService(Service parentService) {
+		this.parentService = parentService;
+	}
+
+	@Override
+	public Object getParent() {
+		return parentService;
+	}
+
+	@Override
+	public final HttpServer getObj() {
+		return this;
+	}
+
+	@Override
+	public final List<HttpUrl> getChilds() {
+		return httpUrls;
+	}
+
 }

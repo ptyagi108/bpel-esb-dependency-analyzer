@@ -10,13 +10,13 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.protocols.Node;
 
 /**
- * FTP folder
+ * SFTP folder
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
-public final class FtpFolder implements ImageFace, Node<FtpFolder> {
+public final class SFtpFolder implements ImageFace, Node<SFtpFolder> {
 
 	private final List<Node<?>> nodes = new ArrayList<Node<?>>();
 
@@ -28,7 +28,7 @@ public final class FtpFolder implements ImageFace, Node<FtpFolder> {
 	/**
 	 * parent server
 	 */
-	private FtpServer ftpServer;
+	private SFtpServer ftpServer;
 
 	/**
 	 * Constructor
@@ -36,17 +36,13 @@ public final class FtpFolder implements ImageFace, Node<FtpFolder> {
 	 * @param name
 	 * @param ftpServer
 	 */
-	public FtpFolder(String name, FtpServer ftpServer) {
+	public SFtpFolder(String name, SFtpServer ftpServer) {
 		this.name = name;
 		this.ftpServer = ftpServer;
 	}
 
 	public final String getPath() {
 		return name;
-	}
-
-	public final FtpServer getFtpServer() {
-		return ftpServer;
 	}
 
 	public final String toString() {
@@ -67,7 +63,7 @@ public final class FtpFolder implements ImageFace, Node<FtpFolder> {
 	}
 
 	@Override
-	public final FtpServer getParent() {
+	public final SFtpServer getParent() {
 		return ftpServer;
 	}
 
@@ -77,7 +73,7 @@ public final class FtpFolder implements ImageFace, Node<FtpFolder> {
 	}
 
 	@Override
-	public final FtpFolder getObj() {
+	public final SFtpFolder getObj() {
 		return this;
 	}
 

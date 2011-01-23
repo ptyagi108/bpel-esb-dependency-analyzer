@@ -169,7 +169,7 @@ public final class ServiceDependency {
 		 */
 		SPLITJOIN("", "SplitJoin flow"),
 
-		XQUERY("", "Xquery"), XML_SCHEMA("", "XMLSchema"), SERVICE_ACCOUNT("", "Service Account"), ARCHIVE("", "Archive"), SKP("", "Service Key Provider");
+		XQUERY("", "Xquery"), XML_SCHEMA("", "XMLSchema"), SERVICE_ACCOUNT("", "Service Account"), ARCHIVE("", "Archive"), SKP("", "Service Key Provider"), JAR("","JAR");
 
 		/**
 		 * in element

@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.project.Project;
@@ -21,15 +23,18 @@ import com.tomecode.soa.workspace.Workspace;
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
+@PropertyGroupView(type = "Workspace...", name = "Oracle Service Bus 10g", parentMethod = "getMultiWorkspace")
 public final class OraSB10gWorkspace implements Workspace {
 
 	/**
 	 * workspace name
 	 */
+	@PropertyViewData(title = "Name")
 	private String name;
 	/**
 	 * workspace file
 	 */
+	@PropertyViewData(title = "Path")
 	private File file;
 
 	/**

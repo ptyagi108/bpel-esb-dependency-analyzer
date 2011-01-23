@@ -87,10 +87,15 @@ public final class ProjectFilesNavigator extends ViewPart implements HideView {
 	}
 
 	private final void setProject(Project project) {
-		labelProvider.setRoot(project.getFile());
-		rootNode.setProject(project);
-		tree.setInput(rootNode);
-		tree.expandAll();
+		if (project == null) {
+			tree.setInput(null);
+		} else {
+			labelProvider.setRoot(project.getFile());
+			rootNode.setProject(project);
+			tree.setInput(rootNode);
+			tree.expandAll();
+		}
+
 	}
 
 	/**

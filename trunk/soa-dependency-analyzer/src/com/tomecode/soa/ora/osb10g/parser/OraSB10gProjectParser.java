@@ -192,7 +192,7 @@ public final class OraSB10gProjectParser {
 				e.printStackTrace();
 				// TODO: error
 			}
-		} else if (name.equals(".project")) {
+		} else if (name.equals(".project") || name.equals(".classpath") || name.equals(".factorypath")) {
 			return null;
 		}
 
@@ -219,6 +219,8 @@ public final class OraSB10gProjectParser {
 			return new ResourceFile(file, ServiceDependencyType.ARCHIVE);
 		} else if (name.endsWith(".skp")) {
 			return new ResourceFile(file, ServiceDependencyType.SKP);
+		} else if (name.endsWith(".jar")) {
+			return new ResourceFile(file, ServiceDependencyType.JAR);
 		}
 		return new UnknownFile(file);
 	}

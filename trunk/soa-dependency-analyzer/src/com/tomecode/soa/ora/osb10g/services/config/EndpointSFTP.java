@@ -17,7 +17,7 @@ import com.tomecode.soa.protocols.ftp.SFtpServer;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public final class EndpointSFTP extends EndpointConfig {
+public final class EndpointSFTP extends EndpointConfig<SFtpServer> {
 
 	private final List<SFtpServer> ftpServers;
 
