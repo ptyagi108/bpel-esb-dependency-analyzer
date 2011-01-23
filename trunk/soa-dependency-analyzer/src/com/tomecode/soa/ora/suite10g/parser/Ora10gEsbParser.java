@@ -396,15 +396,22 @@ public final class Ora10gEsbParser extends AbstractParser {
 
 	}
 
+	/**
+	 * parse endpoint for {@link Database}
+	 * 
+	 * @param esbSvc
+	 * @param element
+	 */
 	private final void parseEndpointDB(EsbSvc esbSvc, Element element) {
-		Element eDefinitions = element.element("definitions");
-		if (eDefinitions != null) {
-			Element eService = eDefinitions.element("service");
-			if (eService != null) {
-				Element eAddress = eService.element("address");
+		Element eService = element.element("service");
+		if (eService != null) {
+			Element ePort = eService.element("port");
+			if (ePort != null) {
+				Element eAddress = ePort.element("address");
 				if (eAddress != null) {
 					Database database = new Database(eAddress.attributeValue("location"));
-					database.toString();
+					esbSvc.setEndpoint(database);
+					database.setParentService(esbSvc);
 				}
 			}
 		}

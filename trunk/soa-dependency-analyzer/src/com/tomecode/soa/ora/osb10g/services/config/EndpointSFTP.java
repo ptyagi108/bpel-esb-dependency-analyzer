@@ -7,7 +7,7 @@ import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.parser.OraSB10gBasicServiceParser;
-import com.tomecode.soa.protocols.ftp.SFtpServer;
+import com.tomecode.soa.ora.osb10g.services.protocols.ftp.SFtpServer;
 
 /**
  * Endpoint protocol - SFTP

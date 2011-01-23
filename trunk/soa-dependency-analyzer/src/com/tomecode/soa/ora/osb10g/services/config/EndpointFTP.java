@@ -6,7 +6,7 @@ import org.eclipse.swt.graphics.Image;
 
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.parser.OraSB10gBasicServiceParser;
-import com.tomecode.soa.protocols.ftp.FtpServer;
+import com.tomecode.soa.ora.osb10g.services.protocols.ftp.FtpServer;
 
 /**
  * Endpoint protocol - FTP

@@ -1,4 +1,4 @@
-package com.tomecode.soa.protocols.ftp;
+package com.tomecode.soa.ora.osb10g.services.protocols.ftp;
 
 import java.util.ArrayList;
 import java.util.List;

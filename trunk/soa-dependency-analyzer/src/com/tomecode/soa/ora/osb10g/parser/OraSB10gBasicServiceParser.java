@@ -34,6 +34,8 @@ import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificDsp;
 import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificEJB;
 import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificHttp;
 import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificJms;
+import com.tomecode.soa.ora.osb10g.services.protocols.ftp.FtpServer;
+import com.tomecode.soa.ora.osb10g.services.protocols.ftp.SFtpServer;
 import com.tomecode.soa.ora.osb10g.services.protocols.jms.JMSConnectionFactory;
 import com.tomecode.soa.ora.osb10g.services.protocols.jms.JMSServer;
 import com.tomecode.soa.parser.AbstractParser;
@@ -43,8 +45,6 @@ import com.tomecode.soa.protocols.ejb.EjbMethod;
 import com.tomecode.soa.protocols.ejb.EjbObject;
 import com.tomecode.soa.protocols.ejb.EjbProvider;
 import com.tomecode.soa.protocols.file.File;
-import com.tomecode.soa.protocols.ftp.FtpServer;
-import com.tomecode.soa.protocols.ftp.SFtpServer;
 import com.tomecode.soa.protocols.http.HttpServer;
 
 /**

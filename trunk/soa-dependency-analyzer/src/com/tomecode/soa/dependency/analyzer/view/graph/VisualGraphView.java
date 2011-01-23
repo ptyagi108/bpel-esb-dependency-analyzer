@@ -555,7 +555,6 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 			esbProjectNode = objectFactory.createNode(rootEsbProject);
 			objectFactory.createConnectionOutbound(esbProjectNode, source, null, null, false);
 		} else {
-
 			GraphNode exitsSourceNode = objectFactory.findDataInNodes(sourceEsbSvc);
 			if (exitsSourceNode != null) {
 				if (objectFactory.findConnection(esbProjectNode, exitsSourceNode) == null) {
@@ -563,6 +562,8 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 				}
 			}
 		}
+
+		createEndpointEsbSvc(sourceEsbSvc, source);
 
 		for (EsbOperation esbOperation : sourceEsbSvc.getEsbOperations()) {
 			for (Object dep : esbOperation.getDependencies()) {
@@ -626,6 +627,27 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 						}
 					}
 
+				}
+			}
+		}
+	}
+
+	/**
+	 * create endpoint from {@link EsbSvc}
+	 * 
+	 * @param esbSvc
+	 * @param nodeEsbSvc
+	 */
+	private final void createEndpointEsbSvc(EsbSvc esbSvc, GraphNode nodeEsbSvc) {
+		if (esbSvc.getEndpoint() != null) {
+			CollectionGraphNode nodeObject = objectFactory.findCollectionNodeTitleAndType(esbSvc.getEndpoint());
+			if (nodeObject == null) {
+				nodeObject = objectFactory.createCollectionNode(esbSvc.getEndpoint());
+				objectFactory.createConnectionRequestResponse(nodeEsbSvc, nodeObject, null, null, false);
+			} else {
+				nodeObject.addData(esbSvc.getEndpoint());
+				if (objectFactory.findConnection(nodeEsbSvc, nodeObject, false) == null) {
+					objectFactory.createConnectionRequestResponse(nodeEsbSvc, nodeObject, null, null, false);
 				}
 			}
 		}

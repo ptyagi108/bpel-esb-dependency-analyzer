@@ -25,10 +25,10 @@ public final class Database implements ImageFace, Node<Database> {
 	 */
 	private Object parentService;
 
-	private String name;
+	private String locations;
 
-	public Database(String name) {
-		this.name = name;
+	public Database(String locations) {
+		this.locations = locations;
 	}
 
 	@Override
@@ -63,7 +63,11 @@ public final class Database implements ImageFace, Node<Database> {
 	 * @return the name
 	 */
 	public final String getName() {
-		return name;
+		return locations;
+	}
+
+	public final String toString() {
+		return locations;
 	}
 
 	/**

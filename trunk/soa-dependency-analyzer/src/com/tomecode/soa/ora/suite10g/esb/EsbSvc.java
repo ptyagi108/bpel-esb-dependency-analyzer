@@ -11,6 +11,7 @@ import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
 import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.protocols.Node;
+import com.tomecode.soa.protocols.db.Database;
 
 /**
  * (c) Copyright Tomecode.com, 2010. All rights reserved.
@@ -60,7 +61,7 @@ public final class EsbSvc implements BasicEsbNode {
 	private EsbSvc targetService;
 
 	private Node<?> node;
-	
+
 	/**
 	 * Constructor
 	 */
@@ -214,6 +215,24 @@ public final class EsbSvc implements BasicEsbNode {
 
 	public final List<EsbOperation> getEsbOperations() {
 		return childs;
+	}
+
+	/**
+	 * set endpoint from adapter, for example {@link Database}
+	 * 
+	 * @param node
+	 */
+	public final void setEndpoint(Node<?> node) {
+		this.node = node;
+	}
+
+	/**
+	 * return endpoint from adapter, for example {@link Database}
+	 * 
+	 * @return
+	 */
+	public final Node<?> getEndpoint() {
+		return node;
 	}
 
 	@Override
