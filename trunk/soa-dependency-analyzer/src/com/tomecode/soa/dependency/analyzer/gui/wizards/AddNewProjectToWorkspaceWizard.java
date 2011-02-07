@@ -375,6 +375,7 @@ public final class AddNewProjectToWorkspaceWizard extends Wizard {
 
 			Group groupSwithProject = createGroupDataEnter(composite, "Add new SOA Suite 10g project:");
 			Composite compositeSwithProject = createOneColumnGrid(groupSwithProject);
+
 			buttonBPEL10gProject = new Button(compositeSwithProject, SWT.RADIO);
 			createRadioButton2(buttonBPEL10gProject, "as BPEL 10g folder/project", this);
 			Composite cBPEL10gProject = createTwoColumnGrid(compositeSwithProject);
@@ -708,7 +709,6 @@ public final class AddNewProjectToWorkspaceWizard extends Wizard {
 
 	private static final Button createRadioButton2(Button button, String title, Listener listener) {
 		button.setText(title);
-		button.setSelection(true);
 		button.addListener(SWT.Selection, listener);
 		return button;
 	}
