@@ -5,11 +5,15 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.protocols.Node;
 
 /**
+ * (c) Copyright Tomecode.com, 2010-2011. All rights reserved.
+ * 
  * JMS Connection factory - A JMS ConnectionFactory object is used by the client
  * to make connections to the server
  * 
@@ -17,11 +21,13 @@ import com.tomecode.soa.protocols.Node;
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
+@PropertyGroupView(type = "JMS Connection Factory", parentMethod = "getParent")
 public final class JMSConnectionFactory implements ImageFace, Node<JMSConnectionFactory> {
 
 	/**
 	 * connection factory name
 	 */
+	@PropertyViewData(title = "Name:")
 	private String name;
 	/**
 	 * list of {@link JMSQueue}

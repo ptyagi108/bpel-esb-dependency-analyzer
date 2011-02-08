@@ -9,6 +9,9 @@ import org.eclipse.zest.core.widgets.GraphNode;
 import org.eclipse.zest.core.widgets.IContainer;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
+ * Special {@link GraphNode}
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com

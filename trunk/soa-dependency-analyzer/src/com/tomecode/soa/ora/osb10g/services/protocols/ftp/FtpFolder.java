@@ -5,17 +5,22 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.protocols.Node;
 
 /**
+ * (c) Copyright Tomecode.com, 2010-2011. All rights reserved.
+ * 
  * FTP folder
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
+@PropertyGroupView(type = "FTP Folder", parentMethod = "getParent")
 public final class FtpFolder implements ImageFace, Node<FtpFolder> {
 
 	private final List<Node<?>> nodes = new ArrayList<Node<?>>();
@@ -23,6 +28,7 @@ public final class FtpFolder implements ImageFace, Node<FtpFolder> {
 	/**
 	 * path
 	 */
+	@PropertyViewData(title = "Name:")
 	private String name;
 
 	/**

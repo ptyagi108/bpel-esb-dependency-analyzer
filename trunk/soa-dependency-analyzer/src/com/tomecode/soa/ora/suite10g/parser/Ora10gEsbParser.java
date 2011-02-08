@@ -3,7 +3,6 @@ package com.tomecode.soa.ora.suite10g.parser;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -11,6 +10,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.dom4j.Attribute;
 import org.dom4j.Element;
 
 import com.tomecode.soa.ora.suite10g.esb.EsbGrp;
@@ -21,11 +21,14 @@ import com.tomecode.soa.ora.suite10g.esb.EsbSvc.ServiceSubType;
 import com.tomecode.soa.ora.suite10g.esb.EsbSvc.ServiceType;
 import com.tomecode.soa.ora.suite10g.esb.EsbSys;
 import com.tomecode.soa.ora.suite10g.esb.Ora10gEsbProject;
+import com.tomecode.soa.ora.suite10g.esb.protocols.db.Database;
+import com.tomecode.soa.ora.suite10g.esb.protocols.db.FTPAdapter;
+import com.tomecode.soa.ora.suite10g.esb.protocols.db.FileAdapter;
+import com.tomecode.soa.ora.suite10g.esb.protocols.db.JMSAdapter;
 import com.tomecode.soa.ora.suite10g.project.PartnerLinkBinding;
 import com.tomecode.soa.parser.AbstractParser;
 import com.tomecode.soa.parser.ServiceParserException;
 import com.tomecode.soa.project.Project;
-import com.tomecode.soa.protocols.db.Database;
 
 /**
  * (c) Copyright Tomecode.com, 2010. All rights reserved.
@@ -354,11 +357,13 @@ public final class Ora10gEsbParser extends AbstractParser {
 			}
 		}
 
+		// /parsovanie inbound adapteru
 		Element eInvocation = eService.element("invocation");
 		if (eInvocation != null) {
-			Element eInterface = eService.element("interface");
+			Element eInterface = eInvocation.element("interface");
 			if (eInterface != null) {
-				// ZISTIM WSDL A ZNEHO VYPARSUJEM JCA
+				esb.setWsdlURL(eInterface.elementTextTrim("wsdlURL"));
+				parseServicEndpoints(esb);
 			}
 
 			Element eTargetService = eInvocation.element("targetService");
@@ -366,34 +371,106 @@ public final class Ora10gEsbParser extends AbstractParser {
 				esb.setTargetServiceQName(eTargetService.attributeValue("qname"));
 			}
 		}
-
-		parseServicEndpoints(esb);
 	}
 
 	private final void parseServicEndpoints(EsbSvc esbSvc) {
+		File file = null;
 		if (esbSvc.getWsdlURL() != null) {
 			try {
-				new URL(esbSvc.getWsdlURL()).getPath();
-			} catch (MalformedURLException e) {
-				File file = new File(esbSvc.getProject().getFile() + File.separator + esbSvc.getWsdlURL());
+				file = new File(new URL(esbSvc.getWsdlURL()).getPath());
+			} catch (Exception e) {
+				file = new File(esbSvc.getProject().getFile() + File.separator + esbSvc.getWsdlURL());
+			}
+		}
 
-				if (file.exists()) {
-					try {
-						parseEndpointType(esbSvc, parseXml(file));
-					} catch (ServiceParserException e1) {
-						e1.printStackTrace();
+		if (file != null) {
+			try {
+				parseEndpointType(esbSvc, parseXml(file));
+			} catch (ServiceParserException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * parse endpoint type
+	 * 
+	 * @param esbSvc
+	 * @param element
+	 */
+	private final void parseEndpointType(EsbSvc esbSvc, Element element) {
+		if (esbSvc.getServiceSubType() == ServiceSubType.DB) {
+			parseEndpointDB(esbSvc, element);
+		} else if (esbSvc.getServiceSubType() == ServiceSubType.FTP) {
+			parseEndpointFTP(esbSvc, element);
+		} else if (esbSvc.getServiceSubType() == ServiceSubType.JMS) {
+			parseEndpointJMS(esbSvc, element);
+		} else if (esbSvc.getServiceSubType() == ServiceSubType.File) {
+			parseEndpointFILE(esbSvc, element);
+		} else if (esbSvc.getServiceSubType() == ServiceSubType.DEFAULT) {
+			parseEndpointNamespaceType(esbSvc, element);
+		}
+
+	}
+
+	/**
+	 * parse targetNamespace
+	 * 
+	 * @param esbSvc
+	 * @param element
+	 */
+	private final void parseEndpointNamespaceType(EsbSvc esbSvc, Element element) {
+		String targetNamespace = element.attributeValue("targetNamespace");
+		if (targetNamespace != null) {
+			if (targetNamespace.contains("/pcbpel/adapter/jms/")) {
+				parseEndpointJMS(esbSvc, element);
+			} else if (targetNamespace.contains("/pcbpel/adapter/ftp/")) {
+				parseEndpointFTP(esbSvc, element);
+			} else if (targetNamespace.contains("/pcbpel/adapter/db/")) {
+				parseEndpointDB(esbSvc, element);
+			} else if (targetNamespace.contains("/pcbpel/adapter/file/")) {
+				parseEndpointFILE(esbSvc, element);
+			}
+		}
+	}
+
+	/**
+	 * parse endpoint for {@link FileAdapter}
+	 * 
+	 * @param esbSvc
+	 * @param element
+	 */
+	private final void parseEndpointFILE(EsbSvc esbSvc, Element element) {
+		Element eService = element.element("service");
+		if (eService != null) {
+			Element ePort = eService.element("port");
+			if (ePort != null) {
+				Element eAddress = ePort.element("address");
+				if (eAddress != null) {
+					FileAdapter fileAdapter = new FileAdapter(eAddress.attributeValue("location"));
+					esbSvc.setEndpoint(fileAdapter);
+					fileAdapter.setParentService(esbSvc);
+
+					Element ebinding = element.element("binding");
+					if (ebinding != null) {
+						Element eOperation = ebinding.element("operation");
+						if (eOperation != null) {
+							Element eOperation2 = eOperation.element("operation");
+							if (eOperation2 != null) {
+								fileAdapter.setPhysicalDirectory(eOperation2.attributeValue("PhysicalDirectory"));
+								fileAdapter.setActivationSpec(eOperation2.attributeValue("ActivationSpec"));
+								fileAdapter.setDeleteFile(eOperation2.attributeValue("DeleteFile"));
+								fileAdapter.setPollingFrequency(eOperation2.attributeValue("PollingFrequency"));
+								fileAdapter.setMinimumAge(eOperation2.attributeValue("MinimumAge"));
+								fileAdapter.setQpaqueSchema(eOperation2.attributeValue("OpaqueSchema"));
+								fileAdapter.setFileNamingConvention(eOperation2.attributeValue("FileNamingConvention"));
+
+							}
+						}
 					}
 				}
 			}
 		}
-
-	}
-
-	private final void parseEndpointType(EsbSvc esbSvc, Element element) {
-		if (esbSvc.getServiceSubType() == ServiceSubType.DB) {
-			parseEndpointDB(esbSvc, element);
-		}
-
 	}
 
 	/**
@@ -409,9 +486,106 @@ public final class Ora10gEsbParser extends AbstractParser {
 			if (ePort != null) {
 				Element eAddress = ePort.element("address");
 				if (eAddress != null) {
+
 					Database database = new Database(eAddress.attributeValue("location"));
+					database.setUiConnectionName(eAddress.attributeValue("UIConnectionName"));
+					database.setManagedConnectionFactory(eAddress.attributeValue("ManagedConnectionFactory"));
+
+					List<?> attrList = eAddress.attributes();
+					if (attrList != null) {
+						for (Object o : attrList) {
+							Attribute attribute = (Attribute) o;
+							if (attribute.getName().contains("DriverClassName")) {
+								database.setDriverClassName(attribute.getValue());
+							} else if (attribute.getName().contains("PlatformClassName")) {
+								database.setPlatformClassName(attribute.getValue());
+							} else if (attribute.getName().contains("ConnectionString")) {
+								database.setConnectionString(attribute.getValue());
+							} else if (attribute.getName().contains("UserName")) {
+								database.setUserName(attribute.getValue());
+							}
+						}
+					}
+
 					esbSvc.setEndpoint(database);
 					database.setParentService(esbSvc);
+				}
+			}
+		}
+	}
+
+	/**
+	 * parse endpoint for {@link FTPAdapter}
+	 * 
+	 * @param esbSvc
+	 * @param element
+	 */
+	private final void parseEndpointFTP(EsbSvc esbSvc, Element element) {
+		Element eService = element.element("service");
+		if (eService != null) {
+			Element ePort = eService.element("port");
+			if (ePort != null) {
+				Element eAddress = ePort.element("address");
+				if (eAddress != null) {
+					FTPAdapter ftpRepository = new FTPAdapter(eAddress.attributeValue("location"));
+					esbSvc.setEndpoint(ftpRepository);
+					ftpRepository.setParentService(esbSvc);
+
+					Element ebinding = element.element("binding");
+					if (ebinding != null) {
+						Element eOperation = ebinding.element("operation");
+						if (eOperation != null) {
+							Element eOperation2 = eOperation.element("operation");
+							if (eOperation2 != null) {
+								ftpRepository.setFileType(eOperation2.attributeValue("FileType"));
+								ftpRepository.setPhysicalDirectory(eOperation2.attributeValue("PhysicalDirectory"));
+								ftpRepository.setInteractionSpec(eOperation2.attributeValue("InteractionSpec"));
+								ftpRepository.setFileNamingConvention(eOperation2.attributeValue("FileNamingConvention"));
+								ftpRepository.setNumberMessages(eOperation2.attributeValue("NumberMessages"));
+								ftpRepository.setQpaqueSchema(eOperation2.attributeValue("OpaqueSchema"));
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * parse endpoint for {@link JMSAdapter}
+	 * 
+	 * @param esbSvc
+	 * @param element
+	 */
+	private final void parseEndpointJMS(EsbSvc esbSvc, Element element) {
+		Element eService = element.element("service");
+		if (eService != null) {
+			Element ePort = eService.element("port");
+			if (ePort != null) {
+				Element eAddress = ePort.element("address");
+				if (eAddress != null) {
+					JMSAdapter jmsAdapter = new JMSAdapter(eAddress.attributeValue("location"));
+					jmsAdapter.setManagedConnectionFactory(eAddress.attributeValue("ManagedConnectionFactory"));
+					List<?> attrList = eAddress.attributes();
+					if (attrList != null) {
+						for (Object o : attrList) {
+							Attribute attribute = (Attribute) o;
+							if (attribute.getName().contains("ConnectionFactoryLocation")) {
+								jmsAdapter.setConnectionFactoryLocation(attribute.getValue());
+							} else if (attribute.getName().contains("FactoryProperties")) {
+								jmsAdapter.setFactoryProperties(attribute.getValue());
+							} else if (attribute.getName().contains("IsTopic")) {
+								jmsAdapter.setIsTopic(attribute.getValue());
+							} else if (attribute.getName().contains("IsTransacted")) {
+								jmsAdapter.setIsTransacted(attribute.getValue());
+							} else if (attribute.getName().contains("Username")) {
+								jmsAdapter.setUsername(attribute.getValue());
+							}
+						}
+					}
+
+					esbSvc.setEndpoint(jmsAdapter);
+					jmsAdapter.setParentService(esbSvc);
 				}
 			}
 		}

@@ -5,17 +5,22 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.protocols.Node;
 
 /**
+ * (c) Copyright Tomecode.com, 2010-2011. All rights reserved.
+ * 
  * HTTP URL
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
+@PropertyGroupView(type = "HTTP Url", parentMethod = "getParent")
 public final class HttpUrl implements ImageFace, Node<HttpUrl> {
 
 	/**
@@ -26,6 +31,7 @@ public final class HttpUrl implements ImageFace, Node<HttpUrl> {
 	/**
 	 * HTTP URL
 	 */
+	@PropertyViewData(title = "URL:")
 	private String url;
 
 	private final List<Node<?>> nodes = new ArrayList<Node<?>>();

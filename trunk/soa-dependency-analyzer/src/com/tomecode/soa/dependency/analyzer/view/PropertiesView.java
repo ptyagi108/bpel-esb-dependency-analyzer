@@ -2,6 +2,8 @@ package com.tomecode.soa.dependency.analyzer.view;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -14,12 +16,12 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.gui.utils.HideView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.Inside;
 import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
 import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
-import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.project.Project;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
@@ -34,7 +36,6 @@ import com.tomecode.soa.workspace.Workspace;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-
 public final class PropertiesView extends ViewPart implements HideView {
 
 	public static final String ID = "view.properties";
@@ -50,25 +51,6 @@ public final class PropertiesView extends ViewPart implements HideView {
 	private Composite emptyPage;
 
 	private Composite dynamicPage;
-
-	private Composite servicePage;
-	private Text txtServiceName;
-	private Text txtServiceType;
-	private Text txtServiceFolder;
-	private Text txtServicePath;
-	private Text txtServiceProjectName;
-	private Text txtServiceProjectType;
-	private Text txtServiceProjectPath;
-	private Text txtServiceProjectWorkspace;
-	private Text txtServiceProjectWorkspacePath;
-	private Text txtServiceProjectMultiWorkspaceName;
-	private Text txtServiceProjectMultiWorkspacePath;
-
-	private Composite serviceDepPage;
-	private Text txtServiceDepProjectName;
-	private Text txtServiceDepName;
-	private Text txtServiceDepOsbActivity;
-	private Text txtServiceDepOsbType;
 
 	/**
 	 * Constructor
@@ -87,79 +69,8 @@ public final class PropertiesView extends ViewPart implements HideView {
 		emptyPage.pack();
 		dynamicPage = new Composite(contentPanel, SWT.NONE);
 		dynamicPage.pack();
-		// initServicePage(contentPanel); //
-		// initOra10gProcessPage(contentPanel);
-		// initServiceDepPage(contentPanel);
 		layout.topControl = emptyPage;
-
 		contentPanel.layout();
-
-	}
-
-	/**
-	 * create panel for {@link Service}
-	 * 
-	 * @param parent
-	 */
-	private final void initServicePage(Composite parent) {
-		servicePage = new Composite(parent, SWT.NONE);
-		servicePage.setLayout(new FillLayout());
-
-		ScrolledComposite sc = new ScrolledComposite(servicePage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
-		Composite composite = GuiUtils.createCompositeWithGrid(sc);
-
-		Group groupService = GuiUtils.createGroupWithGrid(composite, "Service...");
-		GuiUtils.createLabelWithGrid(groupService, "Type ");
-		txtServiceType = GuiUtils.createTextReadOnlyWithGrid(groupService);
-		GuiUtils.createLabelWithGrid(groupService, "Name ");
-		txtServiceName = GuiUtils.createTextReadOnlyWithGrid(groupService);
-		GuiUtils.createLabelWithGrid(groupService, "Folder ");
-		txtServiceFolder = GuiUtils.createTextReadOnlyWithGrid(groupService);
-		GuiUtils.createLabelWithGrid(groupService, "Path ");
-		txtServicePath = GuiUtils.createTextReadOnlyWithGrid(groupService);
-
-		Group groupProject = GuiUtils.createGroupWithGrid(composite, "Project...");
-		GuiUtils.createLabelWithGrid(groupProject, "Type ");
-		txtServiceProjectType = GuiUtils.createTextReadOnlyWithGrid(groupProject);
-		GuiUtils.createLabelWithGrid(groupProject, "Name ");
-		txtServiceProjectName = GuiUtils.createTextReadOnlyWithGrid(groupProject);
-		GuiUtils.createLabelWithGrid(groupProject, "Path:");
-		txtServiceProjectPath = GuiUtils.createTextReadOnlyWithGrid(groupProject);
-
-		Group groupWorkspace = GuiUtils.createGroupWithGrid(composite, "Workspace...");
-		GuiUtils.createLabelWithGrid(groupWorkspace, "Name ");
-		txtServiceProjectWorkspace = GuiUtils.createTextReadOnlyWithGrid(groupWorkspace);
-		GuiUtils.createLabelWithGrid(groupWorkspace, "Path ");
-		txtServiceProjectWorkspacePath = GuiUtils.createTextReadOnlyWithGrid(groupWorkspace);
-
-		Group groupMultiWorkspace = GuiUtils.createGroupWithGrid(composite, "Multi-Workspace...");
-		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Name ");
-		txtServiceProjectMultiWorkspaceName = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
-		GuiUtils.createLabelWithGrid(groupMultiWorkspace, "Path ");
-		txtServiceProjectMultiWorkspacePath = GuiUtils.createTextReadOnlyWithGrid(groupMultiWorkspace);
-
-		finishPage(composite, sc);
-
-	}
-
-	private final void initServiceDepPage(Composite parent) {
-		serviceDepPage = new Composite(parent, SWT.NONE);
-		serviceDepPage.setLayout(new FillLayout());
-
-		ScrolledComposite sc = new ScrolledComposite(serviceDepPage, SWT.SCROLL_PAGE | SWT.H_SCROLL | SWT.V_SCROLL);
-		Composite composite = GuiUtils.createCompositeWithGrid(sc);
-
-		Group groupService = GuiUtils.createGroupWithGrid(composite, "Unknown Service...");
-		GuiUtils.createLabelWithGrid(groupService, "Name ");
-		txtServiceDepName = GuiUtils.createTextReadOnlyWithGrid(groupService);
-		GuiUtils.createLabelWithGrid(groupService, "Type ");
-		txtServiceDepOsbType = GuiUtils.createTextReadOnlyWithGrid(groupService);
-		GuiUtils.createLabelWithGrid(groupService, "In Activity ");
-		txtServiceDepOsbActivity = GuiUtils.createTextReadOnlyWithGrid(groupService);
-		GuiUtils.createLabelWithGrid(groupService, "Project ");
-		txtServiceDepProjectName = GuiUtils.createTextReadOnlyWithGrid(groupService);
-
-		finishPage(composite, sc);
 	}
 
 	private void finishPage(Composite composite, ScrolledComposite sc) {
@@ -225,19 +136,36 @@ public final class PropertiesView extends ViewPart implements HideView {
 	 */
 	private final void createDynamicParent(Object data, Composite parentComposite) {
 		PropertyGroupView propertyGroupView = data.getClass().getAnnotation(PropertyGroupView.class);
-		Group group = GuiUtils.createGroupWithGrid(parentComposite, propertyGroupView.type());
-		createTextWithLable(group, "Type", propertyGroupView.name());
-		createDymaicContent(data, group);
+		if (propertyGroupView != null) {
+			Group group = GuiUtils.createGroupWithGrid(parentComposite, propertyGroupView.type());
+			if (propertyGroupView.name().trim().length() != 0) {
+				createTextWithLable(group, "Type", propertyGroupView.name());
+			}
+			createDymaicContent(data, group);
 
-		Object parentObject = getMethodValue(data, data.getClass().getDeclaredMethods(), propertyGroupView.parentMethod());
-		if (parentObject != null) {
-			createDynamicParent(parentObject, parentComposite);
-		} else {
-			if (!data.getClass().getSuperclass().toString().equals("class java.lang.Object")) {
-				parentObject = getMethodValue(data, data.getClass().getSuperclass().getDeclaredMethods(), propertyGroupView.parentMethod());
-				if (parentObject != null) {
+			Object parentObject = getMethodValue(data, data.getClass().getDeclaredMethods(), propertyGroupView.parentMethod());
+			if (parentObject != null) {
+
+				if (parentObject instanceof ArrayList<?>) {
+					List<?> objs = (List<?>) parentObject;
+					for (Object o : objs) {
+						createDynamicParent(o, parentComposite);
+					}
+				} else {
 					createDynamicParent(parentObject, parentComposite);
 				}
+			} else {
+				if (!data.getClass().getSuperclass().toString().equals("class java.lang.Object")) {
+					parentObject = getMethodValue(data, data.getClass().getSuperclass().getDeclaredMethods(), propertyGroupView.parentMethod());
+					if (parentObject != null) {
+						createDynamicParent(parentObject, parentComposite);
+					}
+				}
+			}
+
+			List<Object> insideObjects = findInsiseObject(data);
+			for (Object inside : insideObjects) {
+				createDynamicParent(inside, parentComposite);
 			}
 		}
 	}
@@ -251,7 +179,6 @@ public final class PropertiesView extends ViewPart implements HideView {
 		if (!data.getClass().getSuperclass().toString().equals("class java.lang.Object")) {
 			createDynamicContentFromMethod(data, data.getClass().getSuperclass().getDeclaredMethods(), group);
 		}
-
 	}
 
 	/**
@@ -319,6 +246,30 @@ public final class PropertiesView extends ViewPart implements HideView {
 			}
 		}
 		return null;
+	}
+
+	private final List<Object> findInsiseObject(Object parentObject) {
+		List<Object> list = new ArrayList<Object>();
+		Field[] fields = parentObject.getClass().getDeclaredFields();
+		for (Field field : fields) {
+			if (field.getAnnotation(Inside.class) != null) {
+				Object o = getObjectValue(parentObject, field);
+				if (o != null) {
+					list.add(o);
+				}
+			}
+		}
+		fields = parentObject.getClass().getSuperclass().getDeclaredFields();
+		for (Field field : fields) {
+			if (field.getAnnotation(Inside.class) != null) {
+				Object o = getObjectValue(parentObject.getClass().getAnnotations(), field);
+				if (o != null) {
+					list.add(o);
+				}
+			}
+		}
+
+		return list;
 	}
 
 	private final Object invokeMethod(Object owner, Method method) {

@@ -18,10 +18,13 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
+
 public final class EsbRoutingRule implements BasicEsbNode {
 
 	private static final long serialVersionUID = -342513167744595428L;
+
 	private List<EsbSvc> esbSvcs;
+
 	private String qname;
 	private String serviceQName;
 

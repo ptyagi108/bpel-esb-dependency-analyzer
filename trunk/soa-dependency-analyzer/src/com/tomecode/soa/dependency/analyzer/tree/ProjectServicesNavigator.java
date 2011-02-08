@@ -225,32 +225,32 @@ public final class ProjectServicesNavigator extends ViewPart implements HideView
 	}
 
 	private final void selectItemInTree(TreeItem[] items, Object object) {
-
 		try {
-			for (TreeItem item : items) {
-				if (item.getData().equals(object)) {
-					item.setFont(GuiUtils.FONT_ITALIC_BOLD);
-					item.setForeground(GuiUtils.COLOR_RED);
-					item.setExpanded(true);
-					tree.update(item, null);
-					selectedItem = item;
+			if (object != null) {
+				for (TreeItem item : items) {
+					if (object.equals(item.getData())) {
+						item.setFont(GuiUtils.FONT_ITALIC_BOLD);
+						item.setForeground(GuiUtils.COLOR_RED);
+						item.setExpanded(true);
+						tree.update(item, null);
+						selectedItem = item;
 
-					TreeItem i = item;
-					while (i.getParentItem() != null) {
-						i = i.getParentItem();
-						i.setExpanded(true);
-						tree.update(i, null);
+						TreeItem i = item;
+						while (i.getParentItem() != null) {
+							i = i.getParentItem();
+							i.setExpanded(true);
+							tree.update(i, null);
+						}
+
+						return;
+					} else {
+						selectItemInTree(item.getItems(), object);
 					}
-
-					return;
-				} else {
-					selectItemInTree(item.getItems(), object);
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	private final void clearSelectedItem() {

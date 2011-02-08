@@ -5,24 +5,33 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.protocols.Node;
 
 /**
+ * (c) Copyright Tomecode.com, 2010-2011. All rights reserved.
+ * 
+ * 
  * HTTP server
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
+@PropertyGroupView(type = "HTTP Server")
 public final class HttpServer implements ImageFace, Node<HttpServer> {
 
+	@PropertyViewData(title = "Https:")
 	private boolean https;
 
+	@PropertyViewData(title = "Server:")
 	private String server;
 
+	@PropertyViewData(title = "Port:")
 	private int port;
 	/**
 	 * list of {@link HttpUrl}

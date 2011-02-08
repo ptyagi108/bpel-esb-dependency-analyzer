@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
 import com.tomecode.soa.ora.osb10g.services.BusinessService;
 import com.tomecode.soa.ora.osb10g.services.Proxy;
 
@@ -16,6 +17,7 @@ import com.tomecode.soa.ora.osb10g.services.Proxy;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
+@PropertyGroupView(type = "Endpoint", name = "Oracle Service Bus 10g")
 public abstract class EndpointConfig<T> {
 
 	private boolean inbound;

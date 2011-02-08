@@ -32,6 +32,7 @@ public final class EsbSys implements BasicEsbNode {
 
 	@PropertyViewData(title = "Path")
 	private File file;
+
 	private String qName;
 
 	private final List<BasicEsbNode> childs;

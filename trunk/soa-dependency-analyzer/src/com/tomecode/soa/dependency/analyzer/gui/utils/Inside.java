@@ -8,19 +8,14 @@ import java.lang.annotation.Target;
 /**
  * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
- * data for {@link PropertyGroupView}
+ * data for {@link Inside}
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(value = { ElementType.TYPE })
-public @interface PropertyGroupView {
+@Target(value = { ElementType.FIELD })
+public @interface Inside {
 
-	String type();
-
-	String name() default "";
-
-	String parentMethod() default "";
 }

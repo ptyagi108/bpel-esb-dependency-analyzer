@@ -33,6 +33,7 @@ import com.tomecode.soa.workspace.Workspace;
 /**
  * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
+ * Create nodes, connections etc
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com

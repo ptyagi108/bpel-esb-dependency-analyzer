@@ -391,46 +391,53 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 			if (serviceBusStructureNavigator != null) {
 				serviceBusStructureNavigator.show(connection.getData());
 			}
-
+		} else if (object instanceof CollectionGraphNode) {
+			CollectionGraphNode collectionGraphNode = (CollectionGraphNode) object;
+			if (!collectionGraphNode.getDatas().isEmpty()) {
+				setDataForGraphActions(collectionGraphNode);
+				showDataInViews(collectionGraphNode.getDatas().get(0));
+				highlightFactory.highlightWithDependencies(collectionGraphNode);
+			}
 		} else if (object instanceof GraphNode) {
 			GraphNode graphNode = (GraphNode) object;
-
 			setDataForGraphActions(graphNode);
-
-			Object selectedData = graphNode.getData();
-			PropertiesView propertiesView = GuiUtils.getPropertiesView();
-			if (propertiesView != null) {
-				propertiesView.show(selectedData);
-			}
-			BpelProcessStructureNavigator bpelProcessStructureNavigator = GuiUtils.getBpelProcessStructureNavigator();
-			if (bpelProcessStructureNavigator != null) {
-				bpelProcessStructureNavigator.show(selectedData);
-			}
-			ServiceBusStructureNavigator serviceBusStructureNavigator = GuiUtils.getServiceBusStructureNavigator();
-			if (serviceBusStructureNavigator != null) {
-				serviceBusStructureNavigator.show(selectedData);
-			}
-			ServiceOperationsDepNavigator serviceOperationsDepNavigator = GuiUtils.getServiceOperationsDepNavigator();
-			if (serviceOperationsDepNavigator != null) {
-				serviceOperationsDepNavigator.show(selectedData);
-				serviceBusStructureNavigator.showInTree(selectedData);
-			}
-			ProjectFilesNavigator projectStructureNavigator = GuiUtils.getProjectStructureNavigator();
-			if (projectStructureNavigator != null) {
-				projectStructureNavigator.showProjectFiles(selectedData);
-			}
-			PropertiesViewOsbAdapter propertiesViewOsbAdapter = GuiUtils.getPropertiesViewOsbAdapter();
-			if (propertiesViewOsbAdapter != null) {
-				propertiesViewOsbAdapter.show(selectedData);
-			}
-			ProjectServicesNavigator projectServicesNavigator = GuiUtils.getProjectServicesNavigator();
-			if (projectServicesNavigator != null) {
-				projectServicesNavigator.selectInTree(selectedData);
-			}
-			selectInGraph(selectedData);
+			showDataInViews(graphNode.getData());
 			highlightFactory.highlightWithDependencies(graphNode);
 		}
 
+	}
+
+	private final void showDataInViews(Object selectedData) {
+		PropertiesView propertiesView = GuiUtils.getPropertiesView();
+		if (propertiesView != null) {
+			propertiesView.show(selectedData);
+		}
+		BpelProcessStructureNavigator bpelProcessStructureNavigator = GuiUtils.getBpelProcessStructureNavigator();
+		if (bpelProcessStructureNavigator != null) {
+			bpelProcessStructureNavigator.show(selectedData);
+		}
+		ServiceBusStructureNavigator serviceBusStructureNavigator = GuiUtils.getServiceBusStructureNavigator();
+		if (serviceBusStructureNavigator != null) {
+			serviceBusStructureNavigator.show(selectedData);
+		}
+		ServiceOperationsDepNavigator serviceOperationsDepNavigator = GuiUtils.getServiceOperationsDepNavigator();
+		if (serviceOperationsDepNavigator != null) {
+			serviceOperationsDepNavigator.show(selectedData);
+			serviceBusStructureNavigator.showInTree(selectedData);
+		}
+		ProjectFilesNavigator projectStructureNavigator = GuiUtils.getProjectStructureNavigator();
+		if (projectStructureNavigator != null) {
+			projectStructureNavigator.showProjectFiles(selectedData);
+		}
+		PropertiesViewOsbAdapter propertiesViewOsbAdapter = GuiUtils.getPropertiesViewOsbAdapter();
+		if (propertiesViewOsbAdapter != null) {
+			propertiesViewOsbAdapter.show(selectedData);
+		}
+		ProjectServicesNavigator projectServicesNavigator = GuiUtils.getProjectServicesNavigator();
+		if (projectServicesNavigator != null) {
+			projectServicesNavigator.selectInTree(selectedData);
+		}
+		selectInGraph(selectedData);
 	}
 
 	/**

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.dom4j.Element;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
 import com.tomecode.soa.ora.osb10g.services.Binding;
 import com.tomecode.soa.ora.osb10g.services.Binding.BindingType;
 import com.tomecode.soa.ora.osb10g.services.Binding.WsdlServiceBinding;
@@ -102,12 +103,12 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 			} else if (ProviderProtocol.BPEL_10G.name().equalsIgnoreCase(providerId)) {
 				endpoint = parseBPEL10Gtransport(eEndpointConfig);
 			} else {
-				endpoint = parseUnknownEndpoint(eEndpointConfig);
+				endpoint = parseUnknownEndpoint(eEndpointConfig, service);
 			}
 
 			endpoint.setInbound(Boolean.parseBoolean(eEndpointConfig.elementText("inbound")));
 		} else {
-			endpoint = parseUnknownEndpoint(eEndpointConfig);
+			endpoint = parseUnknownEndpoint(eEndpointConfig, service);
 		}
 		return endpoint;
 	}
@@ -118,8 +119,8 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	 * @param eEndpointConfig
 	 * @return
 	 */
-	private final EndpointUNKNOWN parseUnknownEndpoint(Element eEndpointConfig) {
-		EndpointUNKNOWN unknown = new EndpointUNKNOWN();
+	private final EndpointUNKNOWN parseUnknownEndpoint(Element eEndpointConfig, Service parentService) {
+		EndpointUNKNOWN unknown = new EndpointUNKNOWN(parentService);
 		unknown.setProviderId(eEndpointConfig.elementText("provider-id"));
 		unknown.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
 		return unknown;
@@ -131,6 +132,7 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	 * @param eEndpointConfig
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private final EndpointBPEL10g parseBPEL10Gtransport(Element eEndpointConfig) {
 		EndpointBPEL10g bpel10g = new EndpointBPEL10g();
 		bpel10g.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
@@ -158,6 +160,7 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	 * @param eEndpointConfig
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private final EndpointMQ parseMQtransport(Element eEndpointConfig) {
 		EndpointMQ mq = new EndpointMQ();
 		mq.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
@@ -170,6 +173,7 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	 * @param eEndpointConfig
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private final EndpointMail parseMAILtransport(Element eEndpointConfig) {
 		EndpointMail mail = new EndpointMail();
 		mail.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
@@ -196,6 +200,7 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	 * @param eEndpointConfig
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private final EndpointJPD parseJPDtransport(Element eEndpointConfig) {
 		EndpointJPD jpd = new EndpointJPD();
 		jpd.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
@@ -223,6 +228,7 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	 * @param eEndpointConfig
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private final EndpointDsp parseDSPtransport(Element eEndpointConfig) {
 		EndpointDsp dsp = new EndpointDsp();
 		dsp.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
@@ -265,6 +271,7 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	 * @param eEndpointConfig
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private final EndpointWS parseWStransport(Element eEndpointConfig) {
 		EndpointWS ws = new EndpointWS();
 		ws.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
@@ -277,6 +284,7 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	 * @param eEndpointConfig
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private final EndpointSB parseSBtransport(Element eEndpointConfig) {
 		EndpointSB sb = new EndpointSB();
 		sb.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
@@ -289,6 +297,7 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	 * @param eEndpointConfig
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private final EndpointJca parseJCAtransport(Element eEndpointConfig) {
 		EndpointJca jca = new EndpointJca();
 		jca.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
@@ -308,6 +317,8 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 		for (Node<HttpServer> httpServer : http.getNodes()) {
 			httpServer.getObj().setParentService(service);
 		}
+
+		Object o = http.getClass().getAnnotation(PropertyGroupView.class);
 		return http;
 	}
 

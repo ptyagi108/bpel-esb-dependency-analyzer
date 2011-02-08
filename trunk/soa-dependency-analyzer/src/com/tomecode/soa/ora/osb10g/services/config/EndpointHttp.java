@@ -2,6 +2,7 @@ package com.tomecode.soa.ora.osb10g.services.config;
 
 import java.util.List;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
 import com.tomecode.soa.ora.osb10g.parser.OraSB10gBasicServiceParser;
 import com.tomecode.soa.protocols.http.HttpServer;
 
@@ -13,6 +14,7 @@ import com.tomecode.soa.protocols.http.HttpServer;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
+@PropertyGroupView(type = "Endpoint", name = "HTTP")
 public final class EndpointHttp extends EndpointConfig<HttpServer> {
 
 	private ProviderSpecificHttp providerSpecificHttp;

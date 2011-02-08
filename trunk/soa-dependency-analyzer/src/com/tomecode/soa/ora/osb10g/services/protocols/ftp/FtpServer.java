@@ -5,27 +5,34 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.protocols.Node;
 
 /**
+ * (c) Copyright Tomecode.com, 2010-2011. All rights reserved.
+ * 
  * FTP server
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
+@PropertyGroupView(type = "FTP Server")
 public final class FtpServer implements ImageFace, Node<FtpServer> {
 
 	/**
 	 * ftp server host
 	 */
+	@PropertyViewData(title = "Server:")
 	protected String server;
 	/**
 	 * ftp server port
 	 */
+	@PropertyViewData(title = "Port:")
 	protected int port;
 	/**
 	 * list of {@link FtpFolder}

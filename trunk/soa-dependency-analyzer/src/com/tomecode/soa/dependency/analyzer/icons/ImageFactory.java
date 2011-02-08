@@ -250,6 +250,7 @@ public final class ImageFactory {
 	// ---transports
 	public static final Image JMS_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/jmsServer.png").createImage();
 	public static final Image JMS_QUEUE = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/jmsQueue.png").createImage();
+	public static final Image JMS_TOPIC = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/jmsTopic.png").createImage();
 	public static final Image JMS_CONNECTION_FACTORY = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/jmsFactory.png").createImage();
 	public static final Image HTTP_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/httpServer.png").createImage();
 	public static final Image HTTPS_SERVER = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/httpsServer.png").createImage();
@@ -269,6 +270,8 @@ public final class ImageFactory {
 	public static final Image EJB_PROVIDER_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/ejbProvider.png").createImage();
 	public static final Image FTP_SERVER_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/ftpServer.png").createImage();
 	public static final Image JMS_QUEUE_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/jmsQueue.png").createImage();
+	public static final Image JMS_TOPIC_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/jmsTopic.png").createImage();
+
 	public static final Image JMS_SERVER_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/jmsServer.png").createImage();
 	public static final Image JMS_CONNECTION_FACTORY_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/jmsFactory.png").createImage();
 	public static final Image UNKNOWN_SERVICE_SMALL = Activator.getImageDescriptor("/icons/com/tomecode/soa/transports/16/unknownService.png").createImage();

@@ -5,27 +5,34 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.protocols.Node;
 
 /**
+ * (c) Copyright Tomecode.com, 2010-2011. All rights reserved.
+ * 
  * JMS Server
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
+@PropertyGroupView(type = "JMS Server")
 public final class JMSServer implements ImageFace, Node<JMSServer> {
 
 	/**
 	 * JMS server name (host)
 	 */
+	@PropertyViewData(title = "Name:")
 	private String name;
 	/**
 	 * JMS server port
 	 */
+	@PropertyViewData(title = "Port:")
 	private String port;
 
 	/**

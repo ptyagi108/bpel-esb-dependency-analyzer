@@ -10,8 +10,8 @@ import org.eclipse.swt.graphics.Image;
 import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
 import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
+import com.tomecode.soa.ora.suite10g.esb.protocols.db.Database;
 import com.tomecode.soa.protocols.Node;
-import com.tomecode.soa.protocols.db.Database;
 
 /**
  * (c) Copyright Tomecode.com, 2010. All rights reserved.
@@ -23,18 +23,10 @@ import com.tomecode.soa.protocols.db.Database;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-@PropertyGroupView(type = "Service", name = "Oracle SOA Suite 10g", parentMethod = "getProject")
+@PropertyGroupView(type = "ESB Service", parentMethod = "getProject")
 public final class EsbSvc implements BasicEsbNode {
 
 	private static final long serialVersionUID = -1114897174017288770L;
-
-	private final List<EsbOperation> childs;
-
-	private ServiceSubType serviceSubType;
-
-	private ServiceType serviceType;
-
-	private String typeDescription;
 
 	@PropertyViewData(title = "Name")
 	private String name;
@@ -44,12 +36,26 @@ public final class EsbSvc implements BasicEsbNode {
 	 */
 	@PropertyViewData(title = "Path")
 	private File file;
+
+	private final List<EsbOperation> childs;
+
+	@PropertyViewData(title = "Service Sub Type")
+	private ServiceSubType serviceSubType;
+
+	@PropertyViewData(title = "Service Type")
+	private ServiceType serviceType;
+
+	@PropertyViewData(title = "Description")
+	private String typeDescription;
+
 	private String qName;
 
+	@PropertyViewData(title = "WSDL URL")
 	private String wsdlURL;
 
 	private String concreteWSDLURL;
 
+	@PropertyViewData(title = "SOAP Endpoint URI")
 	private String soapEndpointURI;
 
 	/**
@@ -114,7 +120,6 @@ public final class EsbSvc implements BasicEsbNode {
 		return qName;
 	}
 
-	@PropertyViewData(title = "WSDL URL")
 	public final String getWsdlURL() {
 		return wsdlURL;
 	}

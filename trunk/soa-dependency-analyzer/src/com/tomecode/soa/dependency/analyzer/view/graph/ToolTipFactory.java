@@ -114,7 +114,6 @@ final class ToolTipFactory {
 			} else {
 				tooltip.add(new org.eclipse.draw2d.Label(endpointConfig.getProtocol().toString()));
 			}
-
 			createUrisLables(endpointConfig.getUris(), tooltip);
 			fillProviderSpecific(endpointConfig, tooltip);
 		}
@@ -302,6 +301,10 @@ final class ToolTipFactory {
 		if (esbSvc.getSoapEndpointURI() != null && esbSvc.getSoapEndpointURI().trim().length() != 0) {
 			tooltip.add(GuiUtils.createLabel2dBold("SOAP Endpoint URI: "));
 			tooltip.add(new org.eclipse.draw2d.Label(esbSvc.getSoapEndpointURI()));
+		}
+		if (esbSvc.getWsdlURL() != null) {
+			tooltip.add(GuiUtils.createLabel2dBold("WSDL URL: "));
+			tooltip.add(new org.eclipse.draw2d.Label(esbSvc.getWsdlURL()));
 		}
 		return tooltip;
 	}

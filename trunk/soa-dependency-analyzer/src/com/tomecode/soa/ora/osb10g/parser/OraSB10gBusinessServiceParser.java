@@ -9,6 +9,8 @@ import com.tomecode.soa.ora.osb10g.services.BusinessService;
 import com.tomecode.soa.parser.ServiceParserException;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Oracle Service Bus 10gr3 - Business Service
  * 
  * @author Tomas Frastia

@@ -1,22 +1,20 @@
-package com.tomecode.soa.protocols.db;
+package com.tomecode.soa.ora.suite10g.esb.protocols;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.swt.graphics.Image;
-
-import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
-import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.protocols.Node;
 
 /**
- * DB protocol
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
+ * ESH adapter
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
-public final class Database implements ImageFace, Node<Database> {
+public class EsbAdapter {
 
 	private final List<Node<?>> nodes = new ArrayList<Node<?>>();
 
@@ -27,36 +25,21 @@ public final class Database implements ImageFace, Node<Database> {
 
 	private String locations;
 
-	public Database(String locations) {
+	/**
+	 * 
+	 * @param locations
+	 *            JNDI name
+	 */
+	public EsbAdapter(String locations) {
 		this.locations = locations;
 	}
 
-	@Override
 	public final Object getParent() {
 		return parentService;
 	}
 
-	@Override
 	public final List<?> getChilds() {
 		return nodes;
-	}
-
-	@Override
-	public final Database getObj() {
-		return this;
-	}
-
-	@Override
-	public final Image getImage(boolean small) {
-		if (small) {
-			return ImageFactory.DB_SERVER_SMALL;
-		}
-		return ImageFactory.DB_SERVER;
-	}
-
-	@Override
-	public final String getToolTip() {
-		return "DB Server";
 	}
 
 	/**
