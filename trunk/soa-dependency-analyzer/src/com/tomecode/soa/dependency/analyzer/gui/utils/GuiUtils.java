@@ -31,7 +31,6 @@ import com.tomecode.soa.dependency.analyzer.tree.ServiceBusStructureNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceOperationsDepNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.WorkspacesNavigator;
 import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
-import com.tomecode.soa.dependency.analyzer.view.PropertiesViewOsbAdapter;
 import com.tomecode.soa.dependency.analyzer.view.graph.FlowGraphView;
 import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
 
@@ -69,15 +68,6 @@ public final class GuiUtils {
 	 */
 	public static final PropertiesView getPropertiesView() {
 		return (PropertiesView) findView(PropertiesView.ID);
-	}
-
-	/**
-	 * find reference for {@link PropertiesViewOsbAdapter}
-	 * 
-	 * @return
-	 */
-	public static final PropertiesViewOsbAdapter getPropertiesViewOsbAdapter() {
-		return (PropertiesViewOsbAdapter) findView(PropertiesViewOsbAdapter.ID);
 	}
 
 	/**

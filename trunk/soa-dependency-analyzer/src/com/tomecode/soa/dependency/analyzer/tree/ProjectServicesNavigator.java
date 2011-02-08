@@ -26,7 +26,6 @@ import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.dependency.analyzer.tree.node.EmptyNode;
 import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
-import com.tomecode.soa.dependency.analyzer.view.PropertiesViewOsbAdapter;
 import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
 import com.tomecode.soa.ora.osb10g.services.OraSB10gFolder;
 import com.tomecode.soa.ora.osb10g.services.OraSB10gFolders;
@@ -155,11 +154,6 @@ public final class ProjectServicesNavigator extends ViewPart implements HideView
 					PropertiesView propertiesView = GuiUtils.getPropertiesView();
 					if (propertiesView != null) {
 						propertiesView.show(selectedData);
-					}
-
-					PropertiesViewOsbAdapter propertiesViewOsbAdapter = GuiUtils.getPropertiesViewOsbAdapter();
-					if (propertiesViewOsbAdapter != null) {
-						propertiesViewOsbAdapter.show(selectedData);
 					}
 				}
 

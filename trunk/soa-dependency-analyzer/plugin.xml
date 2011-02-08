@@ -63,14 +63,7 @@
             class="com.tomecode.soa.dependency.analyzer.view.PropertiesView"
             id="view.properties" >
     </view>
- 	<view 
-            name="Properties about OSB 10g Adapter"
-            allowMultiple="true"
-            icon="icons/com/tomecode/soa/icons/properties.png"
-            class="com.tomecode.soa.dependency.analyzer.view.PropertiesViewOsbAdapter"
-            id="view.properties.osb.adapter">
-    </view>
-     	<view 
+    <view 
             name="Project Files"
             allowMultiple="true"
             class="com.tomecode.soa.dependency.analyzer.tree.ProjectFilesNavigator"

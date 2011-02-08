@@ -49,7 +49,6 @@ import com.tomecode.soa.dependency.analyzer.tree.ProjectServicesNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceBusStructureNavigator;
 import com.tomecode.soa.dependency.analyzer.tree.ServiceOperationsDepNavigator;
 import com.tomecode.soa.dependency.analyzer.view.PropertiesView;
-import com.tomecode.soa.dependency.analyzer.view.PropertiesViewOsbAdapter;
 import com.tomecode.soa.dependency.analyzer.view.graph.model.CollectionGraphNode;
 import com.tomecode.soa.dependency.analyzer.view.visual.ZoomHelper;
 import com.tomecode.soa.dependency.analyzer.view.visual.ZoomHelper.ZoomAction;
@@ -429,10 +428,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 		if (projectStructureNavigator != null) {
 			projectStructureNavigator.showProjectFiles(selectedData);
 		}
-		PropertiesViewOsbAdapter propertiesViewOsbAdapter = GuiUtils.getPropertiesViewOsbAdapter();
-		if (propertiesViewOsbAdapter != null) {
-			propertiesViewOsbAdapter.show(selectedData);
-		}
+
 		ProjectServicesNavigator projectServicesNavigator = GuiUtils.getProjectServicesNavigator();
 		if (projectServicesNavigator != null) {
 			projectServicesNavigator.selectInTree(selectedData);
