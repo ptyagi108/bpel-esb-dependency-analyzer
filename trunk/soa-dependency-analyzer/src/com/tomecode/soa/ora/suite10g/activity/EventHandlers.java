@@ -1,5 +1,7 @@
 package com.tomecode.soa.ora.suite10g.activity;
 
+import org.eclipse.swt.graphics.Image;
+
 import com.tomecode.soa.activity.Activity;
 import com.tomecode.soa.activity.ActivityType;
 
@@ -15,5 +17,10 @@ public final class EventHandlers extends Activity {
 
 	public EventHandlers(String name) {
 		super(ActivityType.ORACLE_10G_EVENTHANDLERS, name);
+	}
+
+	@Override
+	public Image getImage() {
+		return null;
 	}
 }

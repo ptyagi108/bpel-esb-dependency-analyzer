@@ -41,7 +41,7 @@ public final class Assign extends Activity {
 	}
 
 	@Override
-	public final Image getImage(boolean small) {
+	public final Image getImage() {
 		return ImageFactory.ORACLE_10G_ASSIGN;
 	}
 

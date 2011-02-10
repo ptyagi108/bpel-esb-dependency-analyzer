@@ -1,5 +1,7 @@
 package com.tomecode.soa.ora.suite10g.project;
 
+import org.eclipse.swt.graphics.Image;
+
 import com.tomecode.soa.activity.Activity;
 
 /**
@@ -46,6 +48,11 @@ public final class Ora10gBpelProcessStrukture extends Activity {
 
 	public final Ora10gBpelProject getProject() {
 		return bpelProject;
+	}
+
+	@Override
+	public Image getImage() {
+		return null;
 	}
 
 	// public final FindUsagePartnerLinkResult findUsage(PartnerLink

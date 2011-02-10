@@ -1,5 +1,7 @@
 package com.tomecode.soa.ora.suite10g.activity;
 
+import org.eclipse.swt.graphics.Image;
+
 import com.tomecode.soa.activity.Activity;
 import com.tomecode.soa.activity.ActivityType;
 
@@ -15,6 +17,11 @@ public final class FaultHandlers extends Activity {
 
 	public FaultHandlers() {
 		super(ActivityType.ORACLE_10G_FAULTHANDLERS, "FaultHandlers");
+	}
+
+	@Override
+	public Image getImage() {
+		return null;
 	}
 
 }

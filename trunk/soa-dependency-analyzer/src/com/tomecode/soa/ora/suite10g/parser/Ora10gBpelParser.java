@@ -13,6 +13,7 @@ import org.dom4j.io.SAXReader;
 
 import com.tomecode.soa.activity.Activity;
 import com.tomecode.soa.activity.ActivityType;
+import com.tomecode.soa.activity.BasicActivity;
 import com.tomecode.soa.ora.suite10g.activity.Assign;
 import com.tomecode.soa.ora.suite10g.activity.Assign.AssignOperation;
 import com.tomecode.soa.ora.suite10g.activity.Assign.OperationType;
@@ -242,7 +243,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 	 * @param strukture
 	 */
 	private final void parseBpelProcessStrukture(Element root, Ora10gBpelProcessStrukture strukture) {
-		Activity activity = new Activity(ActivityType.parseOra10gBpelActivityType(root.getName()), root.getName());
+		Activity activity = new BasicActivity(ActivityType.parseOra10gBpelActivityType(root.getName()), root.getName());
 		strukture.addActivity(activity);
 		parseBpelProcessActivities(root.elements(), activity, strukture);
 	}
@@ -389,7 +390,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 			} else if (element.getName().equals("annotation")) {
 				// TODO: parse annotations
 			} else {
-				Activity activity = new Activity(ActivityType.parseOra10gBpelActivityType(element.getName()), element.attributeValue("name"));
+				Activity activity = new BasicActivity(ActivityType.parseOra10gBpelActivityType(element.getName()), element.attributeValue("name"));
 				root.addActivity(activity);
 			}
 		}
@@ -697,7 +698,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 				}
 			}
 		}
-		Activity activity = new Activity(ActivityType.parseOra10gBpelActivityType(element.getName()), element.attributeValue("name"));
+		Activity activity = new BasicActivity(ActivityType.parseOra10gBpelActivityType(element.getName()), element.attributeValue("name"));
 		root.addActivity(activity);
 		parseBpelProcessActivities(element.elements(), activity, strukture);
 	}

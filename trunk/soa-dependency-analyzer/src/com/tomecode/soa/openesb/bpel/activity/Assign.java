@@ -3,10 +3,15 @@ package com.tomecode.soa.openesb.bpel.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
 import com.tomecode.soa.activity.Activity;
 import com.tomecode.soa.activity.ActivityType;
+import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * assign activity in Open ESB - BPEL process
  * 
  * @author Tomas Frastia
@@ -35,7 +40,13 @@ public final class Assign extends Activity {
 		this.copies.add(copy);
 	}
 
+	public Image getImage() {
+		return ImageFactory.ORACLE_10G_ASSIGN;
+	}
+
 	/**
+	 * (c) Copyright Tomecode.com, 2010. All rights reserved.
+	 * 
 	 * copy element for {@link Assign}
 	 * 
 	 * @author Tomas Frastia

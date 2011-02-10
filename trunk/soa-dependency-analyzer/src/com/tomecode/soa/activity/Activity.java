@@ -10,15 +10,14 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 /**
  * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
- * 
- * BPEL Activities
+ * Basic BPEL Activity
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-public class Activity implements ImageFace {
+public abstract class Activity implements ImageFace {
 
 	private static final long serialVersionUID = -6772380545433052884L;
 
@@ -170,9 +169,11 @@ public class Activity implements ImageFace {
 		return toString().equals(activity.toString());
 	}
 
+	public abstract Image getImage();
+
 	@Override
 	public Image getImage(boolean small) {
-		return null;
+		return getImage();
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import org.dom4j.Element;
 
 import com.tomecode.soa.activity.Activity;
 import com.tomecode.soa.activity.ActivityType;
+import com.tomecode.soa.activity.BasicActivity;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcessStructure;
 import com.tomecode.soa.openesb.bpel.activity.Assign;
@@ -92,7 +93,7 @@ public final class OpenEsbBpelParser extends AbstractParser {
 		OpenEsbBpelProcessStructure structure = new OpenEsbBpelProcessStructure(process);
 		process.setProcessStructure(structure);
 
-		Activity activity = new Activity(null, eProcess.getName());
+		BasicActivity activity = new BasicActivity(null, eProcess.getName());
 		structure.addActivity(activity);
 
 		parseProcessActivities(eProcess.elements(), activity, structure);
@@ -111,7 +112,7 @@ public final class OpenEsbBpelParser extends AbstractParser {
 			if (element.getName().equals("sequence") || element.getName().equals("variables") || element.getName().equals("faultHandlers") || element.getName().equals("catchAll")
 					|| element.getName().equals("partnerLinks") || element.getName().equals("eventHandlers") || element.getName().equals("terminationHandler") || element.getName().equals("scope")
 					|| element.getName().equals("flow") || element.getName().equals("compensationHandler") || element.getName().equals("pick")) {
-				Activity activity = new Activity(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("name"));
+				Activity activity = new BasicActivity(ActivityType.parseOpenEsbBpelActivtyType(element.getName()), element.attributeValue("name"));
 				root.addActivity(activity);
 				parseProcessActivities(element.elements(), activity, strukture);
 

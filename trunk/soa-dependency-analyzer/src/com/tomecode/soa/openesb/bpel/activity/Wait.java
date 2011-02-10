@@ -1,9 +1,13 @@
 package com.tomecode.soa.openesb.bpel.activity;
 
+import org.eclipse.swt.graphics.Image;
+
 import com.tomecode.soa.activity.Activity;
 import com.tomecode.soa.activity.ActivityType;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * wait activity in Open ESB - BPEL process
  * 
  * @author Tomas Frastia
@@ -56,6 +60,11 @@ public final class Wait extends Activity {
 	 */
 	public final void setUntil(String until) {
 		this.until = until;
+	}
+
+	@Override
+	public Image getImage() {
+		return null;
 	}
 
 }

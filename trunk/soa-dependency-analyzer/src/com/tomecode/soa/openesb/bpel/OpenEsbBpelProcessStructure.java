@@ -1,5 +1,7 @@
 package com.tomecode.soa.openesb.bpel;
 
+import org.eclipse.swt.graphics.Image;
+
 import com.tomecode.soa.activity.Activity;
 
 /**
@@ -35,6 +37,11 @@ public final class OpenEsbBpelProcessStructure extends Activity {
 
 	public final String toString() {
 		return "!!!structura!!!";
+	}
+
+	@Override
+	public Image getImage() {
+		return null;
 	}
 
 }
