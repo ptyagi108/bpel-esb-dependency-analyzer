@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.dom4j.Element;
 
-import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
 import com.tomecode.soa.ora.osb10g.services.Binding;
 import com.tomecode.soa.ora.osb10g.services.Binding.BindingType;
 import com.tomecode.soa.ora.osb10g.services.Binding.WsdlServiceBinding;
@@ -31,9 +30,6 @@ import com.tomecode.soa.ora.osb10g.services.config.EndpointSB;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointSFTP;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointUNKNOWN;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointWS;
-import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificDsp;
-import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificEJB;
-import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificHttp;
 import com.tomecode.soa.ora.osb10g.services.config.ProviderSpecificJms;
 import com.tomecode.soa.ora.osb10g.services.protocols.ftp.FtpServer;
 import com.tomecode.soa.ora.osb10g.services.protocols.ftp.SFtpServer;
@@ -49,6 +45,7 @@ import com.tomecode.soa.protocols.file.File;
 import com.tomecode.soa.protocols.http.HttpServer;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * Basic parser for Proxy and Business service
  * 
@@ -232,22 +229,12 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	private final EndpointDsp parseDSPtransport(Element eEndpointConfig) {
 		EndpointDsp dsp = new EndpointDsp();
 		dsp.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
-		dsp.setProviderSpecificDsp(parseProviderSpecificDsp(eEndpointConfig.element("provider-specific")));
-		return dsp;
-	}
 
-	/**
-	 * parse {@link ProviderSpecificDsp}
-	 * 
-	 * @param element
-	 * @return
-	 */
-	private final ProviderSpecificDsp parseProviderSpecificDsp(Element element) {
-		ProviderSpecificDsp providerSpecificDsp = new ProviderSpecificDsp();
-		if (element != null) {
-			providerSpecificDsp.setRequestResponse(Boolean.parseBoolean(element.elementTextTrim("request-response")));
+		Element eProviderSpecific = eEndpointConfig.element("provider-specific");
+		if (eProviderSpecific != null) {
+			dsp.setRequestResponse(Boolean.parseBoolean(eProviderSpecific.elementTextTrim("request-response")));
 		}
-		return providerSpecificDsp;
+		return dsp;
 	}
 
 	/**
@@ -313,31 +300,18 @@ public abstract class OraSB10gBasicServiceParser extends AbstractParser {
 	private final EndpointHttp parseHttpTransport(Element eEndpointConfig, Service service) {
 		EndpointHttp http = new EndpointHttp();
 		http.putAllURI(parseTrasportURI(eEndpointConfig.elements("URI")));
-		http.setProviderSpecificHttp(parseProviderSpecificHttp(eEndpointConfig.element("provider-specific")));
-		for (Node<HttpServer> httpServer : http.getNodes()) {
-			httpServer.getObj().setParentService(service);
-		}
-
-		Object o = http.getClass().getAnnotation(PropertyGroupView.class);
-		return http;
-	}
-
-	/**
-	 * parse provider specific HTTP
-	 * 
-	 * @param element
-	 * @return
-	 */
-	private final ProviderSpecificHttp parseProviderSpecificHttp(Element element) {
-		ProviderSpecificHttp providerSpecificHttp = new ProviderSpecificHttp();
-		if (element != null) {
-			Element outboundProperties = element.element("outbound-properties");
+		Element eProviderSpecific = eEndpointConfig.element("provider-specific");
+		if (eProviderSpecific != null) {
+			Element outboundProperties = eProviderSpecific.element("outbound-properties");
 			if (outboundProperties != null) {
-				providerSpecificHttp.setRequestMethod(outboundProperties.elementTextTrim("request-method"));
+				http.setRequestMethod(outboundProperties.elementTextTrim("request-method"));
 			}
 		}
 
-		return providerSpecificHttp;
+		for (Node<HttpServer> httpServer : http.getNodes()) {
+			httpServer.getObj().setParentService(service);
+		}
+		return http;
 	}
 
 	/**

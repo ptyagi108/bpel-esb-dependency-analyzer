@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.eclipse.swt.graphics.Image;
 
-import com.tomecode.soa.dependency.analyzer.gui.utils.Inside;
+import com.tomecode.soa.dependency.analyzer.gui.utils.AddDataToExistsGroupView;
 import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFace;
 import com.tomecode.soa.ora.osb10g.services.config.EndpointConfig;
@@ -71,8 +71,11 @@ public abstract class Service implements ImageFace {
 	/**
 	 * service endpoint config
 	 */
-	@Inside
+
+	@AddDataToExistsGroupView
 	protected EndpointConfig<?> endpointConfig;
+
+	// private EndpointHttp endpointHttp = new EndpointHttp();
 
 	/**
 	 * Constructor

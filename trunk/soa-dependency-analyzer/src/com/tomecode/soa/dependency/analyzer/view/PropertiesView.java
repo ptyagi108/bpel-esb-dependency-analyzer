@@ -14,9 +14,9 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.AddDataToExistsGroupView;
 import com.tomecode.soa.dependency.analyzer.gui.utils.GuiUtils;
 import com.tomecode.soa.dependency.analyzer.gui.utils.HideView;
-import com.tomecode.soa.dependency.analyzer.gui.utils.Inside;
 import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
 import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.gui.utils.WindowChangeListener;
@@ -141,11 +141,16 @@ public final class PropertiesView extends ViewPart implements HideView {
 			if (propertyGroupView.name().trim().length() != 0) {
 				createTextWithLable(group, "Type", propertyGroupView.name());
 			}
+
 			createDymaicContent(data, group);
+
+			List<Object> insideObjects = findInsiseObject(data);
+			for (Object inside : insideObjects) {
+				addContentForInside(inside, group);
+			}
 
 			Object parentObject = getMethodValue(data, data.getClass().getDeclaredMethods(), propertyGroupView.parentMethod());
 			if (parentObject != null) {
-
 				if (parentObject instanceof ArrayList<?>) {
 					List<?> objs = (List<?>) parentObject;
 					for (Object o : objs) {
@@ -162,12 +167,17 @@ public final class PropertiesView extends ViewPart implements HideView {
 					}
 				}
 			}
+		}
+	}
 
-			List<Object> insideObjects = findInsiseObject(data);
-			for (Object inside : insideObjects) {
-				createDynamicParent(inside, parentComposite);
+	private final void addContentForInside(Object inside, Group group) {
+		PropertyViewData propertyViewData = inside.getClass().getAnnotation(PropertyViewData.class);
+		if (propertyViewData != null) {
+			if (propertyViewData.value() != "") {
+				createTextWithLable(group, propertyViewData.title(), propertyViewData.value());
 			}
 		}
+		createDymaicContent(inside, group);
 	}
 
 	private final void createDymaicContent(Object data, Group group) {
@@ -192,8 +202,21 @@ public final class PropertiesView extends ViewPart implements HideView {
 		for (Field field : fields) {
 			PropertyViewData propertyViewData = field.getAnnotation(PropertyViewData.class);
 			if (propertyViewData != null) {
-				Object value = getObjectValue(data, field);
-				createTextWithLable(group, propertyViewData.title(), (value == null ? "" : value.toString()));
+
+				if (!propertyViewData.value().equals("")) {
+					createTextWithLable(group, propertyViewData.title(), propertyViewData.value());
+				} else {
+					Object value = getObjectValue(data, field);
+
+					if (value instanceof List<?>) {
+						List<?> list = (List<?>) value;
+						for (Object v : list) {
+							createTextWithLable(group, propertyViewData.title(), v.toString());
+						}
+					} else {
+						createTextWithLable(group, propertyViewData.title(), (value == null ? "" : value.toString()));
+					}
+				}
 			}
 		}
 	}
@@ -209,9 +232,6 @@ public final class PropertiesView extends ViewPart implements HideView {
 		for (Method method : methods) {
 			PropertyViewData propertyViewData = method.getAnnotation(PropertyViewData.class);
 			if (propertyViewData != null) {
-				if (propertyViewData.title().equals("Path")) {
-					toString();
-				}
 				Object value = getMethodValue(data, method);
 				createTextWithLable(group, propertyViewData.title(), (value == null ? "" : value.toString()));
 			}
@@ -252,7 +272,7 @@ public final class PropertiesView extends ViewPart implements HideView {
 		List<Object> list = new ArrayList<Object>();
 		Field[] fields = parentObject.getClass().getDeclaredFields();
 		for (Field field : fields) {
-			if (field.getAnnotation(Inside.class) != null) {
+			if (field.getAnnotation(AddDataToExistsGroupView.class) != null) {
 				Object o = getObjectValue(parentObject, field);
 				if (o != null) {
 					list.add(o);
@@ -261,8 +281,8 @@ public final class PropertiesView extends ViewPart implements HideView {
 		}
 		fields = parentObject.getClass().getSuperclass().getDeclaredFields();
 		for (Field field : fields) {
-			if (field.getAnnotation(Inside.class) != null) {
-				Object o = getObjectValue(parentObject.getClass().getAnnotations(), field);
+			if (field.getAnnotation(AddDataToExistsGroupView.class) != null) {
+				Object o = getObjectValue(parentObject, field);
 				if (o != null) {
 					list.add(o);
 				}
@@ -283,12 +303,12 @@ public final class PropertiesView extends ViewPart implements HideView {
 		return null;
 	}
 
-	private final String getObjectValue(Object parentObject, Field field) {
+	private final Object getObjectValue(Object parentObject, Field field) {
 		try {
 			field.setAccessible(true);
 			Object value = field.get(parentObject);
 			if (value != null) {
-				return value.toString();
+				return value;
 			}
 		} catch (Exception e) {
 

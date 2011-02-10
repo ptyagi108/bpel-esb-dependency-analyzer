@@ -15,9 +15,10 @@ import java.lang.annotation.Target;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(value = { ElementType.FIELD, ElementType.METHOD })
+@Target(value = { ElementType.FIELD, ElementType.METHOD, ElementType.TYPE })
 public @interface PropertyViewData {
 
 	String title();
 
+	String value() default "";
 }

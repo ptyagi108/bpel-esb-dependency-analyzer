@@ -8,6 +8,8 @@ import com.tomecode.soa.ora.osb10g.activity.splitjoin.DataLayout;
 import com.tomecode.soa.ora.osb10g.activity.splitjoin.LogicFlyout;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Split Join process structure
  * 
  * 

@@ -149,14 +149,14 @@ final class ToolTipFactory {
 			}
 		} else if (endpointConfig.getProtocol() == ProviderProtocol.HTTP) {
 			EndpointHttp endpointHttp = (EndpointHttp) endpointConfig;
-			if (endpointHttp.getProviderSpecificHttp().getRequestMethod() != null) {
+			if (endpointHttp.getRequestMethod() != null) {
 				tooltip.add(GuiUtils.createLabel2dBold("Request Method: "));
-				tooltip.add(new org.eclipse.draw2d.Label(endpointHttp.getProviderSpecificHttp().getRequestMethod()));
+				tooltip.add(new org.eclipse.draw2d.Label(endpointHttp.getRequestMethod()));
 			}
 		} else if (endpointConfig.getProtocol() == ProviderProtocol.DSP) {
 			EndpointDsp endpointDsp = (EndpointDsp) endpointConfig;
 			tooltip.add(GuiUtils.createLabel2dBold("Request Response: "));
-			tooltip.add(new org.eclipse.draw2d.Label(String.valueOf(endpointDsp.getProviderSpecificDsp().isRequestResponse())));
+			tooltip.add(new org.eclipse.draw2d.Label(String.valueOf(endpointDsp.isRequestResponse())));
 		}
 
 	}

@@ -2,13 +2,16 @@ package com.tomecode.soa.ora.osb10g.services.config;
 
 import java.util.List;
 
-import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
 import com.tomecode.soa.ora.osb10g.parser.OraSB10gBasicServiceParser;
 import com.tomecode.soa.ora.osb10g.services.Service;
 import com.tomecode.soa.ora.osb10g.services.protocols.jms.JMSServer;
 import com.tomecode.soa.protocols.Node;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
+ * 
+ * 
  * Endpoint protocol - JMS
  * 
  * @author Tomas Frastia
@@ -16,7 +19,6 @@ import com.tomecode.soa.protocols.Node;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-@PropertyGroupView(type = "Endpoint JMS", name = "Endpoint JMS")
 public final class EndpointJms extends EndpointConfig<JMSServer> {
 
 	private ProviderSpecificJms providerSpecificJms;

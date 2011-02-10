@@ -7,6 +7,9 @@ import com.tomecode.soa.ora.osb10g.parser.OraSB10gBasicServiceParser;
 import com.tomecode.soa.ora.osb10g.services.protocols.jms.JMSServer;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
+ * 
  * element: provider-specific for JMS
  * 
  * @author Tomas Frastia

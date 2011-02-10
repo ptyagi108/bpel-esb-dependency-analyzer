@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
- * data for {@link Inside}
+ * adding data from object to parent {@link PropertyGroupView}
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
@@ -16,6 +16,6 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = { ElementType.FIELD })
-public @interface Inside {
+public @interface AddDataToExistsGroupView {
 
 }

@@ -1,6 +1,8 @@
 package com.tomecode.soa.ora.osb10g.services;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * 
  * Service binding
  * 

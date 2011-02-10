@@ -17,6 +17,8 @@ import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.Servi
 import com.tomecode.soa.parser.ServiceParserException;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * 
  * Project parser for Oracle Service Bus 10g
  * 

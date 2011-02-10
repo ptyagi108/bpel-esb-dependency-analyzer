@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.ora.osb10g.services.BusinessService;
 import com.tomecode.soa.ora.osb10g.services.Proxy;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * 
  * Endpoint config for OSB 10g {@link Proxy} or {@link BusinessService}
  * 
@@ -17,16 +19,17 @@ import com.tomecode.soa.ora.osb10g.services.Proxy;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-@PropertyGroupView(type = "Endpoint", name = "Oracle Service Bus 10g")
 public abstract class EndpointConfig<T> {
 
-	private boolean inbound;
-
+	@PropertyViewData(title = "Endpoint Protocol")
 	protected ProviderProtocol protocol;
 
+	@PropertyViewData(title = "Endpoint is Inbound")
+	private boolean inbound;
 	/**
 	 * list of uris
 	 */
+	@PropertyViewData(title = "URIs")
 	protected final List<String> uris;
 
 	protected final List<T> nodes;

@@ -6,6 +6,8 @@ import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * flow structure of {@link Proxy}
  * 
  * @author Tomas Frastia
@@ -14,7 +16,7 @@ import com.tomecode.soa.ora.osb10g.activity.OsbActivity;
  * 
  */
 public final class ProxyStructure extends OsbActivity {
-	
+
 	private final Proxy proxy;
 
 	/**

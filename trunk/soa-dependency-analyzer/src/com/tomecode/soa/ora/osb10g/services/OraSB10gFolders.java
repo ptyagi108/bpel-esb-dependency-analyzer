@@ -7,6 +7,8 @@ import java.util.List;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * 
  * Root OSB 10g folder
  * 

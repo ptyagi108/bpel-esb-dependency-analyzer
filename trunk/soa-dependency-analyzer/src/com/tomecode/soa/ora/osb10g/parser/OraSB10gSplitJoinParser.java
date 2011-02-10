@@ -47,6 +47,8 @@ import com.tomecode.soa.parser.AbstractParser;
 import com.tomecode.soa.parser.ServiceParserException;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Oracle SB 10g - SplitJoin parser
  * 
  * @author Tomas Frastia

@@ -17,6 +17,8 @@ import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Oracle Service Bus 10g Multi Workspace parser
  * 
  * @author Tomas Frastia

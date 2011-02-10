@@ -14,6 +14,7 @@ import com.tomecode.soa.dependency.analyzer.view.graph.FlowGraphView;
 import com.tomecode.soa.dependency.analyzer.view.graph.VisualGraphView;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * helper class for making better menu
  * 

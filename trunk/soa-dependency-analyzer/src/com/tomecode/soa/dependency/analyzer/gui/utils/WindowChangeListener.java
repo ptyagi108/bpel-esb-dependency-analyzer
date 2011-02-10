@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import com.tomecode.soa.dependency.analyzer.gui.event.CloseViewListener;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
  * 
  * 
  * window change listener

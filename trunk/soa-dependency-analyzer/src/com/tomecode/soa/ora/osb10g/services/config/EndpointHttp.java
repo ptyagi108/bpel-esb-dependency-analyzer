@@ -2,11 +2,14 @@ package com.tomecode.soa.ora.osb10g.services.config;
 
 import java.util.List;
 
-import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.ora.osb10g.parser.OraSB10gBasicServiceParser;
 import com.tomecode.soa.protocols.http.HttpServer;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
+ * 
  * Endpoint protocol - HTTP
  * 
  * @author Tomas Frastia
@@ -14,34 +17,13 @@ import com.tomecode.soa.protocols.http.HttpServer;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
-@PropertyGroupView(type = "Endpoint", name = "HTTP")
 public final class EndpointHttp extends EndpointConfig<HttpServer> {
 
-	private ProviderSpecificHttp providerSpecificHttp;
-
-	/**
-	 * list of {@link HttpServer}
-	 */
-	// private final List<HttpServer> httpServers;
+	@PropertyViewData(title = "Endpoint HTTP Request Method")
+	private String requestMethod;
 
 	public EndpointHttp() {
 		super(ProviderProtocol.HTTP);
-		// this.httpServers = new ArrayList<HttpServer>();
-	}
-
-	/**
-	 * @return the providerSpecificHttp
-	 */
-	public final ProviderSpecificHttp getProviderSpecificHttp() {
-		return providerSpecificHttp;
-	}
-
-	/**
-	 * @param providerSpecificHttp
-	 *            the providerSpecificHttp to set
-	 */
-	public final void setProviderSpecificHttp(ProviderSpecificHttp providerSpecificHttp) {
-		this.providerSpecificHttp = providerSpecificHttp;
 	}
 
 	public final void putAllURI(List<String> uris) {
@@ -49,8 +31,19 @@ public final class EndpointHttp extends EndpointConfig<HttpServer> {
 		OraSB10gBasicServiceParser.parseHttpServersUris(uris, nodes);
 	}
 
-	// public final List<HttpServer> getHttpServers() {
-	// return httpServers;
-	// }
+	/**
+	 * @return the requestMethod
+	 */
+	public final String getRequestMethod() {
+		return requestMethod;
+	}
+
+	/**
+	 * @param requestMethod
+	 *            the requestMethod to set
+	 */
+	public final void setRequestMethod(String requestMethod) {
+		this.requestMethod = requestMethod;
+	}
 
 }

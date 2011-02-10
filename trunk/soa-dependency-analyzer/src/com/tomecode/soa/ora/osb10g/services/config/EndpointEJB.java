@@ -2,9 +2,13 @@ package com.tomecode.soa.ora.osb10g.services.config;
 
 import java.util.List;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.protocols.ejb.EjbProvider;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
+ * 
  * Endpoint protocol - EJB
  * 
  * @author Tomas Frastia
@@ -14,42 +18,16 @@ import com.tomecode.soa.protocols.ejb.EjbProvider;
  */
 public final class EndpointEJB extends EndpointConfig<EjbProvider> {
 
-	private ProviderSpecificEJB providerSpecificEJB;
-
-	// private EjbProvider ejbProvider;
-
+	@PropertyViewData(title = "Endpoint Client JAR: ")
 	private String clientJar;
 
 	public EndpointEJB() {
 		super(ProviderProtocol.EJB);
 	}
 
-	/**
-	 * @return the providerSpecificEJB
-	 */
-	public final ProviderSpecificEJB getProviderSpecificEJB() {
-		return providerSpecificEJB;
-	}
-
-	/**
-	 * @param providerSpecificEJB
-	 *            the providerSpecificEJB to set
-	 */
-	public final void setProviderSpecificEJB(ProviderSpecificEJB providerSpecificEJB) {
-		this.providerSpecificEJB = providerSpecificEJB;
-	}
-
 	public void putAllURI(List<String> uris) {
 		this.uris.addAll(uris);
 	}
-
-	// public final EjbProvider getEjbProvider() {
-	// return ejbProvider;
-	// }
-	//
-	// public final void setEjbProvider(EjbProvider ejbProvider) {
-	// this.ejbProvider = ejbProvider;
-	// }
 
 	/**
 	 * @return the clientJar

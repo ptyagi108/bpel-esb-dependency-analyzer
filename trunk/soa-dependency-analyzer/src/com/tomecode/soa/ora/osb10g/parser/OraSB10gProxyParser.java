@@ -57,6 +57,8 @@ import com.tomecode.soa.ora.osb10g.services.dependnecies.ServiceDependency.Servi
 import com.tomecode.soa.parser.ServiceParserException;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
  * Oracle SB 10g PROXY service parser
  * 
  * @author Tomas Frastia

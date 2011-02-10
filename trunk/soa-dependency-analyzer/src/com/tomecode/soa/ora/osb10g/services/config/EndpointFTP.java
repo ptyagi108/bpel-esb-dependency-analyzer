@@ -9,6 +9,9 @@ import com.tomecode.soa.ora.osb10g.parser.OraSB10gBasicServiceParser;
 import com.tomecode.soa.ora.osb10g.services.protocols.ftp.FtpServer;
 
 /**
+ * (c) Copyright Tomecode.com, 2010. All rights reserved.
+ * 
+ * 
  * Endpoint protocol - FTP
  * 
  * @author Tomas Frastia
