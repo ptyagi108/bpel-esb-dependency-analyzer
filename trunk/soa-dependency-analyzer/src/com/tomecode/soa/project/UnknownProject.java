@@ -4,6 +4,8 @@ import java.io.File;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.ora.suite10g.project.PartnerLinkBinding;
 import com.tomecode.soa.workspace.Workspace;
@@ -18,12 +20,14 @@ import com.tomecode.soa.workspace.Workspace;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
+@PropertyGroupView(type = "Unknown Project...", name = "Oracle SOA Suite 10g", parentMethod = "getWorkpsace")
 public final class UnknownProject implements Project {
 
 	private static final long serialVersionUID = 6364329347778611989L;
 
 	private PartnerLinkBinding partnerLinkBinding;
 
+	@PropertyViewData(title = "Name")
 	private String name;
 
 	private Workspace workspace;

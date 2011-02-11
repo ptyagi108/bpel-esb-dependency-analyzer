@@ -239,6 +239,7 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 				if (project.getType() == ProjectType.ORACLE10G_BPEL) {
 					Ora10gBpelProject bpelProject = (Ora10gBpelProject) project;
 					for (PartnerLinkBinding partnerLinkBinding : bpelProject.getPartnerLinkBindings()) {
+
 						if (partnerLinkBinding.getDependencyEsbProject() == null) {
 
 							URL urlWsdl = parseWsdlToUrl(partnerLinkBinding.getWsdlLocation());
@@ -251,7 +252,7 @@ public final class Ora10gMWorkspaceParser extends AbstractParser {
 										EsbSvc esbSvc = esbDepProject.findEsbSvcByQname(qName);
 										partnerLinkBinding.setDependencyEsbProject(new BpelEsbDependency(esbDepProject, esbSvc, urlWsdl));
 									} else {
-										toString();
+										// TODO : DOKNCIT!! toString();
 									}
 								}
 

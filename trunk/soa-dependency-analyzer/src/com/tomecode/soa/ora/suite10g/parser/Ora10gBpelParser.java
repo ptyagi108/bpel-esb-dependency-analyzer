@@ -836,7 +836,7 @@ public final class Ora10gBpelParser extends AbstractParser {
 				if (parseBpelProcess != null) {
 					partnerLinkBinding.setDependencyBpelProject(parseBpelProcess);// setDependencyProject(parseBpelProcess);
 				} else {
-
+					partnerLinkBinding.setUnknownProject(parseProjectFromWsdl(partnerLinkBinding));					
 					// TODO: dokoncit
 					// parseBpelXml(file.getParentFile());
 					// System.err.println("parse unused bpel process");
