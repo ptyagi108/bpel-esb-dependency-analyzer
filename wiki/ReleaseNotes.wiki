@@ -3,7 +3,7 @@
 
 *Version 0.8 - Technical preview/Beta 3*
         * bug fixes - very very much!!
-        * display in the graph, the endpoints for services
+        * display in the graph, the [http://code.google.com/p/bpel-esb-dependency-analyzer/wiki/GettingStartedGuide_08_Beta3#Examples endpoint] for services
 
 
 *Version 0.8 - Technical preview/Beta 2*
