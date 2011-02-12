@@ -58,11 +58,13 @@ final class HighlightFactory {
 
 	private final void highlightNodeMiddle(CollectionGraphNode selectedNode) {
 		for (Object data : selectedNode.getDatas()) {
-			Node<?> node = (Node<?>) data;
-			highlightParentNode(node, selectedNode);
+			if (data instanceof Node<?>) {
+				Node<?> node = (Node<?>) data;
+				highlightParentNode(node, selectedNode);
 
-			for (Object childNodeObj : node.getChilds()) {
-				highlightNodeData(childNodeObj, selectedNode);
+				for (Object childNodeObj : node.getChilds()) {
+					highlightNodeData(childNodeObj, selectedNode);
+				}
 			}
 		}
 	}

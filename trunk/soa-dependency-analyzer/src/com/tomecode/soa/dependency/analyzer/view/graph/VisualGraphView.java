@@ -679,7 +679,11 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 			} else if (endpointConfig.getProtocol() == ProviderProtocol.UNKNOWN) {
 				createEndpointUnknown(endpointConfig, nodeSourceService);
 			} else {
-				createOsbEndpoint(endpointConfig.getNodes(), nodeSourceService);
+				if (endpointConfig.getNodes().isEmpty()) {
+					createEndpointUnknown(endpointConfig, nodeSourceService);
+				} else {
+					createOsbEndpoint(endpointConfig.getNodes(), nodeSourceService);
+				}
 			}
 		}
 	}

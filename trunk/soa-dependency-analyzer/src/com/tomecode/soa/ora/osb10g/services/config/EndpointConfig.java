@@ -19,6 +19,7 @@ import com.tomecode.soa.ora.osb10g.services.Proxy;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
+@PropertyViewData(title = "Endpoint Service", value = "Endpoint Service")
 public abstract class EndpointConfig<T> {
 
 	@PropertyViewData(title = "Endpoint Protocol")
@@ -99,7 +100,14 @@ public abstract class EndpointConfig<T> {
 		return nodes;
 	}
 
+	public String toString() {
+		return "Endpoint Protocol:" + protocol.toString();
+	}
+
 	/**
+	 * (c) Copyright Tomecode.com, 2010. All rights reserved.
+	 * 
+	 * 
 	 * provider protocols
 	 * 
 	 * @author Tomas Frastia
