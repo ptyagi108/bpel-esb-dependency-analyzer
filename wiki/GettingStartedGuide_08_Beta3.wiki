@@ -7,7 +7,7 @@ SOA Dependency Analyzer is tool (utility) for graphically visualizing dependenci
 Its built on [http://wiki.eclipse.org/index.php/Rich_Client_Platform Eclipse RCP (SWT) framework] and to visualize the dependency graph used Eclipse [http://www.eclipse.org/gef/ GEF]/[http://www.eclipse.org/gef/zest/ ZEST] framework.
 
 
-= Getting Started with SOA Dependency Analyzer 0.8-Beta2 =
+= Getting Started with SOA Dependency Analyzer 0.8-Beta3 =
 
 Requirements: Java 1.6
 
