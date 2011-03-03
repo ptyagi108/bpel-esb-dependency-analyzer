@@ -27,6 +27,11 @@ public final class OpenEsbBpelProject implements Project {
 
 	private static final long serialVersionUID = 2921064536043532535L;
 
+	/**
+	 * if is true then this project is JAR file
+	 */
+	private boolean folder;
+
 	private String name;
 
 	private File file;
@@ -51,9 +56,9 @@ public final class OpenEsbBpelProject implements Project {
 	 * @param file
 	 *            BPEL process file
 	 */
-	public OpenEsbBpelProject(String name, File file) {
-		this.name = name;
+	public OpenEsbBpelProject(File file, boolean isFolder) {
 		this.file = file;
+		this.folder = isFolder;
 		this.bpelProcesses = new ArrayList<OpenEsbBpelProcess>();
 		this.wsdlFiles = new ArrayList<Wsdl>();
 	}
@@ -132,7 +137,11 @@ public final class OpenEsbBpelProject implements Project {
 
 	@Override
 	public boolean isFolder() {
-		return false;
+		return folder;
+	}
+
+	public final void setName(String projectName) {
+		this.name = projectName;
 	}
 
 }

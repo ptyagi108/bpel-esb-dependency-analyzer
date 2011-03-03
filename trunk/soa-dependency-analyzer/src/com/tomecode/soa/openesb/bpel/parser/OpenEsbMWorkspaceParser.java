@@ -18,6 +18,9 @@ import com.tomecode.soa.ora.suite10g.activity.Receive;
 import com.tomecode.soa.ora.suite10g.activity.Reply;
 import com.tomecode.soa.parser.AbstractParser;
 import com.tomecode.soa.parser.ServiceParserException;
+import com.tomecode.soa.project.Project;
+import com.tomecode.soa.project.ProjectType;
+import com.tomecode.soa.workspace.Workspace;
 import com.tomecode.soa.wsdl.Wsdl;
 
 /**
@@ -50,33 +53,35 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 		this.wsdlParser = new OpenEsbWsdlParser();
 	}
 
+	public final void parseMultiWorkspace(OpenEsbMultiWorkspace multiWorkspace, List<String> workspacesPaths) throws ServiceParserException {
+
+		for (String workspacePath : workspacesPaths) {
+			multiWorkspace.addWorkspace(parse(new File(workspacePath)));
+		}
+	}
+
 	/**
-	 * parse {@link OpenEsbMultiWorkspace}
+	 * parse {@link OpenEsbWorkspace}
 	 * 
-	 * @param name
 	 * @param path
-	 *            multi-workspace name
 	 * @return
 	 * @throws ServiceParserException
 	 */
-	public final OpenEsbMultiWorkspace parse(String name, File path) throws ServiceParserException {
+	private final OpenEsbWorkspace parse(File path) throws ServiceParserException {
 		if (!path.exists()) {
 			throw new ServiceParserException("File not exists: " + path, false);
 		}
-		// TODO: missing workspace name
-		OpenEsbMultiWorkspace multiWorkspace = new OpenEsbMultiWorkspace(name, path);
 
 		List<File> projects = new ArrayList<File>();
 		findAllProjects(path, projects);
 
 		OpenEsbWorkspace workspace = new OpenEsbWorkspace(path.getName(), path);
-		multiWorkspace.addWorkspace(workspace);
 
 		// filter only BPEL projects
 		List<OpenEsbBpelProject> esbBpelProjects = filterBpelProjects(projects);
 		parseProjectSources(workspace, esbBpelProjects);
 
-		return multiWorkspace;
+		return workspace;
 	}
 
 	/**
@@ -88,38 +93,43 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 	 */
 	private final void parseProjectSources(OpenEsbWorkspace workspace, List<OpenEsbBpelProject> esbBpelProjects) {
 		for (OpenEsbBpelProject project : esbBpelProjects) {
-			List<File> bpelFiles = new ArrayList<File>();
-
-			File srcFolder = new File(project.getFile() + File.separator + "src");
-			filterBpelProcess(srcFolder, bpelFiles);
-
-			for (File bpelFile : bpelFiles) {
-				try {
-					project.addBpelProcess(bpelParser.parseBpel(bpelFile));
-				} catch (ServiceParserException e) {
-					// TODO:error
-					e.printStackTrace();
-				}
-			}
-
-			List<File> wsdlFiles = new ArrayList<File>();
-			filterWsldFiles(srcFolder, wsdlFiles);
-			for (File wsdlFile : wsdlFiles) {
-				project.addWsdlFile(wsdlParser.parseWsdl(wsdlFile));
-			}
-
-			project.setWorkspace(workspace);
+			parseProcessInProject(project);
 			workspace.addProject(project);
 		}
 
-		linkingWsdlWithPartnerLinks(esbBpelProjects);
-		analyzeDependencies(esbBpelProjects);
-		linkingProcessDependencies(esbBpelProjects);
+		linkingWsdlWithPartnerLinks(workspace);
+		analyzeDependencies(workspace);
+		linkingProcessDependencies(workspace);
 	}
 
-	private final void linkingProcessDependencies(List<OpenEsbBpelProject> projects) {
-		for (OpenEsbBpelProject project : projects) {
-			for (OpenEsbBpelProcess process : project.getProcesses()) {
+	private final void parseProcessInProject(OpenEsbBpelProject project) {
+		List<File> bpelFiles = new ArrayList<File>();
+
+		File srcFolder = new File(project.getFile() + File.separator + "src");
+		filterBpelProcess(srcFolder, bpelFiles);
+
+		for (File bpelFile : bpelFiles) {
+			try {
+				project.addBpelProcess(bpelParser.parseBpel(bpelFile));
+			} catch (ServiceParserException e) {
+				// TODO:error
+				e.printStackTrace();
+			}
+		}
+
+		List<File> wsdlFiles = new ArrayList<File>();
+		filterWsldFiles(srcFolder, wsdlFiles);
+		for (File wsdlFile : wsdlFiles) {
+			project.addWsdlFile(wsdlParser.parseWsdl(wsdlFile));
+		}
+	}
+
+	private final void linkingProcessDependencies(Workspace workspace) {
+
+		for (Project project : workspace.getProjects()) {
+			OpenEsbBpelProject esbBpelProject = (OpenEsbBpelProject) project;
+
+			for (OpenEsbBpelProcess process : esbBpelProject.getProcesses()) {
 				for (BpelActivityDependency dependency : process.getActivityDependencies()) {
 					PartnerLink partnerLink = null;
 					if (dependency.getActivity() instanceof Receive) {
@@ -135,10 +145,17 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 						OnMessage onMessage = (OnMessage) dependency.getActivity();
 						partnerLink = process.findPartnerLink(onMessage.getPartnerLink());
 					}
-					dependency.addDependencyProcess(partnerLink.getDependenciesProcesses().get(0));
+					try {
+						dependency.addDependencyProcess(partnerLink.getDependenciesProcesses().get(0));
+					} catch (Exception e) {
+						// TODO: nullpointer je tu !!
+						e.printStackTrace();
+					}
 				}
 			}
+
 		}
+
 	}
 
 	/**
@@ -146,19 +163,20 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 	 * 
 	 * @param projects
 	 */
-	private final void linkingWsdlWithPartnerLinks(List<OpenEsbBpelProject> projects) {
-		for (OpenEsbBpelProject project : projects) {
-			for (OpenEsbBpelProcess bpelProcess : project.getProcesses()) {
+	private final void linkingWsdlWithPartnerLinks(Workspace workspace) {
+		for (Project project : workspace.getProjects()) {
+			OpenEsbBpelProject openEsbProject = (OpenEsbBpelProject) project;
+			for (OpenEsbBpelProcess bpelProcess : openEsbProject.getProcesses()) {
 				for (PartnerLink partnerLink : bpelProcess.getPartnerLinks()) {
-					Wsdl wsdl = project.findWsdlByPartnerLinkType(partnerLink.getPartnerLinkType());
+					Wsdl wsdl = openEsbProject.findWsdlByPartnerLinkType(partnerLink.getPartnerLinkType());
 					if (wsdl != null) {
 						partnerLink.setWsdl(wsdl);
 					} else {
-						wsdl = findWsdlInOtherProjects(projects, partnerLink.getPartnerLinkType());
+						wsdl = findWsdlInOtherProjects(workspace, partnerLink.getPartnerLinkType());
 					}
-
 				}
 			}
+
 		}
 	}
 
@@ -167,14 +185,16 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 	 * 
 	 * @param projects
 	 */
-	private final void analyzeDependencies(List<OpenEsbBpelProject> projects) {
-		for (OpenEsbBpelProject project : projects) {
-			for (OpenEsbBpelProcess bpelProcess : project.getProcesses()) {
+	private final void analyzeDependencies(Workspace workspace) {
+		for (Project project : workspace.getProjects()) {
+			OpenEsbBpelProject esbBpelProject = (OpenEsbBpelProject) project;
+
+			for (OpenEsbBpelProcess bpelProcess : esbBpelProject.getProcesses()) {
 				for (PartnerLink partnerLink : bpelProcess.getPartnerLinks()) {
 					// TODO: co ak je null
 					Wsdl wsdl = partnerLink.getWsdl();
 					if (wsdl != null) {
-						List<OpenEsbBpelProcess> dependenciesProcess = findWsldRefInOtherProcess(projects, wsdl);
+						List<OpenEsbBpelProcess> dependenciesProcess = findWsldRefInOtherProcess(workspace, wsdl);
 						for (OpenEsbBpelProcess depProcess : dependenciesProcess) {
 							// if (!bpelProcess.equals(depProcess)) {
 							partnerLink.addDependency(depProcess);
@@ -185,6 +205,7 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 				}
 			}
 		}
+
 	}
 
 	/**
@@ -194,10 +215,13 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 	 * @param wsdl
 	 * @return
 	 */
-	private final List<OpenEsbBpelProcess> findWsldRefInOtherProcess(List<OpenEsbBpelProject> projects, Wsdl wsdl) {
+	private final List<OpenEsbBpelProcess> findWsldRefInOtherProcess(Workspace workspace, Wsdl wsdl) {
+
 		List<OpenEsbBpelProcess> bpelProcesses = new ArrayList<OpenEsbBpelProcess>();
-		for (OpenEsbBpelProject project : projects) {
-			for (OpenEsbBpelProcess process : project.getProcesses()) {
+
+		for (Project project : workspace.getProjects()) {
+			OpenEsbBpelProject esbBpelProject = (OpenEsbBpelProject) project;
+			for (OpenEsbBpelProcess process : esbBpelProject.getProcesses()) {
 				for (PartnerLink partnerLink : process.getPartnerLinks()) {
 					if (wsdl.equals(partnerLink.getWsdl())) {
 						bpelProcesses.add(process);
@@ -205,7 +229,6 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 				}
 			}
 		}
-
 		return bpelProcesses;
 	}
 
@@ -216,9 +239,10 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 	 * @param partnerLinkTypeName
 	 * @return
 	 */
-	private final Wsdl findWsdlInOtherProjects(List<OpenEsbBpelProject> projects, String partnerLinkTypeName) {
-		for (OpenEsbBpelProject project : projects) {
-			Wsdl wsdl = project.findWsdlByPartnerLinkType(partnerLinkTypeName);
+	private final Wsdl findWsdlInOtherProjects(Workspace workspace, String partnerLinkTypeName) {
+		for (Project project : workspace.getProjects()) {
+			OpenEsbBpelProject esbBpelProject = (OpenEsbBpelProject) project;
+			Wsdl wsdl = esbBpelProject.findWsdlByPartnerLinkType(partnerLinkTypeName);
 			if (wsdl != null) {
 				return wsdl;
 			}
@@ -275,41 +299,47 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 	private final List<OpenEsbBpelProject> filterBpelProjects(List<File> projectXmls) {
 		List<OpenEsbBpelProject> projects = new ArrayList<OpenEsbBpelProject>();
 		for (File projectXml : projectXmls) {
-			try {
-				OpenEsbBpelProject project = parseNProjectXml(parseXml(projectXml), projectXml);
-				if (project != null) {
-					projects.add(project);
-				}
-			} catch (ServiceParserException e) {
-				// TODO: error
-				e.printStackTrace();
+			OpenEsbBpelProject esbBpelProject = parseBpelProject(projectXml);
+			if (esbBpelProject != null) {
+				projects.add(esbBpelProject);
 			}
 		}
 
 		return projects;
 	}
 
+	private final OpenEsbBpelProject parseBpelProject(File projectXml) {
+		try {
+			return parseNProjectXml(parseXml(projectXml), projectXml);
+
+		} catch (ServiceParserException e) {
+			// TODO: error
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	/**
-	 * parse project in
+	 * parse project.xml
 	 * 
+	 * @param eProject
 	 * @param projectXml
 	 * @return
 	 */
 	private final OpenEsbBpelProject parseNProjectXml(Element eProject, File projectXml) {
-		if (!BPEL_PROJECT_TYPE.equals(eProject.elementTextTrim("type"))) {
-			return null;
-		}
+		if (BPEL_PROJECT_TYPE.equals(eProject.elementTextTrim("type"))) {
+			Element eConfiguration = eProject.element("configuration");
+			if (eConfiguration != null && eConfiguration.element("data") != null) {
+				String projectName = eConfiguration.element("data").elementTextTrim("name");
 
-		Element eConfiguration = eProject.element("configuration");
-		if (eConfiguration != null && eConfiguration.element("data") != null) {
-			String projectName = eConfiguration.element("data").elementTextTrim("name");
-
-			if (projectName == null) {
-				projectName = projectXml.getParentFile().getParentFile().getName();
+				if (projectName == null) {
+					projectName = projectXml.getParentFile().getParentFile().getName();
+				}
+				OpenEsbBpelProject project = new OpenEsbBpelProject(projectXml.getParentFile().getParentFile(), true);
+				project.setName(projectName);
+				return project;
 			}
-			return new OpenEsbBpelProject(projectName, projectXml.getParentFile().getParentFile());
 		}
-
 		return null;
 	}
 
@@ -330,6 +360,48 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 					findAllProjects(file, projects);
 				}
 			}
+		}
+	}
+
+	private final File findProjectXml(File[] files) {
+		if (files != null) {
+			for (File file : files) {
+				if (file.isFile() && file.getName().equalsIgnoreCase("project.xml") && file.getParentFile() != null && file.getParentFile().getName().equals("nbproject")) {
+					return file;
+				} else if (file.isDirectory()) {
+					File f = findProjectXml(file.listFiles());
+					if (f != null) {
+						return f;
+					}
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public final void parse(OpenEsbMultiWorkspace multiWorkspace) {
+		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
+
+			for (Project project : workspace.getProjects()) {
+				if (project.getType() == ProjectType.OPEN_ESB_BPEL) {
+					OpenEsbBpelProject esbBpelProject = (OpenEsbBpelProject) project;
+
+					File projectXml = findProjectXml(esbBpelProject.getFile().listFiles());
+					// TODO: TOTO JE NADRATOVANE!!! TRABA PREROBIT PARSOVANIE
+					// PROJEKTOV PRE OPEN ESB
+					OpenEsbBpelProject p = parseBpelProject(projectXml);
+					if (p != null) {
+						esbBpelProject.setName(p.getName());
+						parseProcessInProject(esbBpelProject);
+					}
+
+				}
+			}
+
+			linkingWsdlWithPartnerLinks(workspace);
+			analyzeDependencies(workspace);
+			linkingProcessDependencies(workspace);
 		}
 	}
 }

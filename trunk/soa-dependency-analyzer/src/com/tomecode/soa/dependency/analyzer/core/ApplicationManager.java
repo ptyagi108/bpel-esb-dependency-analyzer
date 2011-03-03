@@ -18,7 +18,9 @@ import org.dom4j.io.XMLWriter;
 import com.tomecode.soa.dependency.analyzer.gui.wizards.AddNewProjectToWorkspaceWizard.AddNewProjectToWorkspaceConfig;
 import com.tomecode.soa.dependency.analyzer.gui.wizards.OpenNewWorkspaceWizard.WorkspaceConfig;
 import com.tomecode.soa.openesb.bpel.parser.OpenEsbMWorkspaceParser;
+import com.tomecode.soa.openesb.project.OpenEsbBpelProject;
 import com.tomecode.soa.openesb.workspace.OpenEsbMultiWorkspace;
+import com.tomecode.soa.openesb.workspace.OpenEsbWorkspace;
 import com.tomecode.soa.ora.osb10g.parser.OraSB10gMWorkspaceParser;
 import com.tomecode.soa.ora.osb10g.project.OraSB10gProject;
 import com.tomecode.soa.ora.osb10g.workspace.OraSB10gMultiWorkspace;
@@ -228,7 +230,7 @@ public final class ApplicationManager {
 	}
 
 	/**
-	 * parse mutl-workspace element
+	 * parse multi-workspace element
 	 * 
 	 * @param element
 	 * @throws ServiceParserException
@@ -236,6 +238,7 @@ public final class ApplicationManager {
 	private final void parseWorkspaces(Element element) throws ServiceParserException {
 		Ora10gMWorkspaceParser ora10gParser = new Ora10gMWorkspaceParser();
 		OraSB10gMWorkspaceParser oraSB10gParser = new OraSB10gMWorkspaceParser();
+		OpenEsbMWorkspaceParser openEsbParser = new OpenEsbMWorkspaceParser();
 
 		List<?> elements = element.elements("multi-workspace");
 		if (elements != null) {
@@ -254,8 +257,8 @@ public final class ApplicationManager {
 					oraSB10gParser.parse(multiWorkspace);
 					multiWorkspaces.add(multiWorkspace);
 				} else if ("open-esb".equals(type)) {
-					OpenEsbMWorkspaceParser openEsbParser = new OpenEsbMWorkspaceParser();
-					MultiWorkspace multiWorkspace = openEsbParser.parse(name, new File(path));
+					OpenEsbMultiWorkspace multiWorkspace = restoreOpenEsb(eMultiWorkspace.element("workspaces"), name, path);
+					openEsbParser.parse(multiWorkspace);
 					multiWorkspaces.add(multiWorkspace);
 				}
 			}
@@ -336,6 +339,31 @@ public final class ApplicationManager {
 		return multiWorkspace;
 	}
 
+	private final OpenEsbMultiWorkspace restoreOpenEsb(Element eWorkspaces, String name, String path) {
+		OpenEsbMultiWorkspace multiWorkspace = new OpenEsbMultiWorkspace(name, new File(path));
+		if (eWorkspaces != null) {
+			List<?> eWorkspace = eWorkspaces.elements("workspace");
+			for (Object o : eWorkspace) {
+				Element element = (Element) o;
+
+				OpenEsbWorkspace workspace = new OpenEsbWorkspace(element.elementTextTrim("name"), new File(element.elementTextTrim("path")));
+				multiWorkspace.addWorkspace(workspace);
+
+				Element eProjects = element.element("projects");
+				if (eProjects != null) {
+					List<?> list = eProjects.elements("project");
+					for (Object op : list) {
+						Element ee = (Element) op;
+						OpenEsbBpelProject project = new OpenEsbBpelProject(new File(ee.elementTextTrim("path")), Boolean.parseBoolean(ee.attributeValue("isFolder")));
+						workspace.addProject(project);
+					}
+				}
+			}
+		}
+
+		return multiWorkspace;
+	}
+
 	/**
 	 * get {@link MultiWorkspace} by type
 	 * 
@@ -374,14 +402,13 @@ public final class ApplicationManager {
 	 */
 	public final OpenEsbMultiWorkspace parseEsbMultiWorkspace(WorkspaceConfig config) throws ServiceParserException {
 		if (config.isNewMultiWorkspace()) {
-			// OpenEsbMWorkspaceParser parser = new OpenEsbMWorkspaceParser();
-			// OpenEsbMultiWorkspace multiWorkspace =
-			// parser.parse(config.getMultiWorkspaceName(),
-			// config.getWorkspaceDir());
-			// this.multiWorkspaces.add(multiWorkspace);
+			OpenEsbMultiWorkspace multiWorkspace = new OpenEsbMultiWorkspace(config.getMultiWorkspaceName(), new File(config.getMultiWorkspacePath()));
+			OpenEsbMWorkspaceParser parser = new OpenEsbMWorkspaceParser();
+			parser.parseMultiWorkspace(multiWorkspace, config.getWorkspacePaths());
+			this.multiWorkspaces.add(multiWorkspace);
 
 			writeAppData();
-			// return multiWorkspace;
+			return multiWorkspace;
 		}
 
 		for (MultiWorkspace multiWorkspace : multiWorkspaces) {
