@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.openesb.bpel.OpenEsbBpelProcess;
 import com.tomecode.soa.openesb.workspace.OpenEsbWorkspace;
@@ -21,8 +23,9 @@ import com.tomecode.soa.wsdl.Wsdl;
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
- *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
+@PropertyGroupView(type = "BPEL Project...", name = "Open ESB", parentMethod = "getWorkpsace")
 public final class OpenEsbBpelProject implements Project {
 
 	private static final long serialVersionUID = 2921064536043532535L;
@@ -32,8 +35,10 @@ public final class OpenEsbBpelProject implements Project {
 	 */
 	private boolean folder;
 
+	@PropertyViewData(title = "Name")
 	private String name;
 
+	@PropertyViewData(title = "Path")
 	private File file;
 
 	/**
@@ -89,7 +94,7 @@ public final class OpenEsbBpelProject implements Project {
 
 	@Override
 	public final ProjectType getType() {
-		return ProjectType.OPEN_ESB_BPEL;
+		return ProjectType.OPENESB_BPEL;
 	}
 
 	public final void setWorkspace(OpenEsbWorkspace workspace) {
@@ -132,11 +137,11 @@ public final class OpenEsbBpelProject implements Project {
 
 	@Override
 	public final String getToolTip() {
-		return name + "\n\n" + (file != null ? file.getPath() : "");
+		return "Open ESB - BPEL Project\nName: " + getName() + "\nFile: " + (file != null ? file.getPath() : "");
 	}
 
 	@Override
-	public boolean isFolder() {
+	public final boolean isFolder() {
 		return folder;
 	}
 

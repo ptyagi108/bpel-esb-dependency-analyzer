@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyGroupView;
+import com.tomecode.soa.dependency.analyzer.gui.utils.PropertyViewData;
 import com.tomecode.soa.dependency.analyzer.icons.ImageFactory;
 import com.tomecode.soa.workspace.MultiWorkspace;
 import com.tomecode.soa.workspace.Workspace;
@@ -21,6 +23,7 @@ import com.tomecode.soa.workspace.Workspace.WorkspaceType;
  *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  * 
  */
+@PropertyGroupView(type = "Multi-Workspace...", name = "Open ESB")
 public final class OpenEsbMultiWorkspace implements MultiWorkspace {
 
 	private static final long serialVersionUID = -5117584282066150277L;
@@ -28,11 +31,13 @@ public final class OpenEsbMultiWorkspace implements MultiWorkspace {
 	/**
 	 * workspace name
 	 */
+	@PropertyViewData(title = "Name")
 	private String name;
 
 	/**
 	 * workspace folder
 	 */
+	@PropertyViewData(title = "Path")
 	private File file;
 
 	/**
@@ -110,7 +115,7 @@ public final class OpenEsbMultiWorkspace implements MultiWorkspace {
 
 	@Override
 	public final String getToolTip() {
-		return "Multi-Workspace: Open Esb\nName: " + name + "\nPath:" + (file != null ? file.getPath() : "");
+		return "Multi-Workspace: Open ESB\nName: " + name + "\nPath:" + (file != null ? file.getPath() : "");
 	}
 
 }

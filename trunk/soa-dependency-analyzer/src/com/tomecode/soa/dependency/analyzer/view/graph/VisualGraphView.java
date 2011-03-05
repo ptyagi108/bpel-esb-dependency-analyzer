@@ -675,7 +675,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 				if (providerSpecificJms != null) {
 					createEndpointJMSServer(providerSpecificJms.getJmsServers(), nodeSourceService, !isRequest);
 				}
-
+			} else if (endpointConfig.getProtocol() == ProviderProtocol.LOCAL) {
 			} else if (endpointConfig.getProtocol() == ProviderProtocol.UNKNOWN) {
 				createEndpointUnknown(endpointConfig, nodeSourceService);
 			} else {
@@ -853,7 +853,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 
 	/**
 	 * create {@link GraphNode} and {@link GraphConnection} for
-	 * {@link ProjectType#OPEN_ESB_BPEL}
+	 * {@link ProjectType#OPENESB_BPEL}
 	 * 
 	 * @param bpelProcess
 	 * @param existsSource
@@ -903,7 +903,7 @@ public final class VisualGraphView extends EditorPart implements IEditorInput {/
 		} else if (project.getType() == ProjectType.ORACLE10G_ESB) {
 			Ora10gEsbProject esbProject = (Ora10gEsbProject) project;
 			applyDependencies(esbProject, existsSource);
-		} else if (project.getType() == ProjectType.OPEN_ESB_BPEL) {
+		} else if (project.getType() == ProjectType.OPENESB_BPEL) {
 			OpenEsbBpelProject bpelProject = (OpenEsbBpelProject) project;
 			applyDependenciesOpenEsbBpel(bpelProject, bpelProject.getProcesses(), existsSource);
 		} else if (project.getType() == ProjectType.ORACLE_SERVICE_BUS_1OG) {

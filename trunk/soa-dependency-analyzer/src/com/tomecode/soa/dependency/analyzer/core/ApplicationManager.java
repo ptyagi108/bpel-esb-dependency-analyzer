@@ -220,6 +220,8 @@ public final class ApplicationManager {
 				eProject.addAttribute("type", "esb");
 			} else if (project.getType() == ProjectType.ORACLE10G_BPEL) {
 				eProject.addAttribute("type", "bpel");
+			} else if (project.getType() == ProjectType.OPENESB_BPEL) {
+				eProject.addAttribute("type", "bpel");
 			}
 
 			Element ePath = DocumentHelper.createElement("path");
@@ -339,6 +341,17 @@ public final class ApplicationManager {
 		return multiWorkspace;
 	}
 
+	/**
+	 * load all workspaces and projects for {@link OpenEsbWorkspace}
+	 * 
+	 * @param eWorkspaces
+	 *            XML element - workspace
+	 * @param name
+	 *            {@link OpenEsbMultiWorkspace} name
+	 * @param path
+	 *            {@link OpenEsbMultiWorkspace} path
+	 * @return
+	 */
 	private final OpenEsbMultiWorkspace restoreOpenEsb(Element eWorkspaces, String name, String path) {
 		OpenEsbMultiWorkspace multiWorkspace = new OpenEsbMultiWorkspace(name, new File(path));
 		if (eWorkspaces != null) {
@@ -354,8 +367,11 @@ public final class ApplicationManager {
 					List<?> list = eProjects.elements("project");
 					for (Object op : list) {
 						Element ee = (Element) op;
-						OpenEsbBpelProject project = new OpenEsbBpelProject(new File(ee.elementTextTrim("path")), Boolean.parseBoolean(ee.attributeValue("isFolder")));
-						workspace.addProject(project);
+
+						if ("bpel".equals(ee.attributeValue("type"))) {
+							OpenEsbBpelProject project = new OpenEsbBpelProject(new File(ee.elementTextTrim("path")), Boolean.parseBoolean(ee.attributeValue("isFolder")));
+							workspace.addProject(project);
+						}
 					}
 				}
 			}

@@ -23,11 +23,20 @@ public enum ProjectType {
 	ORACLE10G_ESB("Oracle SOA Suit 10g - ESB"),
 
 	/**
-	 * Open ESB - ESB and BPEL project
+	 * Open ESB - BPEL project
 	 */
-	OPEN_ESB_BPEL("Open ESB and BPEL"),
+	OPENESB_BPEL("Open ESB - BPEL"),
 
+	/**
+	 * Open ESB - ESB project
+	 */
+	OPENESB_ESB("Open ESB - ESB"),
+
+	/**
+	 * Oracle Service Bus 10g
+	 */
 	ORACLE_SERVICE_BUS_1OG("Oracle Service Bus 10g"),
+
 	/**
 	 * unknown project
 	 */
@@ -35,6 +44,11 @@ public enum ProjectType {
 
 	private final String title;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param title
+	 */
 	private ProjectType(String title) {
 		this.title = title;
 	}

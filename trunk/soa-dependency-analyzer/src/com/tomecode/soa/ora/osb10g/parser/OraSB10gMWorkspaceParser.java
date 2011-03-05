@@ -23,7 +23,7 @@ import com.tomecode.soa.workspace.Workspace;
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
- *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
 public final class OraSB10gMWorkspaceParser extends AbstractParser {
 
@@ -294,6 +294,8 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 				try {
 					if (service.getOrginalName().equals(serviceName) || service.getOrginalName().replaceAll(" ", "_").equals(serviceName2)) {
 						if (realPath == null) {
+
+							System.out.println("match: " + service.toString());
 							return service;
 						} else {
 							if (service.getFolder().getPath().equals(realPath)) {
@@ -302,6 +304,9 @@ public final class OraSB10gMWorkspaceParser extends AbstractParser {
 						}
 					}
 				} catch (Exception e) {
+					System.out.println("serviceName: " + serviceName);
+					System.out.println("realPath: " + realPath);
+					System.out.println("serviceDependencyType: " + type);
 					e.printStackTrace();
 				}
 

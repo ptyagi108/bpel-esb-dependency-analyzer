@@ -25,14 +25,17 @@ import com.tomecode.soa.wsdl.Wsdl;
 
 /**
  * 
- * This parser parse all workspace and projects
+ * This parser parse all workspace and projects for Open ESB
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
- *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
 public final class OpenEsbMWorkspaceParser extends AbstractParser {
 
+	/**
+	 * project type in ../nbproject/projext.xml
+	 */
 	private static final String BPEL_PROJECT_TYPE = "org.netbeans.modules.bpel.project";
 
 	/**
@@ -73,7 +76,7 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 		}
 
 		List<File> projects = new ArrayList<File>();
-		findAllProjects(path, projects);
+		findAllProjectXml(path, projects);
 
 		OpenEsbWorkspace workspace = new OpenEsbWorkspace(path.getName(), path);
 
@@ -149,7 +152,8 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 						dependency.addDependencyProcess(partnerLink.getDependenciesProcesses().get(0));
 					} catch (Exception e) {
 						// TODO: nullpointer je tu !!
-						e.printStackTrace();
+						//e.printStackTrace();
+						
 					}
 				}
 			}
@@ -299,7 +303,7 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 	private final List<OpenEsbBpelProject> filterBpelProjects(List<File> projectXmls) {
 		List<OpenEsbBpelProject> projects = new ArrayList<OpenEsbBpelProject>();
 		for (File projectXml : projectXmls) {
-			OpenEsbBpelProject esbBpelProject = parseBpelProject(projectXml);
+			OpenEsbBpelProject esbBpelProject = parseNBprojectXml(projectXml);
 			if (esbBpelProject != null) {
 				projects.add(esbBpelProject);
 			}
@@ -308,13 +312,18 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 		return projects;
 	}
 
-	private final OpenEsbBpelProject parseBpelProject(File projectXml) {
-		try {
-			return parseNProjectXml(parseXml(projectXml), projectXml);
-
-		} catch (ServiceParserException e) {
-			// TODO: error
-			e.printStackTrace();
+	/**
+	 * parse nbproject/project.xml
+	 * 
+	 * @param projectXml
+	 * @return
+	 */
+	private final OpenEsbBpelProject parseNBprojectXml(File projectXml) {
+		String projectName = parseProjectName(projectXml);
+		if (projectName != null) {
+			OpenEsbBpelProject project = new OpenEsbBpelProject(projectXml.getParentFile().getParentFile(), true);
+			project.setName(projectName);
+			return project;
 		}
 		return null;
 	}
@@ -326,77 +335,71 @@ public final class OpenEsbMWorkspaceParser extends AbstractParser {
 	 * @param projectXml
 	 * @return
 	 */
-	private final OpenEsbBpelProject parseNProjectXml(Element eProject, File projectXml) {
-		if (BPEL_PROJECT_TYPE.equals(eProject.elementTextTrim("type"))) {
-			Element eConfiguration = eProject.element("configuration");
-			if (eConfiguration != null && eConfiguration.element("data") != null) {
-				String projectName = eConfiguration.element("data").elementTextTrim("name");
+	private final String parseProjectName(File projectXml) {
+		try {
+			Element eProject = parseXml(projectXml);
 
-				if (projectName == null) {
-					projectName = projectXml.getParentFile().getParentFile().getName();
+			if (BPEL_PROJECT_TYPE.equals(eProject.elementTextTrim("type"))) {
+				Element eConfiguration = eProject.element("configuration");
+				if (eConfiguration != null && eConfiguration.element("data") != null) {
+					String projectName = eConfiguration.element("data").elementTextTrim("name");
+
+					if (projectName == null) {
+						projectName = projectXml.getParentFile().getParentFile().getName();
+					}
+					return projectName;
 				}
-				OpenEsbBpelProject project = new OpenEsbBpelProject(projectXml.getParentFile().getParentFile(), true);
-				project.setName(projectName);
-				return project;
 			}
+		} catch (ServiceParserException e) {
+			// TODO: error
+			e.printStackTrace();
 		}
 		return null;
 	}
 
 	/**
-	 * find all SRC folder
+	 * find all project.xml
 	 * 
 	 * @param workspaceFolder
 	 * @param projects
 	 *            list contains projects
 	 */
-	private final void findAllProjects(File workspaceFolder, List<File> projects) {
+	private final void findAllProjectXml(File workspaceFolder, List<File> projects) {
 		File[] files = workspaceFolder.listFiles();
 		if (files != null) {
 			for (File file : files) {
 				if (file.isFile() && file.getName().equalsIgnoreCase("project.xml") && file.getParentFile() != null && file.getParentFile().getName().equals("nbproject")) {
 					projects.add(file);
 				} else if (file.isDirectory()) {
-					findAllProjects(file, projects);
+					findAllProjectXml(file, projects);
 				}
 			}
 		}
 	}
 
-	private final File findProjectXml(File[] files) {
-		if (files != null) {
-			for (File file : files) {
-				if (file.isFile() && file.getName().equalsIgnoreCase("project.xml") && file.getParentFile() != null && file.getParentFile().getName().equals("nbproject")) {
-					return file;
-				} else if (file.isDirectory()) {
-					File f = findProjectXml(file.listFiles());
-					if (f != null) {
-						return f;
-					}
-				}
-			}
-		}
-
-		return null;
-	}
-
+	/**
+	 * parse all openEsb projects
+	 * 
+	 * @param multiWorkspace
+	 */
 	public final void parse(OpenEsbMultiWorkspace multiWorkspace) {
 		for (Workspace workspace : multiWorkspace.getWorkspaces()) {
 
 			for (Project project : workspace.getProjects()) {
-				if (project.getType() == ProjectType.OPEN_ESB_BPEL) {
+				if (project.getType() == ProjectType.OPENESB_BPEL) {
 					OpenEsbBpelProject esbBpelProject = (OpenEsbBpelProject) project;
 
-					File projectXml = findProjectXml(esbBpelProject.getFile().listFiles());
-					// TODO: TOTO JE NADRATOVANE!!! TRABA PREROBIT PARSOVANIE
-					// PROJEKTOV PRE OPEN ESB
-					OpenEsbBpelProject p = parseBpelProject(projectXml);
-					if (p != null) {
-						esbBpelProject.setName(p.getName());
+					String projectName = parseProjectName(new File(esbBpelProject.getFile().getPath() + File.separator + "nbproject" + File.separator + "project.xml"));
+
+					if (projectName != null) {
+						esbBpelProject.setName(projectName);
 						parseProcessInProject(esbBpelProject);
 					}
 
+				} else if (project.getType() == ProjectType.OPENESB_ESB) {
+					// TODO: doplnit parsovnaie pre esb projecty
 				}
+
 			}
 
 			linkingWsdlWithPartnerLinks(workspace);

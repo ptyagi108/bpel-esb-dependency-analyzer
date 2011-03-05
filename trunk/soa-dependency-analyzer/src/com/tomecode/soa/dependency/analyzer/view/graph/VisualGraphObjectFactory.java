@@ -69,9 +69,12 @@ final class VisualGraphObjectFactory {
 	}
 
 	/**
-	 * * create connection between source and target {@link GraphNode}
+	 * create connection between source and target {@link GraphNode}
 	 * 
 	 * config: SWT.ARROW_DOWN - outbound
+	 * 
+	 * 
+	 * OBJECT A ---> OBJECT B
 	 * 
 	 * @param source
 	 * @param destination
@@ -86,6 +89,10 @@ final class VisualGraphObjectFactory {
 	}
 
 	/**
+	 * 
+	 * create connection between source and target {@link GraphNode}
+	 * 
+	 * OBJECT A <--> OBJECT B
 	 * 
 	 * @param source
 	 * @param destination
@@ -125,6 +132,8 @@ final class VisualGraphObjectFactory {
 	/**
 	 * create connection without arrow
 	 * 
+	 * OBJECT A ---- OBJECT B
+	 * 
 	 * @param source
 	 * @param destination
 	 * @param data
@@ -137,6 +146,16 @@ final class VisualGraphObjectFactory {
 		return createConnection(connection, data, toolTip, withText);
 	}
 
+	/**
+	 * internal helper method for creating connection between source and target
+	 * {@link GraphNode}
+	 * 
+	 * @param connection
+	 * @param data
+	 * @param toolTip
+	 * @param withText
+	 * @return
+	 */
 	private final GraphConnection createConnection(GraphConnection connection, Object data, IFigure toolTip, boolean withText) {
 		connection.setData(data);
 		if (data != null && withText) {

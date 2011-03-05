@@ -25,7 +25,7 @@ import com.tomecode.soa.parser.ServiceParserException;
  * 
  * @author Tomas Frastia
  * @see http://www.tomecode.com
- *      http://code.google.com/p/bpel-esb-dependency-analyzer/ *
+ *      http://code.google.com/p/bpel-esb-dependency-analyzer/
  */
 public final class OraSB10gProjectParser {
 
@@ -173,6 +173,7 @@ public final class OraSB10gProjectParser {
 	 */
 	private final Service parseService(File file) {
 		String name = file.getName().toLowerCase();
+
 		if (name.endsWith(".proxy") || name.endsWith(".proxyservice")) {
 			try {
 				return proxyParser.parseProxy(file);
@@ -194,7 +195,8 @@ public final class OraSB10gProjectParser {
 				e.printStackTrace();
 				// TODO: error
 			}
-		} else if (name.equals(".project") || name.equals(".classpath") || name.equals(".factorypath")) {
+			// these files will be ignored
+		} else if (name.equals(".project") || name.equals(".classpath") || name.equals(".factorypath") || name.equals("_projectdata.locationdata") || name.equals("_folderdata.locationdata")) {
 			return null;
 		}
 
