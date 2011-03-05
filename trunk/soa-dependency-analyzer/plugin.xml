@@ -107,7 +107,7 @@
          </property>
          <property
                name="aboutText"
-               value="SOA Dependency Analyzer&#x0A;Version: 0.8 Beta 0.2&#x0A;&#x0A;Developer:  Tomas Frastia&#x0A;(c) Copyright For The TomeCode.com 2010. All Rights Reserved.&#x0A;Visit:&#x0A;http://www.tomecode.com&#x0A;http://code.google.com/p/bpel-esb-dependency-analyzer/">
+               value="SOA Dependency Analyzer&#x0A;Version: 0.8 Beta 0.3&#x0A;&#x0A;Developer:  Tomas Frastia&#x0A;(c) Copyright For The TomeCode.com 2011. All Rights Reserved.&#x0A;Visit:&#x0A;http://www.tomecode.com&#x0A;http://code.google.com/p/bpel-esb-dependency-analyzer/">
          </property>
          <property
                name="windowImages"
