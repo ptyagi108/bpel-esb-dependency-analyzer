@@ -1,6 +1,20 @@
 #summary Release notes
 #labels ReleaseNotes,SOADependencyAnalyzer
 
+*Version 1.0*
+        * bug fixes - very very...;) 
+        * first version of parser for OSB 11g
+        * first version (beta) of parser for SOA Suite 11g(Mediator, BPEL process, SCA, JCA)
+        * new tool: show/find all headers in proxy service - OSB
+        * new tool: show/find all variables in proxy service - OSB
+        * new tool: show all partnerlinks in bpel process
+        * new tool: show all veriables in bpel process
+        * new tool: show/find all endpoint in selected project
+        * display detail informations about selected activity in BPEL process or Proxy Service
+        * new splash screen
+        * new logo
+        * new web site
+        * new User Guide
 *Version 0.8 - Technical preview/Beta 3*
         * bug fixes - very very much!!
         * display in the graph, the [http://code.google.com/p/bpel-esb-dependency-analyzer/wiki/GettingStartedGuide_08_Beta3#Examples endpoint] for services
