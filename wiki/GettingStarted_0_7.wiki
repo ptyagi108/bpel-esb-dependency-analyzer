@@ -1,5 +1,5 @@
 #summary Getting Started with bpel-esb-dependency-analyzer (version 0.7).
-#labels Phase-Deploy,Phase-Implementation,Getting-stated-0-7
+#labels Phase-Deploy,Phase-Implementation,Getting-stated-0-7,Deprecated
 
 = Getting Started with bpel-esb-dependency-analyzer =
 
