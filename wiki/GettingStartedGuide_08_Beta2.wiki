@@ -1,5 +1,5 @@
 #summary Getting Started with SOA Dependency-Analyzer (version 0.8-Beta2 - Build: 0.8.209).
-#labels Phase-Implementation,Phase-Deploy,Phase-Design,Featured,Phase-Requirements,0.8.2-beta2
+#labels Phase-Implementation,Phase-Deploy,Phase-Design,Featured,Phase-Requirements,0.8.2-beta2,Deprecated
 
 = What is SOA Dependency Analyzer =
 
