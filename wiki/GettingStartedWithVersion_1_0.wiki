@@ -1,6 +1,12 @@
 #labels Phase-Requirements,Phase-Design,Phase-Implementation,Phase-Deploy,Phase-QA
-#Getting Started with SOA Dependency Analyzer version 1.0
+Getting Started with SOA Dependency Analyzer version 1.0
 
 = User Guide for version 1.0 =
 
 Download [http://bpel-esb-dependency-analyzer.googlecode.com/files/SOADependencyAnalyzer_1_0_0.pdf User Guide for SOA Dependency Analyzer 1.0]
+
+
+= Videos =
+
+=== SOA Dependency Analyzer - Getting Started with OSB 10g/11g ===
+<wiki:video url="http://www.youtube.com/watch?v=WlLXtSnuAms"/>
