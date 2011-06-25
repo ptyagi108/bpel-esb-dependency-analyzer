@@ -10,3 +10,6 @@ Download [http://bpel-esb-dependency-analyzer.googlecode.com/files/SOADependency
 
 === SOA Dependency Analyzer - Getting Started with OSB 10g/11g ===
 <wiki:video url="http://www.youtube.com/watch?v=WlLXtSnuAms"/>
+
+=== SOA Dependency Analyzer - Getting Started with Oracle SOA Suite 10g ===
+<wiki:video url="http://www.youtube.com/watch?v=MVsp-NZGcKg"/>
